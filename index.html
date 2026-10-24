@@ -112,12 +112,21 @@
             border: 1px solid var(--border-color); border-radius: 12px; z-index: 999; padding: 10px;
         }
         .dropdown-content.show { display: block; }
+        
+        /* Chat Styles */
+        .chat-container { height: calc(100vh - 180px); display: flex; flex-direction: column; }
+        .chat-messages { flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 8px; }
+        .chat-bubble { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 12px; line-height: 1.4; position: relative; }
+        .chat-own { background: var(--accent-primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-other { background: var(--bg-inner); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
+        .chat-meta { font-size: 9px; opacity: 0.8; margin-bottom: 2px; display: block; font-weight: bold; }
     </style>
 </head>
 <body id="body-root">
 
     <audio id="bg-music" loop></audio>
 
+    <!-- CUSTOMER SUPPORT MODAL -->
     <div id="customer-support-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <div class="cyber-card p-6 max-w-sm w-full space-y-3 text-center shadow-2xl">
             <span class="text-3xl">🎧</span>
@@ -131,6 +140,7 @@
         </div>
     </div>
 
+    <!-- LOGIN OVERLAY -->
     <div id="google-login-overlay" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <div class="cyber-card p-6 max-w-sm w-full space-y-3 text-center shadow-2xl">
             <span class="text-3xl">🛡️</span>
@@ -160,6 +170,7 @@
         </div>
     </div>
 
+    <!-- FACTORY RESET MODAL -->
     <div id="factory-reset-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <div class="cyber-card p-6 max-w-sm w-full space-y-4 text-center shadow-2xl border border-rose-500">
             <span class="text-3xl">⚠️</span>
@@ -173,6 +184,7 @@
         </div>
     </div>
 
+    <!-- MAINTENANCE SCREEN -->
     <div id="maintenance-screen" class="fixed inset-0 z-[998] hidden flex flex-col items-center justify-center p-6 text-center" style="background: var(--bg-main);">
         <div class="cyber-card p-8 max-w-md space-y-4 shadow-2xl">
             <span class="text-4xl">🛠️</span>
@@ -181,6 +193,7 @@
         </div>
     </div>
 
+    <!-- TOP HEADER -->
     <header class="sticky top-0 z-50 px-4 py-3 border-b backdrop-blur-md shadow-sm" style="background: var(--header-bg); border-color: var(--border-color);">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('home')">
@@ -196,6 +209,7 @@
                     <span id="music-icon" class="text-base">🔇</span>
                 </button>
 
+                <!-- Three Dots Menu -->
                 <div class="relative">
                     <button onclick="window.toggleMenuDropdown(event)" class="p-2 rounded-lg cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -233,6 +247,8 @@
     </header>
 
     <main class="max-w-4xl mx-auto px-4 pt-4 space-y-4">
+
+        <!-- HOME TAB -->
         <section id="section-home" class="space-y-4">
             <div class="cyber-card p-6 text-center space-y-3">
                 <span id="display-hero-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background-color: var(--accent-glow); color: var(--accent-primary);">
@@ -264,6 +280,7 @@
             </div>
         </section>
 
+        <!-- MATCHES TAB -->
         <section id="section-matches" class="hidden space-y-3">
             <div class="flex justify-between items-center">
                 <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back to Home</button>
@@ -274,6 +291,7 @@
             </div>
         </section>
 
+        <!-- ROADMAP TAB -->
         <section id="section-roadmap" class="hidden space-y-3">
             <div class="flex justify-between items-center">
                 <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back to Home</button>
@@ -284,6 +302,26 @@
             </div>
         </section>
 
+        <!-- CHAT TAB -->
+        <section id="section-chat" class="hidden space-y-3">
+            <div class="flex justify-between items-center">
+                <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back to Home</button>
+            </div>
+            <h2 class="text-base font-bold">💬 Global Chat (Messages auto-delete in 48h)</h2>
+            
+            <div class="cyber-card p-3 chat-container">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="text-center text-xs text-slate-500 py-4">Loading chat...</div>
+                </div>
+                
+                <div class="flex gap-2 pt-2 border-t mt-2" style="border-color: var(--border-color);">
+                    <input type="text" id="chat-input" maxlength="200" placeholder="Type a message..." class="cyber-input flex-1 px-3 py-2 text-xs" onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                    <button onclick="sendChatMessage()" class="btn-theme px-4 py-2 text-xs font-bold">Send</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAID REGISTRATION -->
         <section id="section-register-paid" class="hidden">
             <div class="cyber-card p-5 max-w-lg mx-auto space-y-4">
                 <button type="button" onclick="switchTab('matches')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer" style="color: var(--accent-primary);">⬅️ Back to Matches</button>
@@ -326,6 +364,7 @@
             </div>
         </section>
 
+        <!-- FREE REGISTRATION -->
         <section id="section-register-free" class="hidden">
             <div class="cyber-card p-5 max-w-lg mx-auto space-y-4">
                 <button type="button" onclick="switchTab('matches')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer" style="color: var(--accent-primary);">⬅️ Back to Matches</button>
@@ -353,7 +392,7 @@
             </div>
         </section>
 
-        <!-- UPDATED PRIVACY POLICY SECTION -->
+        <!-- PRIVACY POLICY -->
         <section id="section-privacy" class="hidden">
             <div class="cyber-card p-6 space-y-4 text-xs leading-relaxed text-justify">
                 <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
@@ -371,7 +410,7 @@
             </div>
         </section>
 
-        <!-- UPDATED TERMS OF SERVICE SECTION -->
+        <!-- TERMS OF SERVICE -->
         <section id="section-terms" class="hidden">
             <div class="cyber-card p-6 space-y-4 text-xs leading-relaxed text-justify">
                 <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
@@ -389,7 +428,10 @@
             </div>
         </section>
 
+        <!-- DASHBOARD / CONSOLES -->
         <section id="section-teams" class="hidden space-y-4">
+            
+            <!-- SUPER ADMIN CONSOLE -->
             <div id="console-super-admin" class="cyber-card p-4 space-y-4 hidden">
                 <div class="flex items-center justify-between pb-2 border-b" style="border-color: var(--border-color);">
                     <div class="flex items-center gap-2">
@@ -413,7 +455,7 @@
                 <div id="sas-sec-score" class="space-y-3 text-xs">
                     <div class="cyber-card p-3 space-y-3">
                         <label class="block font-medium">Select Match</label>
-                        <select id="calc-match-select" onchange="loadMatchTeamsForCalc()" class="cyber-input w-full px-2.5 py-1.5 text-xs"><option value="">-- Choose Match --</option></select>
+                        <select id="sa-calc-match-select" onchange="loadMatchTeamsForCalc('sa')" class="cyber-input w-full px-2.5 py-1.5 text-xs"><option value="">-- Choose Match --</option></select>
                         
                         <div class="cyber-card p-2.5 space-y-2 border border-emerald-500/30">
                             <div class="font-bold text-emerald-400">⚙️ Points Table Configuration</div>
@@ -432,9 +474,9 @@
                             <div><label class="block font-[10px] font-bold">Points Per Kill</label><input type="number" id="pts-kill" value="3" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
                         </div>
 
-                        <div id="host-teams-input-area" class="space-y-2 hidden pt-2">
-                            <div id="host-teams-rows" class="space-y-1.5 max-h-60 overflow-y-auto"></div>
-                            <button onclick="generateAndPublishScoreboard()" class="btn-theme px-3 py-1.5">Publish Scoreboard</button>
+                        <div id="sa-host-teams-input-area" class="space-y-2 hidden pt-2">
+                            <div id="sa-host-teams-rows" class="space-y-1.5 max-h-60 overflow-y-auto"></div>
+                            <button onclick="generateAndPublishScoreboard('sa')" class="btn-theme px-3 py-1.5">Publish Scoreboard</button>
                         </div>
                     </div>
                 </div>
@@ -465,6 +507,8 @@
                             <label class="flex items-center gap-2 cursor-pointer font-semibold"><input type="checkbox" id="cm-upi-toggle" checked class="accent-emerald-500 w-4 h-4"> Enable UPI ID</label>
                             <label class="flex items-center gap-2 cursor-pointer font-semibold"><input type="checkbox" id="cm-qr-toggle" checked class="accent-emerald-500 w-4 h-4"> Enable QR Code</label>
                         </div>
+
+                        <div><label class="block font-semibold mb-1 text-emerald-400">📺 YouTube Live Stream Link (Optional)</label><input type="url" id="cm-youtube" class="cyber-input w-full px-2.5 py-1.5 text-xs" placeholder="https://youtube.com/live/..."></div>
 
                         <div><label class="block font-semibold mb-1">Groups (comma separated)</label><input type="text" id="cm-groups" required value="TEAM A, TEAM B" oninput="updateDynamicWhatsAppInputs()" class="cyber-input w-full px-2.5 py-1.5 text-xs uppercase"></div>
                         <div id="dynamic-whatsapp-container" class="space-y-1.5 pt-1"><div id="whatsapp-inputs-list" class="space-y-1.5"></div></div>
@@ -552,7 +596,7 @@
                         </div>
                         
                         <div class="space-y-1 pt-2 border-t" style="border-color: var(--border-color);">
-                            <label class="block font-bold text-emerald-400">🚀 Live Code Deployer (Warning: Use Netlify Instead)</label>
+                            <label class="block font-bold text-emerald-400">🚀 Live Code Deployer (Warning: Use GitHub Instead)</label>
                             <textarea id="edit-live-code" rows="3" placeholder="Paste full HTML code here..." class="cyber-input w-full p-2 text-xs font-mono"></textarea>
                             <button type="button" onclick="deployLiveCode()" class="mt-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-xs w-full">⚡ Deploy Code Live</button>
                         </div>
@@ -600,6 +644,7 @@
                 </div>
             </div>
 
+            <!-- ADMIN / HOST CONSOLE -->
             <div id="console-admin-host" class="cyber-card p-4 space-y-4 hidden">
                 <div class="flex items-center justify-between pb-2 border-b" style="border-color: var(--border-color);">
                     <div class="flex items-center gap-2">
@@ -614,12 +659,43 @@
                 
                 <div class="flex gap-2 overflow-x-auto pb-2" id="admin-host-nav">
                     <button onclick="switchAHSub('match')" id="ah-btn-match" class="px-3 py-1.5 rounded text-xs font-semibold btn-theme whitespace-nowrap">Match Manager</button>
+                    <button onclick="switchAHSub('score')" id="ah-btn-score" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">🏆 Scoreboard</button>
                     <button onclick="switchAHSub('staffs')" id="ah-btn-staffs" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">👥 Staffs (Hosts)</button>
                 </div>
 
                 <div id="ah-sec-match" class="space-y-3 text-xs">
                     <p class="text-xs font-semibold" style="color: var(--accent-primary);">⚡ Match Manager</p>
                     <div id="host-matches-list" class="space-y-2"></div>
+                </div>
+
+                <!-- NEW ADMIN SCOREBOARD SECTION -->
+                <div id="ah-sec-score" class="hidden space-y-3 text-xs">
+                    <div class="cyber-card p-3 space-y-3">
+                        <label class="block font-medium">Select Match (Only your created matches)</label>
+                        <select id="ah-calc-match-select" onchange="loadMatchTeamsForCalc('ah')" class="cyber-input w-full px-2.5 py-1.5 text-xs"><option value="">-- Choose Match --</option></select>
+                        
+                        <div class="cyber-card p-2.5 space-y-2 border border-emerald-500/30">
+                            <div class="font-bold text-emerald-400">⚙️ Points Table Configuration</div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div><label class="block font-[10px]">1st Place Pts</label><input type="number" id="ah-pts-1" value="12" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">2nd Place Pts</label><input type="number" id="ah-pts-2" value="9" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">3rd Place Pts</label><input type="number" id="ah-pts-3" value="8" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">4th Place Pts</label><input type="number" id="ah-pts-4" value="7" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">5th Place Pts</label><input type="number" id="ah-pts-5" value="6" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">6th Place Pts</label><input type="number" id="ah-pts-6" value="5" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">7th Place Pts</label><input type="number" id="ah-pts-7" value="4" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">8th Place Pts</label><input type="number" id="ah-pts-8" value="3" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">9th Place Pts</label><input type="number" id="ah-pts-9" value="2" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">10th Place Pts</label><input type="number" id="ah-pts-10" value="1" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                            </div>
+                            <div><label class="block font-[10px] font-bold">Points Per Kill</label><input type="number" id="ah-pts-kill" value="3" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                        </div>
+
+                        <div id="ah-host-teams-input-area" class="space-y-2 hidden pt-2">
+                            <div id="ah-host-teams-rows" class="space-y-1.5 max-h-60 overflow-y-auto"></div>
+                            <button onclick="generateAndPublishScoreboard('ah')" class="btn-theme px-3 py-1.5">Publish Scoreboard</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="ah-sec-staffs" class="hidden space-y-3 text-xs">
@@ -640,6 +716,7 @@
                 </div>
             </div>
 
+            <!-- USER DASHBOARD -->
             <div id="console-user" class="cyber-card p-6 text-center space-y-3 hidden">
                 <span class="text-3xl">👤</span>
                 <h2 class="text-base font-bold">User Dashboard</h2>
@@ -653,16 +730,19 @@
         </section>
     </main>
 
+    <!-- BOTTOM NAVIGATION BAR -->
     <nav class="bottom-nav shadow-lg">
         <button onclick="switchTab('home')" id="bnav-home" class="bottom-nav-item active"><span class="text-base">🏠</span><span>Home</span></button>
         <button onclick="switchTab('matches')" id="bnav-matches" class="bottom-nav-item"><span class="text-base">🎮</span><span>Matches</span></button>
         <button onclick="switchTab('roadmap')" id="bnav-roadmap" class="bottom-nav-item"><span class="text-base">🗺️</span><span>Roadmap</span></button>
+        <button onclick="switchTab('chat')" id="bnav-chat" class="bottom-nav-item"><span class="text-base">💬</span><span>Chat</span></button>
     </nav>
 
     <div id="toast" class="fixed bottom-20 right-4 z-50 hidden cyber-card px-3 py-2 text-xs font-semibold shadow-lg">
         <span id="toast-text">Success</span>
     </div>
 
+    <!-- GLOBAL UTILITY FUNCTIONS -->
     <script>
         let musicPlayingState = false;
         window.loggedEmail = localStorage.getItem('satta_pai_auth_email') || '';
@@ -861,7 +941,7 @@
         };
 
         window.switchAHSub = function(sub) {
-            ['match', 'staffs'].forEach(t => {
+            ['match', 'score', 'staffs'].forEach(t => {
                 const el = document.getElementById('ah-sec-' + t); const btn = document.getElementById('ah-btn-' + t);
                 if(el) el.classList.add('hidden'); if(btn) { btn.classList.remove('btn-theme'); btn.classList.add('cyber-card'); }
             });
@@ -888,16 +968,17 @@
         };
 
         window.switchTab = function(tab) {
-            ['home', 'matches', 'roadmap', 'register-paid', 'register-free', 'teams', 'privacy', 'terms'].forEach(s => {
+            ['home', 'matches', 'roadmap', 'register-paid', 'register-free', 'teams', 'privacy', 'terms', 'chat'].forEach(s => {
                 const sec = document.getElementById('section-' + s); if (sec) sec.classList.add('hidden');
             });
             const target = document.getElementById('section-' + tab); if(target) target.classList.remove('hidden');
 
-            ['home', 'matches', 'roadmap'].forEach(s => { const bnav = document.getElementById('bnav-' + s); if(bnav) bnav.classList.remove('active'); });
+            ['home', 'matches', 'roadmap', 'chat'].forEach(s => { const bnav = document.getElementById('bnav-' + s); if(bnav) bnav.classList.remove('active'); });
             const activeBnav = document.getElementById('bnav-' + tab); if(activeBnav) activeBnav.classList.add('active');
 
             if(tab === 'teams') window.checkLoginState();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if(tab === 'chat') window.scrollTo(0, document.body.scrollHeight); // Scroll to bottom for chat
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.showToast = function(msg) {
@@ -906,10 +987,11 @@
         };
     </script>
 
+    <!-- Firebase SDK & Authentication Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDoc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDoc, onSnapshot, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app-check.js";
 
         const firebaseConfig = {
@@ -931,11 +1013,13 @@
         const provider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
-        window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc;
+        window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc; window.addDoc = addDoc; window.collection = collection;
 
         let allTeams = []; let allMatches = [];
         window.authorizedAdmins = [SUPER_ADMIN]; window.authorizedHosts = [SUPER_ADMIN];
         let selectedMatchForReg = null; window.editingMatchId = null;
+        
+        let allChatMessages = [];
 
         window.addEventListener('DOMContentLoaded', async () => {
             try {
@@ -949,6 +1033,7 @@
                     if (data.hosts_list) window.authorizedHosts = data.hosts_list;
                 }
                 trackVisitorStats(); renderStaffsLists(); renderSquadsManagementList(allTeams); window.checkLoginState();
+                initializeChat(); // Start Chat Listener
             } catch(e){}
         });
 
@@ -1116,7 +1201,7 @@
                 <div class="cyber-card p-2.5 rounded flex justify-between items-center text-xs">
                     <div>
                         <div class="font-bold uppercase">${window.escapeHTML(t.teamName)}</div>
-                        <div class="text-[10px]" style="color: var(--text-muted);">Ph: ${window.escapeHTML(t.phoneNumber)} | Group: ${window.escapeHTML(t.slotGroup || 'TEAM A')} | Gmail: ${window.maskEmail(t.userEmail) || 'N/A'}</div>
+                        <div class="text-[10px]" style="color: var(--text-muted);">ID: ${window.escapeHTML(t.teamId || 'N/A')} | Ph: ${window.escapeHTML(t.phoneNumber)} | Group: ${window.escapeHTML(t.slotGroup || 'TEAM A')} | Gmail: ${window.maskEmail(t.userEmail) || 'N/A'}</div>
                     </div>
                     <button onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button>
                 </div>
@@ -1217,6 +1302,12 @@
                     `;
                 }).join('');
 
+                // YOUTUBE LIVE BUTTON
+                let liveStreamBtn = '';
+                if (m.youtubeLink) {
+                     liveStreamBtn = `<a href="${m.youtubeLink}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold shadow mb-2"><span class="animate-pulse">🔴</span> Watch Live Stream</a>`;
+                }
+
                 return `
                     <div class="cyber-card p-4 space-y-3">
                         <div class="flex justify-between items-start cursor-pointer" onclick="toggleMatchExpand('${m.id}')">
@@ -1224,6 +1315,7 @@
                                 <div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-bold" style="color: var(--accent-primary);">#${idx + 1}</span>${statusBadge}</div>
                                 <h3 class="text-sm font-bold">${window.escapeHTML(m.title)}</h3>
                                 <p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted);">🗺️ ${window.escapeHTML(m.map)} | 📅 ${window.escapeHTML(m.time)} | 💰 Prize: ₹${window.escapeHTML(m.prize || '0')} ${m.type === 'paid' ? '| Fee: ₹' + (m.fee || '0') : ''}</p>
+                                ${liveStreamBtn}
                             </div>
                             <span class="text-xs font-semibold underline" style="color: var(--accent-primary);">Slots 🔽</span>
                         </div>
@@ -1250,7 +1342,7 @@
                             ${sb.rankings.map((r, i) => {
                                 const isWinner = (m.stage === 'Finals' && i === 0 && m.status === 'ended');
                                 return `
-                                    <div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''}">
+                                    <div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''} cursor-pointer hover:border-emerald-500 transition-colors" onclick="showPlayerStats('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}')">
                                         <div class="flex justify-between items-center">
                                             <span>#${i+1} ${window.escapeHTML(r.teamName)}</span>
                                             <span class="text-emerald-400">${r.totalScore} Pts</span>
@@ -1268,6 +1360,27 @@
                     `).join('') : '<p class="text-[11px]" style="color: var(--text-muted);">Results pending...</p>'}
                 </div>
             `).join('');
+        }
+        
+        // PLAYER STATS MODAL
+        window.showPlayerStats = function(teamName) {
+            const teamMatches = allMatches.filter(m => m.publishedScoreboards && m.publishedScoreboards.some(sb => sb.rankings.some(r => r.teamName === teamName)));
+            let totalMatches = teamMatches.length;
+            let totalWins = 0;
+            let totalKills = 0;
+
+            teamMatches.forEach(m => {
+                m.publishedScoreboards.forEach(sb => {
+                    sb.rankings.forEach(r => {
+                        if (r.teamName === teamName) {
+                            totalKills += parseFloat(r.kills) || 0;
+                            if (r.place === 1) totalWins++;
+                        }
+                    });
+                });
+            });
+
+            alert(`🏆 Team: ${teamName}\n\n🎮 Matches Played: ${totalMatches}\n🥇 Total Wins: ${totalWins}\n💀 Total Kills: ${totalKills}\n\n(This is an auto-generated stat)`);
         }
 
         window.renderAdminMatches = function() {
@@ -1328,13 +1441,17 @@
             document.getElementById('cm-map').value = m.map || 'Bermuda'; document.getElementById('cm-time').value = m.time || '';
             document.getElementById('cm-slots').value = m.slots || 12; document.getElementById('cm-prize-pool').value = m.prize || '';
             document.getElementById('cm-fee').value = m.fee || ''; document.getElementById('cm-upi').value = m.upiId || '';
+            document.getElementById('cm-youtube').value = m.youtubeLink || '';
             document.getElementById('cm-groups').value = m.groups || 'TEAM A, TEAM B';
             document.getElementById('cm-upi-toggle').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle').checked = m.qrEnabled !== false;
             window.editingMatchId = id; document.getElementById('match-submit-btn').textContent = "💾 Update Match"; window.switchSASub('match');
         };
 
-        window.loadMatchTeamsForCalc = function() {
-            const id = document.getElementById('calc-match-select').value; const area = document.getElementById('host-teams-input-area'); const rows = document.getElementById('host-teams-rows');
+        window.loadMatchTeamsForCalc = function(mode) {
+            const id = mode === 'sa' ? document.getElementById('sa-calc-match-select').value : document.getElementById('ah-calc-match-select').value;
+            const area = mode === 'sa' ? document.getElementById('sa-host-teams-input-area') : document.getElementById('ah-host-teams-input-area');
+            const rows = mode === 'sa' ? document.getElementById('sa-host-teams-rows') : document.getElementById('ah-host-teams-rows');
+            
             if (!id) { area.classList.add('hidden'); return; }
             const teamsInMatch = allTeams.filter(t => t.matchId === id && t.status !== 'banned');
             rows.innerHTML = teamsInMatch.map((t, idx) => `
@@ -1350,13 +1467,22 @@
             area.classList.remove('hidden');
         };
 
-        window.generateAndPublishScoreboard = async function() {
-            const matchId = document.getElementById('calc-match-select').value; if (!matchId) return;
+        window.generateAndPublishScoreboard = async function(mode) {
+            const matchId = mode === 'sa' ? document.getElementById('sa-calc-match-select').value : document.getElementById('ah-calc-match-select').value;
+            if (!matchId) return;
             if(!confirm("Confirm ah scoreboard publish panniringala?")) return;
-            const placePts = {}; for(let i=1; i<=10; i++) { placePts[i] = parseFloat(document.getElementById(`pts-${i}`).value) || 0; }
-            const ptsPerKill = parseFloat(document.getElementById('pts-kill').value) || 0;
+            
+            const placePts = {}; 
+            for(let i=1; i<=10; i++) { 
+                const inputId = mode === 'sa' ? `pts-${i}` : `ah-pts-${i}`;
+                placePts[i] = parseFloat(document.getElementById(inputId).value) || 0; 
+            }
+            const killInputId = mode === 'sa' ? 'pts-kill' : 'ah-pts-kill';
+            const ptsPerKill = parseFloat(document.getElementById(killInputId).value) || 0;
+            
             const rankings = [];
-            document.querySelectorAll('.team-calc-row').forEach(row => {
+            const rowsSelector = mode === 'sa' ? '#sa-host-teams-rows .team-calc-row' : '#ah-host-teams-rows .team-calc-row';
+            document.querySelectorAll(rowsSelector).forEach(row => {
                 const teamName = row.getAttribute('data-team'); const isEliminated = row.querySelector('.calc-elim').checked;
                 const place = parseInt(row.querySelector('.calc-place').value) || 12; const kills = parseFloat(row.querySelector('.calc-kills').value) || 0;
                 const placementScore = isEliminated ? 0 : (placePts[place] || 0); const killScore = kills * ptsPerKill; const totalScore = placementScore + killScore;
@@ -1374,16 +1500,17 @@
             const map = document.getElementById('cm-map').value.trim(); const time = document.getElementById('cm-time').value.trim(); const slots = parseInt(document.getElementById('cm-slots').value) || 12;
             const groupsStr = document.getElementById('cm-groups').value.trim(); const prize = document.getElementById('cm-prize-pool').value.trim();
             const fee = type === 'free' ? '0' : document.getElementById('cm-fee').value.trim(); const upiId = type === 'free' ? '' : document.getElementById('cm-upi').value.trim();
+            const youtubeLink = document.getElementById('cm-youtube').value.trim();
             const upiEnabled = type === 'free' ? false : document.getElementById('cm-upi-toggle').checked; const qrEnabled = type === 'free' ? false : document.getElementById('cm-qr-toggle').checked;
             const qrFileInput = document.getElementById('cm-qr-file'); const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0);
             const whatsappMap = {}; groups.forEach((g, idx) => { const input = document.getElementById(`wa-link-${idx}`); if(input) whatsappMap[g] = input.value.trim(); });
 
             const processSave = async (qrDataURL) => {
-                const matchData = { title, stage, type, map, time, slots, groups: groupsStr, whatsappMap, prize, fee, upiId, upiEnabled, qrEnabled, status: 'not_started', createdAt: Date.now(), createdBy: window.loggedEmail };
+                const matchData = { title, stage, type, map, time, slots, groups: groupsStr, whatsappMap, prize, fee, upiId, youtubeLink, upiEnabled, qrEnabled, status: 'not_started', createdAt: Date.now(), createdBy: window.loggedEmail };
                 if(qrDataURL) matchData.qrDataURL = qrDataURL;
 
                 if(window.editingMatchId) {
-                    delete matchData.createdBy;
+                    delete matchData.createdBy; // Preserve original creator
                     await setDoc(doc(db, 'matches', window.editingMatchId), matchData, { merge: true });
                     window.showToast('Match Updated Successfully!'); window.editingMatchId = null; document.getElementById('match-submit-btn').textContent = "🚀 Publish Match";
                 } else {
@@ -1405,7 +1532,12 @@
             }
             const utr = document.getElementById('paid-transitionId').value.trim();
             if (!/^\d{12}$/.test(utr)) { alert("Invalid UPI Transaction ID. It must be exactly 12 digits."); return; }
+            
+            // AUTO TEAM ID GENERATE
+            const newTeamId = 'T' + (100 + allTeams.length + 1);
+
             await addDoc(collection(db, 'registrations'), {
+                teamId: newTeamId,
                 teamName: document.getElementById('paid-teamName').value.trim().toUpperCase(), leaderName: document.getElementById('paid-leaderName').value.trim(),
                 hometown: document.getElementById('paid-hometown').value.trim(), phoneNumber: document.getElementById('paid-phoneNumber').value.trim(),
                 gameUid: document.getElementById('paid-gameUid').value.trim(), member2Uid: document.getElementById('paid-member2Uid').value.trim(),
@@ -1414,7 +1546,7 @@
                 transitionId: utr, matchId: selectedMatchForReg ? selectedMatchForReg.id : 'general',
                 slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A', userEmail: window.loggedEmail, status: 'active', createdAt: Date.now()
             });
-            window.showToast('Paid Registration Success!'); window.switchTab('matches');
+            window.showToast(`Paid Registration Success! Team ID: ${newTeamId}`); window.switchTab('matches');
         });
 
         document.getElementById('registration-free-form')?.addEventListener('submit', async (e) => {
@@ -1423,7 +1555,12 @@
                 const currentTeams = allTeams.filter(t => t.matchId === selectedMatchForReg.id && (t.slotGroup || 'TEAM A').toUpperCase() === selectedMatchForReg.group.toUpperCase() && t.status !== 'banned');
                 if (currentTeams.length >= (selectedMatchForReg.maxSlots || 12)) { alert("❌ Sorry, this group slots got full while you were filling the form. Please try another group."); window.switchTab('matches'); return; }
             }
+            
+            // AUTO TEAM ID GENERATE
+            const newTeamId = 'T' + (100 + allTeams.length + 1);
+
             await addDoc(collection(db, 'registrations'), {
+                teamId: newTeamId,
                 teamName: document.getElementById('free-teamName').value.trim().toUpperCase(), leaderName: document.getElementById('free-leaderName').value.trim(),
                 hometown: document.getElementById('free-hometown').value.trim(), phoneNumber: document.getElementById('free-phoneNumber').value.trim(),
                 gameUid: document.getElementById('free-gameUid').value.trim(), member2Uid: document.getElementById('free-member2Uid').value.trim(),
@@ -1432,7 +1569,7 @@
                 matchId: selectedMatchForReg ? selectedMatchForReg.id : 'general', slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A',
                 userEmail: window.loggedEmail, status: 'active', createdAt: Date.now()
             });
-            window.showToast('Free Registration Success!'); window.switchTab('matches');
+            window.showToast(`Free Registration Success! Team ID: ${newTeamId}`); window.switchTab('matches');
         });
 
         window.toggleMaintenanceMode = async function() {
@@ -1540,7 +1677,26 @@
         onSnapshot(collection(db, 'matches'), snap => {
             allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
             renderPublicMatches(); renderRoadmapTab();
-            const sel = document.getElementById('calc-match-select'); if (sel) sel.innerHTML = `<option value="">-- Choose Match --</option>` + allMatches.map(m=>`<option value="${m.id}">${window.escapeHTML(m.title)}</option>`).join('');
+            
+            // Populate Super Admin Scoreboard Dropdown
+            const saSel = document.getElementById('sa-calc-match-select'); 
+            if (saSel) saSel.innerHTML = `<option value="">-- Choose Match --</option>` + allMatches.map(m=>`<option value="${m.id}">${window.escapeHTML(m.title)}</option>`).join('');
+            
+            // Populate Admin/Host Scoreboard Dropdown (Filtered)
+            const ahSel = document.getElementById('ah-calc-match-select');
+            if (ahSel) {
+                const isSuper = (window.loggedEmail === SUPER_ADMIN);
+                const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+                const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+                
+                let filteredMatches = allMatches;
+                if (!isAdmin && isHost) {
+                    // Host can only see matches they created
+                    filteredMatches = allMatches.filter(m => m.createdBy === window.loggedEmail);
+                }
+                
+                ahSel.innerHTML = `<option value="">-- Choose Match --</option>` + filteredMatches.map(m=>`<option value="${m.id}">${window.escapeHTML(m.title)}</option>`).join('');
+            }
         });
 
         onSnapshot(collection(db, 'registrations'), snap => {
@@ -1550,9 +1706,84 @@
             const userList = document.getElementById('user-bookings-list');
             if(userList && window.loggedEmail) {
                 const myRegs = (window.loggedEmail === SUPER_ADMIN) ? allTeams : allTeams.filter(t => t.userEmail === window.loggedEmail);
-                userList.innerHTML = myRegs.length === 0 ? "No bookings found." : myRegs.map(r => `<div>✅ ${window.escapeHTML(r.teamName)} <span class="text-[10px] opacity-60">(${window.escapeHTML(r.slotGroup || 'TEAM A')})</span></div>`).join('');
+                userList.innerHTML = myRegs.length === 0 ? "No bookings found." : myRegs.map(r => `<div>✅ [${r.teamId || 'N/A'}] ${window.escapeHTML(r.teamName)} <span class="text-[10px] opacity-60">(${window.escapeHTML(r.slotGroup || 'TEAM A')})</span></div>`).join('');
             }
         });
+
+        // ==========================================
+        // CHAT SYSTEM
+        // ==========================================
+        let chatUnsubscribe = null;
+
+        window.initializeChat = function() {
+            if (chatUnsubscribe) chatUnsubscribe();
+            
+            // Delete messages older than 48 hours
+            const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
+            const qOld = query(collection(db, 'chats'), where('timestamp', '<', cutoffTime));
+            getDocs(qOld).then(snaps => {
+                snaps.forEach(async (d) => { await deleteDoc(d.ref); });
+            }).catch(e => console.log("Cleanup error: ", e));
+
+            // Listen for recent messages
+            const qRecent = query(collection(db, 'chats'), where('timestamp', '>', cutoffTime), orderBy('timestamp', 'asc'));
+            
+            chatUnsubscribe = onSnapshot(qRecent, snap => {
+                allChatMessages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderChatMessages();
+            });
+        };
+
+        function renderChatMessages() {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+            
+            if (allChatMessages.length === 0) {
+                container.innerHTML = `<div class="text-center text-xs text-slate-500 py-4">No messages yet. Start the conversation!</div>`;
+                return;
+            }
+
+            const myEmail = window.loggedEmail;
+            container.innerHTML = allChatMessages.map(msg => {
+                const isOwn = (msg.userEmail === myEmail);
+                const bubbleClass = isOwn ? 'chat-own' : 'chat-other';
+                const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const name = isOwn ? 'You' : window.maskEmail(msg.userEmail);
+                
+                return `
+                    <div class="chat-bubble ${bubbleClass}">
+                        <span class="chat-meta">${name} • ${time}</span>
+                        <div>${window.escapeHTML(msg.message)}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Auto scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        window.sendChatMessage = async function() {
+            if (window.loggedEmail === 'guest') {
+                alert("Please sign in with Google to chat!");
+                return;
+            }
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            input.value = ''; // Clear immediately for UI smoothness
+            
+            try {
+                await addDoc(collection(db, 'chats'), {
+                    message: msg,
+                    userEmail: window.loggedEmail,
+                    timestamp: Date.now()
+                });
+            } catch(e) {
+                console.error("Error sending message: ", e);
+                alert("Failed to send message. Check connection.");
+            }
+        };
     </script>
 </body>
 </html>
