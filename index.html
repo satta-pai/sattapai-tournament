@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Satta Pai - Free Fire Tournament Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        const savedMode = localStorage.getItem('satta_pai_mode');
+        if (savedMode === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+        const savedTheme = localStorage.getItem('satta_pai_theme') || 'whatsapp';
+        if (savedTheme !== 'whatsapp') {
+            document.documentElement.classList.add('theme-' + savedTheme);
+        }
+    </script>
+    <style>
+        :root {
+            --bg-main: #f9fafb;
+            --bg-card: #ffffff;
+            --bg-inner: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --accent-primary: #25d366;
+            --accent-glow: rgba(37, 211, 102, 0.15);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --btn-bg: #25d366;
+            --btn-text: #ffffff;
+        }
+
+        html.dark {
+            --bg-main: #121212;
+            --bg-card: #1e1e1e;
+            --bg-inner: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #f3f3f6;
+            --text-muted: #9ca3af;
+            --accent-primary: #25d366;
+            --accent-glow: rgba(37, 211, 102, 0.2);
+            --header-bg: rgba(18, 18, 18, 0.95);
+            --btn-bg: #25d366;
+            --btn-text: #ffffff;
+        }
+
+        html.theme-whatsapp { --accent-primary: #25d366; --accent-glow: rgba(37, 211, 102, 0.2); --btn-bg: #25d366; --btn-text: #ffffff; }
+        html.theme-instagram { --accent-primary: #e1306c; --accent-glow: rgba(225, 48, 108, 0.2); --btn-bg: #e1306c; --btn-text: #ffffff; }
+        html.theme-gold { --accent-primary: #d97706; --accent-glow: rgba(217, 119, 6, 0.2); --btn-bg: #d97706; --btn-text: #ffffff; }
+        html.theme-blue { --accent-primary: #2563eb; --accent-glow: rgba(37, 99, 235, 0.2); --btn-bg: #2563eb; --btn-text: #ffffff; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        input, select, textarea { font-size: 16px !important; }
+
+        .cyber-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+        }
+
+        .cyber-input {
+            background-color: var(--bg-inner);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            outline: none;
+        }
+        .cyber-input:focus { border-color: var(--accent-primary); }
+        
+        .btn-theme {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--header-bg);
+            border-top: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 4px;
+        }
+
+        .bottom-nav-item {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 600; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 6px 0;
+        }
+        .bottom-nav-item.active { color: var(--accent-primary); }
+
+        .dropdown-content {
+            display: none; position: absolute; right: 0; top: 100%; margin-top: 8px;
+            background: var(--bg-card); width: 220px; max-height: 220px; overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color); border-radius: 12px; z-index: 999; padding: 10px;
+        }
+        .dropdown-content.show { display: block; }
+    </style>
+</head>
+<body id="body-root">
+
+    <audio id="bg-music" loop></audio>
+
+    <div id="customer-support-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="cyber-card p-6 max-w-sm w-full space-y-3 text-center shadow-2xl">
+            <span class="text-3xl">🎧</span>
+            <h3 class="text-sm font-bold text-emerald-400">Customer Support</h3>
+            <div class="text-xs space-y-2 text-left cyber-card p-3 font-mono">
+                <div>📧 Email: <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline">satta0pai@gmail.com</a></div>
+                <div>📱 Telegram: <a href="https://t.me/CHELLAM_STORE" target="_blank" class="text-emerald-400 underline">@CHELLAM_STORE</a></div>
+                <div>👥 Telegram Group: <a href="https://t.me/freefairgameff" target="_blank" class="text-emerald-400 underline">Join Group</a></div>
+            </div>
+            <button onclick="closeCustomerSupportModal()" class="w-full py-2 btn-theme text-xs font-bold cursor-pointer">Close</button>
+        </div>
+    </div>
+
+    <div id="google-login-overlay" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="cyber-card p-6 max-w-sm w-full space-y-3 text-center shadow-2xl">
+            <span class="text-3xl">🛡️</span>
+            <h2 class="text-sm font-bold">Tournament Arena Login</h2>
+            <p class="text-[11px]" style="color: var(--text-muted);">Please verify your Google account or continue as guest to visit the arena.</p>
+            
+            <div class="cyber-card p-2.5 text-left text-[10px] space-y-1.5 border border-emerald-500/30">
+                <label class="flex items-start gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="terms-accept-checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0">
+                    <span style="color: var(--text-main);">
+                        I accept the 
+                        <a href="#" onclick="openPolicyTab('terms')" class="text-emerald-400 font-bold underline">Terms of Service</a> 
+                        and 
+                        <a href="#" onclick="openPolicyTab('privacy')" class="text-emerald-400 font-bold underline">Privacy Policy</a>.
+                    </span>
+                </label>
+            </div>
+
+            <button onclick="loginWithGoogleAuth()" class="w-full py-2.5 px-4 rounded-xl cyber-card flex items-center justify-center gap-2 font-bold text-xs cursor-pointer hover:bg-zinc-500/10 transition shadow" style="color: var(--text-main); border-color: var(--border-color);">
+                <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.95H1.2v3.14C3.18 21.36 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.25c-.25-.72-.38-1.49-.38-2.25s.13-1.53.38-2.25V6.61H1.2C.43 8.15 0 9.89 0 12s.43 3.85 1.2 5.39l4.08-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.18 2.64 1.2 6.61l4.08 3.14c.95-2.84 3.6-4.95 6.72-4.95z"/></svg>
+                <span>Sign in with Google</span>
+            </button>
+
+            <button onclick="loginAsGuest()" class="w-full py-2 px-4 rounded-xl cyber-card flex items-center justify-center gap-2 font-bold text-xs cursor-pointer hover:bg-zinc-500/10 transition shadow text-emerald-400 border-emerald-500/30">
+                <span>👤 Continue with Guest Login</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="factory-reset-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="cyber-card p-6 max-w-sm w-full space-y-4 text-center shadow-2xl border border-rose-500">
+            <span class="text-3xl">⚠️</span>
+            <h3 class="text-base font-bold text-rose-500">Factory Reset Warning</h3>
+            <p class="text-xs" style="color: var(--text-muted);">This will permanently delete all matches, registrations, staff permissions, custom settings, and analytics.</p>
+            <div id="reset-countdown-text" class="text-xs font-bold text-amber-400">Please wait 5 seconds...</div>
+            <div class="flex gap-2 pt-2">
+                <button onclick="closeFactoryResetModal()" class="flex-1 py-2 cyber-card text-xs font-bold cursor-pointer">Cancel</button>
+                <button id="confirm-factory-reset-btn" disabled class="flex-1 py-2 bg-rose-600 text-white rounded text-xs font-bold opacity-50 cursor-not-allowed" onclick="executeFactoryReset()">Confirm Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="maintenance-screen" class="fixed inset-0 z-[998] hidden flex flex-col items-center justify-center p-6 text-center" style="background: var(--bg-main);">
+        <div class="cyber-card p-8 max-w-md space-y-4 shadow-2xl">
+            <span class="text-4xl">🛠️</span>
+            <h1 class="text-xl font-bold" style="color: var(--text-main);">Site Under Maintenance</h1>
+            <p class="text-xs" style="color: var(--text-muted);">We are currently updating our tournament arena. Please check back soon!</p>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-50 px-4 py-3 border-b backdrop-blur-md shadow-sm" style="background: var(--header-bg); border-color: var(--border-color);">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('home')">
+                <div id="brand-logo-container" class="w-7 h-7 rounded-full flex items-center justify-center overflow-hidden border border-emerald-500/40 shadow" style="background: var(--accent-primary);">
+                    <span id="brand-logo-emoji">💀</span>
+                    <img id="brand-logo-img" src="" alt="Logo" class="w-full h-full object-cover hidden">
+                </div>
+                <span id="display-brand-name" class="font-bold text-sm tracking-tight" style="color: var(--text-main);">Satta Pai Esports</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="toggleMusic()" id="music-btn" class="p-2 rounded-lg cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);" title="Toggle Sound">
+                    <span id="music-icon" class="text-base">🔇</span>
+                </button>
+
+                <div class="relative">
+                    <button onclick="window.toggleMenuDropdown(event)" class="p-2 rounded-lg cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                    <div id="settings-dropdown" class="dropdown-content p-3 space-y-2.5 text-left text-xs">
+                        <div class="space-y-1">
+                            <div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Display Mode</div>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="setDarkMode(false)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer">☀️ Light</button>
+                                <button onclick="setDarkMode(true)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer bg-zinc-800 text-white">🌙 Dark</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1 pt-1.5 border-t" style="border-color: var(--border-color);">
+                            <div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Theme Color</div>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <button onclick="setTheme('whatsapp')" title="Green" class="w-6 h-6 rounded-full bg-[#25d366] cursor-pointer mx-auto"></button>
+                                <button onclick="setTheme('instagram')" title="Pink" class="w-6 h-6 rounded-full bg-[#e1306c] cursor-pointer mx-auto"></button>
+                                <button onclick="setTheme('gold')" title="Gold" class="w-6 h-6 rounded-full bg-[#d97706] cursor-pointer mx-auto"></button>
+                                <button onclick="setTheme('blue')" title="Blue" class="w-6 h-6 rounded-full bg-[#2563eb] cursor-pointer mx-auto"></button>
+                            </div>
+                        </div>
+
+                        <div class="pt-1.5 border-t space-y-1" style="border-color: var(--border-color);">
+                            <button id="menu-admin-portal-btn" onclick="switchTab('teams'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer hidden">🔒 Admin Portal</button>
+                            <button onclick="openCustomerSupportModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer text-emerald-400 font-bold">🎧 Customer Support</button>
+                            <button onclick="switchTab('privacy'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer">📄 Privacy Policy</button>
+                            <button onclick="switchTab('terms'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer">⚖️ Terms of Use</button>
+                            <button onclick="confirmSecureLogout(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-rose-500 hover:bg-rose-500/10 cursor-pointer">🚪 Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pt-4 space-y-4">
+        <section id="section-home" class="space-y-4">
+            <div class="cyber-card p-6 text-center space-y-3">
+                <span id="display-hero-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold" style="background-color: var(--accent-glow); color: var(--accent-primary);">
+                    👑 FREE FIRE ELITE BATTLEGROUND 👑
+                </span>
+                <h1 id="display-hero-title" class="text-2xl sm:text-4xl font-bold tracking-tight uppercase">BOOYAH TOURNAMENT</h1>
+                <p id="display-hero-subtitle" class="text-xs sm:text-sm font-semibold uppercase" style="color: var(--accent-primary);">BR / CS CUSTOM BATTLE ARENA</p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+                    <div class="cyber-card p-3 text-center"><span id="display-f1-icon" class="text-lg">🎯</span><div id="display-f1-text" class="text-xs font-bold mt-1">BR/CS CUSTOM</div></div>
+                    <div class="cyber-card p-3 text-center"><span id="display-f2-icon" class="text-lg">👥</span><div id="display-f2-text" class="text-xs font-bold mt-1">4 MEMBERS SQUAD</div></div>
+                    <div class="cyber-card p-3 text-center"><span id="display-f3-icon" class="text-lg">🏆</span><div id="display-f3-text" class="text-xs font-bold mt-1" style="color: var(--accent-primary);">CASH PRIZES</div></div>
+                    <div class="cyber-card p-3 text-center"><span id="display-f4-icon" class="text-lg">⚡</span><div id="display-f4-text" class="text-xs font-bold mt-1">INSTANT UPI</div></div>
+                </div>
+
+                <div class="pt-4 flex flex-wrap justify-center gap-2">
+                    <button onclick="switchTab('matches')" class="btn-theme px-5 py-2.5 text-xs uppercase font-bold">🎮 View Matches</button>
+                    <button onclick="switchTab('roadmap')" class="cyber-card px-5 py-2.5 text-xs font-bold uppercase">🗺️ Roadmap</button>
+                </div>
+            </div>
+
+            <div class="cyber-card p-5 space-y-3">
+                <h3 id="display-rules-header" class="text-sm font-bold flex items-center gap-2" style="color: var(--accent-primary);"><span>⚔️</span> Tournament Rules & Points System</h3>
+                <div id="display-rules-content" class="text-xs space-y-2 leading-relaxed" style="color: var(--text-muted);">
+                    <p>⚡ <strong style="color: var(--text-main);">Standard Free Fire Tournament Rules</strong> apply.</p>
+                    <p>💀 <strong style="color: var(--accent-primary);">+3 Points</strong> per Kill.</p>
+                    <p>📍 <strong style="color: var(--accent-primary);">In-map Placement</strong> points active for top positions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-matches" class="hidden space-y-3">
+            <div class="flex justify-between items-center">
+                <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back to Home</button>
+            </div>
+            <h2 class="text-base font-bold">Active Tournament Matches</h2>
+            <div id="public-matches-container" class="space-y-2">
+                <div class="cyber-card p-6 text-center text-xs" style="color: var(--text-muted);">Loading matches...</div>
+            </div>
+        </section>
+
+        <section id="section-roadmap" class="hidden space-y-3">
+            <div class="flex justify-between items-center">
+                <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back to Home</button>
+            </div>
+            <h2 class="text-base font-bold">Tournament Roadmap & Results</h2>
+            <div id="roadmap-container" class="space-y-3">
+                <div class="cyber-card p-6 text-center text-xs" style="color: var(--text-muted);">Loading roadmap...</div>
+            </div>
+        </section>
+
+        <section id="section-register-paid" class="hidden">
+            <div class="cyber-card p-5 max-w-lg mx-auto space-y-4">
+                <button type="button" onclick="switchTab('matches')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer" style="color: var(--accent-primary);">⬅️ Back to Matches</button>
+                <h2 class="text-lg font-bold">Paid Squad Registration</h2>
+                <div id="reg-paid-match-title" class="text-xs font-medium" style="color: var(--accent-primary);"></div>
+                
+                <div id="reg-paid-payment-box" class="cyber-card p-3 space-y-3 text-center hidden">
+                    <div id="reg-upi-btn-box" class="hidden">
+                        <a id="reg-upi-pay-link" href="#" class="btn-theme block py-2.5 px-4 text-xs uppercase font-bold tracking-wider">⚡ Pay via UPI App (GPay / PhonePe)</a>
+                    </div>
+                    <div id="reg-qr-box" class="hidden space-y-1">
+                        <p class="text-[10px] font-bold">Or Scan QR Code to Pay:</p>
+                        <img id="reg-qr-img" src="" alt="QR Code" class="w-36 h-36 mx-auto object-contain rounded border">
+                    </div>
+                </div>
+
+                <form id="registration-paid-form" class="space-y-3 text-xs">
+                    <div><label class="block font-semibold mb-1">Team Name *</label><input type="text" id="paid-teamName" required class="cyber-input w-full px-3 py-2 uppercase"></div>
+                    <div><label class="block font-semibold mb-1">Leader Name *</label><input type="text" id="paid-leaderName" required class="cyber-input w-full px-3 py-2"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label class="block font-semibold mb-1">City / Town *</label><input type="text" id="paid-hometown" required class="cyber-input w-full px-3 py-2"></div>
+                        <div><label class="block font-semibold mb-1">Phone (10 Digits) *</label><input type="tel" id="paid-phoneNumber" required maxlength="10" class="cyber-input w-full px-3 py-2 font-mono" oninput="this.value = this.value.replace(/[^0-9]/g, '')"></div>
+                    </div>
+                    <div><label class="block font-semibold mb-1">Leader Game UID *</label><input type="text" id="paid-gameUid" required class="cyber-input w-full px-3 py-2 font-mono"></div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="block font-[10px] font-semibold mb-1">Player 2 UID *</label><input type="text" id="paid-member2Uid" required class="cyber-input w-full px-2.5 py-1.5 font-mono"></div>
+                        <div><label class="block font-[10px] font-semibold mb-1">Player 3 UID *</label><input type="text" id="paid-member3Uid" required class="cyber-input w-full px-2.5 py-1.5 font-mono"></div>
+                        <div><label class="block font-[10px] font-semibold mb-1">Player 4 UID *</label><input type="text" id="paid-member4Uid" required class="cyber-input w-full px-2.5 py-1.5 font-mono"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1 border-t" style="border-color: var(--border-color);">
+                        <div><label class="block font-[10px] font-semibold mb-1" style="color: var(--accent-primary);">Sub Player 1 UID (Optional)</label><input type="text" id="paid-sub1Uid" class="cyber-input w-full px-2.5 py-1.5 font-mono text-xs"></div>
+                        <div><label class="block font-[10px] font-semibold mb-1" style="color: var(--accent-primary);">Sub Player 2 UID (Optional)</label><input type="text" id="paid-sub2Uid" class="cyber-input w-full px-2.5 py-1.5 font-mono text-xs"></div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">UPI Transaction ID / Ref No (12 Digits) *</label>
+                        <input type="text" id="paid-transitionId" required class="cyber-input w-full px-3 py-2 font-mono" placeholder="Enter 12-digit UPI Ref No" pattern="[0-9]{12}" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                    <button type="submit" class="btn-theme w-full py-2.5 uppercase tracking-wider">✅ Submit Registration</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="section-register-free" class="hidden">
+            <div class="cyber-card p-5 max-w-lg mx-auto space-y-4">
+                <button type="button" onclick="switchTab('matches')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer" style="color: var(--accent-primary);">⬅️ Back to Matches</button>
+                <h2 class="text-lg font-bold text-emerald-400">🎉 Free Squad Registration</h2>
+                <div id="reg-free-match-title" class="text-xs font-medium" style="color: var(--accent-primary);"></div>
+                <form id="registration-free-form" class="space-y-3 text-xs">
+                    <div><label class="block font-semibold mb-1">Team Name *</label><input type="text" id="free-teamName" required class="cyber-input w-full px-3 py-2 uppercase"></div>
+                    <div><label class="block font-semibold mb-1">Leader Name *</label><input type="text" id="free-leaderName" required class="cyber-input w-full px-3 py-2"></div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label class="block font-semibold mb-1">City / Town *</label><input type="text" id="free-hometown" required class="cyber-input w-full px-3 py-2"></div>
+                        <div><label class="block font-semibold mb-1">Phone (10 Digits) *</label><input type="tel" id="free-phoneNumber" required maxlength="10" class="cyber-input w-full px-3 py-2 font-mono" oninput="this.value = this.value.replace(/[^0-9]/g, '')"></div>
+                    </div>
+                    <div><label class="block font-semibold mb-1">Leader Game UID *</label><input type="text" id="free-gameUid" required class="cyber-input w-full px-3 py-2 font-mono"></div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="block font-[10px] font-semibold mb-1">Player 2 UID *</label><input type="text" id="free-member2Uid" required class="cyber-input w-full px-2.5 py-1.5 font-mono"></div>
+                        <div><label class="block font-[10px] font-semibold mb-1">Player 3 UID *</label><input type="text" id="free-member3Uid" required class="cyber-input w-full px-2.5 py-1.5 font-mono"></div>
+                        <div><label class="block font-[10px] font-semibold mb-1">Player 4 UID *</label><input type="text" id="free-member4Uid" required class="cyber-input w-full px-2.5 py-1.5 font-mono"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1 border-t" style="border-color: var(--border-color);">
+                        <div><label class="block font-[10px] font-semibold mb-1" style="color: var(--accent-primary);">Sub Player 1 UID (Optional)</label><input type="text" id="free-sub1Uid" class="cyber-input w-full px-2.5 py-1.5 font-mono text-xs"></div>
+                        <div><label class="block font-[10px] font-semibold mb-1" style="color: var(--accent-primary);">Sub Player 2 UID (Optional)</label><input type="text" id="free-sub2Uid" class="cyber-input w-full px-2.5 py-1.5 font-mono text-xs"></div>
+                    </div>
+                    <button type="submit" class="btn-theme w-full py-2.5 uppercase tracking-wider">✅ Confirm Free Registration</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- UPDATED PRIVACY POLICY SECTION -->
+        <section id="section-privacy" class="hidden">
+            <div class="cyber-card p-6 space-y-4 text-xs leading-relaxed text-justify">
+                <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
+                    <h2 class="text-sm font-bold" style="color: var(--accent-primary);">Privacy Policy</h2>
+                    <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back</button>
+                </div>
+                <p style="color: var(--text-main);"><strong>Satta Pai Esports</strong> respects your privacy and is committed to protecting your personal data.</p>
+                <div class="space-y-2" style="color: var(--text-muted);">
+                    <p>🔹 <strong>Information We Collect:</strong> When you register for a tournament, we collect your Google Email, Phone Number, City, Free Fire Game UID, and UPI Transaction details (UTR) for payment verification.</p>
+                    <p>🔹 <strong>How We Use Your Data:</strong> Your details are strictly used for tournament organization, slot allotment, verifying payments, and sending prize money. We do not sell or share your data with third-party advertisers.</p>
+                    <p>🔹 <strong>Data Security:</strong> All data is securely stored in Google Firebase. We use reCAPTCHA (App Check) and strict database rules to prevent unauthorized access, hacking, or bot spam.</p>
+                    <p>🔹 <strong>Payment Info:</strong> We do not ask for your UPI PIN or bank passwords. We only verify the 12-digit Transaction ID (UTR) manually to confirm your entry fee.</p>
+                    <p>🔹 <strong>Contact:</strong> For any privacy concerns, email us at <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline">satta0pai@gmail.com</a>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- UPDATED TERMS OF SERVICE SECTION -->
+        <section id="section-terms" class="hidden">
+            <div class="cyber-card p-6 space-y-4 text-xs leading-relaxed text-justify">
+                <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
+                    <h2 class="text-sm font-bold" style="color: var(--accent-primary);">Terms of Service</h2>
+                    <button onclick="switchTab('home')" class="text-xs font-semibold px-3 py-1.5 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Back</button>
+                </div>
+                <p style="color: var(--text-main);">By registering and participating in <strong>Satta Pai Esports</strong> tournaments, you agree to the following terms:</p>
+                <div class="space-y-2" style="color: var(--text-muted);">
+                    <p>⚖️ <strong>Fair Play:</strong> The use of hacks, scripts, panel injections, or emulators on mobile is strictly prohibited. Any team found cheating will be immediately disqualified without a refund.</p>
+                    <p>⚖️ <strong>Entry Fees & Refunds:</strong> All entry fees are non-refundable unless the match is cancelled by the organizers. Fake UPI Transaction IDs will result in a permanent ban from the platform.</p>
+                    <p>⚖️ <strong>Game UIDs:</strong> Ensure all 4 Player UIDs are correct. Wrong UIDs will lead to disqualification. In-game names (IGN) must match the registered details.</p>
+                    <p>⚖️ <strong>Room Details:</strong> Room ID and Password will be shared via the WhatsApp group before the match. Players must join 10 minutes prior. Late entries will not be accommodated.</p>
+                    <p>⚖️ <strong>Organizer Rights:</strong> Satta Pai Esports reserves the right to change match timings, rules, or disqualify any team if suspicious activity is detected.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-teams" class="hidden space-y-4">
+            <div id="console-super-admin" class="cyber-card p-4 space-y-4 hidden">
+                <div class="flex items-center justify-between pb-2 border-b" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2">
+                        <button onclick="switchTab('home')" class="text-xs font-semibold px-2.5 py-1 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Home</button>
+                        <div>
+                            <h2 class="text-sm font-bold">👑 Super Admin Console</h2>
+                            <p class="text-[10px]" style="color: var(--text-muted);" id="sa-email-lbl"></p>
+                        </div>
+                    </div>
+                    <button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs font-bold">Logout</button>
+                </div>
+                <div class="flex gap-2 overflow-x-auto pb-2">
+                    <button onclick="switchSASub('score')" id="sas-btn-score" class="px-3 py-1.5 rounded text-xs font-semibold btn-theme whitespace-nowrap">Scoreboard</button>
+                    <button onclick="switchSASub('match')" id="sas-btn-match" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">Match Manager</button>
+                    <button onclick="switchSASub('users')" id="sas-btn-users" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">📊 Users</button>
+                    <button onclick="switchSASub('staffs')" id="sas-btn-staffs" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">👥 Staffs</button>
+                    <button onclick="switchSASub('squads')" id="sas-btn-squads" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">Squads (<span id="total-teams-count">0</span>)</button>
+                    <button onclick="switchSASub('settings')" id="sas-btn-settings" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">Settings & Tools</button>
+                </div>
+
+                <div id="sas-sec-score" class="space-y-3 text-xs">
+                    <div class="cyber-card p-3 space-y-3">
+                        <label class="block font-medium">Select Match</label>
+                        <select id="calc-match-select" onchange="loadMatchTeamsForCalc()" class="cyber-input w-full px-2.5 py-1.5 text-xs"><option value="">-- Choose Match --</option></select>
+                        
+                        <div class="cyber-card p-2.5 space-y-2 border border-emerald-500/30">
+                            <div class="font-bold text-emerald-400">⚙️ Points Table Configuration</div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div><label class="block font-[10px]">1st Place Pts</label><input type="number" id="pts-1" value="12" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">2nd Place Pts</label><input type="number" id="pts-2" value="9" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">3rd Place Pts</label><input type="number" id="pts-3" value="8" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">4th Place Pts</label><input type="number" id="pts-4" value="7" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">5th Place Pts</label><input type="number" id="pts-5" value="6" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">6th Place Pts</label><input type="number" id="pts-6" value="5" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">7th Place Pts</label><input type="number" id="pts-7" value="4" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">8th Place Pts</label><input type="number" id="pts-8" value="3" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">9th Place Pts</label><input type="number" id="pts-9" value="2" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                                <div><label class="block font-[10px]">10th Place Pts</label><input type="number" id="pts-10" value="1" class="cyber-input w-full px-2.5 py-1 text-xs font-mono"></div>
+                            </div>
+                            <div><label class="block font-[10px] font-bold">Points Per Kill</label><input type="number" id="pts-kill" value="3" class="cyber-input w-full px-2 py-1 text-xs font-mono"></div>
+                        </div>
+
+                        <div id="host-teams-input-area" class="space-y-2 hidden pt-2">
+                            <div id="host-teams-rows" class="space-y-1.5 max-h-60 overflow-y-auto"></div>
+                            <button onclick="generateAndPublishScoreboard()" class="btn-theme px-3 py-1.5">Publish Scoreboard</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sas-sec-match" class="hidden space-y-3 text-xs">
+                    <form id="create-match-form" class="cyber-card p-3 space-y-3">
+                        <div><label class="block font-semibold mb-1">Match Title *</label><input type="text" id="cm-title" required class="cyber-input w-full px-2.5 py-1.5 text-xs" placeholder="Saturday Clash S1"></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block font-semibold mb-1">Stage</label><select id="cm-stage" class="cyber-input w-full px-2 py-1.5 text-xs font-bold"><option value="Playoffs">Playoffs</option><option value="Semifinals" selected>Semifinals</option><option value="Finals">Finals</option></select></div>
+                            <div><label class="block font-semibold mb-1">Type</label><select id="cm-type" onchange="toggleMatchTypeFields(this.value)" class="cyber-input w-full px-2 py-1.5 text-xs font-bold"><option value="paid" selected>Paid Match</option><option value="free">Free Match</option></select></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block font-semibold mb-1">Map</label><input type="text" id="cm-map" required value="Bermuda" class="cyber-input w-full px-2.5 py-1.5 text-xs"></div>
+                            <div><label class="block font-semibold mb-1">Date & Time</label><input type="text" id="cm-time" required value="25-10-2026 at 1:50 PM" class="cyber-input w-full px-2.5 py-1.5 text-xs"></div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div><label class="block font-semibold mb-1">Slots</label><input type="number" id="cm-slots" required value="12" class="cyber-input w-full px-2.5 py-1.5 text-xs font-mono"></div>
+                            <div><label class="block font-semibold mb-1">Prize Pool (₹)</label><input type="text" id="cm-prize-pool" required value="500" class="cyber-input w-full px-2.5 py-1.5 text-xs font-mono" placeholder="500"></div>
+                            <div id="cm-fee-container"><label class="block font-semibold mb-1">Entry Fee (₹)</label><input type="text" id="cm-fee" required value="50" class="cyber-input w-full px-2.5 py-1.5 text-xs font-mono" placeholder="50"></div>
+                        </div>
+
+                        <div id="cm-upi-container">
+                            <label class="block font-semibold mb-1">UPI ID</label>
+                            <input type="text" id="cm-upi" value="sattapai@oksbi" class="cyber-input w-full px-2.5 py-1.5 text-xs font-mono">
+                        </div>
+
+                        <div id="cm-payment-toggles" class="grid grid-cols-2 gap-2 pt-1 pb-1 border-y" style="border-color: var(--border-color);">
+                            <label class="flex items-center gap-2 cursor-pointer font-semibold"><input type="checkbox" id="cm-upi-toggle" checked class="accent-emerald-500 w-4 h-4"> Enable UPI ID</label>
+                            <label class="flex items-center gap-2 cursor-pointer font-semibold"><input type="checkbox" id="cm-qr-toggle" checked class="accent-emerald-500 w-4 h-4"> Enable QR Code</label>
+                        </div>
+
+                        <div><label class="block font-semibold mb-1">Groups (comma separated)</label><input type="text" id="cm-groups" required value="TEAM A, TEAM B" oninput="updateDynamicWhatsAppInputs()" class="cyber-input w-full px-2.5 py-1.5 text-xs uppercase"></div>
+                        <div id="dynamic-whatsapp-container" class="space-y-1.5 pt-1"><div id="whatsapp-inputs-list" class="space-y-1.5"></div></div>
+                        <div id="cm-qr-upload-container">
+                            <label class="block font-semibold mb-1" style="color: var(--accent-primary);">📱 Upload QR Code Image</label>
+                            <input type="file" id="cm-qr-file" accept="image/*" class="block w-full text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-emerald-600 file:text-white cursor-pointer">
+                        </div>
+                        <button type="submit" id="match-submit-btn" class="btn-theme w-full py-2.5 mt-2">🚀 Publish Match</button>
+                    </form>
+                    <div id="admin-matches-list" class="space-y-2 pt-2"></div>
+                </div>
+
+                <div id="sas-sec-users" class="hidden space-y-3 text-xs">
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="cyber-card p-3 text-center space-y-1">
+                            <div class="text-[10px] font-semibold" style="color: var(--text-muted);">🟢 Live Users</div>
+                            <div id="stat-live-users" class="text-lg font-bold text-emerald-400 font-mono">0</div>
+                        </div>
+                        <div class="cyber-card p-3 text-center space-y-1">
+                            <div class="text-[10px] font-semibold" style="color: var(--text-muted);">📅 Daily (24h)</div>
+                            <div id="stat-daily-visitors" class="text-lg font-bold font-mono" style="color: var(--accent-primary);">0</div>
+                        </div>
+                        <div class="cyber-card p-3 text-center space-y-1">
+                            <div class="text-[10px] font-semibold" style="color: var(--text-muted);">👥 Total Visitors</div>
+                            <div id="stat-total-visitors" class="text-lg font-bold font-mono text-blue-400">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sas-sec-staffs" class="hidden space-y-3 text-xs">
+                    <div class="cyber-card p-3 space-y-3">
+                        <h3 class="font-bold text-sm" style="color: var(--accent-primary);">👥 Manage Staffs</h3>
+                        <form id="add-staff-form" class="space-y-2">
+                            <div>
+                                <label class="block font-semibold mb-1">Gmail Address *</label>
+                                <input type="email" id="staff-email-input" required placeholder="staff@gmail.com" class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                            </div>
+                            <div>
+                                <label class="block font-semibold mb-1">Assign Role *</label>
+                                <select id="staff-role-select" class="cyber-input w-full px-2.5 py-1.5 text-xs font-bold">
+                                    <option value="host">Host</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-theme w-full py-2">➕ Add Staff Member</button>
+                        </form>
+                    </div>
+
+                    <div class="cyber-card p-3 space-y-2">
+                        <div class="font-bold">Authorized Admins:</div>
+                        <div id="admins-list-container" class="space-y-1"></div>
+                    </div>
+
+                    <div class="cyber-card p-3 space-y-2">
+                        <div class="font-bold">Authorized Hosts:</div>
+                        <div id="hosts-list-container" class="space-y-1"></div>
+                    </div>
+                </div>
+
+                <div id="sas-sec-squads" class="hidden space-y-2 text-xs">
+                    <div class="flex justify-between items-center">
+                        <div class="font-bold text-xs" style="color: var(--accent-primary);">Registered Squads (<span id="total-teams-count">0</span>)</div>
+                        <button onclick="removeAllSquads()" class="px-3 py-1.5 bg-rose-600 text-white rounded font-bold text-xs hover:bg-rose-700">🗑️ Remove All Squads</button>
+                    </div>
+                    <input type="text" id="search-input" oninput="filterSquadsList(this.value)" placeholder="🔍 Search squad or team name..." class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                    <div id="teams-container" class="space-y-2"></div>
+                </div>
+
+                <div id="sas-sec-settings" class="hidden space-y-3 text-xs">
+                    <div class="cyber-card p-3 flex items-center justify-between">
+                        <span class="font-bold">🛠️ Maintenance Mode</span>
+                        <button type="button" id="maintenance-toggle-btn" onclick="toggleMaintenanceMode()" class="px-3 py-1 rounded bg-rose-600 text-white font-bold text-xs">OFF</button>
+                    </div>
+
+                    <div class="cyber-card p-3 space-y-2 border border-rose-500/30">
+                        <div class="font-bold text-rose-400">⚡ Super Admin Database Tools</div>
+                        <div class="grid grid-cols-3 gap-1.5 pt-1">
+                            <button onclick="resetAllDatabaseData()" class="px-2 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded text-[11px]">🧹 Reset Data</button>
+                            <button onclick="backupAndExportData()" class="px-2 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded text-[11px]">💾 Backup</button>
+                            <button onclick="openFactoryResetModal()" class="px-2 py-2 bg-rose-700 hover:bg-rose-800 text-white font-bold rounded text-[11px]">🚨 Factory Reset</button>
+                        </div>
+                        <div class="space-y-1 pt-2">
+                            <label class="block text-[10px] font-bold">📥 Restore Data from JSON Backup:</label>
+                            <input type="file" id="restore-file-input" accept=".json" onchange="restoreDatabaseFromJSON(event)" class="block w-full text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-blue-600 file:text-white cursor-pointer">
+                        </div>
+                        
+                        <div class="space-y-1 pt-2 border-t" style="border-color: var(--border-color);">
+                            <label class="block font-bold text-emerald-400">🚀 Live Code Deployer (Warning: Use Netlify Instead)</label>
+                            <textarea id="edit-live-code" rows="3" placeholder="Paste full HTML code here..." class="cyber-input w-full p-2 text-xs font-mono"></textarea>
+                            <button type="button" onclick="deployLiveCode()" class="mt-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold text-xs w-full">⚡ Deploy Code Live</button>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card p-3 space-y-3 border border-emerald-500/30">
+                        <div class="font-bold text-emerald-400">🖼️ Brand Logo Management</div>
+                        <input type="file" id="logo-file-input" accept="image/*" class="block w-full text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-emerald-600 file:text-white cursor-pointer">
+                        <div class="flex gap-2">
+                            <button type="button" onclick="saveLogoSettings()" class="btn-theme flex-1 py-1.5 text-xs">🖼️ Save Logo</button>
+                            <button type="button" onclick="removeLogoSettings()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded text-xs">Remove Logo</button>
+                        </div>
+
+                        <div class="pt-2 border-t space-y-2" style="border-color: var(--border-color);">
+                            <div class="font-bold text-emerald-400">🎵 Background Song Management</div>
+                            <input type="file" id="music-file-input" accept="audio/mp3, audio/*" class="block w-full text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-emerald-600 file:text-white cursor-pointer">
+                            <div class="flex gap-2">
+                                <button type="button" onclick="saveSongSettings()" class="btn-theme flex-1 py-1.5 text-xs">🎵 Save & Play</button>
+                                <button type="button" onclick="removeSongSettings()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded text-xs">Remove Song</button>
+                            </div>
+                            <span id="current-song-status" class="text-[10px] block mt-1" style="color: var(--text-muted);">No custom song uploaded</span>
+                        </div>
+                    </div>
+
+                    <form id="tournament-settings-form" class="cyber-card p-3 space-y-2">
+                        <label class="block font-bold">Brand Name</label><input type="text" id="edit-brand-name" required class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                        <label class="block font-bold">Hero Badge Text</label><input type="text" id="edit-hero-badge" required class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                        <label class="block font-bold">Hero Title</label><input type="text" id="edit-hero-title" required class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                        <label class="block font-bold">Hero Subtitle</label><input type="text" id="edit-hero-subtitle" required class="cyber-input w-full px-2.5 py-1.5 text-xs">
+
+                        <div class="grid grid-cols-2 gap-2 pt-2 border-t" style="border-color: var(--border-color);">
+                            <div><label class="block font-[10px] font-bold">Card 1 Icon & Text</label><input type="text" id="edit-f1-icon" value="🎯" class="cyber-input w-full px-2 py-1 text-xs mb-1"><input type="text" id="edit-f1-text" value="BR/CS CUSTOM" class="cyber-input w-full px-2 py-1 text-xs"></div>
+                            <div><label class="block font-[10px] font-bold">Card 2 Icon & Text</label><input type="text" id="edit-f2-icon" value="👥" class="cyber-input w-full px-2 py-1 text-xs mb-1"><input type="text" id="edit-f2-text" value="4 MEMBERS SQUAD" class="cyber-input w-full px-2 py-1 text-xs"></div>
+                            <div><label class="block font-[10px] font-bold">Card 3 Icon & Text</label><input type="text" id="edit-f3-icon" value="🏆" class="cyber-input w-full px-2 py-1 text-xs mb-1"><input type="text" id="edit-f3-text" value="CASH PRIZES" class="cyber-input w-full px-2 py-1 text-xs"></div>
+                            <div><label class="block font-[10px] font-bold">Card 4 Icon & Text</label><input type="text" id="edit-f4-icon" value="⚡" class="cyber-input w-full px-2 py-1 text-xs mb-1"><input type="text" id="edit-f4-text" value="INSTANT UPI" class="cyber-input w-full px-2 py-1 text-xs"></div>
+                        </div>
+
+                        <div class="pt-2 border-t" style="border-color: var(--border-color);">
+                            <label class="block font-bold">Rules Header</label><input type="text" id="edit-rules-header" required class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                            <label class="block font-bold mt-1">Rules Content (HTML)</label><textarea id="edit-rules-content" rows="3" class="cyber-input w-full p-2 text-xs font-mono"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-theme w-full py-2 mt-2">💾 Save Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="console-admin-host" class="cyber-card p-4 space-y-4 hidden">
+                <div class="flex items-center justify-between pb-2 border-b" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2">
+                        <button onclick="switchTab('home')" class="text-xs font-semibold px-2.5 py-1 cyber-card inline-flex items-center gap-1 cursor-pointer">⬅️ Home</button>
+                        <div>
+                            <h2 class="text-sm font-bold" id="ah-title-lbl">Match Host / Admin Console</h2>
+                            <p class="text-[10px]" style="color: var(--text-muted);" id="ah-email-lbl"></p>
+                        </div>
+                    </div>
+                    <button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs font-bold">Logout</button>
+                </div>
+                
+                <div class="flex gap-2 overflow-x-auto pb-2" id="admin-host-nav">
+                    <button onclick="switchAHSub('match')" id="ah-btn-match" class="px-3 py-1.5 rounded text-xs font-semibold btn-theme whitespace-nowrap">Match Manager</button>
+                    <button onclick="switchAHSub('staffs')" id="ah-btn-staffs" class="px-3 py-1.5 rounded text-xs font-semibold cyber-card whitespace-nowrap" style="color: var(--text-muted);">👥 Staffs (Hosts)</button>
+                </div>
+
+                <div id="ah-sec-match" class="space-y-3 text-xs">
+                    <p class="text-xs font-semibold" style="color: var(--accent-primary);">⚡ Match Manager</p>
+                    <div id="host-matches-list" class="space-y-2"></div>
+                </div>
+
+                <div id="ah-sec-staffs" class="hidden space-y-3 text-xs">
+                    <div class="cyber-card p-3 space-y-3">
+                        <h3 class="font-bold text-sm" style="color: var(--accent-primary);">👥 Add Host</h3>
+                        <form id="add-host-form-ah" class="space-y-2">
+                            <div>
+                                <label class="block font-semibold mb-1">Host Gmail Address *</label>
+                                <input type="email" id="host-email-input-ah" required placeholder="host@gmail.com" class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                            </div>
+                            <button type="submit" class="btn-theme w-full py-2">➕ Add Host</button>
+                        </form>
+                    </div>
+                    <div class="cyber-card p-3 space-y-2">
+                        <div class="font-bold">Authorized Hosts:</div>
+                        <div id="hosts-list-container-ah" class="space-y-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="console-user" class="cyber-card p-6 text-center space-y-3 hidden">
+                <span class="text-3xl">👤</span>
+                <h2 class="text-base font-bold">User Dashboard</h2>
+                <p class="text-xs" style="color: var(--text-muted);" id="user-email-lbl"></p>
+                <div class="cyber-card p-3 text-xs space-y-2 text-left">
+                    <div class="font-bold uppercase text-[10px]" style="color: var(--accent-primary);">Your Bookings:</div>
+                    <div id="user-bookings-list" class="space-y-1 text-xs">No active bookings found.</div>
+                </div>
+                <button onclick="confirmSecureLogout()" class="px-4 py-2 bg-rose-600 text-white rounded text-xs font-bold">Logout</button>
+            </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav shadow-lg">
+        <button onclick="switchTab('home')" id="bnav-home" class="bottom-nav-item active"><span class="text-base">🏠</span><span>Home</span></button>
+        <button onclick="switchTab('matches')" id="bnav-matches" class="bottom-nav-item"><span class="text-base">🎮</span><span>Matches</span></button>
+        <button onclick="switchTab('roadmap')" id="bnav-roadmap" class="bottom-nav-item"><span class="text-base">🗺️</span><span>Roadmap</span></button>
+    </nav>
+
+    <div id="toast" class="fixed bottom-20 right-4 z-50 hidden cyber-card px-3 py-2 text-xs font-semibold shadow-lg">
+        <span id="toast-text">Success</span>
+    </div>
+
+    <script>
+        let musicPlayingState = false;
+        window.loggedEmail = localStorage.getItem('satta_pai_auth_email') || '';
+        const SUPER_ADMIN = "vasanth90871@gmail.com";
+
+        window.escapeHTML = function(str) {
+            if(!str) return '';
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+            });
+        };
+
+        window.maskEmail = function(email) {
+            if(!email) return '';
+            if(email === 'guest') return 'Guest User';
+            const parts = email.split('@');
+            if(parts.length !== 2) return email;
+            const username = parts[0];
+            if(username.length <= 1) return email;
+            const masked = username[0] + '*****';
+            return masked + '@' + parts[1];
+        };
+
+        window.openPolicyTab = function(tabName) {
+            document.getElementById('google-login-overlay').classList.add('hidden');
+            switchTab(tabName);
+        };
+
+        window.openCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.remove('hidden'); };
+        window.closeCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.add('hidden'); };
+
+        window.compressImageAndGetBase64 = function(file, callback) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 250;
+                    const MAX_HEIGHT = 250;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } }
+                    else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    callback(canvas.toDataURL('image/jpeg', 0.7));
+                }
+            }
+        };
+
+        window.saveLogoSettings = async function() {
+            if(!confirm("Confirm ah intha logo-ai save panniringala?")) return;
+            const logoInput = document.getElementById('logo-file-input');
+            if(logoInput.files && logoInput.files[0]) {
+                window.compressImageAndGetBase64(logoInput.files[0], async function(logoDataURL) {
+                    await window.setDoc(window.doc(window.db, 'settings', 'config'), { logoDataURL }, { merge: true });
+                    const imgEl = document.getElementById('brand-logo-img');
+                    const emojiEl = document.getElementById('brand-logo-emoji');
+                    if(imgEl && emojiEl) { imgEl.src = logoDataURL; imgEl.classList.remove('hidden'); emojiEl.classList.add('hidden'); }
+                    window.showToast("Brand Logo Saved Successfully!");
+                });
+            } else { alert("Please select an image file first."); }
+        };
+
+        window.removeLogoSettings = async function() {
+            if(!confirm("Confirm ah brand logo-va remove panniringala?")) return;
+            await window.setDoc(window.doc(window.db, 'settings', 'config'), { logoDataURL: "" }, { merge: true });
+            document.getElementById('brand-logo-img').classList.add('hidden');
+            document.getElementById('brand-logo-emoji').classList.remove('hidden');
+            window.showToast("Logo Removed Successfully!");
+        };
+
+        window.saveSongSettings = async function() {
+            if(!confirm("Confirm ah intha song-a save panni play panniringala?")) return;
+            const musicInput = document.getElementById('music-file-input');
+            if(musicInput.files && musicInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(evt) {
+                    const musicDataURL = evt.target.result;
+                    await window.setDoc(window.doc(window.db, 'settings', 'config'), { musicDataURL }, { merge: true });
+                    const audio = document.getElementById('bg-music');
+                    audio.src = musicDataURL; audio.play().catch(e => console.log(e));
+                    musicPlayingState = true; document.getElementById('music-icon').textContent = "🔊";
+                    window.showToast("Song Saved & Playing!");
+                    document.getElementById('current-song-status').textContent = "🎵 Custom song active";
+                };
+                reader.readAsDataURL(musicInput.files[0]);
+            } else { alert("Please select an MP3 file first."); }
+        };
+
+        window.removeSongSettings = async function() {
+            if(!confirm("Confirm ah background song-a remove panniringala?")) return;
+            await window.setDoc(window.doc(window.db, 'settings', 'config'), { musicDataURL: "" }, { merge: true });
+            const audio = document.getElementById('bg-music'); audio.pause(); audio.src = "";
+            musicPlayingState = false; document.getElementById('music-icon').textContent = "🔇";
+            document.getElementById('current-song-status').textContent = "No custom song uploaded";
+            window.showToast("Song Removed Successfully!");
+        };
+
+        function applyCachedConfigToDOM() {
+            try {
+                const cached = JSON.parse(localStorage.getItem('satta_pai_cached_config') || '{}');
+                if(cached.brandName) { const el = document.getElementById('display-brand-name'); if(el) el.textContent = cached.brandName; const editEl = document.getElementById('edit-brand-name'); if(editEl) editEl.value = cached.brandName; }
+                if(cached.heroBadge) { const el = document.getElementById('display-hero-badge'); if(el) el.textContent = cached.heroBadge; const editEl = document.getElementById('edit-hero-badge'); if(editEl) editEl.value = cached.heroBadge; }
+                if(cached.heroTitle) { const el = document.getElementById('display-hero-title'); if(el) el.textContent = cached.heroTitle; const editEl = document.getElementById('edit-hero-title'); if(editEl) editEl.value = cached.heroTitle; }
+                if(cached.heroSubtitle) { const el = document.getElementById('display-hero-subtitle'); if(el) el.textContent = cached.heroSubtitle; const editEl = document.getElementById('edit-hero-subtitle'); if(editEl) editEl.value = cached.heroSubtitle; }
+                if(cached.logoDataURL) { const imgEl = document.getElementById('brand-logo-img'); const emojiEl = document.getElementById('brand-logo-emoji'); if(imgEl && emojiEl) { imgEl.src = cached.logoDataURL; imgEl.classList.remove('hidden'); emojiEl.classList.add('hidden'); } }
+                if(cached.f1Icon) { document.getElementById('display-f1-icon').textContent = cached.f1Icon; document.getElementById('edit-f1-icon').value = cached.f1Icon; }
+                if(cached.f1Text) { document.getElementById('display-f1-text').textContent = cached.f1Text; document.getElementById('edit-f1-text').value = cached.f1Text; }
+                if(cached.f2Icon) { document.getElementById('display-f2-icon').textContent = cached.f2Icon; document.getElementById('edit-f2-icon').value = cached.f2Icon; }
+                if(cached.f2Text) { document.getElementById('display-f2-text').textContent = cached.f2Text; document.getElementById('edit-f2-text').value = cached.f2Text; }
+                if(cached.f3Icon) { document.getElementById('display-f3-icon').textContent = cached.f3Icon; document.getElementById('edit-f3-icon').value = cached.f3Icon; }
+                if(cached.f3Text) { document.getElementById('display-f3-text').textContent = cached.f3Text; document.getElementById('edit-f3-text').value = cached.f3Text; }
+                if(cached.f4Icon) { document.getElementById('display-f4-icon').textContent = cached.f4Icon; document.getElementById('edit-f4-icon').value = cached.f4Icon; }
+                if(cached.f4Text) { document.getElementById('display-f4-text').textContent = cached.f4Text; document.getElementById('edit-f4-text').value = cached.f4Text; }
+                if(cached.rulesHeader) { const el = document.getElementById('display-rules-header'); if(el) el.innerHTML = `<span>⚔️</span> ${cached.rulesHeader}`; const editEl = document.getElementById('edit-rules-header'); if(editEl) editEl.value = cached.rulesHeader; }
+                if(cached.rulesContent) { const el = document.getElementById('display-rules-content'); if(el) el.innerHTML = cached.rulesContent; const editEl = document.getElementById('edit-rules-content'); if(editEl) editEl.value = cached.rulesContent; }
+            } catch(e){}
+        }
+        applyCachedConfigToDOM();
+
+        window.setDarkMode = function(isDark) {
+            if (isDark) { document.documentElement.classList.add('dark'); localStorage.setItem('satta_pai_mode', 'dark'); }
+            else { document.documentElement.classList.remove('dark'); localStorage.setItem('satta_pai_mode', 'light'); }
+            window.showToast(isDark ? "Dark Mode Enabled" : "Light Mode Enabled");
+            window.closeMenuDropdown();
+        };
+
+        window.setTheme = function(themeName) {
+            const root = document.documentElement;
+            root.classList.remove('theme-whatsapp', 'theme-instagram', 'theme-gold', 'theme-blue');
+            if(themeName !== 'whatsapp') root.classList.add('theme-' + themeName);
+            localStorage.setItem('satta_pai_theme', themeName);
+            window.showToast("Theme updated!"); window.closeMenuDropdown();
+        };
+
+        window.toggleMenuDropdown = function(e) { e.stopPropagation(); document.getElementById('settings-dropdown').classList.toggle('show'); };
+        window.closeMenuDropdown = function() { document.getElementById('settings-dropdown').classList.remove('show'); };
+        window.addEventListener('click', () => window.closeMenuDropdown());
+
+        window.addEventListener('DOMContentLoaded', () => {
+            applyCachedConfigToDOM();
+            window.updateDynamicWhatsAppInputs();
+            window.checkLoginState();
+        });
+
+        window.checkLoginState = function() {
+            const overlay = document.getElementById('google-login-overlay');
+            const saConsole = document.getElementById('console-super-admin');
+            const ahConsole = document.getElementById('console-admin-host');
+            const userConsole = document.getElementById('console-user');
+            const portalBtn = document.getElementById('menu-admin-portal-btn');
+
+            if(!window.loggedEmail) {
+                if(overlay) overlay.classList.remove('hidden');
+                if(portalBtn) portalBtn.classList.add('hidden');
+                return;
+            }
+            if(overlay) overlay.classList.add('hidden');
+
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+
+            if(isSuper || isAdmin || isHost) { if(portalBtn) portalBtn.classList.remove('hidden'); } else { if(portalBtn) portalBtn.classList.add('hidden'); }
+
+            if(isSuper) {
+                if(saConsole) saConsole.classList.remove('hidden');
+                if(ahConsole) ahConsole.classList.add('hidden');
+                if(userConsole) userConsole.classList.add('hidden');
+                document.getElementById('sa-email-lbl').textContent = window.maskEmail(window.loggedEmail);
+            } else if(isAdmin || isHost) {
+                if(saConsole) saConsole.classList.add('hidden');
+                if(ahConsole) ahConsole.classList.remove('hidden');
+                if(userConsole) userConsole.classList.add('hidden'); 
+                document.getElementById('ah-email-lbl').textContent = window.maskEmail(window.loggedEmail);
+                document.getElementById('ah-title-lbl').textContent = isAdmin ? "🛡️ Admin Console" : "🎮 Match Host Console";
+            } else {
+                if(saConsole) saConsole.classList.add('hidden');
+                if(ahConsole) ahConsole.classList.add('hidden');       
+                if(userConsole) userConsole.classList.remove('hidden');
+                document.getElementById('user-email-lbl').textContent = window.loggedEmail === 'guest' ? 'Guest User (Visit Only)' : window.maskEmail(window.loggedEmail);
+            }
+        };
+
+        window.switchSASub = function(sub) {
+            ['score', 'match', 'users', 'staffs', 'squads', 'settings'].forEach(t => {
+                const el = document.getElementById('sas-sec-' + t); const btn = document.getElementById('sas-btn-' + t);
+                if(el) el.classList.add('hidden'); if(btn) { btn.classList.remove('btn-theme'); btn.classList.add('cyber-card'); }
+            });
+            document.getElementById('sas-sec-' + sub).classList.remove('hidden');
+            const activeBtn = document.getElementById('sas-btn-' + sub); activeBtn.classList.remove('cyber-card'); activeBtn.classList.add('btn-theme');
+        };
+
+        window.switchAHSub = function(sub) {
+            ['match', 'staffs'].forEach(t => {
+                const el = document.getElementById('ah-sec-' + t); const btn = document.getElementById('ah-btn-' + t);
+                if(el) el.classList.add('hidden'); if(btn) { btn.classList.remove('btn-theme'); btn.classList.add('cyber-card'); }
+            });
+            document.getElementById('ah-sec-' + sub).classList.remove('hidden');
+            const activeBtn = document.getElementById('ah-btn-' + sub); activeBtn.classList.remove('cyber-card'); activeBtn.classList.add('btn-theme');
+        };
+
+        window.updateDynamicWhatsAppInputs = function() {
+            const groupsStr = document.getElementById('cm-groups')?.value || 'TEAM A, TEAM B';
+            const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0);
+            const container = document.getElementById('whatsapp-inputs-list'); if(!container) return;
+            container.innerHTML = groups.map((g, idx) => `
+                <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] font-bold w-16 truncate" style="color: var(--accent-primary);">${g}:</span>
+                    <input type="text" id="wa-link-${idx}" placeholder="WhatsApp Link for ${g}" class="cyber-input flex-1 px-2 py-1 text-xs wa-link-input">
+                </div>
+            `).join('');
+        };
+
+        window.toggleMusic = function() {
+            const audio = document.getElementById('bg-music'); const icon = document.getElementById('music-icon');
+            if (musicPlayingState) { audio.pause(); musicPlayingState = false; icon.textContent = "🔇"; }
+            else { audio.play().then(() => { musicPlayingState = true; icon.textContent = "🔊"; }).catch(() => { window.showToast("Click page first"); }); }
+        };
+
+        window.switchTab = function(tab) {
+            ['home', 'matches', 'roadmap', 'register-paid', 'register-free', 'teams', 'privacy', 'terms'].forEach(s => {
+                const sec = document.getElementById('section-' + s); if (sec) sec.classList.add('hidden');
+            });
+            const target = document.getElementById('section-' + tab); if(target) target.classList.remove('hidden');
+
+            ['home', 'matches', 'roadmap'].forEach(s => { const bnav = document.getElementById('bnav-' + s); if(bnav) bnav.classList.remove('active'); });
+            const activeBnav = document.getElementById('bnav-' + tab); if(activeBnav) activeBnav.classList.add('active');
+
+            if(tab === 'teams') window.checkLoginState();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.showToast = function(msg) {
+            const toast = document.getElementById('toast'); document.getElementById('toast-text').textContent = msg;
+            toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 2000);
+        };
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDoc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app-check.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAMs5OGAD7bOtbRoQ-0DMv-lLf-SRxyHS8",
+            authDomain: "sattapai-tournament.firebaseapp.com",
+            projectId: "sattapai-tournament",
+            storageBucket: "sattapai-tournament.firebasestorage.app",
+            messagingSenderId: "465702743401",
+            appId: "1:465702743401:web:1072a897dc24f0b380e1f8",
+            measurementId: "G-5CQJ29EP02"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const appCheck = initializeAppCheck(app, {
+          provider: new ReCaptchaEnterpriseProvider('6LcaQv4tAAAAAFTUX_nLee9dSXlPRSvxOLs1Rksg'),
+          isTokenAutoRefreshEnabled: true
+        });
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc;
+
+        let allTeams = []; let allMatches = [];
+        window.authorizedAdmins = [SUPER_ADMIN]; window.authorizedHosts = [SUPER_ADMIN];
+        let selectedMatchForReg = null; window.editingMatchId = null;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const configDoc = await getDoc(doc(db, 'settings', 'config'));
+                if (configDoc.exists()) {
+                    const data = configDoc.data();
+                    if (data.liveHtmlCode && data.liveHtmlCode.includes('</html>') && !window.location.href.includes('deployed=true')) {
+                        document.open(); document.write(data.liveHtmlCode); document.close(); return;
+                    }
+                    if (data.admins_list) window.authorizedAdmins = data.admins_list;
+                    if (data.hosts_list) window.authorizedHosts = data.hosts_list;
+                }
+                trackVisitorStats(); renderStaffsLists(); renderSquadsManagementList(allTeams); window.checkLoginState();
+            } catch(e){}
+        });
+
+        async function trackVisitorStats() {
+            try {
+                const statsRef = doc(db, 'settings', 'analytics');
+                const snap = await getDoc(statsRef);
+                const now = Date.now(); const threeMinAgo = now - (3 * 60 * 1000); const dayAgo = now - (24 * 60 * 60 * 1000);
+                let visitors = []; let total = 1;
+                if (snap.exists()) { const data = snap.data(); visitors = data.visitors || []; total = (data.total || 0) + 1; }
+                const visitorId = window.loggedEmail || ('guest_' + Math.random());
+                visitors.push({ id: visitorId, time: now });
+                const activeLiveCount = visitors.filter(v => v.time > threeMinAgo).length;
+                visitors = visitors.filter(v => v.time > dayAgo);
+                await setDoc(statsRef, { total: total, visitors: visitors }, { merge: true });
+                const totalEl = document.getElementById('stat-total-visitors'); const dailyEl = document.getElementById('stat-daily-visitors'); const liveEl = document.getElementById('stat-live-users');
+                if (totalEl) totalEl.textContent = total; if (dailyEl) dailyEl.textContent = visitors.length; if (liveEl) liveEl.textContent = Math.max(1, activeLiveCount);
+            } catch(e){}
+        }
+
+        window.loginWithGoogleAuth = function() {
+            const termsBox = document.getElementById('terms-accept-checkbox');
+            if(!termsBox || !termsBox.checked) { alert("தயவுசெய்து Terms of Service மற்றும் Privacy Policy-ஐ ஏற்கவும் (Accept Terms)."); return; }
+            signInWithPopup(auth, provider).then((result) => {
+                const user = result.user; window.loggedEmail = user.email.toLowerCase();
+                localStorage.setItem('satta_pai_auth_email', window.loggedEmail);
+                document.getElementById('google-login-overlay').classList.add('hidden');
+                window.showToast("Google Authentication Success!"); trackVisitorStats(); window.checkLoginState();
+            }).catch((error) => { alert("Google Sign-In Failed: " + error.message); });
+        };
+
+        window.loginAsGuest = function() {
+            const termsBox = document.getElementById('terms-accept-checkbox');
+            if(!termsBox || !termsBox.checked) { alert("தயவுசெய்து Terms of Service மற்றும் Privacy Policy-ஐ ஏற்கவும் (Accept Terms)."); return; }
+            window.loggedEmail = 'guest'; localStorage.setItem('satta_pai_auth_email', 'guest');
+            document.getElementById('google-login-overlay').classList.add('hidden');
+            window.showToast("Logged in as Guest (Visit Only)"); trackVisitorStats(); window.checkLoginState();
+        };
+
+        window.confirmSecureLogout = function() {
+            if(confirm("Confirm ah logout adikiringala?")) {
+                signOut(auth).then(() => {
+                    localStorage.removeItem('satta_pai_auth_email'); window.loggedEmail = '';
+                    window.showToast("Logged out successfully"); window.checkLoginState();
+                    document.getElementById('google-login-overlay').classList.remove('hidden');
+                }).catch((error) => {
+                    localStorage.removeItem('satta_pai_auth_email'); window.loggedEmail = '';
+                    window.showToast("Logged out successfully"); window.checkLoginState();
+                    document.getElementById('google-login-overlay').classList.remove('hidden');
+                });
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) { window.loggedEmail = user.email.toLowerCase(); localStorage.setItem('satta_pai_auth_email', window.loggedEmail); }
+            else { if (localStorage.getItem('satta_pai_auth_email') !== 'guest') { window.loggedEmail = localStorage.getItem('satta_pai_auth_email') || ''; } }
+            window.checkLoginState();
+        });
+
+        window.toggleMatchTypeFields = function(type) {
+            const upiContainer = document.getElementById('cm-upi-container'); const toggles = document.getElementById('cm-payment-toggles');
+            const qrUpload = document.getElementById('cm-qr-upload-container'); const feeContainer = document.getElementById('cm-fee-container');
+            if(type === 'free') {
+                if(feeContainer) feeContainer.classList.add('hidden'); if(upiContainer) upiContainer.classList.add('hidden');
+                if(toggles) toggles.classList.add('hidden'); if(qrUpload) qrUpload.classList.add('hidden');
+            } else {
+                if(feeContainer) feeContainer.classList.remove('hidden'); if(upiContainer) upiContainer.classList.remove('hidden');
+                if(toggles) toggles.classList.remove('hidden'); if(qrUpload) qrUpload.classList.remove('hidden');
+            }
+        };
+
+        async function handleAddStaff(email, role) {
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            if (role === 'admin' && !isSuper) { alert("Only Super Admin can add Admins!"); return; }
+            if (role === 'host' && !isAdmin) { alert("Only Super Admin or Admin can add Hosts!"); return; }
+            email = email.trim().toLowerCase();
+            if(!email || !email.includes('@')) { alert("Enter valid email"); return; }
+            if(!confirm(`Confirm ah intha ${email}-ai ${role.toUpperCase()}-aha add panniringala?`)) return;
+            if (role === 'admin') {
+                if(!window.authorizedAdmins.includes(email)) window.authorizedAdmins.push(email);
+                await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true });
+                window.showToast("Admin added successfully!");
+            } else {
+                if(!window.authorizedHosts.includes(email)) window.authorizedHosts.push(email);
+                await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true });
+                window.showToast("Host added successfully!");
+            }
+            renderStaffsLists();
+        }
+
+        document.getElementById('add-staff-form')?.addEventListener('submit', (e) => {
+            e.preventDefault(); const email = document.getElementById('staff-email-input').value; const role = document.getElementById('staff-role-select').value;
+            handleAddStaff(email, role); e.target.reset();
+        });
+
+        document.getElementById('add-host-form-ah')?.addEventListener('submit', (e) => {
+            e.preventDefault(); const email = document.getElementById('host-email-input-ah').value;
+            handleAddStaff(email, 'host'); e.target.reset();
+        });
+
+        window.removeStaff = async function(email, role) {
+            const isSuper = (window.loggedEmail === SUPER_ADMIN); const isAdmin = isSuper || (window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            if(role === 'admin' && !isSuper) { alert("Only Super Admin can remove admins!"); return; }
+            if(role === 'host' && !isAdmin) { alert("You don't have permission to remove hosts!"); return; }
+            if(email === SUPER_ADMIN) { alert("Cannot remove Super Admin!"); return; }
+            if(confirm(`Confirm ah ${email} -i remove panniringala?`)) {
+                if(role === 'admin') {
+                    window.authorizedAdmins = window.authorizedAdmins.filter(e => e.toLowerCase() !== email.toLowerCase());
+                    await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true });
+                } else {
+                    window.authorizedHosts = window.authorizedHosts.filter(e => e.toLowerCase() !== email.toLowerCase());
+                    await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true });
+                }
+                window.showToast("Staff removed successfully!"); renderStaffsLists();
+            }
+        };
+
+        function renderStaffsLists() {
+            const adminsContainer = document.getElementById('admins-list-container'); const hostsContainer = document.getElementById('hosts-list-container'); const hostsContainerAH = document.getElementById('hosts-list-container-ah');
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            if(adminsContainer) {
+                adminsContainer.innerHTML = window.authorizedAdmins.map(email => `
+                    <div class="cyber-card p-2 rounded flex justify-between items-center text-xs">
+                        <span>${window.escapeHTML(email)} ${email === SUPER_ADMIN ? '(Super Admin)' : ''}</span>
+                        ${email !== SUPER_ADMIN && isSuper ? `<button onclick="removeStaff('${window.escapeHTML(email)}', 'admin')" class="px-2 py-0.5 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button>` : ''}
+                    </div>
+                `).join('');
+            }
+            const hostHtml = window.authorizedHosts.map(email => `
+                <div class="cyber-card p-2 rounded flex justify-between items-center text-xs">
+                    <span>${window.escapeHTML(email)}</span>
+                    <button onclick="removeStaff('${window.escapeHTML(email)}', 'host')" class="px-2 py-0.5 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button>
+                </div>
+            `).join('');
+            if(hostsContainer) hostsContainer.innerHTML = hostHtml; if(hostsContainerAH) hostsContainerAH.innerHTML = hostHtml;
+        }
+
+        window.removeIndividualTeam = async function(teamId, teamName) {
+            if(confirm(`Confirm ah '${window.escapeHTML(teamName)}' squad-ai remove panniringala?`)) {
+                await deleteDoc(doc(db, 'registrations', teamId)); window.showToast("Squad removed successfully!");
+            }
+        };
+
+        window.removeAllSquads = async function() {
+            const isAdmin = (window.loggedEmail === SUPER_ADMIN) || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const isHost = isAdmin || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            if (!isAdmin && !isHost) { window.showToast("❌ No permission to remove all squads!"); return; }
+            if(confirm("WARNING: Are you sure you want to remove ALL registered squads?")) {
+                const snaps = await getDocs(collection(db, 'registrations'));
+                snaps.forEach(async (d) => { await deleteDoc(d.ref); }); window.showToast("All squads removed successfully!");
+            }
+        };
+
+        window.filterSquadsList = function(query) {
+            const filtered = allTeams.filter(t => t.teamName.toLowerCase().includes(query.toLowerCase()) || (t.phoneNumber||'').includes(query));
+            renderSquadsManagementList(filtered);
+        };
+
+        function renderSquadsManagementList(teamsList) {
+            const container = document.getElementById('teams-container'); const countLbl = document.getElementById('total-teams-count');
+            if(countLbl) countLbl.textContent = allTeams.length; if(!container) return;
+            if(teamsList.length === 0) { container.innerHTML = `<div class="cyber-card p-4 text-center text-xs text-slate-500">No squads registered.</div>`; return; }
+            container.innerHTML = teamsList.map(t => `
+                <div class="cyber-card p-2.5 rounded flex justify-between items-center text-xs">
+                    <div>
+                        <div class="font-bold uppercase">${window.escapeHTML(t.teamName)}</div>
+                        <div class="text-[10px]" style="color: var(--text-muted);">Ph: ${window.escapeHTML(t.phoneNumber)} | Group: ${window.escapeHTML(t.slotGroup || 'TEAM A')} | Gmail: ${window.maskEmail(t.userEmail) || 'N/A'}</div>
+                    </div>
+                    <button onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        let resetTimerInterval = null;
+        window.openFactoryResetModal = function() {
+            const modal = document.getElementById('factory-reset-modal'); const btn = document.getElementById('confirm-factory-reset-btn'); const txt = document.getElementById('reset-countdown-text');
+            modal.classList.remove('hidden'); btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
+            let timeLeft = 5; txt.textContent = `Please wait ${timeLeft} seconds...`;
+            if(resetTimerInterval) clearInterval(resetTimerInterval);
+            resetTimerInterval = setInterval(() => {
+                timeLeft--;
+                if(timeLeft > 0) { txt.textContent = `Please wait ${timeLeft} seconds...`; }
+                else { clearInterval(resetTimerInterval); txt.textContent = "You can now confirm factory reset."; btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); }
+            }, 1000);
+        };
+
+        window.closeFactoryResetModal = function() { if(resetTimerInterval) clearInterval(resetTimerInterval); document.getElementById('factory-reset-modal').classList.add('hidden'); };
+
+        window.executeFactoryReset = async function() {
+            if (window.loggedEmail !== SUPER_ADMIN) { window.showToast("❌ Only Super Admin can factory reset!"); return; }
+            closeFactoryResetModal(); window.showToast("Executing Factory Reset...");
+            try {
+                const matchSnaps = await getDocs(collection(db, 'matches')); matchSnaps.forEach(async (d) => { await deleteDoc(d.ref); });
+                const regSnaps = await getDocs(collection(db, 'registrations')); regSnaps.forEach(async (d) => { await deleteDoc(d.ref); });
+                await deleteDoc(doc(db, 'settings', 'config')); await deleteDoc(doc(db, 'settings', 'analytics'));
+                await deleteDoc(doc(db, 'settings', 'admins_config')); await deleteDoc(doc(db, 'settings', 'hosts_config'));
+                window.showToast("Factory Reset Complete! Refreshing..."); setTimeout(() => { localStorage.clear(); location.reload(); }, 2000);
+            } catch(e) { alert("Factory reset error: " + e.message); }
+        };
+
+        window.selectMatchSlot = function(id, title, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots) {
+            if (window.loggedEmail === 'guest') { alert("Guest users cannot register for matches. Please sign in with Google to register."); document.getElementById('google-login-overlay').classList.remove('hidden'); return; }
+            const currentTeams = allTeams.filter(t => t.matchId === id && (t.slotGroup || 'TEAM A').toUpperCase() === group.toUpperCase() && t.status !== 'banned');
+            if (currentTeams.length >= (maxSlots || 12)) { alert("❌ Sorry, this group slots are full!"); return; }
+            selectedMatchForReg = { id, title: `${title} (${group})`, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots };
+            if (type === 'free') {
+                document.getElementById('reg-free-match-title').textContent = `${selectedMatchForReg.title} - Prize Pool: ₹${prize || '0'}`; window.switchTab('register-free');
+            } else {
+                document.getElementById('reg-paid-match-title').textContent = `${selectedMatchForReg.title} - Entry Fee: ₹${entryFee || 50} | Prize Pool: ₹${prize || '0'}`;
+                const paymentBox = document.getElementById('reg-paid-payment-box'); const upiBtnBox = document.getElementById('reg-upi-btn-box');
+                const upiPayLink = document.getElementById('reg-upi-pay-link'); const qrBox = document.getElementById('reg-qr-box'); const qrImg = document.getElementById('reg-qr-img');
+                let hasPaymentMethod = false; paymentBox.classList.remove('hidden');
+                if (upiEnabled && upiId) { upiPayLink.href = `upi://pay?pa=${upiId}&pn=SattaPai&am=${entryFee || 50}.00&cu=INR`; upiBtnBox.classList.remove('hidden'); hasPaymentMethod = true; } else { upiBtnBox.classList.add('hidden'); }
+                if (qrEnabled && qrDataURL) { qrImg.src = qrDataURL; qrBox.classList.remove('hidden'); hasPaymentMethod = true; } else { qrBox.classList.add('hidden'); }
+                if (!hasPaymentMethod) { paymentBox.classList.add('hidden'); }
+                window.switchTab('register-paid');
+            }
+        };
+
+        window.toggleMatchExpand = function(id) { const el = document.getElementById(`slots-box-${id}`); if(el) el.classList.toggle('hidden'); };
+
+        function renderPublicMatches() {
+            const c = document.getElementById('public-matches-container'); if (!c) return;
+            if (allMatches.length === 0) { c.innerHTML = `<div class="cyber-card p-4 text-center text-xs" style="color: var(--text-muted);">No matches scheduled.</div>`; return; }
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const showGmailToStaff = isAdmin || isHost;
+
+            c.innerHTML = allMatches.map((m, idx) => {
+                const groups = m.groups ? m.groups.split(',').map(g => g.trim().toUpperCase()) : ['TEAM A', 'TEAM B'];
+                const whatsappMap = m.whatsappMap || {}; const status = m.status || 'not_started';
+                let statusBadge = status === 'playing' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 animate-pulse">🟢 LIVE</span>` : (status === 'ended' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300">🔴 ENDED</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">🟡 UPCOMING</span>`);
+
+                const slotsHTML = groups.map(grp => {
+                    const teamsInGroup = allTeams.filter(t => t.matchId === m.id && (t.slotGroup || 'TEAM A').toUpperCase() === grp && t.status !== 'banned');
+                    const groupWaLink = whatsappMap[grp] || '#'; const isFull = teamsInGroup.length >= (m.slots || 12);
+                    
+                    return `
+                        <div class="cyber-card rounded-xl p-3 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs font-bold uppercase">🛡️ Group ${grp}</div>
+                                <button onclick="selectMatchSlot('${m.id}', '${window.escapeHTML(m.title || '').replace(/'/g, "\\'")}', '${grp}', '${m.type}', '${m.prize || ''}', '${m.fee || ''}', '${m.upiId || ''}', '${m.qrDataURL || ''}', ${m.upiEnabled !== false}, ${m.qrEnabled !== false}, ${m.slots || 12})" class="btn-theme px-3 py-1.5 text-xs ${isFull ? 'opacity-50 cursor-not-allowed' : ''}" ${isFull ? 'disabled' : ''}>${isFull ? 'Slots Full' : 'Join Slot'}</button>
+                            </div>
+                            ${teamsInGroup.length > 0 ? `
+                                <div class="mt-2 space-y-1.5 pt-2 border-t" style="border-color: var(--border-color);">
+                                    <div class="text-[10px] font-bold uppercase flex items-center justify-between" style="color: var(--accent-primary);">
+                                        <span>Registered Squads (${teamsInGroup.length}/${m.slots || 12}):</span>
+                                        ${groupWaLink !== '#' ? `<a href="${groupWaLink}" target="_blank" class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px] shadow">💬 Join WhatsApp</a>` : ''}
+                                    </div>
+                                    <div class="space-y-1">
+                                        ${teamsInGroup.map((tm, tIdx) => `
+                                            <div class="cyber-card px-2.5 py-1.5 rounded flex justify-between items-center text-xs">
+                                                <div>
+                                                    <span class="font-bold">#${tIdx+1} ${window.escapeHTML(tm.teamName)}</span>
+                                                    ${showGmailToStaff ? `<div class="text-[9px] font-mono text-emerald-400">Gmail: ${window.maskEmail(tm.userEmail) || 'N/A'} | Ph: ${window.escapeHTML(tm.phoneNumber)}</div>` : ''}
+                                                </div>
+                                                ${groupWaLink !== '#' ? `<a href="${groupWaLink}" target="_blank" class="text-emerald-500 font-bold text-xs">💬 WhatsApp</a>` : ''}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="cyber-card p-4 space-y-3">
+                        <div class="flex justify-between items-start cursor-pointer" onclick="toggleMatchExpand('${m.id}')">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-bold" style="color: var(--accent-primary);">#${idx + 1}</span>${statusBadge}</div>
+                                <h3 class="text-sm font-bold">${window.escapeHTML(m.title)}</h3>
+                                <p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted);">🗺️ ${window.escapeHTML(m.map)} | 📅 ${window.escapeHTML(m.time)} | 💰 Prize: ₹${window.escapeHTML(m.prize || '0')} ${m.type === 'paid' ? '| Fee: ₹' + (m.fee || '0') : ''}</p>
+                            </div>
+                            <span class="text-xs font-semibold underline" style="color: var(--accent-primary);">Slots 🔽</span>
+                        </div>
+                        <div id="slots-box-${m.id}" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t" style="border-color: var(--border-color);">${slotsHTML}</div>
+                    </div>
+                `;
+            }).join('');
+            renderAdminMatches();
+        }
+
+        function renderRoadmapTab() {
+            const container = document.getElementById('roadmap-container'); if (!container) return;
+            container.innerHTML = allMatches.length === 0 ? `<div class="cyber-card p-4 text-center text-xs">No roadmap data.</div>` : allMatches.map(m => `
+                <div class="cyber-card p-3 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-bold">${window.escapeHTML(m.title)}</h3>
+                        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 uppercase">Stage: ${window.escapeHTML(m.stage || 'Finals')}</span>
+                    </div>
+                    ${m.publishedScoreboards ? m.publishedScoreboards.map(sb => `
+                        <div class="space-y-1.5 pt-1.5 border-t" style="border-color: var(--border-color);">
+                            <div class="grid grid-cols-4 gap-1 text-[10px] font-bold uppercase pb-1" style="color: var(--text-muted);">
+                                <span>Team</span><span class="text-center">TP (Place)</span><span class="text-center">K (Kills)</span><span class="text-right">TT (Total)</span>
+                            </div>
+                            ${sb.rankings.map((r, i) => {
+                                const isWinner = (m.stage === 'Finals' && i === 0 && m.status === 'ended');
+                                return `
+                                    <div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''}">
+                                        <div class="flex justify-between items-center">
+                                            <span>#${i+1} ${window.escapeHTML(r.teamName)}</span>
+                                            <span class="text-emerald-400">${r.totalScore} Pts</span>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-1 text-[10px] font-mono font-normal" style="color: var(--text-muted);">
+                                            <span>Place: ${r.isEliminated ? 'Eliminated' : '#' + r.place}</span>
+                                            <span class="text-center">Kills: ${r.kills}</span>
+                                            <span class="text-right">Total: ${r.totalScore}</span>
+                                        </div>
+                                        ${isWinner ? `<div class="mt-1 p-1 bg-amber-500 text-black text-center text-[10px] font-extrabold rounded uppercase">👑 WINNER - Won ₹${window.escapeHTML(m.prize || '500')}!</div>` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `).join('') : '<p class="text-[11px]" style="color: var(--text-muted);">Results pending...</p>'}
+                </div>
+            `).join('');
+        }
+
+        window.renderAdminMatches = function() {
+            const c = document.getElementById('admin-matches-list'); const hc = document.getElementById('host-matches-list');
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+
+            const listHTML = allMatches.length === 0 ? `<div class="text-xs text-slate-500">No matches.</div>` : allMatches.map(m => {
+                let canEdit = isAdmin || isHost; 
+                let canDelete = isSuper || isAdmin || (isHost && m.createdBy === window.loggedEmail);
+
+                return `
+                <div class="cyber-card p-2.5 rounded flex items-center justify-between text-xs">
+                    <div>
+                        <div class="font-bold">${window.escapeHTML(m.title)}</div>
+                        <div class="text-[10px]" style="color: var(--text-muted);">Status: ${m.status} | Type: ${m.type} | By: ${window.maskEmail(m.createdBy)}</div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <select onchange="updateMatchStatus('${m.id}', this.value)" class="cyber-input rounded p-1 text-[10px]">
+                            <option value="not_started" ${m.status==='not_started'?'selected':''}>Upcoming</option>
+                            <option value="playing" ${m.status==='playing'?'selected':''}>Playing</option>
+                            <option value="ended" ${m.status==='ended'?'selected':''}>Ended</option>
+                        </select>
+                        <button onclick="editMatch('${m.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer ${canEdit ? '' : 'hidden'}">Edit</button>
+                        <button onclick="deleteMatch('${m.id}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer ${canDelete ? '' : 'hidden'}">Delete</button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            
+            if(c) c.innerHTML = listHTML; if(hc) hc.innerHTML = listHTML;
+        }
+
+        window.updateMatchStatus = async function(id, status) {
+            if(!confirm(`Confirm ah intha match status-a '${status.toUpperCase()}' nu change panniringala?`)) return;
+            await setDoc(doc(db, 'matches', id), { status }, { merge: true }); window.showToast('Status updated');
+        };
+
+        window.deleteMatch = async function(id) {
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const matchObj = allMatches.find(m => m.id === id); if(!matchObj) return;
+            if (!isSuper && !isAdmin) {
+                if (!isHost) { window.showToast("❌ No permission to delete matches!"); return; }
+                if (matchObj.createdBy !== window.loggedEmail) { window.showToast("❌ Hosts can only delete matches they created!"); return; }
+            }
+            if(confirm("Confirm ah intha match-a delete panniringala?")) {
+                await deleteDoc(doc(db, 'matches', id)); window.showToast("Match deleted successfully!");
+            }
+        };
+
+        window.editMatch = function(id) {
+            const m = allMatches.find(item => item.id === id); if(!m) return;
+            document.getElementById('cm-title').value = m.title || ''; document.getElementById('cm-stage').value = m.stage || 'Semifinals';
+            document.getElementById('cm-type').value = m.type || 'paid'; toggleMatchTypeFields(m.type || 'paid');
+            document.getElementById('cm-map').value = m.map || 'Bermuda'; document.getElementById('cm-time').value = m.time || '';
+            document.getElementById('cm-slots').value = m.slots || 12; document.getElementById('cm-prize-pool').value = m.prize || '';
+            document.getElementById('cm-fee').value = m.fee || ''; document.getElementById('cm-upi').value = m.upiId || '';
+            document.getElementById('cm-groups').value = m.groups || 'TEAM A, TEAM B';
+            document.getElementById('cm-upi-toggle').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle').checked = m.qrEnabled !== false;
+            window.editingMatchId = id; document.getElementById('match-submit-btn').textContent = "💾 Update Match"; window.switchSASub('match');
+        };
+
+        window.loadMatchTeamsForCalc = function() {
+            const id = document.getElementById('calc-match-select').value; const area = document.getElementById('host-teams-input-area'); const rows = document.getElementById('host-teams-rows');
+            if (!id) { area.classList.add('hidden'); return; }
+            const teamsInMatch = allTeams.filter(t => t.matchId === id && t.status !== 'banned');
+            rows.innerHTML = teamsInMatch.map((t, idx) => `
+                <div class="cyber-card p-2 rounded flex justify-between items-center team-calc-row" data-team="${window.escapeHTML(t.teamName)}">
+                    <span class="text-xs font-bold">${idx + 1}. ${window.escapeHTML(t.teamName)}</span>
+                    <div class="flex items-center gap-1">
+                        <input type="number" min="1" max="10" value="1" placeholder="Place" class="calc-place cyber-input w-12 rounded p-1 text-center text-xs font-mono" title="Placement (1-10)">
+                        <input type="number" min="0" value="0" placeholder="Kills" class="calc-kills cyber-input w-12 rounded p-1 text-center text-xs font-mono" title="Kills">
+                        <label class="flex items-center gap-1 text-[10px] text-rose-400 font-bold ml-1 cursor-pointer"><input type="checkbox" class="calc-elim w-3 h-3 accent-rose-500"> Eliminated</label>
+                    </div>
+                </div>
+            `).join('');
+            area.classList.remove('hidden');
+        };
+
+        window.generateAndPublishScoreboard = async function() {
+            const matchId = document.getElementById('calc-match-select').value; if (!matchId) return;
+            if(!confirm("Confirm ah scoreboard publish panniringala?")) return;
+            const placePts = {}; for(let i=1; i<=10; i++) { placePts[i] = parseFloat(document.getElementById(`pts-${i}`).value) || 0; }
+            const ptsPerKill = parseFloat(document.getElementById('pts-kill').value) || 0;
+            const rankings = [];
+            document.querySelectorAll('.team-calc-row').forEach(row => {
+                const teamName = row.getAttribute('data-team'); const isEliminated = row.querySelector('.calc-elim').checked;
+                const place = parseInt(row.querySelector('.calc-place').value) || 12; const kills = parseFloat(row.querySelector('.calc-kills').value) || 0;
+                const placementScore = isEliminated ? 0 : (placePts[place] || 0); const killScore = kills * ptsPerKill; const totalScore = placementScore + killScore;
+                rankings.push({ teamName, place: isEliminated ? 'Eliminated' : place, kills, totalScore, isEliminated });
+            });
+            rankings.sort((a,b) => b.totalScore - a.totalScore);
+            const matchObj = allMatches.find(m => m.id === matchId); const stageName = matchObj ? matchObj.stage : 'Finals';
+            await setDoc(doc(db, 'matches', matchId), { publishedScoreboards: [{ stageName: stageName, groupName: 'TEAM A', rankings }], status: 'ended' }, { merge: true });
+            window.showToast('Scoreboard Published!'); window.switchTab('roadmap');
+        };
+
+        document.getElementById('create-match-form')?.addEventListener('submit', (e) => {
+            e.preventDefault(); if(!confirm("Confirm ah intha match-a publish/update panniringala?")) return;
+            const title = document.getElementById('cm-title').value.trim(); const stage = document.getElementById('cm-stage').value; const type = document.getElementById('cm-type').value;
+            const map = document.getElementById('cm-map').value.trim(); const time = document.getElementById('cm-time').value.trim(); const slots = parseInt(document.getElementById('cm-slots').value) || 12;
+            const groupsStr = document.getElementById('cm-groups').value.trim(); const prize = document.getElementById('cm-prize-pool').value.trim();
+            const fee = type === 'free' ? '0' : document.getElementById('cm-fee').value.trim(); const upiId = type === 'free' ? '' : document.getElementById('cm-upi').value.trim();
+            const upiEnabled = type === 'free' ? false : document.getElementById('cm-upi-toggle').checked; const qrEnabled = type === 'free' ? false : document.getElementById('cm-qr-toggle').checked;
+            const qrFileInput = document.getElementById('cm-qr-file'); const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0);
+            const whatsappMap = {}; groups.forEach((g, idx) => { const input = document.getElementById(`wa-link-${idx}`); if(input) whatsappMap[g] = input.value.trim(); });
+
+            const processSave = async (qrDataURL) => {
+                const matchData = { title, stage, type, map, time, slots, groups: groupsStr, whatsappMap, prize, fee, upiId, upiEnabled, qrEnabled, status: 'not_started', createdAt: Date.now(), createdBy: window.loggedEmail };
+                if(qrDataURL) matchData.qrDataURL = qrDataURL;
+
+                if(window.editingMatchId) {
+                    delete matchData.createdBy;
+                    await setDoc(doc(db, 'matches', window.editingMatchId), matchData, { merge: true });
+                    window.showToast('Match Updated Successfully!'); window.editingMatchId = null; document.getElementById('match-submit-btn').textContent = "🚀 Publish Match";
+                } else {
+                    await addDoc(collection(db, 'matches'), matchData); window.showToast('Match Published Successfully!');
+                }
+                document.getElementById('create-match-form').reset(); updateDynamicWhatsAppInputs();
+            };
+
+            if (type !== 'free' && qrFileInput.files && qrFileInput.files[0]) {
+                const reader = new FileReader(); reader.onload = function(evt) { processSave(evt.target.result); }; reader.readAsDataURL(qrFileInput.files[0]);
+            } else { processSave(""); }
+        });
+
+        document.getElementById('registration-paid-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault(); if(!confirm("Confirm ah paid registration submit panniringala?")) return;
+            if (selectedMatchForReg) {
+                const currentTeams = allTeams.filter(t => t.matchId === selectedMatchForReg.id && (t.slotGroup || 'TEAM A').toUpperCase() === selectedMatchForReg.group.toUpperCase() && t.status !== 'banned');
+                if (currentTeams.length >= (selectedMatchForReg.maxSlots || 12)) { alert("❌ Sorry, this group slots got full while you were filling the form. Please try another group."); window.switchTab('matches'); return; }
+            }
+            const utr = document.getElementById('paid-transitionId').value.trim();
+            if (!/^\d{12}$/.test(utr)) { alert("Invalid UPI Transaction ID. It must be exactly 12 digits."); return; }
+            await addDoc(collection(db, 'registrations'), {
+                teamName: document.getElementById('paid-teamName').value.trim().toUpperCase(), leaderName: document.getElementById('paid-leaderName').value.trim(),
+                hometown: document.getElementById('paid-hometown').value.trim(), phoneNumber: document.getElementById('paid-phoneNumber').value.trim(),
+                gameUid: document.getElementById('paid-gameUid').value.trim(), member2Uid: document.getElementById('paid-member2Uid').value.trim(),
+                member3Uid: document.getElementById('paid-member3Uid').value.trim(), member4Uid: document.getElementById('paid-member4Uid').value.trim(),
+                sub1Uid: document.getElementById('paid-sub1Uid').value.trim(), sub2Uid: document.getElementById('paid-sub2Uid').value.trim(),
+                transitionId: utr, matchId: selectedMatchForReg ? selectedMatchForReg.id : 'general',
+                slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A', userEmail: window.loggedEmail, status: 'active', createdAt: Date.now()
+            });
+            window.showToast('Paid Registration Success!'); window.switchTab('matches');
+        });
+
+        document.getElementById('registration-free-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault(); if(!confirm("Confirm ah free registration submit panniringala?")) return;
+            if (selectedMatchForReg) {
+                const currentTeams = allTeams.filter(t => t.matchId === selectedMatchForReg.id && (t.slotGroup || 'TEAM A').toUpperCase() === selectedMatchForReg.group.toUpperCase() && t.status !== 'banned');
+                if (currentTeams.length >= (selectedMatchForReg.maxSlots || 12)) { alert("❌ Sorry, this group slots got full while you were filling the form. Please try another group."); window.switchTab('matches'); return; }
+            }
+            await addDoc(collection(db, 'registrations'), {
+                teamName: document.getElementById('free-teamName').value.trim().toUpperCase(), leaderName: document.getElementById('free-leaderName').value.trim(),
+                hometown: document.getElementById('free-hometown').value.trim(), phoneNumber: document.getElementById('free-phoneNumber').value.trim(),
+                gameUid: document.getElementById('free-gameUid').value.trim(), member2Uid: document.getElementById('free-member2Uid').value.trim(),
+                member3Uid: document.getElementById('free-member3Uid').value.trim(), member4Uid: document.getElementById('free-member4Uid').value.trim(),
+                sub1Uid: document.getElementById('free-sub1Uid').value.trim(), sub2Uid: document.getElementById('free-sub2Uid').value.trim(),
+                matchId: selectedMatchForReg ? selectedMatchForReg.id : 'general', slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A',
+                userEmail: window.loggedEmail, status: 'active', createdAt: Date.now()
+            });
+            window.showToast('Free Registration Success!'); window.switchTab('matches');
+        });
+
+        window.toggleMaintenanceMode = async function() {
+            if (window.loggedEmail !== SUPER_ADMIN) { window.showToast("❌ Only Super Admin can toggle maintenance!"); return; }
+            if(!confirm("Confirm ah maintenance mode toggle panniringala?")) return;
+            let configRef = doc(db, 'settings', 'config'); let snap = await getDoc(configRef);
+            let current = snap.exists() ? (snap.data().maintenance || false) : false;
+            await setDoc(configRef, { maintenance: !current }, { merge: true }); window.showToast("Maintenance mode toggled");
+        };
+
+        window.resetAllDatabaseData = async function() {
+            if (window.loggedEmail !== SUPER_ADMIN) { window.showToast("❌ Only Super Admin can reset data!"); return; }
+            if(confirm("WARNING: Are you sure you want to clear all matches and registrations?")) {
+                try {
+                    const matchSnaps = await getDocs(collection(db, 'matches')); matchSnaps.forEach(async (d) => { await deleteDoc(d.ref); });
+                    const regSnaps = await getDocs(collection(db, 'registrations')); regSnaps.forEach(async (d) => { await deleteDoc(d.ref); });
+                    window.showToast("All match and registration data reset successfully!");
+                } catch(e) { alert("Error resetting data: " + e.message); }
+            }
+        };
+
+        window.backupAndExportData = function() {
+            const isAdmin = (window.loggedEmail === SUPER_ADMIN) || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            const isHost = isAdmin || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
+            if (!isAdmin && !isHost) { window.showToast("❌ No permission to backup data!"); return; }
+            if(!confirm("Confirm ah backup export panniringala?")) return;
+            const backupObj = { matches: allMatches, teams: allTeams, timestamp: new Date().toISOString() };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupObj));
+            const downloadAnchor = document.createElement('a'); downloadAnchor.setAttribute("href", dataStr); downloadAnchor.setAttribute("download", "satta_pai_backup_" + Date.now() + ".json");
+            document.body.appendChild(downloadAnchor); downloadAnchor.click(); downloadAnchor.remove(); window.showToast("Backup downloaded successfully!");
+        };
+
+        window.restoreDatabaseFromJSON = async function(event) {
+            if (window.loggedEmail !== SUPER_ADMIN) { window.showToast("❌ Only Super Admin can restore data!"); event.target.value = ""; return; }
+            const file = event.target.files[0]; if(!file) return;
+            if(!confirm("Confirm ah intha JSON backup-ilirunthu data restore panniringala?")) { event.target.value = ""; return; }
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    if(backup.matches && Array.isArray(backup.matches)) { for(let m of backup.matches) { const { id, ...data } = m; await addDoc(collection(db, 'matches'), data); } }
+                    if(backup.teams && Array.isArray(backup.teams)) { for(let t of backup.teams) { const { id, ...data } = t; await addDoc(collection(db, 'registrations'), data); } }
+                    window.showToast("Backup Restored Successfully!");
+                } catch(err) { alert("Restore failed: " + err.message); }
+            };
+            reader.readAsText(file);
+        };
+
+        window.deployLiveCode = async function() {
+            if (window.loggedEmail !== SUPER_ADMIN) { window.showToast("❌ Only Super Admin can deploy code!"); return; }
+            const code = document.getElementById('edit-live-code').value.trim();
+            if(!code || !code.includes('</html>')) { alert("Please paste a valid and complete HTML code."); return; }
+            if(!confirm("Confirm ah live code deploy panniringala?")) return;
+            try {
+                await setDoc(doc(db, 'settings', 'config'), { liveHtmlCode: code }, { merge: true });
+                window.showToast("Live Code Deployed Successfully! Refreshing...");
+                setTimeout(() => { location.href = window.location.pathname + '?deployed=true'; }, 1500);
+            } catch(e) { alert("Deployment failed: " + e.message); }
+        };
+
+        document.getElementById('tournament-settings-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault(); if(!confirm("Confirm ah settings save panniringala?")) return;
+            const brandName = document.getElementById('edit-brand-name').value.trim(); const heroBadge = document.getElementById('edit-hero-badge').value.trim();
+            const heroTitle = document.getElementById('edit-hero-title').value.trim(); const heroSubtitle = document.getElementById('edit-hero-subtitle').value.trim();
+            const f1Icon = document.getElementById('edit-f1-icon').value.trim(); const f1Text = document.getElementById('edit-f1-text').value.trim();
+            const f2Icon = document.getElementById('edit-f2-icon').value.trim(); const f2Text = document.getElementById('edit-f2-text').value.trim();
+            const f3Icon = document.getElementById('edit-f3-icon').value.trim(); const f3Text = document.getElementById('edit-f3-text').value.trim();
+            const f4Icon = document.getElementById('edit-f4-icon').value.trim(); const f4Text = document.getElementById('edit-f4-text').value.trim();
+            const rulesHeader = document.getElementById('edit-rules-header').value.trim(); const rulesContent = document.getElementById('edit-rules-content').value.trim();
+            const cached = JSON.parse(localStorage.getItem('satta_pai_cached_config') || '{}');
+            const data = { ...cached, brandName, heroBadge, heroTitle, heroSubtitle, f1Icon, f1Text, f2Icon, f2Text, f3Icon, f3Text, f4Icon, f4Text, rulesHeader, rulesContent };
+            await setDoc(doc(db, 'settings', 'config'), data, { merge: true });
+            localStorage.setItem('satta_pai_cached_config', JSON.stringify(data)); window.showToast('Home Page Settings Saved!');
+        });
+
+        onSnapshot(doc(db, 'settings', 'config'), snap => {
+            if (snap.exists()) {
+                const s = snap.data();
+                const cached = { ...(JSON.parse(localStorage.getItem('satta_pai_cached_config') || '{}')), ...s };
+                localStorage.setItem('satta_pai_cached_config', JSON.stringify(cached));
+                let maintenanceOn = s.maintenance || false; const screen = document.getElementById('maintenance-screen');
+                if(screen) { if(maintenanceOn && window.loggedEmail !== SUPER_ADMIN) screen.classList.remove('hidden'); else screen.classList.add('hidden'); }
+                const btn = document.getElementById('maintenance-toggle-btn');
+                if(btn) { btn.textContent = maintenanceOn ? "ON" : "OFF"; btn.className = maintenanceOn ? "px-3 py-1 rounded bg-emerald-600 text-white font-bold text-xs" : "px-3 py-1 rounded bg-rose-600 text-white font-bold text-xs"; }
+                
+                if(s.brandName) { document.getElementById('display-brand-name').textContent = s.brandName; document.getElementById('edit-brand-name').value = s.brandName; }
+                if(s.heroBadge) { document.getElementById('display-hero-badge').textContent = s.heroBadge; document.getElementById('edit-hero-badge').value = s.heroBadge; }
+                if(s.heroTitle) { document.getElementById('display-hero-title').textContent = s.heroTitle; document.getElementById('edit-hero-title').value = s.heroTitle; }
+                if(s.heroSubtitle) { document.getElementById('display-hero-subtitle').textContent = s.heroSubtitle; document.getElementById('edit-hero-subtitle').value = s.heroSubtitle; }
+                if(s.logoDataURL) { const imgEl = document.getElementById('brand-logo-img'); const emojiEl = document.getElementById('brand-logo-emoji'); if(imgEl && emojiEl) { imgEl.src = s.logoDataURL; imgEl.classList.remove('hidden'); emojiEl.classList.add('hidden'); } }
+                if(s.f1Icon) { document.getElementById('display-f1-icon').textContent = s.f1Icon; document.getElementById('edit-f1-icon').value = s.f1Icon; }
+                if(s.f1Text) { document.getElementById('display-f1-text').textContent = s.f1Text; document.getElementById('edit-f1-text').value = s.f1Text; }
+                if(s.f2Icon) { document.getElementById('display-f2-icon').textContent = s.f2Icon; document.getElementById('edit-f2-icon').value = s.f2Icon; }
+                if(s.f2Text) { document.getElementById('display-f2-text').textContent = s.f2Text; document.getElementById('edit-f2-text').value = s.f2Text; }
+                if(s.f3Icon) { document.getElementById('display-f3-icon').textContent = s.f3Icon; document.getElementById('edit-f3-icon').value = s.f3Icon; }
+                if(s.f3Text) { document.getElementById('display-f3-text').textContent = s.f3Text; document.getElementById('edit-f3-text').value = s.f3Text; }
+                if(s.f4Icon) { document.getElementById('display-f4-icon').textContent = s.f4Icon; document.getElementById('edit-f4-icon').value = s.f4Icon; }
+                if(s.f4Text) { document.getElementById('display-f4-text').textContent = s.f4Text; document.getElementById('edit-f4-text').value = s.f4Text; }
+                if(s.rulesHeader) { document.getElementById('display-rules-header').innerHTML = `<span>⚔️</span> ${s.rulesHeader}`; document.getElementById('edit-rules-header').value = s.rulesHeader; }
+                if(s.rulesContent) { document.getElementById('display-rules-content').innerHTML = s.rulesContent; document.getElementById('edit-rules-content').value = s.rulesContent; }
+                if(s.musicDataURL) { const audio = document.getElementById('bg-music'); if(audio.src !== s.musicDataURL) { audio.src = s.musicDataURL; audio.loop = true; } document.getElementById('current-song-status').textContent = "🎵 Custom song active"; }
+            }
+        });
+
+        onSnapshot(collection(db, 'matches'), snap => {
+            allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+            renderPublicMatches(); renderRoadmapTab();
+            const sel = document.getElementById('calc-match-select'); if (sel) sel.innerHTML = `<option value="">-- Choose Match --</option>` + allMatches.map(m=>`<option value="${m.id}">${window.escapeHTML(m.title)}</option>`).join('');
+        });
+
+        onSnapshot(collection(db, 'registrations'), snap => {
+            allTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const countEl = document.getElementById('total-teams-count'); if(countEl) countEl.textContent = allTeams.length;
+            renderSquadsManagementList(allTeams); renderPublicMatches();
+            const userList = document.getElementById('user-bookings-list');
+            if(userList && window.loggedEmail) {
+                const myRegs = (window.loggedEmail === SUPER_ADMIN) ? allTeams : allTeams.filter(t => t.userEmail === window.loggedEmail);
+                userList.innerHTML = myRegs.length === 0 ? "No bookings found." : myRegs.map(r => `<div>✅ ${window.escapeHTML(r.teamName)} <span class="text-[10px] opacity-60">(${window.escapeHTML(r.slotGroup || 'TEAM A')})</span></div>`).join('');
+            }
+        });
+    </script>
+</body>
+</html>
