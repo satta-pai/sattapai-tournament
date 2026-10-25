@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Satta Pai - Free Fire Tournament Arena</title>
@@ -326,7 +328,6 @@
                         <div class="flex gap-2"><button onclick="saveSongSettings()" class="btn-theme flex-1 py-1">Save Song</button><button onclick="removeSongSettings()" class="bg-rose-600 text-white flex-1 py-1 rounded">Remove</button></div>
                     </div>
                     
-                    <!-- Home Page Full Edit Option -->
                     <form id="tournament-settings-form" class="cyber-card p-3 space-y-2">
                         <b class="text-emerald-400">Edit Home Page Texts</b>
                         <input type="text" id="edit-brand-name" placeholder="Brand Name" class="cyber-input w-full px-2 py-1">
@@ -353,9 +354,25 @@
                     <button onclick="switchAHSub('score')" id="ah-btn-score" class="px-3 py-1.5 rounded cyber-card">Scoreboard</button>
                     <button onclick="switchAHSub('staffs')" id="ah-btn-staffs" class="px-3 py-1.5 rounded cyber-card hidden">👥 Staffs</button>
                 </div>
-                <div id="ah-sec-match" class="space-y-2"><div id="host-matches-list"></div></div>
                 
-                <!-- FIXED SCOREBOARD INPUT AREA FOR HOST/ADMIN -->
+                <div id="ah-sec-match" class="space-y-2">
+                    <!-- Match Creation Form for Admin/Host -->
+                    <form id="create-match-form-ah" class="cyber-card p-3 space-y-3 text-xs">
+                        <input type="text" id="cm-title-ah" required placeholder="Match Title" class="cyber-input w-full px-2 py-1.5">
+                        <div class="grid grid-cols-2 gap-2"><select id="cm-stage-ah" class="cyber-input w-full px-2 py-1.5"><option>Playoffs</option><option selected>Semifinals</option><option>Finals</option></select><select id="cm-type-ah" onchange="toggleMatchTypeFieldsAH(this.value)" class="cyber-input w-full px-2 py-1.5"><option value="paid" selected>Paid</option><option value="free">Free</option></select></div>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" id="cm-map-ah" required value="Bermuda" placeholder="Map" class="cyber-input w-full px-2 py-1.5"><input type="text" id="cm-time-ah" required value="Today 8 PM" placeholder="Time" class="cyber-input w-full px-2 py-1.5"></div>
+                        <div class="grid grid-cols-3 gap-2"><input type="number" id="cm-slots-ah" required value="12" placeholder="Slots" class="cyber-input w-full px-2 py-1.5"><input type="text" id="cm-prize-pool-ah" required value="500" placeholder="Prize" class="cyber-input w-full px-2 py-1.5"><div id="cm-fee-container-ah"><input type="text" id="cm-fee-ah" required value="50" placeholder="Fee" class="cyber-input w-full px-2 py-1.5"></div></div>
+                        <div id="cm-upi-container-ah"><input type="text" id="cm-upi-ah" value="sattapai@oksbi" placeholder="UPI ID" class="cyber-input w-full px-2 py-1.5"></div>
+                        <div id="cm-payment-toggles-ah" class="grid grid-cols-2 gap-2 text-[10px]"><label><input type="checkbox" id="cm-upi-toggle-ah" checked> UPI</label><label><input type="checkbox" id="cm-qr-toggle-ah" checked> QR</label></div>
+                        <input type="url" id="cm-youtube-ah" placeholder="YouTube Live Link" class="cyber-input w-full px-2 py-1.5">
+                        <input type="text" id="cm-groups-ah" required value="TEAM A, TEAM B" oninput="updateDynamicWhatsAppInputsAH()" placeholder="Groups" class="cyber-input w-full px-2 py-1.5">
+                        <div id="whatsapp-inputs-list-ah" class="space-y-1.5"></div>
+                        <div id="cm-qr-upload-container-ah"><input type="file" id="cm-qr-file-ah" accept="image/*" class="text-[10px]"></div>
+                        <button type="submit" id="match-submit-btn-ah" class="btn-theme w-full py-2">Publish Match</button>
+                    </form>
+                    <div id="host-matches-list" class="space-y-2 pt-2"></div>
+                </div>
+                
                 <div id="ah-sec-score" class="hidden space-y-3 text-xs">
                     <select id="ah-calc-match-select" onchange="loadMatchTeamsForCalc('ah')" class="cyber-input w-full px-2 py-1.5"><option value="">-- Choose Match --</option></select>
                     <div class="cyber-card p-2 space-y-2 border border-emerald-500/30">
@@ -365,7 +382,7 @@
                             <div><label class="block font-[10px]">Kill</label><input type="number" id="ah-pts-kill" value="3" class="cyber-input w-full px-2 py-1"></div>
                         </div>
                     </div>
-                    <div id="ah-host-teams-input-area" class="hidden pt-2"><div id="ah-host-teams-rows" class="space-y-1.5"></div><button onclick="generateAndPublishScoreboard('ah')" class="btn-theme w-full mt-2 py-1.5">Publish</button></div>
+                    <div id="ah-host-teams-input-area" class="hidden pt-2"><div id="ah-host-teams-rows" class="space-y-1.5"></div><button onclick="generateAndPublishScoreboard('ah')" class="btn-theme w-full mt-2 py-1.5">Publish Scoreboard</button></div>
                 </div>
                 
                 <div id="ah-sec-staffs" class="hidden space-y-3 text-xs">
@@ -441,7 +458,6 @@
         window.maskEmail = function(email) { if(!email) return ''; if(email === 'guest') return 'Guest User'; const parts = email.split('@'); if(parts.length !== 2) return email; return parts[0][0] + '*****@' + parts[1]; };
         window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-text').textContent = msg; toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 3000); };
 
-        // COPY TEAM DETAILS FUNCTION
         window.copyTeamDetails = function(teamId) {
             const team = allTeams.find(t => t.id === teamId);
             if(!team) return;
@@ -476,13 +492,13 @@
             ['home', 'matches', 'roadmap', 'chat', 'profile'].forEach(s => { const bnav = document.getElementById('bnav-' + s); if(bnav) bnav.classList.remove('active'); });
             const activeBnav = document.getElementById('bnav-' + tab); if(activeBnav) activeBnav.classList.add('active');
             if(tab === 'teams') window.checkLoginState();
-            if(tab === 'profile') loadProfileUI();
+            if(tab === 'profile') window.loadProfileUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.toggleMenuDropdown = function(e) { e.stopPropagation(); document.getElementById('settings-dropdown').classList.toggle('show'); };
         window.closeMenuDropdown = function() { document.getElementById('settings-dropdown').classList.remove('show'); };
-        window.addEventListener('click', (e) => { window.closeMenuDropdown(); closeChatMenu(); });
+        window.addEventListener('click', (e) => { window.closeMenuDropdown(); window.closeChatMenu(); });
         
         window.openCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.remove('hidden'); };
         window.closeCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.add('hidden'); };
@@ -518,14 +534,18 @@
         const firebaseConfig = { apiKey: "AIzaSyAMs5OGAD7bOtbRoQ-0DMv-lLf-SRxyHS8", authDomain: "sattapai-tournament.firebaseapp.com", projectId: "sattapai-tournament", storageBucket: "sattapai-tournament.firebasestorage.app", messagingSenderId: "465702743401", appId: "1:465702743401:web:1072a897dc24f0b380e1f8", measurementId: "G-5CQJ29EP02" };
         const app = initializeApp(firebaseConfig);
         
-        // APP CHECK FIX: Localhost debugging & proper provider
-        if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-            self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+        try {
+            if (location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:") {
+                self.FIREBASE_APPCHECK_DEBUG_TOKEN = "123e4567-e89b-42d3-a456-426614174000"; // New Debug Token
+                console.log("🔥 App Check Debug Token Active: 123e4567-e89b-42d3-a456-426614174000");
+            }
+            const appCheck = initializeAppCheck(app, { 
+                provider: new ReCaptchaEnterpriseProvider('6LcaQv4tAAAAAEU2faNocvSJv9F21y-A5EqbL2kr'), 
+                isTokenAutoRefreshEnabled: true 
+            });
+        } catch (err) {
+            console.warn("App Check failed to initialize:", err);
         }
-        const appCheck = initializeAppCheck(app, { 
-            provider: new ReCaptchaEnterpriseProvider('6LcaQv4tAAAAAEU2faNocvSJv9F21y-A5EqbL2kr'), 
-            isTokenAutoRefreshEnabled: true 
-        });
         
         const auth = getAuth(app); const provider = new GoogleAuthProvider(); const db = getFirestore(app);
 
@@ -544,7 +564,7 @@
                     if (data.hosts_list) window.authorizedHosts = data.hosts_list; 
                     localStorage.setItem('satta_pai_cached_config', JSON.stringify(data));
                 }
-                trackVisitorStats(); renderStaffsLists(); window.checkLoginState(); initializeChat(); loadProfileUI(); loadSettings();
+                trackVisitorStats(); renderStaffsLists(); window.checkLoginState(); initializeChat(); window.loadProfileUI(); window.loadSettings();
                 
                 onSnapshot(collection(db, 'users'), snap => {
                     let changed = false;
@@ -557,13 +577,13 @@
                             }
                         }
                     });
-                    if(changed) renderChatMessages(); 
+                    if(changed) window.renderChatMessages(); 
                 });
 
             } catch(e){}
         });
 
-        function loadSettings() {
+        window.loadSettings = function() {
             onSnapshot(doc(db, 'settings', 'config'), snap => {
                 if(snap.exists()) {
                     const d = snap.data();
@@ -593,7 +613,7 @@
 
         window.previewDP = function(event) { const file = event.target.files[0]; if(file) window.compressImageAndGetBase64(file, (base64) => { document.getElementById('profile-dp-img').src = base64; }); };
         
-        async function loadProfileUI() {
+        window.loadProfileUI = async function() {
             if(!window.loggedEmail || window.loggedEmail === 'guest') { document.getElementById('profile-username').value = "Guest"; document.getElementById('profile-player-id').value = "N/A"; document.getElementById('dp-cooldown-text').classList.add('hidden'); return; }
             const userSnap = await getDoc(doc(db, 'users', window.loggedEmail));
             if(userSnap.exists()) {
@@ -644,7 +664,7 @@
             if (!userSnap.exists() || !userSnap.data().dpBase64 || userSnap.data().dpBase64 !== dpSrc) { updateData.lastDpUpdate = Date.now(); }
 
             await setDoc(doc(db, 'users', window.loggedEmail), updateData, { merge: true });
-            window.showToast("Profile Saved!"); loadProfileUI();
+            window.showToast("Profile Saved!"); window.loadProfileUI();
         };
 
         window.openFullScreenChat = function() { 
@@ -672,7 +692,7 @@
             onSnapshot(doc(db, 'settings', 'chatConfig'), snap => { if(snap.exists()) { currentChatMode = snap.data().mode || 'all'; const sel = document.getElementById('chat-mode-select'); if(sel) sel.value = currentChatMode; if(document.getElementById('chat-fullscreen').classList.contains('active')) checkChatBanStatus(); } });
             onSnapshot(query(collection(db, 'chats'), orderBy('timestamp', 'desc')), snap => {
                 allChatMessages = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(msg => msg.timestamp > cutoffTime).reverse();
-                renderChatMessages();
+                window.renderChatMessages();
             });
         };
 
@@ -686,7 +706,7 @@
             } catch(e) { alert("Error cleaning chats: " + e.message); }
         };
 
-        function renderChatMessages() {
+        window.renderChatMessages = function() {
             const container = document.getElementById('chat-messages'); if (!container) return;
             if (allChatMessages.length === 0) { container.innerHTML = `<div class="text-center text-xs text-slate-500 py-4 mt-10">No messages yet.</div>`; return; }
             
@@ -749,7 +769,7 @@
         window.closeChatMenu = function() { document.getElementById('chat-action-menu').style.display = 'none'; };
 
         window.handleChatAction = async function(action) {
-            if (!currentChatTargetId) return; closeChatMenu();
+            if (!currentChatTargetId) return; window.closeChatMenu();
             if (action === 'unsend' || action === 'delete') {
                 if(confirm("Delete this message?")) { await deleteDoc(doc(db, 'chats', currentChatTargetId)); window.showToast("Message deleted"); }
             } else if (action === 'edit') {
@@ -828,7 +848,7 @@
                 
                 return `<div class="cyber-card p-4 space-y-3"><div class="flex justify-between items-start cursor-pointer" onclick="toggleMatchExpand('${m.id}')"><div><div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-bold" style="color: var(--accent-primary);">#${idx + 1}</span>${statusBadge}${typeBadge}</div><h3 class="text-sm font-bold">${window.escapeHTML(m.title)}</h3><p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted);">🗺️ ${window.escapeHTML(m.map)} | 📅 ${window.escapeHTML(m.time)} | 💰 Prize: ₹${window.escapeHTML(m.prize || '0')}</p>${liveStreamBtn}</div><span class="text-xs font-semibold underline" style="color: var(--accent-primary);">Slots</span></div><div id="slots-box-${m.id}" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t" style="border-color: var(--border-color);">${slotsHTML}</div></div>`;
             }).join('');
-            renderAdminMatches();
+            window.renderAdminMatches();
         };
 
         window.renderRoadmapTab = function() {
@@ -882,7 +902,7 @@
             const listHTML = allMatches.length === 0 ? `<div class="text-xs text-slate-500">No matches.</div>` : allMatches.map(m => {
                 let canEdit = isAdmin || (isHost && m.createdBy === window.loggedEmail); 
                 let canDelete = isSuper || isAdmin || (isHost && m.createdBy === window.loggedEmail);
-                return `<div class="cyber-card p-2.5 rounded flex items-center justify-between text-xs"><div><div class="font-bold">${window.escapeHTML(m.title)}</div><div class="text-[10px]" style="color: var(--text-muted);">Status: ${m.status} | Type: ${m.type} | By: ${window.maskEmail(m.createdBy)}</div></div><div class="flex items-center gap-1.5"><select onchange="updateMatchStatus('${m.id}', this.value)" class="cyber-input rounded p-1 text-[10px]"><option value="not_started" ${m.status==='not_started'?'selected':''}>Upcoming</option><option value="playing" ${m.status==='playing'?'selected':''}>Playing</option><option value="ended" ${m.status==='ended'?'selected':''}>Ended</option></select><button onclick="editMatch('${m.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer ${canEdit ? '' : 'hidden'}">Edit</button><button onclick="deleteMatch('${m.id}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer ${canDelete ? 'hidden' : ''}">Delete</button></div></div>`;
+                return `<div class="cyber-card p-2.5 rounded flex items-center justify-between text-xs"><div><div class="font-bold">${window.escapeHTML(m.title)}</div><div class="text-[10px]" style="color: var(--text-muted);">Status: ${m.status} | Type: ${m.type} | By: ${window.maskEmail(m.createdBy)}</div></div><div class="flex items-center gap-1.5"><select onchange="updateMatchStatus('${m.id}', this.value)" class="cyber-input rounded p-1 text-[10px]"><option value="not_started" ${m.status==='not_started'?'selected':''}>Upcoming</option><option value="playing" ${m.status==='playing'?'selected':''}>Playing</option><option value="ended" ${m.status==='ended'?'selected':''}>Ended</option></select><button onclick="editMatch('${m.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer ${canEdit ? '' : 'hidden'}">Edit</button><button onclick="deleteMatch('${m.id}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer ${canDelete ? '' : 'hidden'}">Delete</button></div></div>`;
             }).join('');
             if(c) c.innerHTML = listHTML; if(hc) hc.innerHTML = listHTML;
         };
@@ -904,9 +924,18 @@
 
         window.editMatch = function(id) {
             const m = allMatches.find(item => item.id === id); if(!m) return;
-            document.getElementById('cm-title').value = m.title || ''; document.getElementById('cm-stage').value = m.stage || 'Semifinals'; document.getElementById('cm-type').value = m.type || 'paid'; toggleMatchTypeFields(m.type || 'paid');
-            document.getElementById('cm-map').value = m.map || 'Bermuda'; document.getElementById('cm-time').value = m.time || ''; document.getElementById('cm-slots').value = m.slots || 12; document.getElementById('cm-prize-pool').value = m.prize || ''; document.getElementById('cm-fee').value = m.fee || ''; document.getElementById('cm-upi').value = m.upiId || ''; document.getElementById('cm-youtube').value = m.youtubeLink || ''; document.getElementById('cm-groups').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle').checked = m.qrEnabled !== false;
-            window.editingMatchId = id; document.getElementById('match-submit-btn').textContent = "Update Match"; window.switchSASub('match');
+            window.editingMatchId = id; 
+            
+            const isSuper = (window.loggedEmail === SUPER_ADMIN);
+            if (isSuper) {
+                document.getElementById('cm-title').value = m.title || ''; document.getElementById('cm-stage').value = m.stage || 'Semifinals'; document.getElementById('cm-type').value = m.type || 'paid'; toggleMatchTypeFields(m.type || 'paid');
+                document.getElementById('cm-map').value = m.map || 'Bermuda'; document.getElementById('cm-time').value = m.time || ''; document.getElementById('cm-slots').value = m.slots || 12; document.getElementById('cm-prize-pool').value = m.prize || ''; document.getElementById('cm-fee').value = m.fee || ''; document.getElementById('cm-upi').value = m.upiId || ''; document.getElementById('cm-youtube').value = m.youtubeLink || ''; document.getElementById('cm-groups').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle').checked = m.qrEnabled !== false;
+                document.getElementById('match-submit-btn').textContent = "Update Match"; window.switchSASub('match');
+            } else {
+                document.getElementById('cm-title-ah').value = m.title || ''; document.getElementById('cm-stage-ah').value = m.stage || 'Semifinals'; document.getElementById('cm-type-ah').value = m.type || 'paid'; toggleMatchTypeFieldsAH(m.type || 'paid');
+                document.getElementById('cm-map-ah').value = m.map || 'Bermuda'; document.getElementById('cm-time-ah').value = m.time || ''; document.getElementById('cm-slots-ah').value = m.slots || 12; document.getElementById('cm-prize-pool-ah').value = m.prize || ''; document.getElementById('cm-fee-ah').value = m.fee || ''; document.getElementById('cm-upi-ah').value = m.upiId || ''; document.getElementById('cm-youtube-ah').value = m.youtubeLink || ''; document.getElementById('cm-groups-ah').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle-ah').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle-ah').checked = m.qrEnabled !== false;
+                document.getElementById('match-submit-btn-ah').textContent = "Update Match"; window.switchAHSub('match');
+            }
         };
 
         window.loadMatchTeamsForCalc = function(mode) {
@@ -933,6 +962,7 @@
             window.showToast('Published!'); window.switchTab('roadmap');
         };
 
+        // Super Admin Match Form Submission
         document.getElementById('create-match-form')?.addEventListener('submit', (e) => {
             e.preventDefault(); if(!confirm("Publish/Update match?")) return;
             const title = document.getElementById('cm-title').value.trim(); const stage = document.getElementById('cm-stage').value; const type = document.getElementById('cm-type').value; const map = document.getElementById('cm-map').value.trim(); const time = document.getElementById('cm-time').value.trim(); const slots = parseInt(document.getElementById('cm-slots').value) || 12; const groupsStr = document.getElementById('cm-groups').value.trim(); const prize = document.getElementById('cm-prize-pool').value.trim(); const fee = type === 'free' ? '0' : document.getElementById('cm-fee').value.trim(); const upiId = type === 'free' ? '' : document.getElementById('cm-upi').value.trim(); const youtubeLink = document.getElementById('cm-youtube').value.trim(); const upiEnabled = type === 'free' ? false : document.getElementById('cm-upi-toggle').checked; const qrEnabled = type === 'free' ? false : document.getElementById('cm-qr-toggle').checked; const qrFileInput = document.getElementById('cm-qr-file');
@@ -943,6 +973,21 @@
                 if(window.editingMatchId) { delete matchData.createdBy; delete matchData.currentSlots; await setDoc(doc(db, 'matches', window.editingMatchId), matchData, { merge: true }); window.showToast('Updated!'); window.editingMatchId = null; document.getElementById('match-submit-btn').textContent = "Publish"; }
                 else { await addDoc(collection(db, 'matches'), matchData); window.showToast('Published!'); }
                 document.getElementById('create-match-form').reset(); updateDynamicWhatsAppInputs();
+            };
+            if (type !== 'free' && qrFileInput.files && qrFileInput.files[0]) { const reader = new FileReader(); reader.onload = function(evt) { processSave(evt.target.result); }; reader.readAsDataURL(qrFileInput.files[0]); } else { processSave(""); }
+        });
+
+        // Admin/Host Match Form Submission
+        document.getElementById('create-match-form-ah')?.addEventListener('submit', (e) => {
+            e.preventDefault(); if(!confirm("Publish/Update match?")) return;
+            const title = document.getElementById('cm-title-ah').value.trim(); const stage = document.getElementById('cm-stage-ah').value; const type = document.getElementById('cm-type-ah').value; const map = document.getElementById('cm-map-ah').value.trim(); const time = document.getElementById('cm-time-ah').value.trim(); const slots = parseInt(document.getElementById('cm-slots-ah').value) || 12; const groupsStr = document.getElementById('cm-groups-ah').value.trim(); const prize = document.getElementById('cm-prize-pool-ah').value.trim(); const fee = type === 'free' ? '0' : document.getElementById('cm-fee-ah').value.trim(); const upiId = type === 'free' ? '' : document.getElementById('cm-upi-ah').value.trim(); const youtubeLink = document.getElementById('cm-youtube-ah').value.trim(); const upiEnabled = type === 'free' ? false : document.getElementById('cm-upi-toggle-ah').checked; const qrEnabled = type === 'free' ? false : document.getElementById('cm-qr-toggle-ah').checked; const qrFileInput = document.getElementById('cm-qr-file-ah');
+            const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const whatsappMap = {}; groups.forEach((g, idx) => { const input = document.getElementById(`wa-link-ah-${idx}`); if(input) whatsappMap[g] = input.value.trim(); });
+            const processSave = async (qrDataURL) => {
+                const matchData = { title, stage, type, map, time, slots, currentSlots: 0, groups: groupsStr, whatsappMap, prize, fee, upiId, youtubeLink, upiEnabled, qrEnabled, status: 'not_started', createdAt: Date.now(), createdBy: window.loggedEmail };
+                if(qrDataURL) matchData.qrDataURL = qrDataURL;
+                if(window.editingMatchId) { delete matchData.createdBy; delete matchData.currentSlots; await setDoc(doc(db, 'matches', window.editingMatchId), matchData, { merge: true }); window.showToast('Updated!'); window.editingMatchId = null; document.getElementById('match-submit-btn-ah').textContent = "Publish Match"; }
+                else { await addDoc(collection(db, 'matches'), matchData); window.showToast('Published!'); }
+                document.getElementById('create-match-form-ah').reset(); updateDynamicWhatsAppInputsAH();
             };
             if (type !== 'free' && qrFileInput.files && qrFileInput.files[0]) { const reader = new FileReader(); reader.onload = function(evt) { processSave(evt.target.result); }; reader.readAsDataURL(qrFileInput.files[0]); } else { processSave(""); }
         });
@@ -1030,11 +1075,11 @@
             if(confirm(`Remove ${email}?`)) { 
                 if(role==='admin'){ window.authorizedAdmins = window.authorizedAdmins.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); } 
                 else { window.authorizedHosts = window.authorizedHosts.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); } 
-                window.showToast("Removed"); renderStaffsLists(); 
+                window.showToast("Removed"); window.renderStaffsLists(); 
             } 
         };
         
-        async function handleAddStaff(email, role) { 
+        window.handleAddStaff = async function(email, role) { 
             email = email.trim().toLowerCase(); 
             if(!email || !email.includes('@')) { alert("Invalid email"); return; } 
             
@@ -1053,24 +1098,22 @@
                 if(!window.authorizedHosts.includes(email)) window.authorizedHosts.push(email); 
                 await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); 
             } 
-            window.showToast("Added"); renderStaffsLists(); 
+            window.showToast("Added"); window.renderStaffsLists(); 
         }
         
-        document.getElementById('add-staff-form')?.addEventListener('submit', (e) => { e.preventDefault(); handleAddStaff(document.getElementById('staff-email-input').value, document.getElementById('staff-role-select').value); e.target.reset(); });
-        document.getElementById('add-host-form-ah')?.addEventListener('submit', (e) => { e.preventDefault(); handleAddStaff(document.getElementById('host-email-input-ah').value, 'host'); e.target.reset(); });
+        document.getElementById('add-staff-form')?.addEventListener('submit', (e) => { e.preventDefault(); window.handleAddStaff(document.getElementById('staff-email-input').value, document.getElementById('staff-role-select').value); e.target.reset(); });
+        document.getElementById('add-host-form-ah')?.addEventListener('submit', (e) => { e.preventDefault(); window.handleAddStaff(document.getElementById('host-email-input-ah').value, 'host'); e.target.reset(); });
 
         window.changeSquadPage = function(dir) {
             const totalPages = Math.ceil(allTeams.length / SQUADS_PER_PAGE);
             currentSquadPage += dir;
             if(currentSquadPage < 1) currentSquadPage = 1;
             if(currentSquadPage > totalPages) currentSquadPage = totalPages;
-            renderSquadsManagementList();
+            window.renderSquadsManagementList();
         };
 
         window.renderSquadsManagementList = function(teamsList = allTeams) {
             const container = document.getElementById('teams-container'); 
-            const countLbl = document.getElementById('total-teams-count'); 
-            if(countLbl) countLbl.textContent = allTeams.length; 
             if(!container) return;
 
             const totalPages = Math.ceil(teamsList.length / SQUADS_PER_PAGE) || 1;
@@ -1086,7 +1129,26 @@
                 return; 
             }
             
-            container.innerHTML = paginatedTeams.map(t => `<div class="cyber-card p-2.5 rounded flex justify-between items-center text-xs"><div><div class="font-bold uppercase">${window.escapeHTML(t.teamName)}</div><div class="text-[10px] text-muted">ID: ${t.teamId} | Ph: ${window.escapeHTML(t.phoneNumber)}</div></div><button onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}', '${t.matchId}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button></div>`).join('');
+            // Full details & Copy button visible for SA, Admin, Host
+            container.innerHTML = paginatedTeams.map(t => `
+                <div class="cyber-card p-3 rounded space-y-2 text-xs">
+                    <div class="flex justify-between items-center border-b pb-1" style="border-color: var(--border-color);">
+                        <div class="font-bold uppercase text-sm" style="color: var(--accent-primary);">${window.escapeHTML(t.teamName)}</div>
+                        <button onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}', '${t.matchId}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
+                        <div>ID: ${t.teamId}</div>
+                        <div>Ph: ${window.escapeHTML(t.phoneNumber)}</div>
+                        <div>Leader: ${window.escapeHTML(t.leaderName)}</div>
+                        <div>City: ${window.escapeHTML(t.hometown)}</div>
+                        <div class="col-span-2">UIDs: ${window.escapeHTML(t.gameUid)}, ${window.escapeHTML(t.member2Uid)}, ${window.escapeHTML(t.member3Uid)}, ${window.escapeHTML(t.member4Uid)}</div>
+                        ${t.sub1Uid ? `<div class="col-span-2">Subs: ${window.escapeHTML(t.sub1Uid)}, ${window.escapeHTML(t.sub2Uid)}</div>` : ''}
+                        <div class="col-span-2">UTR: ${window.escapeHTML(t.transitionId) || 'N/A'}</div>
+                        <div class="col-span-2 text-slate-500">Mail: ${window.maskEmail(t.userEmail)}</div>
+                    </div>
+                    <button onclick="copyTeamDetails('${t.id}')" class="w-full py-1 bg-blue-600 text-white rounded font-bold text-[10px] mt-1">📋 Copy Full Details</button>
+                </div>
+            `).join('');
         };
         
         window.removeIndividualTeam = async function(teamId, teamName, matchId) { 
@@ -1100,16 +1162,15 @@
         };
         
         window.removeAllSquads = async function() { if(confirm("Remove ALL squads?")) { const snaps = await getDocs(collection(db, 'registrations')); snaps.forEach(async (d) => { await deleteDoc(d.ref); }); window.showToast("All removed!"); } };
-        window.filterSquadsList = function(query) { const filtered = allTeams.filter(t => t.teamName.toLowerCase().includes(query.toLowerCase()) || (t.phoneNumber||'').includes(query)); currentSquadPage = 1; renderSquadsManagementList(filtered); };
+        window.filterSquadsList = function(query) { const filtered = allTeams.filter(t => t.teamName.toLowerCase().includes(query.toLowerCase()) || (t.phoneNumber||'').includes(query)); currentSquadPage = 1; window.renderSquadsManagementList(filtered); };
 
         window.toggleMaintenanceMode = async function() { if(!confirm("Toggle Maintenance?")) return; const snap = await getDoc(doc(db, 'settings', 'config')); const current = snap.exists() ? (snap.data().maintenance || false) : false; await setDoc(doc(db, 'settings', 'config'), { maintenance: !current }, { merge: true }); window.showToast("Toggled"); };
         
-        window.saveLogoSettings = function() { const file = document.getElementById('logo-file-input').files[0]; if(!file) return alert("Select file"); if(file.size > 1048576) return alert("Image is too large! Max 1MB allowed."); compressImageAndGetBase64(file, async (b64) => { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: b64 }, { merge: true }); window.showToast("Logo saved"); }); };
+        window.saveLogoSettings = function() { const file = document.getElementById('logo-file-input').files[0]; if(!file) return alert("Select file"); if(file.size > 1048576) return alert("Image is too large! Max 1MB allowed."); window.compressImageAndGetBase64(file, async (b64) => { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: b64 }, { merge: true }); window.showToast("Logo saved"); }); };
         window.removeLogoSettings = async function() { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: "" }, { merge: true }); window.showToast("Logo removed"); };
         window.saveSongSettings = function() { const file = document.getElementById('music-file-input').files[0]; if(!file) return alert("Select file"); if(file.size > 1048576) return alert("Song is too large! Max 1MB allowed."); const reader = new FileReader(); reader.onload = async (e) => { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: e.target.result }, { merge: true }); window.showToast("Song saved"); }; reader.readAsDataURL(file); };
         window.removeSongSettings = async function() { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: "" }, { merge: true }); window.showToast("Song removed"); };
         
-        // HOME PAGE FULL EDIT SAVE LOGIC
         document.getElementById('tournament-settings-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             const data = { 
@@ -1129,8 +1190,13 @@
 
         window.compressImageAndGetBase64 = function(file, callback) { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = function(e) { const img = new Image(); img.src = e.target.result; img.onload = function() { const canvas = document.createElement('canvas'); const MAX=250; let w=img.width, h=img.height; if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); callback(canvas.toDataURL('image/jpeg',0.7)); } } };
         window.selectMatchSlot = function(id, title, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots) { if (window.loggedEmail === 'guest') { alert("Login required!"); return; } selectedMatchForReg = { id, title: `${title} (${group})`, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots }; if (type === 'free') { document.getElementById('reg-free-match-title').textContent = `${title} - Prize: ₹${prize}`; window.switchTab('register-free'); } else { document.getElementById('reg-paid-match-title').textContent = `${title} - Fee: ₹${entryFee} | Prize: ₹${prize}`; let hasPay = false; if (upiEnabled && upiId) { document.getElementById('reg-upi-pay-link').href = `upi://pay?pa=${upiId}&pn=SattaPai&am=${entryFee}.00&cu=INR`; document.getElementById('reg-paid-payment-box').classList.remove('hidden'); hasPay = true; } if (qrEnabled && qrDataURL) { document.getElementById('reg-qr-img').src = qrDataURL; hasPay = true; } if(!hasPay) document.getElementById('reg-paid-payment-box').classList.add('hidden'); window.switchTab('register-paid'); } };
+        
         window.toggleMatchTypeFields = function(type) { const upi = document.getElementById('cm-upi-container'); const fee = document.getElementById('cm-fee-container'); const toggles = document.getElementById('cm-payment-toggles'); const qr = document.getElementById('cm-qr-upload-container'); if(type === 'free') { fee.classList.add('hidden'); upi.classList.add('hidden'); toggles.classList.add('hidden'); qr.classList.add('hidden'); } else { fee.classList.remove('hidden'); upi.classList.remove('hidden'); toggles.classList.remove('hidden'); qr.classList.remove('hidden'); } };
+        window.toggleMatchTypeFieldsAH = function(type) { const upi = document.getElementById('cm-upi-container-ah'); const fee = document.getElementById('cm-fee-container-ah'); const toggles = document.getElementById('cm-payment-toggles-ah'); const qr = document.getElementById('cm-qr-upload-container-ah'); if(type === 'free') { fee.classList.add('hidden'); upi.classList.add('hidden'); toggles.classList.add('hidden'); qr.classList.add('hidden'); } else { fee.classList.remove('hidden'); upi.classList.remove('hidden'); toggles.classList.remove('hidden'); qr.classList.remove('hidden'); } };
+        
         window.updateDynamicWhatsAppInputs = function() { const groupsStr = document.getElementById('cm-groups')?.value || 'TEAM A, TEAM B'; const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const container = document.getElementById('whatsapp-inputs-list'); if(!container) return; container.innerHTML = groups.map((g, idx) => `<div class="flex items-center gap-1.5"><span class="text-[10px] font-bold w-16 truncate" style="color: var(--accent-primary);">${g}:</span><input type="text" id="wa-link-${idx}" placeholder="WhatsApp Link" class="cyber-input flex-1 px-2 py-1 text-xs"></div>`).join(''); };
+        window.updateDynamicWhatsAppInputsAH = function() { const groupsStr = document.getElementById('cm-groups-ah')?.value || 'TEAM A, TEAM B'; const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const container = document.getElementById('whatsapp-inputs-list-ah'); if(!container) return; container.innerHTML = groups.map((g, idx) => `<div class="flex items-center gap-1.5"><span class="text-[10px] font-bold w-16 truncate" style="color: var(--accent-primary);">${g}:</span><input type="text" id="wa-link-ah-${idx}" placeholder="WhatsApp Link" class="cyber-input flex-1 px-2 py-1 text-xs"></div>`).join(''); };
+        
         window.switchSASub = function(sub) { ['score', 'match', 'users', 'staffs', 'squads', 'settings'].forEach(t => { document.getElementById('sas-sec-' + t)?.classList.add('hidden'); document.getElementById('sas-btn-' + t)?.classList.replace('btn-theme', 'cyber-card'); }); document.getElementById('sas-sec-' + sub)?.classList.remove('hidden'); document.getElementById('sas-btn-' + sub)?.classList.replace('cyber-card', 'btn-theme'); };
         window.switchAHSub = function(sub) { ['match', 'score', 'staffs'].forEach(t => { document.getElementById('ah-sec-' + t)?.classList.add('hidden'); document.getElementById('ah-btn-' + t)?.classList.replace('btn-theme', 'cyber-card'); }); document.getElementById('ah-sec-' + sub)?.classList.remove('hidden'); document.getElementById('ah-btn-' + sub)?.classList.replace('cyber-card', 'btn-theme'); };
         
@@ -1178,13 +1244,13 @@
 
         window.trackVisitorStats = async function() { try{ const sRef=doc(db,'settings','analytics'), snap=await getDoc(sRef), now=Date.now(), tma=now-180000, da=now-86400000; let v=[], tot=1; if(snap.exists()){ const d=snap.data(); v=d.visitors||[]; tot=(d.total||0)+1; } v.push({id:window.loggedEmail||('g_'+Math.random()),time:now}); const alc=v.filter(x=>x.time>tma).length; v=v.filter(x=>x.time>da); await setDoc(sRef,{total:tot,visitors:v},{merge:true}); if(document.getElementById('stat-total-visitors')) document.getElementById('stat-total-visitors').textContent=tot; if(document.getElementById('stat-daily-visitors')) document.getElementById('stat-daily-visitors').textContent=v.length; if(document.getElementById('stat-live-users')) document.getElementById('stat-live-users').textContent=Math.max(1,alc); }catch(e){} };
 
-        window.loginWithGoogleAuth = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){alert("Accept Terms");return;} signInWithPopup(auth, provider).then(r=>{ window.loggedEmail=r.user.email.toLowerCase(); localStorage.setItem('satta_pai_auth_email',window.loggedEmail); document.getElementById('google-login-overlay').classList.add('hidden'); trackVisitorStats(); window.checkLoginState(); loadProfileUI(); }).catch(e=>alert(e.message)); };
-        window.loginAsGuest = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){alert("Accept Terms");return;} window.loggedEmail='guest'; localStorage.setItem('satta_pai_auth_email','guest'); document.getElementById('google-login-overlay').classList.add('hidden'); trackVisitorStats(); window.checkLoginState(); loadProfileUI(); };
+        window.loginWithGoogleAuth = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){alert("Accept Terms");return;} signInWithPopup(auth, provider).then(r=>{ window.loggedEmail=r.user.email.toLowerCase(); localStorage.setItem('satta_pai_auth_email',window.loggedEmail); document.getElementById('google-login-overlay').classList.add('hidden'); window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); }).catch(e=>alert(e.message)); };
+        window.loginAsGuest = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){alert("Accept Terms");return;} window.loggedEmail='guest'; localStorage.setItem('satta_pai_auth_email','guest'); document.getElementById('google-login-overlay').classList.add('hidden'); window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); };
         window.confirmSecureLogout = function() { if(confirm("Logout?")) signOut(auth).then(()=>{localStorage.removeItem('satta_pai_auth_email'); window.loggedEmail=''; window.checkLoginState(); document.getElementById('google-login-overlay').classList.remove('hidden');}); };
         onAuthStateChanged(auth, u=>{ if(u){ window.loggedEmail=u.email.toLowerCase(); localStorage.setItem('satta_pai_auth_email',window.loggedEmail); }else{ if(localStorage.getItem('satta_pai_auth_email')!=='guest'){ window.loggedEmail=localStorage.getItem('satta_pai_auth_email')||''; } } window.checkLoginState(); });
 
-        onSnapshot(collection(db, 'matches'), snap => { allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); renderPublicMatches(); renderRoadmapTab(); });
-        onSnapshot(collection(db, 'registrations'), snap => { allTeams = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderSquadsManagementList(allTeams); renderPublicMatches(); const userList = document.getElementById('user-bookings-list'); if(userList && window.loggedEmail) { const myRegs = (window.loggedEmail === SUPER_ADMIN) ? allTeams : allTeams.filter(t => t.userEmail === window.loggedEmail); userList.innerHTML = myRegs.length === 0 ? "None" : myRegs.map(r => `<div>[${r.teamId||'N/A'}] ${window.escapeHTML(r.teamName)}</div>`).join(''); } });
+        onSnapshot(collection(db, 'matches'), snap => { allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); window.renderPublicMatches(); window.renderRoadmapTab(); });
+        onSnapshot(collection(db, 'registrations'), snap => { allTeams = snap.docs.map(d => ({ id: d.id, ...d.data() })); window.renderSquadsManagementList(allTeams); window.renderPublicMatches(); const userList = document.getElementById('user-bookings-list'); if(userList && window.loggedEmail) { const myRegs = (window.loggedEmail === SUPER_ADMIN) ? allTeams : allTeams.filter(t => t.userEmail === window.loggedEmail); userList.innerHTML = myRegs.length === 0 ? "None" : myRegs.map(r => `<div>[${r.teamId||'N/A'}] ${window.escapeHTML(r.teamName)}</div>`).join(''); } });
     </script>
 </body>
 </html>
