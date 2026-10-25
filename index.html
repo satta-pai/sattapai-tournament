@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+   <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -536,11 +536,12 @@
         
         try {
             if (location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:") {
-                self.FIREBASE_APPCHECK_DEBUG_TOKEN = "123e4567-e89b-42d3-a456-426614174000"; // New Debug Token
+                self.FIREBASE_APPCHECK_DEBUG_TOKEN = "123e4567-e89b-42d3-a456-426614174000"; // Debug Token
                 console.log("🔥 App Check Debug Token Active: 123e4567-e89b-42d3-a456-426614174000");
             }
             const appCheck = initializeAppCheck(app, { 
-                provider: new ReCaptchaEnterpriseProvider('6LcaQv4tAAAAAEU2faNocvSJv9F21y-A5EqbL2kr'), 
+                // NEW KEY UPDATED HERE
+                provider: new ReCaptchaEnterpriseProvider('6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY'), 
                 isTokenAutoRefreshEnabled: true 
             });
         } catch (err) {
