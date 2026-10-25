@@ -77,6 +77,16 @@
 
     <audio id="bg-music" loop></audio>
 
+    <!-- MANUAL COPY MODAL -->
+    <div id="manual-copy-modal" class="fixed inset-0 z-[10007] hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+        <div class="cyber-card p-4 max-w-sm w-full space-y-3 shadow-2xl">
+            <h3 class="text-sm font-bold text-amber-400">Copy Details</h3>
+            <p class="text-[10px]" style="color: var(--text-muted);">Press and hold the text below to copy manually.</p>
+            <textarea id="manual-copy-textarea" class="w-full h-40 cyber-input p-2 text-xs font-mono" readonly></textarea>
+            <button onclick="document.getElementById('manual-copy-modal').classList.add('hidden')" class="btn-theme w-full py-2 text-xs font-bold">Close</button>
+        </div>
+    </div>
+
     <!-- QR ZOOM MODAL -->
     <div id="qr-zoom-modal" class="fixed inset-0 z-[10006] hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onclick="closeQrZoomModal(event)">
         <div class="relative max-w-sm w-full flex flex-col items-center justify-center space-y-4" onclick="event.stopPropagation()">
@@ -327,8 +337,15 @@
                     <div class="cyber-card p-3 space-y-1"><b>Admins:</b><div id="admins-list-container"></div></div><div class="cyber-card p-3 space-y-1"><b>Hosts:</b><div id="hosts-list-container"></div></div>
                 </div>
 
+                <!-- SUPER ADMIN SQUADS -->
                 <div id="sas-sec-squads" class="hidden space-y-2 text-xs">
                     <button onclick="removeAllSquads()" class="px-3 py-1.5 bg-rose-600 text-white rounded font-bold w-full mb-2">Remove All</button>
+                    <div class="flex gap-2 mb-2">
+                        <select id="sa-squad-match-filter" class="cyber-input flex-1 px-2 py-1.5 text-xs">
+                            <option value="">-- All Matches --</option>
+                        </select>
+                        <button onclick="copySquadsForMatch('sa')" class="btn-theme px-3 py-1.5 text-xs">Copy</button>
+                    </div>
                     <input type="text" id="search-input-sa" oninput="filterSquadsList(this.value, 'sa')" placeholder="Search..." class="cyber-input w-full px-2 py-1.5 mb-2">
                     <div id="teams-container-sa" class="space-y-2"></div>
                     <div class="flex justify-between items-center mt-2 pt-2 border-t" style="border-color: var(--border-color);">
@@ -421,6 +438,12 @@
                 
                 <!-- ADMIN/HOST SQUADS -->
                 <div id="ah-sec-squads" class="hidden space-y-2 text-xs">
+                    <div class="flex gap-2 mb-2">
+                        <select id="ah-squad-match-filter" class="cyber-input flex-1 px-2 py-1.5 text-xs">
+                            <option value="">-- All Matches --</option>
+                        </select>
+                        <button onclick="copySquadsForMatch('ah')" class="btn-theme px-3 py-1.5 text-xs">Copy</button>
+                    </div>
                     <input type="text" id="search-input-ah" oninput="filterSquadsList(this.value, 'ah')" placeholder="Search..." class="cyber-input w-full px-2 py-1.5 mb-2">
                     <div id="teams-container-ah" class="space-y-2"></div>
                     <div class="flex justify-between items-center mt-2 pt-2 border-t" style="border-color: var(--border-color);">
@@ -505,45 +528,95 @@
         window.maskEmail = function(email) { if(!email) return ''; if(email === 'guest') return 'Guest User'; const parts = email.split('@'); if(parts.length !== 2) return email; return parts[0][0] + '*****@' + parts[1]; };
         window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-text').textContent = msg; toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 3000); };
 
-        // --- COPY FIX (Tested for Mobile) ---
+        // --- ROBUST COPY/SHARE FUNCTION ---
+        window.executeCopyOrShare = function(text, title = "Team Details") {
+            // 1. Try Native Share API (Best for Mobile)
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text
+                }).then(() => {
+                    window.showToast("Shared successfully!");
+                }).catch((err) => {
+                    console.log("Share failed, trying clipboard...", err);
+                    fallbackClipboard(text);
+                });
+            } else {
+                fallbackClipboard(text);
+            }
+        }
+
+        function fallbackClipboard(text) {
+            // 2. Try Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    window.showToast("Copied to clipboard!");
+                }).catch(err => {
+                    manualCopyModal(text);
+                });
+            } else {
+                // 3. Try execCommand
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed"; 
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.opacity = "0"; 
+                
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                textArea.setSelectionRange(0, 99999); 
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if(successful) {
+                        window.showToast("Copied to clipboard!");
+                    } else {
+                        manualCopyModal(text);
+                    }
+                } catch (err) {
+                    manualCopyModal(text);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function manualCopyModal(text) {
+            document.getElementById('manual-copy-textarea').value = text;
+            document.getElementById('manual-copy-modal').classList.remove('hidden');
+            window.showToast("Auto-copy blocked. Please copy manually.");
+        }
+
         window.copyTeamDetails = function(teamId) {
             const team = allTeams.find(t => t.id === teamId);
             if(!team) return;
             const text = `*Team: ${team.teamName}*\nLeader: ${team.leaderName}\nPhone: ${team.phoneNumber}\nCity: ${team.hometown}\nLeader UID: ${team.gameUid}\nP2 UID: ${team.member2Uid}\nP3 UID: ${team.member3Uid}\nP4 UID: ${team.member4Uid}\nSubs: ${team.sub1Uid || 'N/A'}, ${team.sub2Uid || 'N/A'}\nUTR: ${team.transitionId || 'N/A'}`;
-            
-            // 1. Try Modern Clipboard API
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    window.showToast("Details copied!");
-                }).catch(err => {
-                    fallbackCopyTextToClipboard(text);
-                });
-            } else {
-                // 2. Fallback for WebViews (TrebEdit, etc)
-                fallbackCopyTextToClipboard(text);
-            }
+            window.executeCopyOrShare(text, `Team: ${team.teamName}`);
         }
 
-        function fallbackCopyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed"; 
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.opacity = "0"; // Hide it visually but keep it in DOM
+        window.copySquadsForMatch = function(mode) {
+            const matchId = document.getElementById(mode === 'sa' ? 'sa-squad-match-filter' : 'ah-squad-match-filter').value;
+            let teamsToCopy = allTeams;
+            let matchTitle = "All Matches";
             
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For iOS
-            
-            try {
-                const successful = document.execCommand('copy');
-                window.showToast(successful ? "Details copied!" : "Copy failed, please select manually.");
-            } catch (err) {
-                window.showToast("Copy failed");
+            if (matchId) {
+                teamsToCopy = allTeams.filter(t => t.matchId === matchId);
+                const match = allMatches.find(m => m.id === matchId);
+                if (match) matchTitle = match.title;
             }
-            document.body.removeChild(textArea);
+            
+            if (teamsToCopy.length === 0) {
+                window.showToast("No teams found.");
+                return;
+            }
+            
+            let text = `*Squads for ${matchTitle}* (Total: ${teamsToCopy.length})\n\n`;
+            teamsToCopy.forEach((t, idx) => {
+                text += `${idx + 1}. Team: ${t.teamName} | Leader: ${t.leaderName} | Ph: ${t.phoneNumber}\n   UIDs: ${t.gameUid}, ${t.member2Uid}, ${t.member3Uid}, ${t.member4Uid}\n\n`;
+            });
+            
+            window.executeCopyOrShare(text, `Squads for ${matchTitle}`);
         }
 
         // --- QR ZOOM MODAL FUNCTIONS ---
@@ -1062,15 +1135,22 @@
             window.showToast('Published!'); window.switchTab('roadmap');
         };
 
-        // Populate scoreboard dropdowns
-        window.populateScoreboardDropdowns = function() {
-            const saSel = document.getElementById('sa-calc-match-select');
-            const ahSel = document.getElementById('ah-calc-match-select');
-            
+        // Populate scoreboard and squad dropdowns
+        window.populateAllDropdowns = function() {
             const options = `<option value="">-- Choose Match --</option>` + allMatches.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
             
+            // Scoreboard Dropdowns
+            const saSel = document.getElementById('sa-calc-match-select');
+            const ahSel = document.getElementById('ah-calc-match-select');
             if (saSel) { const current = saSel.value; saSel.innerHTML = options; saSel.value = current; }
             if (ahSel) { const current = ahSel.value; ahSel.innerHTML = options; ahSel.value = current; }
+
+            // Squad Filter Dropdowns
+            const saSquadFilter = document.getElementById('sa-squad-match-filter');
+            const ahSquadFilter = document.getElementById('ah-squad-match-filter');
+            const squadOptions = `<option value="">-- All Matches --</option>` + allMatches.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
+            if (saSquadFilter) { const current = saSquadFilter.value; saSquadFilter.innerHTML = squadOptions; saSquadFilter.value = current; }
+            if (ahSquadFilter) { const current = ahSquadFilter.value; ahSquadFilter.innerHTML = squadOptions; ahSquadFilter.value = current; }
         }
 
         // Super Admin Match Form Submission
@@ -1389,7 +1469,7 @@
             allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); 
             window.renderPublicMatches(); 
             window.renderRoadmapTab(); 
-            window.populateScoreboardDropdowns(); // Update dropdowns when matches change
+            window.populateAllDropdowns(); // Update all dropdowns when matches change
         });
         
         onSnapshot(collection(db, 'registrations'), snap => { 
