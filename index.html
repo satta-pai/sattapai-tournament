@@ -1110,7 +1110,10 @@
 
         const firebaseConfig = { apiKey: "AIzaSyAMs5OGAD7bOtbRoQ-0DMv-lLf-SRxyHS8", authDomain: "sattapai-tournament.firebaseapp.com", projectId: "sattapai-tournament", storageBucket: "sattapai-tournament.firebasestorage.app", messagingSenderId: "465702743401", appId: "1:465702743401:web:1072a897dc24f0b380e1f8", measurementId: "G-5CQJ29EP02" };
         const app = initializeApp(firebaseConfig);
-        try { initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider('6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY'), isTokenAutoRefreshEnabled: true }); } catch (err) { console.warn("App Check init warning:", err); }
+        
+        // ✅ CORRECTED reCAPTCHA ENTERPRISE KEY HERE
+        try { initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider('6Lf4nf8tAAAAAJcuuAZFmRfWOgKwd-zXb62pbhJY'), isTokenAutoRefreshEnabled: true }); } catch (err) { console.warn("App Check init warning:", err); }
+        
         const auth = getAuth(app); const provider = new GoogleAuthProvider(); const db = getFirestore(app);
 
         window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc; window.addDoc = addDoc; window.collection = collection; window.updateDoc = updateDoc; window.increment = increment;
