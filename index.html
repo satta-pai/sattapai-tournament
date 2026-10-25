@@ -7,11 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        const savedMode = localStorage.getItem('satta_pai_mode');
-        if (savedMode === 'light') document.documentElement.classList.remove('dark');
-        else document.documentElement.classList.add('dark');
-        const savedTheme = localStorage.getItem('satta_pai_theme') || 'whatsapp';
-        if (savedTheme !== 'whatsapp') document.documentElement.classList.add('theme-' + savedTheme);
+        try {
+            const savedMode = localStorage.getItem('satta_pai_mode');
+            if (savedMode === 'light') document.documentElement.classList.remove('dark');
+            else document.documentElement.classList.add('dark');
+            const savedTheme = localStorage.getItem('satta_pai_theme') || 'whatsapp';
+            if (savedTheme !== 'whatsapp') document.documentElement.classList.add('theme-' + savedTheme);
+        } catch(e) {}
     </script>
     <style>
         :root {
@@ -81,9 +83,12 @@
     <div id="manual-copy-modal" class="fixed inset-0 z-[10007] hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
         <div class="cyber-card p-4 max-w-sm w-full space-y-3 shadow-2xl">
             <h3 class="text-sm font-bold text-amber-400">Copy Details</h3>
-            <p class="text-[10px]" style="color: var(--text-muted);">Press and hold the text below to copy manually.</p>
-            <textarea id="manual-copy-textarea" class="w-full h-40 cyber-input p-2 text-xs font-mono" readonly></textarea>
-            <button onclick="document.getElementById('manual-copy-modal').classList.add('hidden')" class="btn-theme w-full py-2 text-xs font-bold">Close</button>
+            <p class="text-[10px]" style="color: var(--text-muted);">Press "Select & Copy" or hold the text below to copy manually.</p>
+            <textarea id="manual-copy-textarea" class="w-full h-40 cyber-input p-2 text-xs font-mono" readonly onclick="this.select()"></textarea>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="selectAndCopyFromModal()" class="btn-theme w-full py-2 text-xs font-bold">📋 Select & Copy</button>
+                <button onclick="document.getElementById('manual-copy-modal').classList.add('hidden')" class="cyber-card w-full py-2 text-xs font-bold">Close</button>
+            </div>
         </div>
     </div>
 
@@ -122,7 +127,7 @@
             <div class="cyber-card p-2.5 text-left text-[10px] space-y-1.5 border border-emerald-500/30">
                 <label class="flex items-start gap-2 cursor-pointer select-none">
                     <input type="checkbox" id="terms-accept-checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0">
-                    <span style="color: var(--text-main);">I accept the <a href="#" onclick="openPolicyModal('terms')" class="text-emerald-400 font-bold underline">Terms</a> and <a href="#" onclick="openPolicyModal('privacy')" class="text-emerald-400 font-bold underline">Privacy</a>.</span>
+                    <span style="color: var(--text-main);">I accept the <a href="javascript:void(0)" onclick="openPolicyModal('terms')" class="text-emerald-400 font-bold underline">Terms</a> and <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" class="text-emerald-400 font-bold underline">Privacy</a>.</span>
                 </label>
             </div>
             <button onclick="loginWithGoogleAuth()" class="w-full py-2.5 px-4 rounded-xl cyber-card flex items-center justify-center gap-2 font-bold text-xs cursor-pointer hover:bg-zinc-500/10 text-center" style="color: var(--text-main); border-color: var(--border-color);">Sign in with Google</button>
@@ -229,7 +234,7 @@
                 <button onclick="switchTab('matches')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
                 <h2 class="text-lg font-bold">Paid Registration</h2>
                 <div id="reg-paid-match-title" class="text-xs text-emerald-400"></div>
-                <div id="reg-paid-payment-box" class="hidden"><a id="reg-upi-pay-link" href="#" class="btn-theme block py-2 text-center">Pay UPI</a><img id="reg-qr-img" src="" class="w-36 h-36 mx-auto mt-2 rounded border-2 border-emerald-500/50 shadow-lg cursor-pointer hover:opacity-80 transition-opacity" onclick="openQrZoomModal()"></div>
+                <div id="reg-paid-payment-box" class="hidden"><a id="reg-upi-pay-link" href="javascript:void(0)" class="btn-theme block py-2 text-center">Pay UPI</a><img id="reg-qr-img" src="" class="w-36 h-36 mx-auto mt-2 rounded border-2 border-emerald-500/50 shadow-lg cursor-pointer hover:opacity-80 transition-opacity" onclick="openQrZoomModal()"></div>
                 <form id="registration-paid-form" class="space-y-3 text-xs">
                     <input type="text" id="paid-teamName" required placeholder="Team Name" class="cyber-input w-full px-3 py-2 uppercase">
                     <input type="text" id="paid-leaderName" required placeholder="Leader Name" class="cyber-input w-full px-3 py-2">
@@ -341,10 +346,10 @@
                 <div id="sas-sec-squads" class="hidden space-y-2 text-xs">
                     <button onclick="removeAllSquads()" class="px-3 py-1.5 bg-rose-600 text-white rounded font-bold w-full mb-2">Remove All</button>
                     <div class="flex gap-2 mb-2">
-                        <select id="sa-squad-match-filter" class="cyber-input flex-1 px-2 py-1.5 text-xs">
+                        <select id="sa-squad-match-filter" onchange="filterSquadsByMatch('sa')" class="cyber-input flex-1 px-2 py-1.5 text-xs">
                             <option value="">-- All Matches --</option>
                         </select>
-                        <button onclick="copySquadsForMatch('sa')" class="btn-theme px-3 py-1.5 text-xs">Copy</button>
+                        <button onclick="copySquadsForMatch('sa')" class="btn-theme px-3 py-1.5 text-xs">📋 Copy</button>
                     </div>
                     <input type="text" id="search-input-sa" oninput="filterSquadsList(this.value, 'sa')" placeholder="Search..." class="cyber-input w-full px-2 py-1.5 mb-2">
                     <div id="teams-container-sa" class="space-y-2"></div>
@@ -439,10 +444,10 @@
                 <!-- ADMIN/HOST SQUADS -->
                 <div id="ah-sec-squads" class="hidden space-y-2 text-xs">
                     <div class="flex gap-2 mb-2">
-                        <select id="ah-squad-match-filter" class="cyber-input flex-1 px-2 py-1.5 text-xs">
+                        <select id="ah-squad-match-filter" onchange="filterSquadsByMatch('ah')" class="cyber-input flex-1 px-2 py-1.5 text-xs">
                             <option value="">-- All Matches --</option>
                         </select>
-                        <button onclick="copySquadsForMatch('ah')" class="btn-theme px-3 py-1.5 text-xs">Copy</button>
+                        <button onclick="copySquadsForMatch('ah')" class="btn-theme px-3 py-1.5 text-xs">📋 Copy</button>
                     </div>
                     <input type="text" id="search-input-ah" oninput="filterSquadsList(this.value, 'ah')" placeholder="Search..." class="cyber-input w-full px-2 py-1.5 mb-2">
                     <div id="teams-container-ah" class="space-y-2"></div>
@@ -510,7 +515,8 @@
 
     <script>
         let musicPlayingState = false;
-        window.loggedEmail = localStorage.getItem('satta_pai_auth_email') || '';
+        window.loggedEmail = '';
+        try { window.loggedEmail = localStorage.getItem('satta_pai_auth_email') || ''; } catch(e) {}
         const SUPER_ADMIN = "vasanth90871@gmail.com";
         let currentUserProfile = null;
         let currentChatTargetId = null;
@@ -518,6 +524,10 @@
         let currentChatTargetText = null;
         let currentTargetIsBanned = false;
         let userCache = {}; 
+        
+        // Global access for teams and matches so both module and global scripts can access them
+        window.allTeams = [];
+        window.allMatches = [];
         
         // Separate pagination for SA and AH
         let currentSquadPageSA = 1;
@@ -528,86 +538,123 @@
         window.maskEmail = function(email) { if(!email) return ''; if(email === 'guest') return 'Guest User'; const parts = email.split('@'); if(parts.length !== 2) return email; return parts[0][0] + '*****@' + parts[1]; };
         window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-text').textContent = msg; toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 3000); };
 
-        // --- ROBUST COPY/SHARE FUNCTION ---
+        // --- FIXED: DIRECT CLIPBOARD COPY FUNCTION ---
         window.executeCopyOrShare = function(text, title = "Team Details") {
-            // 1. Try Native Share API (Best for Mobile)
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: text
-                }).then(() => {
-                    window.showToast("Shared successfully!");
-                }).catch((err) => {
-                    console.log("Share failed, trying clipboard...", err);
-                    fallbackClipboard(text);
-                });
-            } else {
-                fallbackClipboard(text);
-            }
-        }
-
-        function fallbackClipboard(text) {
-            // 2. Try Clipboard API
+            // Directly copy to clipboard first while within synchronous user click gesture
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(() => {
-                    window.showToast("Copied to clipboard!");
+                    window.showToast("✅ Copied to clipboard!");
                 }).catch(err => {
-                    manualCopyModal(text);
+                    console.warn("Clipboard API failed, trying execCommand fallback...", err);
+                    fallbackExecCommandCopy(text);
                 });
             } else {
-                // 3. Try execCommand
-                const textArea = document.createElement("textarea");
-                textArea.value = text;
-                textArea.style.position = "fixed"; 
-                textArea.style.top = "0";
-                textArea.style.left = "0";
-                textArea.style.opacity = "0"; 
-                
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                textArea.setSelectionRange(0, 99999); 
-                
-                try {
-                    const successful = document.execCommand('copy');
-                    if(successful) {
-                        window.showToast("Copied to clipboard!");
-                    } else {
-                        manualCopyModal(text);
-                    }
-                } catch (err) {
-                    manualCopyModal(text);
-                }
-                document.body.removeChild(textArea);
+                fallbackExecCommandCopy(text);
+            }
+        };
+
+        function fallbackExecCommandCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            // Make sure the element is part of the viewport and selectable without scrolling
+            textArea.setAttribute("readonly", "");
+            textArea.style.position = "fixed";
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.width = "2em";
+            textArea.style.height = "2em";
+            textArea.style.padding = "0";
+            textArea.style.border = "none";
+            textArea.style.outline = "none";
+            textArea.style.boxShadow = "none";
+            textArea.style.background = "transparent";
+            textArea.style.opacity = "0.01";
+            textArea.style.zIndex = "-1";
+            
+            document.body.appendChild(textArea);
+            textArea.focus({ preventScroll: true });
+            textArea.select();
+            textArea.setSelectionRange(0, 999999);
+            
+            let successful = false;
+            try {
+                successful = document.execCommand('copy');
+            } catch (err) {
+                successful = false;
+            }
+            document.body.removeChild(textArea);
+
+            if (successful) {
+                window.showToast("✅ Copied to clipboard!");
+            } else {
+                manualCopyModal(text);
             }
         }
 
         function manualCopyModal(text) {
-            document.getElementById('manual-copy-textarea').value = text;
+            const textarea = document.getElementById('manual-copy-textarea');
+            textarea.value = text;
             document.getElementById('manual-copy-modal').classList.remove('hidden');
-            window.showToast("Auto-copy blocked. Please copy manually.");
+            setTimeout(() => {
+                textarea.focus();
+                textarea.select();
+            }, 100);
+            window.showToast("Tap 'Select & Copy' below.");
         }
 
+        window.selectAndCopyFromModal = function() {
+            const textarea = document.getElementById('manual-copy-textarea');
+            textarea.focus();
+            textarea.select();
+            textarea.setSelectionRange(0, 999999);
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textarea.value).then(() => {
+                        window.showToast("✅ Copied to clipboard!");
+                        document.getElementById('manual-copy-modal').classList.add('hidden');
+                    }).catch(() => {
+                        document.execCommand('copy');
+                        window.showToast("✅ Copied!");
+                        document.getElementById('manual-copy-modal').classList.add('hidden');
+                    });
+                } else {
+                    document.execCommand('copy');
+                    window.showToast("✅ Copied!");
+                    document.getElementById('manual-copy-modal').classList.add('hidden');
+                }
+            } catch (e) {
+                window.showToast("Long-press the highlighted text to copy.");
+            }
+        };
+
+        // FIXED: Read from window.allTeams & window.allMatches so there is no ReferenceError!
         window.copyTeamDetails = function(teamId) {
-            const team = allTeams.find(t => t.id === teamId);
-            if(!team) return;
+            const teams = window.allTeams || [];
+            const team = teams.find(t => t.id === teamId || t.teamId === teamId);
+            if(!team) {
+                window.showToast("❌ Team details not found!");
+                return;
+            }
             const text = `*Team: ${team.teamName}*\nLeader: ${team.leaderName}\nPhone: ${team.phoneNumber}\nCity: ${team.hometown}\nLeader UID: ${team.gameUid}\nP2 UID: ${team.member2Uid}\nP3 UID: ${team.member3Uid}\nP4 UID: ${team.member4Uid}\nSubs: ${team.sub1Uid || 'N/A'}, ${team.sub2Uid || 'N/A'}\nUTR: ${team.transitionId || 'N/A'}`;
             window.executeCopyOrShare(text, `Team: ${team.teamName}`);
-        }
+        };
 
         window.copySquadsForMatch = function(mode) {
-            const matchId = document.getElementById(mode === 'sa' ? 'sa-squad-match-filter' : 'ah-squad-match-filter').value;
-            let teamsToCopy = allTeams;
+            const selectEl = document.getElementById(mode === 'sa' ? 'sa-squad-match-filter' : 'ah-squad-match-filter');
+            const matchId = selectEl ? selectEl.value : '';
+            const teams = window.allTeams || [];
+            const matches = window.allMatches || [];
+            let teamsToCopy = teams;
             let matchTitle = "All Matches";
             
             if (matchId) {
-                teamsToCopy = allTeams.filter(t => t.matchId === matchId);
-                const match = allMatches.find(m => m.id === matchId);
+                teamsToCopy = teams.filter(t => t.matchId === matchId);
+                const match = matches.find(m => m.id === matchId);
                 if (match) matchTitle = match.title;
             }
             
             if (teamsToCopy.length === 0) {
-                window.showToast("No teams found.");
+                window.showToast("No teams found to copy.");
                 return;
             }
             
@@ -616,8 +663,19 @@
                 text += `${idx + 1}. Team: ${t.teamName} | Leader: ${t.leaderName} | Ph: ${t.phoneNumber}\n   UIDs: ${t.gameUid}, ${t.member2Uid}, ${t.member3Uid}, ${t.member4Uid}\n\n`;
             });
             
-            window.executeCopyOrShare(text, `Squads for ${matchTitle}`);
-        }
+            window.executeCopyOrShare(text.trim(), `Squads for ${matchTitle}`);
+        };
+
+        window.filterSquadsByMatch = function(mode) {
+            const selectEl = document.getElementById(mode === 'sa' ? 'sa-squad-match-filter' : 'ah-squad-match-filter');
+            const matchId = selectEl ? selectEl.value : '';
+            const teams = window.allTeams || [];
+            const filtered = matchId ? teams.filter(t => t.matchId === matchId) : teams;
+            if (mode === 'sa') currentSquadPageSA = 1; else currentSquadPageAH = 1;
+            if (typeof window.renderSquadsManagementList === 'function') {
+                window.renderSquadsManagementList(filtered);
+            }
+        };
 
         // --- QR ZOOM MODAL FUNCTIONS ---
         window.openQrZoomModal = function() {
@@ -657,14 +715,14 @@
             const target = document.getElementById('section-' + tab); if(target) target.classList.remove('hidden');
             ['home', 'matches', 'roadmap', 'chat', 'profile'].forEach(s => { const bnav = document.getElementById('bnav-' + s); if(bnav) bnav.classList.remove('active'); });
             const activeBnav = document.getElementById('bnav-' + tab); if(activeBnav) activeBnav.classList.add('active');
-            if(tab === 'teams') window.checkLoginState();
-            if(tab === 'profile') window.loadProfileUI();
+            if(tab === 'teams' && typeof window.checkLoginState === 'function') window.checkLoginState();
+            if(tab === 'profile' && typeof window.loadProfileUI === 'function') window.loadProfileUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.toggleMenuDropdown = function(e) { e.stopPropagation(); document.getElementById('settings-dropdown').classList.toggle('show'); };
         window.closeMenuDropdown = function() { document.getElementById('settings-dropdown').classList.remove('show'); };
-        window.addEventListener('click', (e) => { window.closeMenuDropdown(); window.closeChatMenu(); });
+        window.addEventListener('click', (e) => { window.closeMenuDropdown(); if(typeof window.closeChatMenu === 'function') window.closeChatMenu(); });
         
         window.openCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.remove('hidden'); };
         window.closeCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.add('hidden'); };
@@ -682,8 +740,8 @@
         };
         window.closePolicyModal = function() { document.getElementById('policy-modal').classList.add('hidden'); };
 
-        window.setDarkMode = function(isDark) { if (isDark) { document.documentElement.classList.add('dark'); localStorage.setItem('satta_pai_mode', 'dark'); } else { document.documentElement.classList.remove('dark'); localStorage.setItem('satta_pai_mode', 'light'); } window.showToast("Theme updated"); window.closeMenuDropdown(); };
-        window.setTheme = function(themeName) { const root = document.documentElement; root.classList.remove('theme-whatsapp', 'theme-instagram', 'theme-gold', 'theme-blue'); if(themeName !== 'whatsapp') root.classList.add('theme-' + themeName); localStorage.setItem('satta_pai_theme', themeName); window.showToast("Color updated"); window.closeMenuDropdown(); };
+        window.setDarkMode = function(isDark) { if (isDark) { document.documentElement.classList.add('dark'); try { localStorage.setItem('satta_pai_mode', 'dark'); } catch(e){} } else { document.documentElement.classList.remove('dark'); try { localStorage.setItem('satta_pai_mode', 'light'); } catch(e){} } window.showToast("Theme updated"); window.closeMenuDropdown(); };
+        window.setTheme = function(themeName) { const root = document.documentElement; root.classList.remove('theme-whatsapp', 'theme-instagram', 'theme-gold', 'theme-blue'); if(themeName !== 'whatsapp') root.classList.add('theme-' + themeName); try { localStorage.setItem('satta_pai_theme', themeName); } catch(e){} window.showToast("Color updated"); window.closeMenuDropdown(); };
         
         window.toggleMusic = function() { 
             const audio = document.getElementById('bg-music'); const icon = document.getElementById('music-icon'); 
@@ -707,7 +765,6 @@
                 console.log("🔥 App Check Debug Token Active: 123e4567-e89b-42d3-a456-426614174000");
             }
             const appCheck = initializeAppCheck(app, { 
-                // ReCaptchaEnterpriseProvider மற்றும் புது Key
                 provider: new ReCaptchaEnterpriseProvider('6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY'), 
                 isTokenAutoRefreshEnabled: true 
             });
@@ -730,7 +787,7 @@
                     const data = configDoc.data(); 
                     if (data.admins_list) window.authorizedAdmins = data.admins_list; 
                     if (data.hosts_list) window.authorizedHosts = data.hosts_list; 
-                    localStorage.setItem('satta_pai_cached_config', JSON.stringify(data));
+                    try { localStorage.setItem('satta_pai_cached_config', JSON.stringify(data)); } catch(e){}
                 }
                 trackVisitorStats(); renderStaffsLists(); window.checkLoginState(); initializeChat(); window.loadProfileUI(); window.loadSettings();
                 
@@ -807,9 +864,9 @@
         }
 
         window.saveProfile = async function() {
-            if(!window.loggedEmail || window.loggedEmail === 'guest') { alert("Login required!"); return; }
+            if(!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Login required!"); return; }
             const username = document.getElementById('profile-username').value.trim(); const ign = document.getElementById('profile-ign').value.trim(); const gameUid = document.getElementById('profile-game-uid').value.trim(); const dpSrc = document.getElementById('profile-dp-img').src; const playerId = document.getElementById('profile-player-id').value;
-            if(!username || !ign || !gameUid) { alert("Fill all fields!"); return; }
+            if(!username || !ign || !gameUid) { window.showToast("Fill all fields!"); return; }
             
             const userSnap = await getDoc(doc(db, 'users', window.loggedEmail));
             if(userSnap.exists()) {
@@ -819,14 +876,14 @@
                 if (isDpChanged && oldData.lastDpUpdate) {
                     const daysSince = (Date.now() - oldData.lastDpUpdate) / (1000 * 60 * 60 * 24);
                     if (daysSince < 14) {
-                        alert(`You can only change your DP once every 14 days. Please wait ${Math.ceil(14 - daysSince)} more days.`);
+                        window.showToast(`You can only change DP once every 14 days (${Math.ceil(14 - daysSince)}d left).`);
                         return;
                     }
                 }
             }
 
             const snaps = await getDocs(query(collection(db, 'users'), where('username', '==', username)));
-            if(!snaps.empty && snaps.docs[0].id !== window.loggedEmail) { alert("Username taken!"); return; }
+            if(!snaps.empty && snaps.docs[0].id !== window.loggedEmail) { window.showToast("Username taken!"); return; }
             
             const updateData = { email: window.loggedEmail, username, ign, gameUid, playerId, dpBase64: dpSrc.startsWith('data:image') ? dpSrc : '', updatedAt: Date.now() };
             if (!userSnap.exists() || !userSnap.data().dpBase64 || userSnap.data().dpBase64 !== dpSrc) { updateData.lastDpUpdate = Date.now(); }
@@ -836,7 +893,7 @@
         };
 
         window.openFullScreenChat = function() { 
-            if (window.loggedEmail === 'guest') { alert("Guest users cannot chat. Please login with Google."); return; }
+            if (window.loggedEmail === 'guest') { window.showToast("Guest users cannot chat. Please login with Google."); return; }
             document.getElementById('chat-fullscreen').classList.add('active'); 
             setTimeout(() => { const box = document.getElementById('chat-messages'); if(box) box.scrollTop = box.scrollHeight; }, 100); 
             checkChatBanStatus(); 
@@ -865,13 +922,12 @@
         };
 
         window.cleanupOldChats = async function() {
-            if(!confirm("Delete messages older than 48 hours?")) return;
             const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
             try {
                 const snaps = await getDocs(query(collection(db, 'chats'), where('timestamp', '<', cutoffTime)));
                 snaps.forEach(async (d) => { await deleteDoc(d.ref); });
                 window.showToast("Old chats cleaned!");
-            } catch(e) { alert("Error cleaning chats: " + e.message); }
+            } catch(e) { window.showToast("Error cleaning chats: " + e.message); }
         };
 
         window.renderChatMessages = function() {
@@ -939,23 +995,28 @@
         window.handleChatAction = async function(action) {
             if (!currentChatTargetId) return; window.closeChatMenu();
             if (action === 'unsend' || action === 'delete') {
-                if(confirm("Delete this message?")) { await deleteDoc(doc(db, 'chats', currentChatTargetId)); window.showToast("Message deleted"); }
+                await deleteDoc(doc(db, 'chats', currentChatTargetId)); window.showToast("Message deleted");
             } else if (action === 'edit') {
-                const newText = prompt("Edit your message:", currentChatTargetText);
-                if(newText && newText.trim() !== "" && newText !== currentChatTargetText) { await updateDoc(doc(db, 'chats', currentChatTargetId), { message: newText.trim(), isEdited: true }); window.showToast("Message edited"); }
+                const input = document.getElementById('chat-input');
+                if (input) {
+                    input.value = currentChatTargetText;
+                    input.focus();
+                    await deleteDoc(doc(db, 'chats', currentChatTargetId));
+                    window.showToast("Edit message in input box & send");
+                }
             } else if (action === 'ban') {
-                if(confirm(`Ban ${window.maskEmail(currentChatTargetEmail)} for 24 hours?`)) { await setDoc(doc(db, 'users', currentChatTargetEmail), { chatBannedUntil: Date.now() + (24 * 60 * 60 * 1000) }, { merge: true }); window.showToast("User banned for 24h"); }
+                await setDoc(doc(db, 'users', currentChatTargetEmail), { chatBannedUntil: Date.now() + (24 * 60 * 60 * 1000) }, { merge: true }); window.showToast("User banned for 24h");
             } else if (action === 'unban') {
-                if(confirm(`Remove ban for ${window.maskEmail(currentChatTargetEmail)}?`)) { await setDoc(doc(db, 'users', currentChatTargetEmail), { chatBannedUntil: 0 }, { merge: true }); window.showToast("User unbanned"); }
+                await setDoc(doc(db, 'users', currentChatTargetEmail), { chatBannedUntil: 0 }, { merge: true }); window.showToast("User unbanned");
             }
         };
 
         window.sendChatMessage = async function() {
-            if (window.loggedEmail === 'guest') { alert("Login required!"); return; }
-            if (myChatBannedUntil > Date.now()) { alert("You are banned!"); return; }
-            if (currentChatMode === 'off') { alert("Chat disabled."); return; }
+            if (window.loggedEmail === 'guest') { window.showToast("Login required!"); return; }
+            if (myChatBannedUntil > Date.now()) { window.showToast("You are banned!"); return; }
+            if (currentChatMode === 'off') { window.showToast("Chat disabled."); return; }
             const isAdmin = (window.loggedEmail === SUPER_ADMIN) || window.authorizedAdmins.includes(window.loggedEmail);
-            if (currentChatMode === 'admin' && !isAdmin) { alert("Admins only."); return; }
+            if (currentChatMode === 'admin' && !isAdmin) { window.showToast("Admins only."); return; }
             
             const input = document.getElementById('chat-input'); const msg = input.value.trim(); if (!msg) return; input.value = '';
             let displayName = window.maskEmail(window.loggedEmail); if(currentUserProfile && currentUserProfile.username) displayName = currentUserProfile.username;
@@ -964,7 +1025,7 @@
                 await addDoc(collection(db, 'chats'), { 
                     message: msg, userEmail: window.loggedEmail, displayName: displayName, isEdited: false, timestamp: Date.now() 
                 }); 
-            } catch(e) { alert(e.message); }
+            } catch(e) { window.showToast(e.message); }
         };
 
         window.updateChatMode = async function(mode) { await setDoc(doc(db, 'settings', 'chatConfig'), { mode: mode }, { merge: true }); window.showToast("Mode updated"); };
@@ -984,7 +1045,7 @@
                     : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 ml-1">PAID ₹${m.fee}</span>`;
 
                 const slotsHTML = groups.map(grp => {
-                    const teamsInGroup = allTeams.filter(t => t.matchId === m.id && (t.slotGroup || 'TEAM A').toUpperCase() === grp && t.status !== 'banned'); const groupWaLink = whatsappMap[grp] || '#'; const isFull = teamsInGroup.length >= (m.slots || 12);
+                    const teamsInGroup = allTeams.filter(t => t.matchId === m.id && (t.slotGroup || 'TEAM A').toUpperCase() === grp && t.status !== 'banned'); const groupWaLink = whatsappMap[grp] || ''; const isFull = teamsInGroup.length >= (m.slots || 12);
                     
                     const teamsListHtml = teamsInGroup.map((tm, tIdx) => {
                         let staffDetails = '';
@@ -996,20 +1057,20 @@
                                     ${tm.sub1Uid ? `<div>Subs: ${window.escapeHTML(tm.sub1Uid)}, ${window.escapeHTML(tm.sub2Uid)}</div>` : ''}
                                     ${tm.transitionId ? `<div>UTR: ${window.escapeHTML(tm.transitionId)}</div>` : ''}
                                     <div class="text-[9px] text-slate-500 font-sans">Gmail: ${window.maskEmail(tm.userEmail) || 'N/A'}</div>
-                                    <button onclick="copyTeamDetails('${tm.id}')" class="mt-1 px-2 py-0.5 bg-blue-600 text-white rounded font-bold text-[9px]">📋 Copy All</button>
+                                    <button type="button" onclick="copyTeamDetails('${tm.id}')" class="mt-1 px-2 py-0.5 bg-blue-600 text-white rounded font-bold text-[9px] cursor-pointer">📋 Copy All</button>
                                 </div>
                             `;
                         }
                         return `<div class="cyber-card px-2.5 py-1.5 rounded flex flex-col gap-1 text-xs">
                             <div class="flex justify-between items-center w-full">
                                 <span class="font-bold">#${tIdx+1} ${window.escapeHTML(tm.teamName)}</span>
-                                ${groupWaLink !== '#' ? `<a href="${groupWaLink}" target="_blank" class="text-emerald-500 font-bold text-xs">Chat</a>` : ''}
+                                ${groupWaLink ? `<a href="${groupWaLink}" target="_blank" class="text-emerald-500 font-bold text-xs">Chat</a>` : ''}
                             </div>
                             ${staffDetails}
                         </div>`;
                     }).join('');
 
-                    return `<div class="cyber-card rounded-xl p-3 space-y-2"><div class="flex items-center justify-between"><div class="text-xs font-bold uppercase">Group ${grp}</div><button onclick="selectMatchSlot('${m.id}', '${window.escapeHTML(m.title || '').replace(/'/g, "\\'")}', '${grp}', '${m.type}', '${m.prize || ''}', '${m.fee || ''}', '${m.upiId || ''}', '${m.qrDataURL || ''}', ${m.upiEnabled !== false}, ${m.qrEnabled !== false}, ${m.slots || 12})" class="btn-theme px-3 py-1.5 text-xs ${isFull ? 'opacity-50 cursor-not-allowed' : ''}" ${isFull ? 'disabled' : ''}>${isFull ? 'Slots Full' : 'Join'}</button></div>${teamsInGroup.length > 0 ? `<div class="mt-2 space-y-1.5 pt-2 border-t" style="border-color: var(--border-color);"><div class="text-[10px] font-bold uppercase flex items-center justify-between" style="color: var(--accent-primary);"><span>Squads (${teamsInGroup.length}/${m.slots || 12}):</span>${groupWaLink !== '#' ? `<a href="${groupWaLink}" target="_blank" class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px] shadow">Join WhatsApp</a>` : ''}</div><div class="space-y-1">${teamsListHtml}</div></div>` : ''}</div>`;
+                    return `<div class="cyber-card rounded-xl p-3 space-y-2"><div class="flex items-center justify-between"><div class="text-xs font-bold uppercase">Group ${grp}</div><button onclick="selectMatchSlot('${m.id}', '${window.escapeHTML(m.title || '').replace(/'/g, "\\'")}', '${grp}', '${m.type}', '${m.prize || ''}', '${m.fee || ''}', '${m.upiId || ''}', '${m.qrDataURL || ''}', ${m.upiEnabled !== false}, ${m.qrEnabled !== false}, ${m.slots || 12})" class="btn-theme px-3 py-1.5 text-xs ${isFull ? 'opacity-50 cursor-not-allowed' : ''}" ${isFull ? 'disabled' : ''}>${isFull ? 'Slots Full' : 'Join'}</button></div>${teamsInGroup.length > 0 ? `<div class="mt-2 space-y-1.5 pt-2 border-t" style="border-color: var(--border-color);"><div class="text-[10px] font-bold uppercase flex items-center justify-between" style="color: var(--accent-primary);"><span>Squads (${teamsInGroup.length}/${m.slots || 12}):</span>${groupWaLink ? `<a href="${groupWaLink}" target="_blank" class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px] shadow">Join WhatsApp</a>` : ''}</div><div class="space-y-1">${teamsListHtml}</div></div>` : ''}</div>`;
                 }).join('');
                 
                 let liveStreamBtn = m.youtubeLink ? `<a href="${m.youtubeLink}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold shadow mb-2">🔴 Watch Live</a>` : '';
@@ -1059,7 +1120,7 @@
             const teamMatches = allMatches.filter(m => m.publishedScoreboards && m.publishedScoreboards.some(sb => sb.rankings.some(r => r.teamName === teamName)));
             let totalMatches = teamMatches.length; let totalWins = 0; let totalKills = 0;
             teamMatches.forEach(m => { m.publishedScoreboards.forEach(sb => { sb.rankings.forEach(r => { if (r.teamName === teamName) { totalKills += parseFloat(r.kills) || 0; if (r.place === 1) totalWins++; } }); }); });
-            alert(`🏆 Team: ${teamName}\n\n🎮 Matches Played: ${totalMatches}\n🥇 Total Wins: ${totalWins}\n💀 Total Kills: ${totalKills}\n\n(Auto-generated stat)`);
+            window.showToast(`🏆 ${teamName}: ${totalMatches} Matches | 🥇 ${totalWins} Wins | 💀 ${totalKills} Kills`);
         };
 
         window.toggleMatchExpand = function(id) { const el = document.getElementById(`slots-box-${id}`); if(el) el.classList.toggle('hidden'); };
@@ -1075,19 +1136,17 @@
             if(c) c.innerHTML = listHTML; if(hc) hc.innerHTML = listHTML;
         };
 
-        window.updateMatchStatus = async function(id, status) { if(!confirm(`Confirm status: '${status.toUpperCase()}'?`)) return; await setDoc(doc(db, 'matches', id), { status }, { merge: true }); window.showToast('Status updated'); };
+        window.updateMatchStatus = async function(id, status) { await setDoc(doc(db, 'matches', id), { status }, { merge: true }); window.showToast('Status updated'); };
         
         window.deleteMatch = async function(id) {
             const isSuper = (window.loggedEmail === SUPER_ADMIN); const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail)); const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
             const matchObj = allMatches.find(m => m.id === id); if(!matchObj) return;
             if (!isSuper && !isAdmin) { if (!isHost) { window.showToast("No permission!"); return; } if (matchObj.createdBy !== window.loggedEmail) { window.showToast("Hosts can only delete their own!"); return; } }
             
-            if(confirm("Delete match AND all its registrations?")) { 
-                await deleteDoc(doc(db, 'matches', id)); 
-                const regSnaps = await getDocs(query(collection(db, 'registrations'), where('matchId', '==', id)));
-                regSnaps.forEach(async (d) => { await deleteDoc(d.ref); });
-                window.showToast("Match and teams deleted!"); 
-            }
+            await deleteDoc(doc(db, 'matches', id)); 
+            const regSnaps = await getDocs(query(collection(db, 'registrations'), where('matchId', '==', id)));
+            regSnaps.forEach(async (d) => { await deleteDoc(d.ref); });
+            window.showToast("Match and teams deleted!"); 
         };
 
         window.editMatch = function(id) {
@@ -1115,9 +1174,8 @@
 
         window.generateAndPublishScoreboard = async function(mode) {
             const matchId = mode === 'sa' ? document.getElementById('sa-calc-match-select').value : document.getElementById('ah-calc-match-select').value;
-            if (!matchId) return; if(!confirm("Publish scoreboard?")) return;
+            if (!matchId) return;
             const placePts = {}; 
-            // Update to 10 places
             for(let i=1; i<=10; i++) { 
                 const inputId = mode === 'sa' ? `pts-${i}` : `ah-pts-${i}`; 
                 placePts[i] = parseFloat(document.getElementById(inputId)?.value) || 0; 
@@ -1155,7 +1213,7 @@
 
         // Super Admin Match Form Submission
         document.getElementById('create-match-form')?.addEventListener('submit', (e) => {
-            e.preventDefault(); if(!confirm("Publish/Update match?")) return;
+            e.preventDefault();
             const title = document.getElementById('cm-title').value.trim(); const stage = document.getElementById('cm-stage').value; const type = document.getElementById('cm-type').value; const map = document.getElementById('cm-map').value.trim(); const time = document.getElementById('cm-time').value.trim(); const slots = parseInt(document.getElementById('cm-slots').value) || 12; const groupsStr = document.getElementById('cm-groups').value.trim(); const prize = document.getElementById('cm-prize-pool').value.trim(); const fee = type === 'free' ? '0' : document.getElementById('cm-fee').value.trim(); const upiId = type === 'free' ? '' : document.getElementById('cm-upi').value.trim(); const youtubeLink = document.getElementById('cm-youtube').value.trim(); const upiEnabled = type === 'free' ? false : document.getElementById('cm-upi-toggle').checked; const qrEnabled = type === 'free' ? false : document.getElementById('cm-qr-toggle').checked; const qrFileInput = document.getElementById('cm-qr-file');
             const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const whatsappMap = {}; groups.forEach((g, idx) => { const input = document.getElementById(`wa-link-${idx}`); if(input) whatsappMap[g] = input.value.trim(); });
             const processSave = async (qrDataURL) => {
@@ -1170,7 +1228,7 @@
 
         // Admin/Host Match Form Submission
         document.getElementById('create-match-form-ah')?.addEventListener('submit', (e) => {
-            e.preventDefault(); if(!confirm("Publish/Update match?")) return;
+            e.preventDefault();
             const title = document.getElementById('cm-title-ah').value.trim(); const stage = document.getElementById('cm-stage-ah').value; const type = document.getElementById('cm-type-ah').value; const map = document.getElementById('cm-map-ah').value.trim(); const time = document.getElementById('cm-time-ah').value.trim(); const slots = parseInt(document.getElementById('cm-slots-ah').value) || 12; const groupsStr = document.getElementById('cm-groups-ah').value.trim(); const prize = document.getElementById('cm-prize-pool-ah').value.trim(); const fee = type === 'free' ? '0' : document.getElementById('cm-fee-ah').value.trim(); const upiId = type === 'free' ? '' : document.getElementById('cm-upi-ah').value.trim(); const youtubeLink = document.getElementById('cm-youtube-ah').value.trim(); const upiEnabled = type === 'free' ? false : document.getElementById('cm-upi-toggle-ah').checked; const qrEnabled = type === 'free' ? false : document.getElementById('cm-qr-toggle-ah').checked; const qrFileInput = document.getElementById('cm-qr-file-ah');
             const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const whatsappMap = {}; groups.forEach((g, idx) => { const input = document.getElementById(`wa-link-ah-${idx}`); if(input) whatsappMap[g] = input.value.trim(); });
             const processSave = async (qrDataURL) => {
@@ -1184,15 +1242,15 @@
         });
 
         document.getElementById('registration-paid-form')?.addEventListener('submit', async (e) => { 
-            e.preventDefault(); if(!confirm("Submit?")) return; 
+            e.preventDefault(); 
             const matchId = selectedMatchForReg ? selectedMatchForReg.id : 'general';
             const newTeamName = document.getElementById('paid-teamName').value.trim().toUpperCase();
             const newUid = document.getElementById('paid-gameUid').value.trim();
 
             const dupTeam = allTeams.find(t => t.matchId === matchId && t.teamName === newTeamName);
-            if(dupTeam) { alert("❌ Team Name already registered for this match!"); return; }
+            if(dupTeam) { window.showToast("❌ Team Name already registered for this match!"); return; }
             const dupUid = allTeams.find(t => t.matchId === matchId && (t.gameUid === newUid || t.member2Uid === newUid || t.member3Uid === newUid || t.member4Uid === newUid));
-            if(dupUid) { alert("❌ One of the UIDs is already registered for this match!"); return; }
+            if(dupUid) { window.showToast("❌ One of the UIDs is already registered!"); return; }
 
             const newTeamId = 'T' + (100 + allTeams.length + 1); 
             
@@ -1212,20 +1270,20 @@
                 });
                 window.showToast(`Success! ID: ${newTeamId}`); window.switchTab('matches'); 
             } catch (err) {
-                alert("Registration failed: " + err);
+                window.showToast("Registration failed: " + err);
             }
         });
 
         document.getElementById('registration-free-form')?.addEventListener('submit', async (e) => { 
-            e.preventDefault(); if(!confirm("Submit?")) return; 
+            e.preventDefault(); 
             const matchId = selectedMatchForReg ? selectedMatchForReg.id : 'general';
             const newTeamName = document.getElementById('free-teamName').value.trim().toUpperCase();
             const newUid = document.getElementById('free-gameUid').value.trim();
 
             const dupTeam = allTeams.find(t => t.matchId === matchId && t.teamName === newTeamName);
-            if(dupTeam) { alert("❌ Team Name already registered for this match!"); return; }
+            if(dupTeam) { window.showToast("❌ Team Name already registered for this match!"); return; }
             const dupUid = allTeams.find(t => t.matchId === matchId && (t.gameUid === newUid || t.member2Uid === newUid || t.member3Uid === newUid || t.member4Uid === newUid));
-            if(dupUid) { alert("❌ One of the UIDs is already registered for this match!"); return; }
+            if(dupUid) { window.showToast("❌ One of the UIDs is already registered!"); return; }
 
             const newTeamId = 'T' + (100 + allTeams.length + 1); 
             
@@ -1245,7 +1303,7 @@
                 });
                 window.showToast(`Success! ID: ${newTeamId}`); window.switchTab('matches'); 
             } catch (err) {
-                alert("Registration failed: " + err);
+                window.showToast("Registration failed: " + err);
             }
         });
 
@@ -1260,27 +1318,23 @@
             const isSuper = (window.loggedEmail === SUPER_ADMIN);
             const isAdmin = isSuper || window.authorizedAdmins.map(e => e.toLowerCase()).includes(window.loggedEmail);
             
-            if(role === 'admin' && !isSuper) { alert("Only Super Admin can remove Admins!"); return; }
-            if(role === 'host' && !isAdmin) { alert("Only Admins can remove Hosts!"); return; }
+            if(role === 'admin' && !isSuper) { window.showToast("Only Super Admin can remove Admins!"); return; }
+            if(role === 'host' && !isAdmin) { window.showToast("Only Admins can remove Hosts!"); return; }
             
-            if(confirm(`Remove ${email}?`)) { 
-                if(role==='admin'){ window.authorizedAdmins = window.authorizedAdmins.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); } 
-                else { window.authorizedHosts = window.authorizedHosts.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); } 
-                window.showToast("Removed"); window.renderStaffsLists(); 
-            } 
+            if(role==='admin'){ window.authorizedAdmins = window.authorizedAdmins.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); } 
+            else { window.authorizedHosts = window.authorizedHosts.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); } 
+            window.showToast("Removed"); window.renderStaffsLists(); 
         };
         
         window.handleAddStaff = async function(email, role) { 
             email = email.trim().toLowerCase(); 
-            if(!email || !email.includes('@')) { alert("Invalid email"); return; } 
+            if(!email || !email.includes('@')) { window.showToast("Invalid email"); return; } 
             
             const isSuper = (window.loggedEmail === SUPER_ADMIN);
             const isAdmin = isSuper || window.authorizedAdmins.map(e => e.toLowerCase()).includes(window.loggedEmail);
 
-            if (role === 'admin' && !isSuper) { alert("Only Super Admin can add Admins!"); return; }
-            if (role === 'host' && !isAdmin) { alert("Only Admins can add Hosts!"); return; }
-            
-            if(!confirm(`Add ${email} as ${role}?`)) return; 
+            if (role === 'admin' && !isSuper) { window.showToast("Only Super Admin can add Admins!"); return; }
+            if (role === 'host' && !isAdmin) { window.showToast("Only Admins can add Hosts!"); return; }
             
             if (role === 'admin') { 
                 if(!window.authorizedAdmins.includes(email)) window.authorizedAdmins.push(email); 
@@ -1297,12 +1351,12 @@
 
         window.changeSquadPage = function(dir, mode) {
             if (mode === 'sa') {
-                const totalPages = Math.ceil(allTeams.length / SQUADS_PER_PAGE);
+                const totalPages = Math.ceil(allTeams.length / SQUADS_PER_PAGE) || 1;
                 currentSquadPageSA += dir;
                 if(currentSquadPageSA < 1) currentSquadPageSA = 1;
                 if(currentSquadPageSA > totalPages) currentSquadPageSA = totalPages;
             } else {
-                const totalPages = Math.ceil(allTeams.length / SQUADS_PER_PAGE);
+                const totalPages = Math.ceil(allTeams.length / SQUADS_PER_PAGE) || 1;
                 currentSquadPageAH += dir;
                 if(currentSquadPageAH < 1) currentSquadPageAH = 1;
                 if(currentSquadPageAH > totalPages) currentSquadPageAH = totalPages;
@@ -1349,7 +1403,7 @@
                 <div class="cyber-card p-3 rounded space-y-2 text-xs">
                     <div class="flex justify-between items-center border-b pb-1" style="border-color: var(--border-color);">
                         <div class="font-bold uppercase text-sm" style="color: var(--accent-primary);">${window.escapeHTML(t.teamName)}</div>
-                        <button onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}', '${t.matchId}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button>
+                        <button type="button" onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}', '${t.matchId}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px] cursor-pointer">Remove</button>
                     </div>
                     <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
                         <div>ID: ${t.teamId}</div>
@@ -1361,29 +1415,27 @@
                         <div class="col-span-2">UTR: ${window.escapeHTML(t.transitionId) || 'N/A'}</div>
                         <div class="col-span-2 text-slate-500">Mail: ${window.maskEmail(t.userEmail)}</div>
                     </div>
-                    <button onclick="copyTeamDetails('${t.id}')" class="w-full py-1 bg-blue-600 text-white rounded font-bold text-[10px] mt-1">📋 Copy Full Details</button>
+                    <button type="button" onclick="copyTeamDetails('${t.id}')" class="w-full py-1 bg-blue-600 text-white rounded font-bold text-[10px] mt-1 cursor-pointer">📋 Copy Full Details</button>
                 </div>
             `;
         }
         
         window.removeIndividualTeam = async function(teamId, teamName, matchId) { 
-            if(confirm(`Remove ${teamName}?`)) { 
-                await deleteDoc(doc(db, 'registrations', teamId)); 
-                if(matchId && matchId !== 'general') {
-                    await updateDoc(doc(db, 'matches', matchId), { currentSlots: increment(-1) });
-                }
-                window.showToast("Removed!"); 
-            } 
+            await deleteDoc(doc(db, 'registrations', teamId)); 
+            if(matchId && matchId !== 'general') {
+                await updateDoc(doc(db, 'matches', matchId), { currentSlots: increment(-1) });
+            }
+            window.showToast("Removed!"); 
         };
         
-        window.removeAllSquads = async function() { if(confirm("Remove ALL squads?")) { const snaps = await getDocs(collection(db, 'registrations')); snaps.forEach(async (d) => { await deleteDoc(d.ref); }); window.showToast("All removed!"); } };
-        window.filterSquadsList = function(query, mode) { const filtered = allTeams.filter(t => t.teamName.toLowerCase().includes(query.toLowerCase()) || (t.phoneNumber||'').includes(query)); if(mode==='sa') currentSquadPageSA = 1; else currentSquadPageAH = 1; window.renderSquadsManagementList(filtered); };
+        window.removeAllSquads = async function() { const snaps = await getDocs(collection(db, 'registrations')); snaps.forEach(async (d) => { await deleteDoc(d.ref); }); window.showToast("All removed!"); };
+        window.filterSquadsList = function(queryStr, mode) { const filtered = allTeams.filter(t => (t.teamName||'').toLowerCase().includes(queryStr.toLowerCase()) || (t.phoneNumber||'').includes(queryStr)); if(mode==='sa') currentSquadPageSA = 1; else currentSquadPageAH = 1; window.renderSquadsManagementList(filtered); };
 
-        window.toggleMaintenanceMode = async function() { if(!confirm("Toggle Maintenance?")) return; const snap = await getDoc(doc(db, 'settings', 'config')); const current = snap.exists() ? (snap.data().maintenance || false) : false; await setDoc(doc(db, 'settings', 'config'), { maintenance: !current }, { merge: true }); window.showToast("Toggled"); };
+        window.toggleMaintenanceMode = async function() { const snap = await getDoc(doc(db, 'settings', 'config')); const current = snap.exists() ? (snap.data().maintenance || false) : false; await setDoc(doc(db, 'settings', 'config'), { maintenance: !current }, { merge: true }); window.showToast("Toggled"); };
         
-        window.saveLogoSettings = function() { const file = document.getElementById('logo-file-input').files[0]; if(!file) return alert("Select file"); if(file.size > 716800) return alert("Image is too large! Max 700KB allowed."); window.compressImageAndGetBase64(file, async (b64) => { try { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: b64 }, { merge: true }); window.showToast("Logo saved"); } catch(err) { alert("Error: " + err.message); } }); };
+        window.saveLogoSettings = function() { const file = document.getElementById('logo-file-input').files[0]; if(!file) return window.showToast("Select file"); if(file.size > 716800) return window.showToast("Image is too large! Max 700KB allowed."); window.compressImageAndGetBase64(file, async (b64) => { try { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: b64 }, { merge: true }); window.showToast("Logo saved"); } catch(err) { window.showToast("Error: " + err.message); } }); };
         window.removeLogoSettings = async function() { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: "" }, { merge: true }); window.showToast("Logo removed"); };
-        window.saveSongSettings = function() { const file = document.getElementById('music-file-input').files[0]; if(!file) return alert("Select file"); if(file.size > 716800) return alert("Song is too large! Max 700KB allowed."); const reader = new FileReader(); reader.onload = async (e) => { try { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: e.target.result }, { merge: true }); window.showToast("Song saved"); } catch(err) { alert("Error: " + err.message); } }; reader.readAsDataURL(file); };
+        window.saveSongSettings = function() { const file = document.getElementById('music-file-input').files[0]; if(!file) return window.showToast("Select file"); if(file.size > 716800) return window.showToast("Song is too large! Max 700KB allowed."); const reader = new FileReader(); reader.onload = async (e) => { try { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: e.target.result }, { merge: true }); window.showToast("Song saved"); } catch(err) { window.showToast("Error: " + err.message); } }; reader.readAsDataURL(file); };
         window.removeSongSettings = async function() { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: "" }, { merge: true }); window.showToast("Song removed"); };
         
         document.getElementById('tournament-settings-form')?.addEventListener('submit', async (e) => { 
@@ -1404,7 +1456,7 @@
         });
 
         window.compressImageAndGetBase64 = function(file, callback) { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = function(e) { const img = new Image(); img.src = e.target.result; img.onload = function() { const canvas = document.createElement('canvas'); const MAX=250; let w=img.width, h=img.height; if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); callback(canvas.toDataURL('image/jpeg',0.7)); } } };
-        window.selectMatchSlot = function(id, title, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots) { if (window.loggedEmail === 'guest') { alert("Login required!"); return; } selectedMatchForReg = { id, title: `${title} (${group})`, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots }; if (type === 'free') { document.getElementById('reg-free-match-title').textContent = `${title} - Prize: ₹${prize}`; window.switchTab('register-free'); } else { document.getElementById('reg-paid-match-title').textContent = `${title} - Fee: ₹${entryFee} | Prize: ₹${prize}`; let hasPay = false; if (upiEnabled && upiId) { document.getElementById('reg-upi-pay-link').href = `upi://pay?pa=${upiId}&pn=SattaPai&am=${entryFee}.00&cu=INR`; document.getElementById('reg-paid-payment-box').classList.remove('hidden'); hasPay = true; } if (qrEnabled && qrDataURL) { document.getElementById('reg-qr-img').src = qrDataURL; hasPay = true; } if(!hasPay) document.getElementById('reg-paid-payment-box').classList.add('hidden'); window.switchTab('register-paid'); } };
+        window.selectMatchSlot = function(id, title, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots) { if (window.loggedEmail === 'guest') { window.showToast("Login required!"); return; } selectedMatchForReg = { id, title: `${title} (${group})`, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots }; if (type === 'free') { document.getElementById('reg-free-match-title').textContent = `${title} - Prize: ₹${prize}`; window.switchTab('register-free'); } else { document.getElementById('reg-paid-match-title').textContent = `${title} - Fee: ₹${entryFee} | Prize: ₹${prize}`; let hasPay = false; if (upiEnabled && upiId) { document.getElementById('reg-upi-pay-link').href = `upi://pay?pa=${upiId}&pn=SattaPai&am=${entryFee}.00&cu=INR`; document.getElementById('reg-paid-payment-box').classList.remove('hidden'); hasPay = true; } if (qrEnabled && qrDataURL) { document.getElementById('reg-qr-img').src = qrDataURL; hasPay = true; } if(!hasPay) document.getElementById('reg-paid-payment-box').classList.add('hidden'); window.switchTab('register-paid'); } };
         
         window.toggleMatchTypeFields = function(type) { const upi = document.getElementById('cm-upi-container'); const fee = document.getElementById('cm-fee-container'); const toggles = document.getElementById('cm-payment-toggles'); const qr = document.getElementById('cm-qr-upload-container'); if(type === 'free') { fee.classList.add('hidden'); upi.classList.add('hidden'); toggles.classList.add('hidden'); qr.classList.add('hidden'); } else { fee.classList.remove('hidden'); upi.classList.remove('hidden'); toggles.classList.remove('hidden'); qr.classList.remove('hidden'); } };
         window.toggleMatchTypeFieldsAH = function(type) { const upi = document.getElementById('cm-upi-container-ah'); const fee = document.getElementById('cm-fee-container-ah'); const toggles = document.getElementById('cm-payment-toggles-ah'); const qr = document.getElementById('cm-qr-upload-container-ah'); if(type === 'free') { fee.classList.add('hidden'); upi.classList.add('hidden'); toggles.classList.add('hidden'); qr.classList.add('hidden'); } else { fee.classList.remove('hidden'); upi.classList.remove('hidden'); toggles.classList.remove('hidden'); qr.classList.remove('hidden'); } };
@@ -1459,21 +1511,22 @@
 
         window.trackVisitorStats = async function() { try{ const sRef=doc(db,'settings','analytics'), snap=await getDoc(sRef), now=Date.now(), tma=now-180000, da=now-86400000; let v=[], tot=1; if(snap.exists()){ const d=snap.data(); v=d.visitors||[]; tot=(d.total||0)+1; } v.push({id:window.loggedEmail||('g_'+Math.random()),time:now}); const alc=v.filter(x=>x.time>tma).length; v=v.filter(x=>x.time>da); await setDoc(sRef,{total:tot,visitors:v},{merge:true}); if(document.getElementById('stat-total-visitors')) document.getElementById('stat-total-visitors').textContent=tot; if(document.getElementById('stat-daily-visitors')) document.getElementById('stat-daily-visitors').textContent=v.length; if(document.getElementById('stat-live-users')) document.getElementById('stat-live-users').textContent=Math.max(1,alc); }catch(e){} };
 
-        // FIXED: Alert message for Login
-        window.loginWithGoogleAuth = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){alert("Please accept the Terms and Privacy Policy to continue.");return;} signInWithPopup(auth, provider).then(r=>{ window.loggedEmail=r.user.email.toLowerCase(); localStorage.setItem('satta_pai_auth_email',window.loggedEmail); document.getElementById('google-login-overlay').classList.add('hidden'); window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); }).catch(e=>alert(e.message)); };
-        window.loginAsGuest = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){alert("Please accept the Terms and Privacy Policy to continue.");return;} window.loggedEmail='guest'; localStorage.setItem('satta_pai_auth_email','guest'); document.getElementById('google-login-overlay').classList.add('hidden'); window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); };
-        window.confirmSecureLogout = function() { if(confirm("Logout?")) signOut(auth).then(()=>{localStorage.removeItem('satta_pai_auth_email'); window.loggedEmail=''; window.checkLoginState(); document.getElementById('google-login-overlay').classList.remove('hidden');}); };
-        onAuthStateChanged(auth, u=>{ if(u){ window.loggedEmail=u.email.toLowerCase(); localStorage.setItem('satta_pai_auth_email',window.loggedEmail); }else{ if(localStorage.getItem('satta_pai_auth_email')!=='guest'){ window.loggedEmail=localStorage.getItem('satta_pai_auth_email')||''; } } window.checkLoginState(); });
+        window.loginWithGoogleAuth = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){window.showToast("Please accept Terms & Privacy Policy.");return;} signInWithPopup(auth, provider).then(r=>{ window.loggedEmail=r.user.email.toLowerCase(); try { localStorage.setItem('satta_pai_auth_email',window.loggedEmail); } catch(e){} document.getElementById('google-login-overlay').classList.add('hidden'); window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); }).catch(e=>window.showToast(e.message)); };
+        window.loginAsGuest = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){window.showToast("Please accept Terms & Privacy Policy.");return;} window.loggedEmail='guest'; try { localStorage.setItem('satta_pai_auth_email','guest'); } catch(e){} document.getElementById('google-login-overlay').classList.add('hidden'); window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); };
+        window.confirmSecureLogout = function() { signOut(auth).then(()=>{ try { localStorage.removeItem('satta_pai_auth_email'); } catch(e){} window.loggedEmail=''; window.checkLoginState(); document.getElementById('google-login-overlay').classList.remove('hidden');}); };
+        onAuthStateChanged(auth, u=>{ if(u){ window.loggedEmail=u.email.toLowerCase(); try { localStorage.setItem('satta_pai_auth_email',window.loggedEmail); } catch(e){} }else{ try { if(localStorage.getItem('satta_pai_auth_email')!=='guest'){ window.loggedEmail=localStorage.getItem('satta_pai_auth_email')||''; } } catch(e){} } window.checkLoginState(); });
 
         onSnapshot(collection(db, 'matches'), snap => { 
             allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); 
+            window.allMatches = allMatches; // Keep global reference in sync for copy functions!
             window.renderPublicMatches(); 
             window.renderRoadmapTab(); 
-            window.populateAllDropdowns(); // Update all dropdowns when matches change
+            window.populateAllDropdowns(); 
         });
         
         onSnapshot(collection(db, 'registrations'), snap => { 
             allTeams = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+            window.allTeams = allTeams; // Keep global reference in sync for copy functions!
             window.renderSquadsManagementList(allTeams); 
             window.renderPublicMatches(); 
             const userList = document.getElementById('user-bookings-list'); 
