@@ -18,40 +18,90 @@
     <style>
         :root {
             --bg-main: #f9fafb; --bg-card: #ffffff; --bg-inner: #f3f4f6; --border-color: #e5e7eb;
-            --text-main: #111827; --text-muted: #6b7280; --accent-primary: #25d366; --accent-glow: rgba(37, 211, 102, 0.15);
-            --header-bg: rgba(255, 255, 255, 0.95); --btn-bg: #25d366; --btn-text: #ffffff;
+            --text-main: #111827; --text-muted: #6b7280; --accent-primary: #25d366; --accent-secondary: #128c7e;
+            --accent-glow: rgba(37, 211, 102, 0.22);
+            --header-bg: rgba(255, 255, 255, 0.95); --btn-bg: linear-gradient(135deg, #25d366, #128c7e); --btn-text: #ffffff;
+            --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.06); --hover-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
         }
         html.dark {
-            --bg-main: #121212; --bg-card: #1e1e1e; --bg-inner: #2a2a2a; --border-color: #333333;
-            --text-main: #f3f3f6; --text-muted: #9ca3af; --accent-primary: #25d366; --accent-glow: rgba(37, 211, 102, 0.2);
-            --header-bg: rgba(18, 18, 18, 0.95); --btn-bg: #25d366; --btn-text: #ffffff;
+            --bg-main: #0f0f10; --bg-card: #1c1c1e; --bg-inner: #2a2a2c; --border-color: #333338;
+            --text-main: #f3f3f6; --text-muted: #9ca3af; --accent-primary: #25d366; --accent-secondary: #128c7e;
+            --accent-glow: rgba(37, 211, 102, 0.28);
+            --header-bg: rgba(15, 15, 16, 0.92); --btn-bg: linear-gradient(135deg, #25d366, #128c7e); --btn-text: #ffffff;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.45); --hover-shadow: 0 10px 32px rgba(0, 0, 0, 0.65);
         }
-        html.theme-whatsapp { --accent-primary: #25d366; --accent-glow: rgba(37, 211, 102, 0.2); --btn-bg: #25d366; --btn-text: #ffffff; }
-        html.theme-instagram { --accent-primary: #e1306c; --accent-glow: rgba(225, 48, 108, 0.2); --btn-bg: #e1306c; --btn-text: #ffffff; }
-        html.theme-gold { --accent-primary: #d97706; --accent-glow: rgba(217, 119, 6, 0.2); --btn-bg: #d97706; --btn-text: #ffffff; }
-        html.theme-blue { --accent-primary: #2563eb; --accent-glow: rgba(37, 99, 235, 0.2); --btn-bg: #2563eb; --btn-text: #ffffff; }
 
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 90px; overflow-x: hidden; position: relative; }
+        /* ============ STANDARD THEMES ============ */
+        html.theme-whatsapp { --accent-primary: #25d366; --accent-secondary: #128c7e; --accent-glow: rgba(37, 211, 102, 0.28); --btn-bg: linear-gradient(135deg, #25d366, #128c7e); }
+        html.theme-instagram { --accent-primary: #e1306c; --accent-secondary: #c13584; --accent-glow: rgba(225, 48, 108, 0.28); --btn-bg: linear-gradient(135deg, #e1306c, #c13584); }
+        html.theme-gold { --accent-primary: #d97706; --accent-secondary: #b45309; --accent-glow: rgba(217, 119, 6, 0.28); --btn-bg: linear-gradient(135deg, #d97706, #b45309); }
+        html.theme-blue { --accent-primary: #2563eb; --accent-secondary: #1e40af; --accent-glow: rgba(37, 99, 235, 0.28); --btn-bg: linear-gradient(135deg, #2563eb, #1e40af); }
+
+        /* ============ 💎 PREMIUM THEMES ============ */
+        html.theme-royal  { --accent-primary: #8b5cf6; --accent-secondary: #6d28d9; --accent-glow: rgba(139, 92, 246, 0.32); --btn-bg: linear-gradient(135deg, #a855f7, #6d28d9); --btn-text: #fff; }
+        html.theme-cyan   { --accent-primary: #06b6d4; --accent-secondary: #0891b2; --accent-glow: rgba(6, 182, 212, 0.32);  --btn-bg: linear-gradient(135deg, #22d3ee, #0891b2); --btn-text: #fff; }
+        html.theme-ruby   { --accent-primary: #e11d48; --accent-secondary: #be123c; --accent-glow: rgba(225, 29, 72, 0.32);  --btn-bg: linear-gradient(135deg, #f43f5e, #be123c); --btn-text: #fff; }
+        html.theme-indigo { --accent-primary: #6366f1; --accent-secondary: #4338ca; --accent-glow: rgba(99, 102, 241, 0.32); --btn-bg: linear-gradient(135deg, #818cf8, #4338ca); --btn-text: #fff; }
+
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 90px; overflow-x: hidden; position: relative; transition: background-color 0.3s; }
         input, select, textarea { font-size: 16px !important; }
-        
-        .cyber-card { background: var(--bg-card); border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); border-radius: 12px; position: relative; overflow: hidden; }
-        .cyber-input { background-color: var(--bg-inner); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; outline: none; }
-        .cyber-input:focus { border-color: var(--accent-primary); }
-        .btn-theme { background: var(--btn-bg); color: var(--btn-text); border-radius: 8px; font-weight: 600; transition: all 0.2s; }
-        .btn-theme:active { transform: scale(0.96); }
-        
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--header-bg); border-top: 1px solid var(--border-color); backdrop-filter: blur(12px); z-index: 100; display: flex; justify-content: space-around; padding: 8px 4px; }
-        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 6px 0; transition: color 0.2s; }
-        .bottom-nav-item.active { color: var(--accent-primary); }
-        .bottom-nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; fill: currentColor; }
-        
-        .dropdown-content { display: none; position: absolute; right: 0; top: 100%; margin-top: 8px; background: var(--bg-card); width: 220px; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; z-index: 999; padding: 10px; }
-        .dropdown-content.show { display: block; }
 
+        /* ============ 💎 PREMIUM CARDS ============ */
+        .cyber-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.15s ease;
+        }
+        .cyber-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
+            background: linear-gradient(90deg, transparent 0%, var(--accent-primary) 50%, transparent 100%);
+            opacity: 0.35; pointer-events: none;
+        }
+        .cyber-card:active { transform: scale(0.995); }
+
+        /* ============ 💎 PREMIUM INPUTS ============ */
+        .cyber-input { background-color: var(--bg-inner); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 10px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        .cyber-input:focus { border-color: var(--accent-primary); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+        /* ============ 💎 PREMIUM BUTTONS ============ */
+        .btn-theme {
+            background: var(--btn-bg); color: var(--btn-text);
+            border-radius: 10px; font-weight: 700; letter-spacing: 0.3px;
+            transition: transform 0.18s ease, box-shadow 0.22s ease, filter 0.2s;
+            box-shadow: 0 4px 14px var(--accent-glow);
+            border: none;
+        }
+        .btn-theme:hover { filter: brightness(1.08); box-shadow: 0 6px 22px var(--accent-glow); }
+        .btn-theme:active { transform: scale(0.96); box-shadow: 0 2px 8px var(--accent-glow); }
+
+        /* ============ 💎 PREMIUM BOTTOM NAV ============ */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--header-bg); border-top: 1px solid var(--border-color); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 100; display: flex; justify-content: space-around; padding: 8px 4px; }
+        .bottom-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 6px 0; transition: color 0.25s, transform 0.15s; position: relative; }
+        .bottom-nav-item.active { color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow); }
+        .bottom-nav-item.active svg { filter: drop-shadow(0 0 6px var(--accent-primary)); transform: scale(1.08); }
+        .bottom-nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; fill: currentColor; transition: transform 0.2s; }
+        .bottom-nav-item:active svg { transform: scale(0.88); }
+        .bottom-nav-item.active::after {
+            content: ''; position: absolute; top: 2px; width: 4px; height: 4px; border-radius: 50%;
+            background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary);
+            animation: navDotPulse 2s ease-in-out infinite;
+        }
+        @keyframes navDotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
+
+        /* ============ DROPDOWN ============ */
+        .dropdown-content { display: none; position: absolute; right: 0; top: 100%; margin-top: 8px; background: var(--bg-card); width: 260px; max-height: 420px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.35), 0 0 0 1px var(--border-color); border-radius: 14px; z-index: 999; padding: 12px; }
+        .dropdown-content.show { display: block; animation: ddSlide 0.2s ease-out; }
+        @keyframes ddSlide { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ============ CHAT ============ */
         #chat-fullscreen { position: fixed; inset: 0; z-index: 9999; background: var(--bg-main); display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         #chat-fullscreen.active { transform: translateX(0); }
         .chat-messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
-        
         .chat-row { display: flex; align-items: flex-end; gap: 8px; width: 100%; }
         .chat-row.own { flex-direction: row-reverse; }
         .chat-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-color); flex-shrink: 0; background-color: var(--bg-inner); }
@@ -59,39 +109,62 @@
         .chat-row.own .chat-content { align-items: flex-end; }
         .chat-meta { font-size: 10px; opacity: 0.7; margin-bottom: 4px; font-weight: 600; color: var(--text-muted); padding: 0 4px; display: flex; align-items: center; gap: 4px; }
         .chat-bubble { padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.4; position: relative; cursor: pointer; user-select: none; word-wrap: break-word; }
-        .chat-own { background: var(--accent-primary); color: #fff; border-bottom-right-radius: 4px; }
+        .chat-own { background: var(--btn-bg); color: #fff; border-bottom-right-radius: 4px; box-shadow: 0 2px 10px var(--accent-glow); }
         .chat-other { background: var(--bg-card); color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid var(--border-color); }
 
-        #chat-action-menu { position: fixed; z-index: 10000; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; width: 160px; }
+        #chat-action-menu { position: fixed; z-index: 10000; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 8px 22px rgba(0,0,0,0.3); display: none; flex-direction: column; overflow: hidden; width: 170px; }
         #chat-action-menu button { padding: 10px 16px; font-size: 13px; font-weight: 600; text-align: left; width: 100%; border-bottom: 1px solid var(--border-color); color: var(--text-main); background: none; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; gap: 8px; }
         #chat-action-menu button:last-child { border-bottom: none; }
         #chat-action-menu button:active { background: var(--bg-inner); }
-        .text-danger { color: #ef4444 !important; }
-        .text-warning { color: #f59e0b !important; }
-        .text-blue { color: #3b82f6 !important; }
+        .text-danger { color: #ef4444 !important; } .text-warning { color: #f59e0b !important; } .text-blue { color: #3b82f6 !important; }
 
-        .ff-touch-effect { position: absolute; border-radius: 50%; background-color: rgba(255,255,255,0.15); pointer-events: none; animation: ripple 0.4s linear; transform: scale(0); z-index: 9999; }
-        @keyframes ripple { to { transform: scale(2.5); opacity: 0; } }
-        .back-btn { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; padding: 6px 12px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; }
+        /* ============ 💎 PREMIUM RIPPLE ============ */
+        .ff-touch-effect { position: absolute; border-radius: 50%; pointer-events: none; animation: ripple 0.55s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(0); z-index: 9999; }
+        @keyframes ripple { to { transform: scale(3); opacity: 0; } }
+        .back-btn { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; padding: 6px 12px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; transition: all 0.2s; }
+        .back-btn:active { transform: scale(0.96); border-color: var(--accent-primary); }
 
-        /* AI Chatbot Styles */
-        #ai-bot-fab { position: fixed; bottom: 76px; right: 16px; z-index: 9500; width: 52px; height: 52px; border-radius: 50%; background: var(--btn-bg); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.35); cursor: pointer; border: 2px solid rgba(255,255,255,0.25); transition: transform 0.2s, box-shadow 0.2s; }
+        /* ============ 💎 PREMIUM THEME BUTTONS ============ */
+        .theme-swatch {
+            width: 26px; height: 26px; border-radius: 50%; margin: 0 auto;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer; position: relative;
+        }
+        .theme-swatch:hover { transform: scale(1.12); }
+        .theme-swatch:active { transform: scale(0.92); }
+        .theme-swatch.premium { box-shadow: 0 3px 10px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.35); }
+        .theme-swatch.selected { border-color: var(--text-main); box-shadow: 0 0 0 3px var(--accent-glow), 0 3px 12px rgba(0,0,0,0.3); transform: scale(1.08); }
+        .theme-swatch.selected::after {
+            content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 12px; font-weight: 900; text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        }
+
+        /* ============ AI CHATBOT ============ */
+        #ai-bot-fab { position: fixed; bottom: 76px; right: 16px; z-index: 9500; width: 54px; height: 54px; border-radius: 50%; background: var(--btn-bg); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px var(--accent-glow), 0 0 0 2px rgba(255,255,255,0.15); cursor: pointer; border: 2px solid rgba(255,255,255,0.25); transition: transform 0.2s, box-shadow 0.25s, opacity 0.2s; }
+        #ai-bot-fab:hover { box-shadow: 0 8px 28px var(--accent-glow), 0 0 0 3px rgba(255,255,255,0.25); }
         #ai-bot-fab:active { transform: scale(0.92); }
-        #ai-bot-panel { position: fixed; bottom: 136px; right: 16px; width: calc(100vw - 32px); max-width: 350px; height: 460px; max-height: calc(100vh - 160px); z-index: 9501; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 12px 35px rgba(0,0,0,0.45); display: none; flex-direction: column; overflow: hidden; }
-        #ai-bot-panel.open { display: flex; animation: botSlideUp 0.22s ease-out; }
-        @keyframes botSlideUp { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        #ai-bot-fab.locked { opacity: 0.55; filter: grayscale(0.4); }
+        #ai-bot-panel { position: fixed; bottom: 140px; right: 16px; width: calc(100vw - 32px); max-width: 350px; height: 470px; max-height: calc(100vh - 165px); z-index: 9501; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 14px 40px rgba(0,0,0,0.5), 0 0 0 1px var(--accent-glow); display: none; flex-direction: column; overflow: hidden; }
+        #ai-bot-panel.open { display: flex; animation: botSlideUp 0.24s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes botSlideUp { from { opacity: 0; transform: translateY(16px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
         .bot-msg-bubble { padding: 9px 12px; border-radius: 14px; font-size: 12px; line-height: 1.45; max-width: 85%; word-wrap: break-word; }
         .bot-msg-ai { background: var(--bg-inner); color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid var(--border-color); align-self: flex-start; }
-        .bot-msg-user { background: var(--accent-primary); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
-        .bot-chip { font-size: 10px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--bg-inner); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
-        .bot-chip:hover, .bot-chip:active { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .bot-msg-user { background: var(--btn-bg); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; box-shadow: 0 2px 8px var(--accent-glow); }
+        .bot-chip { font-size: 10px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--bg-inner); border: 1px solid var(--border-color); color: var(--text-main); cursor: pointer; white-space: nowrap; transition: all 0.18s; }
+        .bot-chip:hover, .bot-chip:active { border-color: var(--accent-primary); color: var(--accent-primary); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+        /* Scrollbar polish */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
     </style>
 </head>
 <body id="body-root">
 
     <audio id="bg-music" loop></audio>
 
-    <!-- CUSTOM CONFIRMATION MODAL (FOR LOGOUT & IMPORTANT ACTIONS) -->
     <div id="custom-confirm-modal" class="fixed inset-0 z-[10008] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <div class="cyber-card p-5 max-w-xs w-full space-y-4 text-center shadow-2xl border border-amber-500/40">
             <div class="w-11 h-11 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto text-xl font-bold">⚠️</div>
@@ -104,7 +177,6 @@
         </div>
     </div>
 
-    <!-- FLOATING AI + SMART TOURNAMENT BOT -->
     <button type="button" id="ai-bot-fab" onclick="toggleAiBotPanel()" title="Satta Pai AI Assistant">
         <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7.5 13A2.5 2.5 0 0 0 5 15.5 2.5 2.5 0 0 0 7.5 18a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 7.5 13m9 0a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5Z"/></svg>
     </button>
@@ -112,7 +184,7 @@
     <div id="ai-bot-panel">
         <div class="px-3.5 py-2.5 border-b flex items-center justify-between" style="background: var(--header-bg); border-color: var(--border-color);">
             <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: var(--accent-primary);">🤖</div>
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: var(--btn-bg);">🤖</div>
                 <div>
                     <div class="text-xs font-bold leading-tight">Satta Pai AI Bot</div>
                     <div id="ai-bot-mode-badge" class="text-[9px] text-emerald-400 font-semibold">● Online • Free AI + Live Data</div>
@@ -138,7 +210,6 @@
         </div>
     </div>
 
-    <!-- MANUAL COPY MODAL -->
     <div id="manual-copy-modal" class="fixed inset-0 z-[10007] hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
         <div class="cyber-card p-4 max-w-sm w-full space-y-3 shadow-2xl">
             <h3 class="text-sm font-bold text-amber-400">Copy Details</h3>
@@ -151,7 +222,6 @@
         </div>
     </div>
 
-    <!-- QR ZOOM MODAL -->
     <div id="qr-zoom-modal" class="fixed inset-0 z-[10006] hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" onclick="closeQrZoomModal(event)">
         <div class="relative max-w-sm w-full flex flex-col items-center justify-center space-y-4" onclick="event.stopPropagation()">
             <button onclick="closeQrZoomModal(event)" class="absolute -top-12 right-0 text-white bg-rose-600 hover:bg-rose-700 rounded-full p-2 font-bold shadow-lg cursor-pointer">
@@ -199,7 +269,7 @@
     <header class="sticky top-0 z-50 px-4 py-3 border-b backdrop-blur-md shadow-sm" style="background: var(--header-bg); border-color: var(--border-color);">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('home')">
-                <div id="brand-logo-container" class="w-7 h-7 rounded-full flex items-center justify-center overflow-hidden border border-emerald-500/40 shadow" style="background: var(--accent-primary);">
+                <div id="brand-logo-container" class="w-7 h-7 rounded-full flex items-center justify-center overflow-hidden border border-emerald-500/40 shadow" style="background: var(--btn-bg);">
                     <img id="brand-logo-img" src="" class="w-full h-full object-cover hidden">
                     <svg id="brand-logo-emoji" class="w-4 h-4 text-white fill-current" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.8l7.5 14.2h-15L12 5.8z"/></svg>
                 </div>
@@ -214,8 +284,39 @@
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                     </button>
                     <div id="settings-dropdown" class="dropdown-content p-3 space-y-2.5 text-left text-xs">
-                        <div class="space-y-1"><div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Display Mode</div><div class="grid grid-cols-2 gap-1.5"><button onclick="setDarkMode(false)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer">Light</button><button onclick="setDarkMode(true)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer bg-zinc-800 text-white">Dark</button></div></div>
-                        <div class="space-y-1 pt-1.5 border-t" style="border-color: var(--border-color);"><div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Theme Color</div><div class="grid grid-cols-4 gap-1.5"><button onclick="setTheme('whatsapp')" class="w-6 h-6 rounded-full bg-[#25d366] mx-auto"></button><button onclick="setTheme('instagram')" class="w-6 h-6 rounded-full bg-[#e1306c] mx-auto"></button><button onclick="setTheme('gold')" class="w-6 h-6 rounded-full bg-[#d97706] mx-auto"></button><button onclick="setTheme('blue')" class="w-6 h-6 rounded-full bg-[#2563eb] mx-auto"></button></div></div>
+
+                        <div class="space-y-1">
+                            <div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Display Mode</div>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="setDarkMode(false)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer">Light</button>
+                                <button onclick="setDarkMode(true)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer bg-zinc-800 text-white">Dark</button>
+                            </div>
+                        </div>
+
+                        <!-- STANDARD COLORS -->
+                        <div class="space-y-1 pt-1.5 border-t" style="border-color: var(--border-color);">
+                            <div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Standard</div>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button data-theme-btn="whatsapp" onclick="setTheme('whatsapp')" class="theme-swatch" style="background: #25d366;" title="WhatsApp"></button>
+                                <button data-theme-btn="instagram" onclick="setTheme('instagram')" class="theme-swatch" style="background: #e1306c;" title="Instagram"></button>
+                                <button data-theme-btn="gold" onclick="setTheme('gold')" class="theme-swatch" style="background: #d97706;" title="Gold"></button>
+                                <button data-theme-btn="blue" onclick="setTheme('blue')" class="theme-swatch" style="background: #2563eb;" title="Blue"></button>
+                            </div>
+                        </div>
+
+                        <!-- 💎 PREMIUM COLORS -->
+                        <div class="space-y-1 pt-1.5 border-t" style="border-color: var(--border-color);">
+                            <div class="font-semibold text-[10px] uppercase tracking-wider flex items-center gap-1" style="color: var(--accent-primary);">
+                                <span>💎</span><span>Premium Themes</span>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button data-theme-btn="royal" onclick="setTheme('royal')" class="theme-swatch premium" style="background: linear-gradient(135deg, #a855f7, #6d28d9);" title="Royal Purple"></button>
+                                <button data-theme-btn="cyan" onclick="setTheme('cyan')" class="theme-swatch premium" style="background: linear-gradient(135deg, #22d3ee, #0891b2);" title="Cyan Neon"></button>
+                                <button data-theme-btn="ruby" onclick="setTheme('ruby')" class="theme-swatch premium" style="background: linear-gradient(135deg, #f43f5e, #be123c);" title="Ruby Crimson"></button>
+                                <button data-theme-btn="indigo" onclick="setTheme('indigo')" class="theme-swatch premium" style="background: linear-gradient(135deg, #818cf8, #4338ca);" title="Indigo Sapphire"></button>
+                            </div>
+                        </div>
+
                         <div class="pt-1.5 border-t space-y-1" style="border-color: var(--border-color);">
                             <button id="menu-admin-portal-btn" onclick="switchTab('teams'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer hidden">Admin Portal</button>
                             <button onclick="openCustomerSupportModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer text-emerald-400 font-bold">Support</button>
@@ -243,7 +344,7 @@
                 </div>
                 <div class="pt-4 flex flex-wrap justify-center gap-2"><button onclick="switchTab('matches')" class="btn-theme px-5 py-2.5 text-xs uppercase font-bold">View Matches</button><button onclick="switchTab('roadmap')" class="cyber-card px-5 py-2.5 text-xs font-bold uppercase">Roadmap</button></div>
             </div>
-            
+
             <div class="cyber-card p-5 space-y-3">
                 <h3 id="display-rules-header" class="text-sm font-bold flex items-center gap-2" style="color: var(--accent-primary);"><span>⚔️</span> Tournament Rules & Points System</h3>
                 <div id="display-rules-content" class="text-xs space-y-2 leading-relaxed" style="color: var(--text-muted);">
@@ -355,8 +456,7 @@
                     <button onclick="switchSASub('squads')" id="sas-btn-squads" class="px-3 py-1.5 rounded cyber-card">Squads</button>
                     <button onclick="switchSASub('settings')" id="sas-btn-settings" class="px-3 py-1.5 rounded cyber-card">⚙️ Settings</button>
                 </div>
-                
-                <!-- SUPER ADMIN SCOREBOARD -->
+
                 <div id="sas-sec-score" class="space-y-3 text-xs">
                     <select id="sa-calc-match-select" onchange="loadMatchTeamsForCalc('sa')" class="cyber-input w-full px-2 py-1.5"><option value="">-- Choose Match --</option></select>
                     <div class="cyber-card p-2 space-y-2 border border-emerald-500/30">
@@ -401,7 +501,6 @@
                     <div class="cyber-card p-3 space-y-1"><b>Admins:</b><div id="admins-list-container"></div></div><div class="cyber-card p-3 space-y-1"><b>Hosts:</b><div id="hosts-list-container"></div></div>
                 </div>
 
-                <!-- SUPER ADMIN SQUADS -->
                 <div id="sas-sec-squads" class="hidden space-y-2 text-xs">
                     <button onclick="removeAllSquads()" class="px-3 py-1.5 bg-rose-600 text-white rounded font-bold w-full mb-2">Remove All</button>
                     <div class="flex gap-2 mb-2">
@@ -423,7 +522,7 @@
                     <div class="cyber-card p-3 flex justify-between items-center"><span>Maintenance</span><button type="button" id="maintenance-toggle-btn" onclick="toggleMaintenanceMode()" class="px-3 py-1 bg-rose-600 text-white rounded">OFF</button></div>
                     <div class="cyber-card p-3 flex justify-between items-center"><span>Cleanup Old Chats (48h)</span><button type="button" onclick="cleanupOldChats()" class="px-3 py-1 bg-rose-600 text-white rounded">Clean Now</button></div>
                     <div class="cyber-card p-3 space-y-2 border border-blue-500/30"><b class="text-blue-400">Chat Settings</b><select id="chat-mode-select" onchange="updateChatMode(this.value)" class="cyber-input w-full px-2 py-1.5"><option value="all">All Users</option><option value="admin">Admin Only</option><option value="off">Disabled</option></select></div>
-                    
+
                     <div class="cyber-card p-3 space-y-2 border border-emerald-500/30">
                         <b class="text-emerald-400">🤖 Free AI & Protected Key Vault</b>
                         <p class="text-[10px]" style="color: var(--text-muted);">Built-in <b>Free Cloud AI (No Key Needed)</b> + Smart Bot is active by default! Optionally store a Google Gemini Key in the encrypted <code>settings/aiSecret</code> vault (blocked from guests & bots).</p>
@@ -442,7 +541,7 @@
                         <input type="file" id="music-file-input" accept="audio/*" class="text-[10px] w-full">
                         <div class="flex gap-2"><button onclick="saveSongSettings()" class="btn-theme flex-1 py-1">Save Song</button><button onclick="removeSongSettings()" class="bg-rose-600 text-white flex-1 py-1 rounded">Remove</button></div>
                     </div>
-                    
+
                     <form id="tournament-settings-form" class="cyber-card p-3 space-y-2">
                         <b class="text-emerald-400">Edit Home Page Texts</b>
                         <input type="text" id="edit-brand-name" placeholder="Brand Name" class="cyber-input w-full px-2 py-1">
@@ -461,7 +560,6 @@
                 </div>
             </div>
 
-            <!-- ADMIN / HOST CONSOLE -->
             <div id="console-admin-host" class="cyber-card p-4 space-y-4 hidden">
                 <div class="flex justify-between pb-2 border-b"><h2 class="text-sm font-bold" id="ah-title-lbl">Console</h2><button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs">Logout</button></div>
                 <div class="flex gap-2 overflow-x-auto pb-2 text-xs">
@@ -470,9 +568,8 @@
                     <button onclick="switchAHSub('squads')" id="ah-btn-squads" class="px-3 py-1.5 rounded cyber-card">Squads</button>
                     <button onclick="switchAHSub('staffs')" id="ah-btn-staffs" class="px-3 py-1.5 rounded cyber-card hidden">👥 Staffs</button>
                 </div>
-                
+
                 <div id="ah-sec-match" class="space-y-2">
-                    <!-- Match Creation Form for Admin/Host -->
                     <form id="create-match-form-ah" class="cyber-card p-3 space-y-3 text-xs">
                         <input type="text" id="cm-title-ah" required placeholder="Match Title" class="cyber-input w-full px-2 py-1.5">
                         <div class="grid grid-cols-2 gap-2"><select id="cm-stage-ah" class="cyber-input w-full px-2 py-1.5"><option>Playoffs</option><option selected>Semifinals</option><option>Finals</option></select><select id="cm-type-ah" onchange="toggleMatchTypeFieldsAH(this.value)" class="cyber-input w-full px-2 py-1.5"><option value="paid" selected>Paid</option><option value="free">Free</option></select></div>
@@ -488,8 +585,7 @@
                     </form>
                     <div id="host-matches-list" class="space-y-2 pt-2"></div>
                 </div>
-                
-                <!-- ADMIN/HOST SCOREBOARD -->
+
                 <div id="ah-sec-score" class="hidden space-y-3 text-xs">
                     <select id="ah-calc-match-select" onchange="loadMatchTeamsForCalc('ah')" class="cyber-input w-full px-2 py-1.5"><option value="">-- Choose Match --</option></select>
                     <div class="cyber-card p-2 space-y-2 border border-emerald-500/30">
@@ -509,8 +605,7 @@
                     </div>
                     <div id="ah-host-teams-input-area" class="hidden pt-2"><div id="ah-host-teams-rows" class="space-y-1.5"></div><button onclick="generateAndPublishScoreboard('ah')" class="btn-theme w-full mt-2 py-1.5">Publish Scoreboard</button></div>
                 </div>
-                
-                <!-- ADMIN/HOST SQUADS -->
+
                 <div id="ah-sec-squads" class="hidden space-y-2 text-xs">
                     <div class="flex gap-2 mb-2">
                         <select id="ah-squad-match-filter" onchange="filterSquadsByMatch('ah')" class="cyber-input flex-1 px-2 py-1.5 text-xs">
@@ -592,15 +687,12 @@
         let currentChatTargetEmail = null;
         let currentChatTargetText = null;
         let currentTargetIsBanned = false;
-        let userCache = {}; 
-        
-        // Global access for teams and matches so both module and global scripts can access them
+        let userCache = {};
+
         window.allTeams = [];
         window.allMatches = [];
-        // AI Key is kept ONLY in memory (loaded from protected settings/aiSecret vault, NEVER stored in localStorage)
         window.geminiApiKey = '';
-        
-        // Separate pagination for SA and AH
+
         let currentSquadPageSA = 1;
         let currentSquadPageAH = 1;
         const SQUADS_PER_PAGE = 10;
@@ -609,7 +701,6 @@
         window.maskEmail = function(email) { if(!email) return ''; if(email === 'guest') return 'Guest User'; const parts = email.split('@'); if(parts.length !== 2) return email; return parts[0][0] + '*****@' + parts[1]; };
         window.showToast = function(msg) { const toast = document.getElementById('toast'); document.getElementById('toast-text').textContent = msg; toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 3000); };
 
-        // --- IN-PAGE CUSTOM CONFIRMATION MODAL (REPLACES BLOCKED NATIVE CONFIRM) ---
         let confirmCallbackFn = null;
         window.askConfirm = function(title, message, onConfirm, confirmText = "Yes, Confirm") {
             document.getElementById('custom-confirm-title').textContent = title || 'Confirm Action';
@@ -618,19 +709,44 @@
             confirmCallbackFn = onConfirm;
             document.getElementById('custom-confirm-modal').classList.remove('hidden');
         };
-
         window.closeConfirmModal = function(isConfirmed) {
             document.getElementById('custom-confirm-modal').classList.add('hidden');
             const cb = confirmCallbackFn;
             confirmCallbackFn = null;
-            if (isConfirmed && typeof cb === 'function') {
-                cb();
-            }
+            if (isConfirmed && typeof cb === 'function') { cb(); }
         };
 
-        // --- HYBRID AI + FREE CLOUD AI + SMART TOURNAMENT BOT ---
+        // ============ 💎 THEME SWATCH ACTIVE INDICATOR ============
+        window.updateThemeSwatches = function() {
+            let current = 'whatsapp';
+            try { current = localStorage.getItem('satta_pai_theme') || 'whatsapp'; } catch(e) {}
+            document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+                if (btn.dataset.themeBtn === current) btn.classList.add('selected');
+                else btn.classList.remove('selected');
+            });
+        };
+
+        // ============ 💎 PREMIUM SET THEME (Updated for 8 themes) ============
+        window.setTheme = function(themeName) {
+            const root = document.documentElement;
+            root.classList.remove('theme-whatsapp', 'theme-instagram', 'theme-gold', 'theme-blue', 'theme-royal', 'theme-cyan', 'theme-ruby', 'theme-indigo');
+            if (themeName !== 'whatsapp') root.classList.add('theme-' + themeName);
+            try { localStorage.setItem('satta_pai_theme', themeName); } catch(e) {}
+            const premiumNames = { royal: '💜 Royal Purple', cyan: '💎 Cyan Neon', ruby: '❤️ Ruby Crimson', indigo: '💙 Indigo Sapphire', whatsapp: 'WhatsApp', instagram: 'Instagram', gold: 'Gold', blue: 'Blue' };
+            window.showToast(`✨ ${premiumNames[themeName] || themeName} theme applied!`);
+            window.updateThemeSwatches();
+            window.closeMenuDropdown();
+        };
+
+        // ============ AI CHATBOT — LOGIN-ONLY ============
         let botInitialized = false;
+
+        // ✅ NEW: Block guests from opening the chatbot
         window.toggleAiBotPanel = function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Please sign in with Google to use the AI Assistant!");
+                return;
+            }
             const panel = document.getElementById('ai-bot-panel');
             panel.classList.toggle('open');
             if (!botInitialized) {
@@ -639,6 +755,19 @@
             }
             if (panel.classList.contains('open')) {
                 setTimeout(() => document.getElementById('ai-bot-input')?.focus(), 150);
+            }
+        };
+
+        // ✅ NEW: Update FAB visual state based on login
+        window.updateAiBotFabState = function() {
+            const fab = document.getElementById('ai-bot-fab');
+            if (!fab) return;
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                fab.classList.add('locked');
+                fab.title = 'Login to use AI Assistant';
+            } else {
+                fab.classList.remove('locked');
+                fab.title = 'Satta Pai AI Assistant';
             }
         };
 
@@ -654,9 +783,7 @@
             if (!box) return;
             const div = document.createElement('div');
             div.className = sender === 'user' ? 'bot-msg-bubble bot-msg-user' : 'bot-msg-bubble bot-msg-ai';
-            const formatted = window.escapeHTML(text)
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n/g, '<br>');
+            const formatted = window.escapeHTML(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             div.innerHTML = formatted;
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
@@ -664,28 +791,28 @@
         }
 
         window.sendBotQuickQuery = function(q) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Please sign in to use the AI Assistant!");
+                return;
+            }
             const input = document.getElementById('ai-bot-input');
             if (input) input.value = q;
             window.handleAiBotSend();
         };
 
         window.handleAiBotSend = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Please sign in to use the AI Assistant!");
+                return;
+            }
             const input = document.getElementById('ai-bot-input');
             const queryText = (input?.value || '').trim();
             if (!queryText) return;
             input.value = '';
             appendBotMessage('user', queryText);
-
-            // Fast-path: If it's a direct tournament command/chip, check if Smart Bot has an exact live-data answer
             const directSmart = checkDirectTournamentIntent(queryText);
-            if (directSmart) {
-                appendBotMessage('ai', directSmart);
-                return;
-            }
-
+            if (directSmart) { appendBotMessage('ai', directSmart); return; }
             const loadingDiv = appendBotMessage('ai', '⏳ Thinking...');
-
-            // 1. Try Optional Protected Gemini API Key (if Super Admin configured one in settings/aiSecret)
             const apiKey = (window.geminiApiKey || '').trim();
             if (apiKey) {
                 try {
@@ -693,23 +820,14 @@
                     if (loadingDiv) loadingDiv.remove();
                     appendBotMessage('ai', aiReply);
                     return;
-                } catch (e) {
-                    console.warn("Gemini API fallback to Keyless Free AI:", e);
-                }
+                } catch (e) { console.warn("Gemini API fallback:", e); }
             }
-
-            // 2. Try 100% Free Keyless Cloud AI API (Pollinations OpenAI-compatible endpoint - Zero API Key Needed!)
             try {
                 const freeAiReply = await fetchKeylessFreeAiReply(queryText);
                 if (loadingDiv) loadingDiv.remove();
                 appendBotMessage('ai', freeAiReply);
                 return;
-            } catch (e) {
-                if (loadingDiv) loadingDiv.remove();
-                console.warn("Free Cloud AI fallback to Local Smart Bot:", e);
-            }
-
-            // 3. Offline / Instant Fallback to Local Smart Tournament Bot
+            } catch (e) { if (loadingDiv) loadingDiv.remove(); console.warn("Free AI fallback:", e); }
             const smartReply = generateSmartTournamentReply(queryText);
             appendBotMessage('ai', smartReply);
         };
@@ -717,9 +835,7 @@
         function checkDirectTournamentIntent(q) {
             const low = q.toLowerCase().trim();
             const exactChips = ['active matches', 'my team status', 'how to register', 'rules & points', 'payment & utr help', 'customer support'];
-            if (exactChips.includes(low)) {
-                return generateSmartTournamentReply(q);
-            }
+            if (exactChips.includes(low)) return generateSmartTournamentReply(q);
             return null;
         }
 
@@ -728,20 +844,12 @@
             return `You are the official AI assistant for "Satta Pai Esports - Free Fire Tournament Arena". Reply concisely and warmly in the same language the user uses (Tamil, Tanglish, or English). Key rules: +3 points per kill, Placement points (1st=12, 2nd=9, 3rd=8, 4th=7, 5th=6). No hacks, panels, or emulators. Paid match requires 12-digit numeric UPI UTR. Room ID & Password shared in the match WhatsApp group 10-15 mins before start. Support Email: satta0pai@gmail.com, Telegram: @CHELLAM_STORE. Current Active Matches: ${matches || 'No active matches right now'}.`;
         }
 
-        // 100% Free Keyless AI API (Pollinations AI - No API Key required, zero key theft risk!)
         async function fetchKeylessFreeAiReply(userMessage) {
             const sysPrompt = getTournamentContextPrompt();
             const resp = await fetch('https://text.pollinations.ai/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    messages: [
-                        { role: 'system', content: sysPrompt },
-                        { role: 'user', content: userMessage }
-                    ],
-                    model: 'openai',
-                    private: true
-                })
+                body: JSON.stringify({ messages: [ { role: 'system', content: sysPrompt }, { role: 'user', content: userMessage } ], model: 'openai', private: true })
             });
             if (!resp.ok) throw new Error('Free AI HTTP Error');
             const text = await resp.text();
@@ -755,11 +863,8 @@
             const teams = window.allTeams || [];
             const myEmail = window.loggedEmail || '';
 
-            // 1. Active / Upcoming Matches
             if (low.includes('match') || low.includes('active') || low.includes('upcoming') || low.includes('live') || low.includes('மேட்ச்') || low.includes('slot')) {
-                if (matches.length === 0) {
-                    return `🎮 தற்போது புதிய மேட்ச்கள் எதுவும் அறிவிக்கப்படவில்லை நண்பா. விரைவில் அப்டேட் செய்யப்படும்!`;
-                }
+                if (matches.length === 0) return `🎮 தற்போது புதிய மேட்ச்கள் எதுவும் அறிவிக்கப்படவில்லை நண்பா. விரைவில் அப்டேட் செய்யப்படும்!`;
                 const activeList = matches.slice(0, 5).map((m, i) => {
                     const regCount = teams.filter(t => t.matchId === m.id && t.status !== 'banned').length;
                     const maxSlots = m.slots || 12;
@@ -768,50 +873,33 @@
                 }).join('\n\n');
                 return `🔥 **தற்போதைய மேட்ச் விவரங்கள்:**\n\n${activeList}\n\n👉 கீழே உள்ள **Matches** டேப் சென்று உங்கள் Slot-ஐ Join செய்யலாம்!`;
             }
-
-            // 2. My Team / Booking Status
             if (low.includes('my team') || low.includes('status') || low.includes('booking') || low.includes('registered') || low.includes('டீம்')) {
-                if (!myEmail || myEmail === 'guest') {
-                    return `🔐 உங்க டீம் விவரங்களைப் பார்க்க முதலில் Google மூலம் Login செய்யவும் நண்பா!`;
-                }
+                if (!myEmail || myEmail === 'guest') return `🔐 உங்க டீம் விவரங்களைப் பார்க்க முதலில் Google மூலம் Login செய்யவும் நண்பா!`;
                 const myTeams = teams.filter(t => t.userEmail === myEmail);
-                if (myTeams.length === 0) {
-                    return `📋 நீங்கள் இன்னும் எந்த மேட்சிலும் உங்கள் டீமை Register செய்யவில்லை. **Matches** பகுதிக்குச் சென்று Join செய்யுங்கள்!`;
-                }
+                if (myTeams.length === 0) return `📋 நீங்கள் இன்னும் எந்த மேட்சிலும் உங்கள் டீமை Register செய்யவில்லை. **Matches** பகுதிக்குச் சென்று Join செய்யுங்கள்!`;
                 const list = myTeams.map(t => {
                     const m = matches.find(x => x.id === t.matchId);
                     return `✅ **${t.teamName}** (ID: ${t.teamId || 'N/A'})\n   Match: ${m ? m.title : 'Match'} | Group: ${t.slotGroup || 'TEAM A'}`;
                 }).join('\n\n');
                 return `🏆 **உங்கள் Registered Squads:**\n\n${list}`;
             }
-
-            // 3. How to Register / Join
             if (low.includes('register') || low.includes('join') || low.includes('epdi') || low.includes('how to') || low.includes('சேர்வது')) {
                 return `📝 **மேட்சில் Join செய்வது எப்படி?**\n\n1. கீழே உள்ள **Matches** பட்டனை அழுத்தவும்.\n2. உங்களுக்குப் பிடித்த மேட்சில் **Slots** க்ளிக் செய்து Group-ல் **Join** கொடுக்கவும்.\n3. உங்க Team Name, Leader Name மற்றும் 4 Player UIDs கொடுக்கவும்.\n4. Paid மேட்ச் என்றால் UPI/QR மூலம் பணம் செலுத்தி **12-digit UTR** நம்பரைப் பதிவு செய்து Submit செய்யவும்.\n5. உடனே WhatsApp Group லிங்க் மூலம் குரூப்பில் இணைந்து கொள்ளுங்கள்!`;
             }
-
-            // 4. Rules & Points System
             if (low.includes('rule') || low.includes('point') || low.includes('kill') || low.includes('score') || low.includes('பாயிண்ட்')) {
                 return `⚔️ **Tournament Rules & Points System:**\n\n• 💀 **Kill Points:** 1 Kill = **+3 Points**\n• 🏆 **Placement Points:** 1st = 12 Pts, 2nd = 9 Pts, 3rd = 8 Pts, 4th = 7 Pts, 5th = 6 Pts.\n• 🚫 **Fair Play:** Hack, Panel, Script அல்லது Mobile மேட்சில் Emulator பயன்படுத்தினால் உடனடியாக Disqualify செய்யப்படுவீர்கள்.\n• ⏰ மேட்ச் தொடங்குவதற்கு 10 நிமிடத்திற்கு முன்பே Room-ல் இணைய வேண்டும்.`;
             }
-
-            // 5. Payment / UPI / UTR / Room ID
             if (low.includes('pay') || low.includes('upi') || low.includes('utr') || low.includes('qr') || low.includes('refund') || low.includes('room') || low.includes('id') || low.includes('password')) {
                 return `💳 **Payment, UTR & Room ID உதவி:**\n\n• **UTR என்றால் என்ன?** நீங்கள் GPay / PhonePe / Paytm மூலம் பணம் அனுப்பியதும் வரும் **12 இலக்க UPI Transaction ID** தான் UTR.\n• **Room ID & Password:** மேட்ச் தொடங்குவதற்கு 10–15 நிமிடங்களுக்கு முன்பு அந்தந்த Match-ன் **WhatsApp Group**-ல் பகிரப்படும்.\n• ஏதேனும் Payment சிக்கல் இருந்தால் Support-ஐத் தொடர்பு கொள்ளுங்கள்.`;
             }
-
-            // 6. Customer Support / Contact
             if (low.includes('support') || low.includes('help') || low.includes('admin') || low.includes('contact') || low.includes('telegram') || low.includes('mail')) {
                 return `📞 **Customer Support:**\n\n• 📧 Email: satta0pai@gmail.com\n• 💬 Telegram: @CHELLAM_STORE\n\nஎந்தச் சந்தேகம் என்றாலும் மேலே உள்ள முகவரிக்கு மெசேஜ் செய்யுங்கள் நண்பா!`;
             }
-
-            // Check if user typed a specific team name
             const matchedTeam = teams.find(t => (t.teamName || '').toLowerCase() === low || (t.teamId || '').toLowerCase() === low);
             if (matchedTeam) {
                 const m = matches.find(x => x.id === matchedTeam.matchId);
                 return `🎯 **Team Found: ${matchedTeam.teamName}**\n• Team ID: ${matchedTeam.teamId}\n• Leader: ${matchedTeam.leaderName}\n• Match: ${m ? m.title : 'Registered'}\n• Group: ${matchedTeam.slotGroup || 'TEAM A'}`;
             }
-
             return `🤖 வணக்கம் நண்பா! உங்க கேள்விக்கு உடனடித் தகவல் பெற கீழே உள்ள பட்டன்களை அழுத்தவும்:\n\n• **Active Matches** - தற்போதைய மேட்ச்கள் & Slots\n• **My Team Status** - உங்க டீம் விவரம்\n• **Rules & Points** - புள்ளிகள் & விதிமுறைகள்\n• **UPI / UTR** - பணம் செலுத்தும் முறை & Room ID\n• **Support** - அட்மின் தொடர்பு எண்`;
         }
 
@@ -821,9 +909,7 @@
             const resp = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ role: 'user', parts: [{ text: `${sysPrompt}\n\nUser Question: ${userMessage}` }] }]
-                })
+                body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `${sysPrompt}\n\nUser Question: ${userMessage}` }] }] })
             });
             if (!resp.ok) throw new Error('API Error');
             const data = await resp.json();
@@ -832,105 +918,48 @@
             return reply.trim();
         }
 
-        // --- FIXED: DIRECT CLIPBOARD COPY FUNCTION ---
         window.executeCopyOrShare = function(text, title = "Team Details") {
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    window.showToast("✅ Copied to clipboard!");
-                }).catch(err => {
-                    console.warn("Clipboard API failed, trying execCommand fallback...", err);
-                    fallbackExecCommandCopy(text);
-                });
-            } else {
-                fallbackExecCommandCopy(text);
-            }
+                navigator.clipboard.writeText(text).then(() => { window.showToast("✅ Copied to clipboard!"); }).catch(err => { fallbackExecCommandCopy(text); });
+            } else { fallbackExecCommandCopy(text); }
         };
-
         function fallbackExecCommandCopy(text) {
             const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.setAttribute("readonly", "");
-            textArea.style.position = "fixed";
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.width = "2em";
-            textArea.style.height = "2em";
-            textArea.style.padding = "0";
-            textArea.style.border = "none";
-            textArea.style.outline = "none";
-            textArea.style.boxShadow = "none";
-            textArea.style.background = "transparent";
-            textArea.style.opacity = "0.01";
-            textArea.style.zIndex = "-1";
-            
+            textArea.value = text; textArea.setAttribute("readonly", "");
+            textArea.style.position = "fixed"; textArea.style.top = "0"; textArea.style.left = "0";
+            textArea.style.width = "2em"; textArea.style.height = "2em"; textArea.style.padding = "0";
+            textArea.style.border = "none"; textArea.style.outline = "none"; textArea.style.boxShadow = "none";
+            textArea.style.background = "transparent"; textArea.style.opacity = "0.01"; textArea.style.zIndex = "-1";
             document.body.appendChild(textArea);
-            textArea.focus({ preventScroll: true });
-            textArea.select();
-            textArea.setSelectionRange(0, 999999);
-            
+            textArea.focus({ preventScroll: true }); textArea.select(); textArea.setSelectionRange(0, 999999);
             let successful = false;
-            try {
-                successful = document.execCommand('copy');
-            } catch (err) {
-                successful = false;
-            }
+            try { successful = document.execCommand('copy'); } catch (err) { successful = false; }
             document.body.removeChild(textArea);
-
-            if (successful) {
-                window.showToast("✅ Copied to clipboard!");
-            } else {
-                manualCopyModal(text);
-            }
+            if (successful) { window.showToast("✅ Copied to clipboard!"); } else { manualCopyModal(text); }
         }
-
         function manualCopyModal(text) {
             const textarea = document.getElementById('manual-copy-textarea');
             textarea.value = text;
             document.getElementById('manual-copy-modal').classList.remove('hidden');
-            setTimeout(() => {
-                textarea.focus();
-                textarea.select();
-            }, 100);
+            setTimeout(() => { textarea.focus(); textarea.select(); }, 100);
             window.showToast("Tap 'Select & Copy' below.");
         }
-
         window.selectAndCopyFromModal = function() {
             const textarea = document.getElementById('manual-copy-textarea');
-            textarea.focus();
-            textarea.select();
-            textarea.setSelectionRange(0, 999999);
+            textarea.focus(); textarea.select(); textarea.setSelectionRange(0, 999999);
             try {
                 if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(textarea.value).then(() => {
-                        window.showToast("✅ Copied to clipboard!");
-                        document.getElementById('manual-copy-modal').classList.add('hidden');
-                    }).catch(() => {
-                        document.execCommand('copy');
-                        window.showToast("✅ Copied!");
-                        document.getElementById('manual-copy-modal').classList.add('hidden');
-                    });
-                } else {
-                    document.execCommand('copy');
-                    window.showToast("✅ Copied!");
-                    document.getElementById('manual-copy-modal').classList.add('hidden');
-                }
-            } catch (e) {
-                window.showToast("Long-press the highlighted text to copy.");
-            }
+                    navigator.clipboard.writeText(textarea.value).then(() => { window.showToast("✅ Copied!"); document.getElementById('manual-copy-modal').classList.add('hidden'); }).catch(() => { document.execCommand('copy'); window.showToast("✅ Copied!"); document.getElementById('manual-copy-modal').classList.add('hidden'); });
+                } else { document.execCommand('copy'); window.showToast("✅ Copied!"); document.getElementById('manual-copy-modal').classList.add('hidden'); }
+            } catch (e) { window.showToast("Long-press the highlighted text to copy."); }
         };
-
-        // FIXED: Read from window.allTeams & window.allMatches so there is no ReferenceError!
         window.copyTeamDetails = function(teamId) {
             const teams = window.allTeams || [];
             const team = teams.find(t => t.id === teamId || t.teamId === teamId);
-            if(!team) {
-                window.showToast("❌ Team details not found!");
-                return;
-            }
+            if(!team) { window.showToast("❌ Team details not found!"); return; }
             const text = `*Team: ${team.teamName}*\nLeader: ${team.leaderName}\nPhone: ${team.phoneNumber || 'Hidden'}\nCity: ${team.hometown || 'N/A'}\nLeader UID: ${team.gameUid}\nP2 UID: ${team.member2Uid}\nP3 UID: ${team.member3Uid}\nP4 UID: ${team.member4Uid}\nSubs: ${team.sub1Uid || 'N/A'}, ${team.sub2Uid || 'N/A'}\nUTR: ${team.transitionId || 'N/A'}`;
             window.executeCopyOrShare(text, `Team: ${team.teamName}`);
         };
-
         window.copySquadsForMatch = function(mode) {
             const selectEl = document.getElementById(mode === 'sa' ? 'sa-squad-match-filter' : 'ah-squad-match-filter');
             const matchId = selectEl ? selectEl.value : '';
@@ -938,60 +967,53 @@
             const matches = window.allMatches || [];
             let teamsToCopy = teams;
             let matchTitle = "All Matches";
-            
-            if (matchId) {
-                teamsToCopy = teams.filter(t => t.matchId === matchId);
-                const match = matches.find(m => m.id === matchId);
-                if (match) matchTitle = match.title;
-            }
-            
-            if (teamsToCopy.length === 0) {
-                window.showToast("No teams found to copy.");
-                return;
-            }
-            
+            if (matchId) { teamsToCopy = teams.filter(t => t.matchId === matchId); const match = matches.find(m => m.id === matchId); if (match) matchTitle = match.title; }
+            if (teamsToCopy.length === 0) { window.showToast("No teams found to copy."); return; }
             let text = `*Squads for ${matchTitle}* (Total: ${teamsToCopy.length})\n\n`;
-            teamsToCopy.forEach((t, idx) => {
-                text += `${idx + 1}. Team: ${t.teamName} | Leader: ${t.leaderName} | Ph: ${t.phoneNumber || 'N/A'}\n   UIDs: ${t.gameUid}, ${t.member2Uid}, ${t.member3Uid}, ${t.member4Uid}\n\n`;
-            });
-            
+            teamsToCopy.forEach((t, idx) => { text += `${idx + 1}. Team: ${t.teamName} | Leader: ${t.leaderName} | Ph: ${t.phoneNumber || 'N/A'}\n   UIDs: ${t.gameUid}, ${t.member2Uid}, ${t.member3Uid}, ${t.member4Uid}\n\n`; });
             window.executeCopyOrShare(text.trim(), `Squads for ${matchTitle}`);
         };
-
         window.filterSquadsByMatch = function(mode) {
             const selectEl = document.getElementById(mode === 'sa' ? 'sa-squad-match-filter' : 'ah-squad-match-filter');
             const matchId = selectEl ? selectEl.value : '';
             const teams = window.allTeams || [];
             const filtered = matchId ? teams.filter(t => t.matchId === matchId) : teams;
             if (mode === 'sa') currentSquadPageSA = 1; else currentSquadPageAH = 1;
-            if (typeof window.renderSquadsManagementList === 'function') {
-                window.renderSquadsManagementList(filtered);
-            }
+            if (typeof window.renderSquadsManagementList === 'function') { window.renderSquadsManagementList(filtered); }
         };
 
-        // --- QR ZOOM MODAL FUNCTIONS ---
         window.openQrZoomModal = function() {
             const currentSrc = document.getElementById('reg-qr-img').src;
-            if(!currentSrc || currentSrc.includes('undefined') || currentSrc === window.location.href) {
-                window.showToast("No QR Code available");
-                return;
-            }
+            if(!currentSrc || currentSrc.includes('undefined') || currentSrc === window.location.href) { window.showToast("No QR Code available"); return; }
             document.getElementById('qr-zoom-img').src = currentSrc;
             document.getElementById('qr-zoom-modal').classList.remove('hidden');
         }
-
-        window.closeQrZoomModal = function(e) {
-            if(e) e.stopPropagation();
-            document.getElementById('qr-zoom-modal').classList.add('hidden');
-        }
+        window.closeQrZoomModal = function(e) { if(e) e.stopPropagation(); document.getElementById('qr-zoom-modal').classList.add('hidden'); }
 
         const ICON_SUPER = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-amber-400 fill-current inline-block" title="Super Admin"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>`;
         const ICON_ADMIN = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-blue-400 fill-current inline-block" title="Admin"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>`;
         const ICON_HOST = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-emerald-400 fill-current inline-block" title="Host"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4-1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2 3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>`;
 
+        // ============ 💎 PREMIUM THEMED RIPPLE ============
         document.addEventListener('mousedown', function(e) { createRipple(e.clientX, e.clientY); });
-        document.addEventListener('touchstart', function(e) { const touch = e.touches[0]; createRipple(touch.clientX, touch.clientY); });
-        function createRipple(x, y) { const ripple = document.createElement('div'); ripple.className = 'ff-touch-effect'; const size = 15; ripple.style.width = ripple.style.height = size + 'px'; ripple.style.left = (x - size/2) + 'px'; ripple.style.top = (y - size/2) + 'px'; document.body.appendChild(ripple); setTimeout(() => { ripple.remove(); }, 400); }
+        document.addEventListener('touchstart', function(e) { const touch = e.touches[0]; createRipple(touch.clientX, touch.clientY); }, { passive: true });
+        function createRipple(x, y) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ff-touch-effect';
+            const size = 18;
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (x - size/2) + 'px';
+            ripple.style.top = (y - size/2) + 'px';
+            const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim();
+            if (accent) {
+                ripple.style.background = `radial-gradient(circle, ${accent}66, ${accent}22 60%, transparent 80%)`;
+                ripple.style.boxShadow = `0 0 24px ${accent}55`;
+            } else {
+                ripple.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            }
+            document.body.appendChild(ripple);
+            setTimeout(() => { ripple.remove(); }, 550);
+        }
 
         function applyCachedConfig() {
             try {
@@ -1012,13 +1034,13 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.toggleMenuDropdown = function(e) { e.stopPropagation(); document.getElementById('settings-dropdown').classList.toggle('show'); };
+        window.toggleMenuDropdown = function(e) { e.stopPropagation(); document.getElementById('settings-dropdown').classList.toggle('show'); window.updateThemeSwatches(); };
         window.closeMenuDropdown = function() { document.getElementById('settings-dropdown').classList.remove('show'); };
         window.addEventListener('click', (e) => { window.closeMenuDropdown(); if(typeof window.closeChatMenu === 'function') window.closeChatMenu(); });
-        
+
         window.openCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.remove('hidden'); };
         window.closeCustomerSupportModal = function() { document.getElementById('customer-support-modal').classList.add('hidden'); };
-        
+
         window.openPolicyModal = function(type) {
             const modal = document.getElementById('policy-modal'); const title = document.getElementById('policy-title'); const content = document.getElementById('policy-content');
             if (type === 'terms') {
@@ -1033,16 +1055,17 @@
         window.closePolicyModal = function() { document.getElementById('policy-modal').classList.add('hidden'); };
 
         window.setDarkMode = function(isDark) { if (isDark) { document.documentElement.classList.add('dark'); try { localStorage.setItem('satta_pai_mode', 'dark'); } catch(e){} } else { document.documentElement.classList.remove('dark'); try { localStorage.setItem('satta_pai_mode', 'light'); } catch(e){} } window.showToast("Theme updated"); window.closeMenuDropdown(); };
-        window.setTheme = function(themeName) { const root = document.documentElement; root.classList.remove('theme-whatsapp', 'theme-instagram', 'theme-gold', 'theme-blue'); if(themeName !== 'whatsapp') root.classList.add('theme-' + themeName); try { localStorage.setItem('satta_pai_theme', themeName); } catch(e){} window.showToast("Color updated"); window.closeMenuDropdown(); };
-        
-        window.toggleMusic = function() { 
-            const audio = document.getElementById('bg-music'); const icon = document.getElementById('music-icon'); 
-            if (musicPlayingState) { audio.pause(); musicPlayingState = false; icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'; } else { audio.play().then(() => { musicPlayingState = true; icon.innerHTML = '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>'; }).catch(() => { window.showToast("Click page first"); }); } 
+
+        window.toggleMusic = function() {
+            const audio = document.getElementById('bg-music'); const icon = document.getElementById('music-icon');
+            if (musicPlayingState) { audio.pause(); musicPlayingState = false; icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'; } else { audio.play().then(() => { musicPlayingState = true; icon.innerHTML = '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>'; }).catch(() => { window.showToast("Click page first"); }); }
         };
+
+        // Init swatches on load
+        window.updateThemeSwatches();
     </script>
 
     <script type="module">
-        // Firebase SDK Version Updated to 11.10.0
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDoc, onSnapshot, getDocs, query, where, orderBy, updateDoc, increment, runTransaction } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
@@ -1050,17 +1073,7 @@
 
         const firebaseConfig = { apiKey: "AIzaSyAMs5OGAD7bOtbRoQ-0DMv-lLf-SRxyHS8", authDomain: "sattapai-tournament.firebaseapp.com", projectId: "sattapai-tournament", storageBucket: "sattapai-tournament.firebasestorage.app", messagingSenderId: "465702743401", appId: "1:465702743401:web:1072a897dc24f0b380e1f8", measurementId: "G-5CQJ29EP02" };
         const app = initializeApp(firebaseConfig);
-        
-        // FIXED: Removed hardcoded FIREBASE_APPCHECK_DEBUG_TOKEN so nobody can abuse debug mode in production
-        try {
-            const appCheck = initializeAppCheck(app, { 
-                provider: new ReCaptchaEnterpriseProvider('6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY'), 
-                isTokenAutoRefreshEnabled: true 
-            });
-        } catch (err) {
-            console.warn("App Check initialization warning:", err);
-        }
-        
+        try { initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider('6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY'), isTokenAutoRefreshEnabled: true }); } catch (err) { console.warn("App Check init warning:", err); }
         const auth = getAuth(app); const provider = new GoogleAuthProvider(); const db = getFirestore(app);
 
         window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc; window.addDoc = addDoc; window.collection = collection; window.updateDoc = updateDoc; window.increment = increment;
@@ -1094,18 +1107,13 @@
         }
 
         window.setupPrivateDataListeners = async function() {
-            if (privUnsubscribe) {
-                try { privUnsubscribe(); } catch(e) {}
-                privUnsubscribe = null;
-            }
+            if (privUnsubscribe) { try { privUnsubscribe(); } catch(e) {} privUnsubscribe = null; }
             if (!window.loggedEmail || window.loggedEmail === 'guest') {
                 window.geminiApiKey = '';
                 privateTeamsMap = {};
                 mergePublicAndPrivateTeams();
                 return;
             }
-
-            // 1. Load AI Key from Protected Vault (settings/aiSecret) - Only accessible to signed-in non-banned users
             try {
                 const secretSnap = await getDoc(doc(db, 'settings', 'aiSecret'));
                 if (secretSnap.exists() && typeof secretSnap.data().geminiApiKey === 'string') {
@@ -1117,20 +1125,14 @@
                 if (badge) badge.textContent = window.geminiApiKey ? '● Online • Gemini AI + Vault Protected' : '● Online • Free Cloud AI (Keyless)';
             } catch (e) {}
 
-            // 2. Listen to Private Registration Vault (Admin/Host gets all; normal signed-in user gets only their own)
             const isSuper = (window.loggedEmail === SUPER_ADMIN);
             const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e => e.toLowerCase()).includes(window.loggedEmail));
             const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e => e.toLowerCase()).includes(window.loggedEmail));
 
             try {
-                const privQuery = (isAdmin || isHost)
-                    ? collection(db, 'registrations_private')
-                    : query(collection(db, 'registrations_private'), where('userEmail', '==', window.loggedEmail));
-
+                const privQuery = (isAdmin || isHost) ? collection(db, 'registrations_private') : query(collection(db, 'registrations_private'), where('userEmail', '==', window.loggedEmail));
                 privUnsubscribe = onSnapshot(privQuery, snap => {
-                    snap.docs.forEach(d => {
-                        privateTeamsMap[d.id] = d.data();
-                    });
+                    snap.docs.forEach(d => { privateTeamsMap[d.id] = d.data(); });
                     mergePublicAndPrivateTeams();
                 });
             } catch (e) {}
@@ -1138,19 +1140,18 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Clean up any old localStorage key so it's never exposed in browser storage
                 try { localStorage.removeItem('satta_pai_gemini_key'); } catch(e) {}
-
                 const configDoc = await getDoc(doc(db, 'settings', 'config'));
-                if (configDoc.exists()) { 
-                    const data = configDoc.data(); 
-                    if (data.admins_list) window.authorizedAdmins = data.admins_list; 
-                    if (data.hosts_list) window.authorizedHosts = data.hosts_list; 
+                if (configDoc.exists()) {
+                    const data = configDoc.data();
+                    if (data.admins_list) window.authorizedAdmins = data.admins_list;
+                    if (data.hosts_list) window.authorizedHosts = data.hosts_list;
                     const safeCache = { brandName: data.brandName, logoDataURL: data.logoDataURL };
                     try { localStorage.setItem('satta_pai_cached_config', JSON.stringify(safeCache)); } catch(e){}
                 }
                 trackVisitorStats(); renderStaffsLists(); window.checkLoginState(); initializeChat(); window.loadProfileUI(); window.loadSettings(); window.setupPrivateDataListeners();
-                
+                if (typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState();
+
                 onSnapshot(collection(db, 'users'), snap => {
                     let changed = false;
                     snap.docChanges().forEach(change => {
@@ -1162,9 +1163,8 @@
                             }
                         }
                     });
-                    if(changed) window.renderChatMessages(); 
+                    if(changed) window.renderChatMessages();
                 });
-
             } catch(e){}
         });
 
@@ -1181,14 +1181,8 @@
                     if(d.f3) { document.getElementById('display-f3-text').textContent = d.f3; document.getElementById('edit-f3').value = d.f3; }
                     if(d.f4) { document.getElementById('display-f4-text').textContent = d.f4; document.getElementById('edit-f4').value = d.f4; }
                     if(d.rules) { document.getElementById('display-rules-content').innerHTML = d.rules; document.getElementById('edit-rules').value = d.rules; }
-                    
                     if(d.logoDataURL) { const img = document.getElementById('brand-logo-img'); img.src = d.logoDataURL; img.classList.remove('hidden'); document.getElementById('brand-logo-emoji').classList.add('hidden'); }
-                    
-                    if(d.musicDataURL) { 
-                        const audio = document.getElementById('bg-music');
-                        if(audio.src !== d.musicDataURL) audio.src = d.musicDataURL; 
-                    }
-
+                    if(d.musicDataURL) { const audio = document.getElementById('bg-music'); if(audio.src !== d.musicDataURL) audio.src = d.musicDataURL; }
                     const btn = document.getElementById('maintenance-toggle-btn');
                     if(btn) { btn.textContent = d.maintenance ? "ON" : "OFF"; btn.className = d.maintenance ? "px-3 py-1 bg-emerald-600 text-white rounded" : "px-3 py-1 bg-rose-600 text-white rounded"; }
                     const ms = document.getElementById('maintenance-screen'); if(ms) { if(d.maintenance && window.loggedEmail !== SUPER_ADMIN) ms.classList.remove('hidden'); else ms.classList.add('hidden'); }
@@ -1196,12 +1190,8 @@
             });
         }
 
-        // FIXED: Stores API Key in Protected Vault (settings/aiSecret), NOT in public settings/config or localStorage!
         window.saveAiBotKey = async function() {
-            if (window.loggedEmail !== SUPER_ADMIN) {
-                window.showToast("Only Super Admin can update the AI Vault!");
-                return;
-            }
+            if (window.loggedEmail !== SUPER_ADMIN) { window.showToast("Only Super Admin can update the AI Vault!"); return; }
             const key = (document.getElementById('gemini-api-key-input')?.value || '').trim();
             window.geminiApiKey = key;
             try {
@@ -1209,15 +1199,11 @@
                 const badge = document.getElementById('ai-bot-mode-badge');
                 if (badge) badge.textContent = key ? '● Online • Gemini AI + Vault Protected' : '● Online • Free Cloud AI (Keyless)';
                 window.showToast(key ? "🔒 Saved in Protected AI Vault!" : "✅ Switched to Keyless Free AI!");
-            } catch(e) {
-                window.showToast("Vault Error: " + e.message);
-            }
+            } catch(e) { window.showToast("Vault Error: " + e.message); }
         };
-
         window.clearAiBotKey = async function() {
             window.askConfirm("Use Keyless Free AI", "Remove custom Gemini key from Vault and use 100% Free Keyless Cloud AI?", async () => {
-                const input = document.getElementById('gemini-api-key-input');
-                if (input) input.value = '';
+                const input = document.getElementById('gemini-api-key-input'); if (input) input.value = '';
                 window.geminiApiKey = '';
                 try { await setDoc(doc(db, 'settings', 'aiSecret'), { geminiApiKey: "" }, { merge: true }); } catch(e) {}
                 const badge = document.getElementById('ai-bot-mode-badge');
@@ -1227,7 +1213,7 @@
         };
 
         window.previewDP = function(event) { const file = event.target.files[0]; if(file) window.compressImageAndGetBase64(file, (base64) => { document.getElementById('profile-dp-img').src = base64; }); };
-        
+
         window.loadProfileUI = async function() {
             if(!window.loggedEmail || window.loggedEmail === 'guest') { document.getElementById('profile-username').value = "Guest"; document.getElementById('profile-player-id').value = "N/A"; document.getElementById('dp-cooldown-text').classList.add('hidden'); return; }
             const userSnap = await getDoc(doc(db, 'users', window.loggedEmail));
@@ -1238,59 +1224,44 @@
                 if(data.chatBannedUntil && data.chatBannedUntil > Date.now()) myChatBannedUntil = data.chatBannedUntil;
                 document.getElementById('user-dash-name').textContent = data.username || 'User';
                 if(data.dpBase64) { const ud = document.getElementById('user-dash-dp'); ud.src = data.dpBase64; ud.classList.remove('hidden'); }
-
                 const cooldownText = document.getElementById('dp-cooldown-text');
                 if(data.lastDpUpdate) {
                     const daysSince = Math.floor((Date.now() - data.lastDpUpdate) / (1000 * 60 * 60 * 24));
-                    if(daysSince < 14) {
-                        cooldownText.textContent = `You can change your DP in ${14 - daysSince} days.`;
-                        cooldownText.classList.remove('text-amber-400'); cooldownText.classList.add('text-rose-400');
-                    } else {
-                        cooldownText.textContent = `Note: DP can only be changed once every 14 days. (Ready to change)`;
-                        cooldownText.classList.remove('text-rose-400'); cooldownText.classList.add('text-amber-400');
-                    }
+                    if(daysSince < 14) { cooldownText.textContent = `You can change your DP in ${14 - daysSince} days.`; cooldownText.classList.remove('text-amber-400'); cooldownText.classList.add('text-rose-400'); }
+                    else { cooldownText.textContent = `Note: DP can only be changed once every 14 days. (Ready to change)`; cooldownText.classList.remove('text-rose-400'); cooldownText.classList.add('text-amber-400'); }
                 }
             } else { document.getElementById('profile-player-id').value = 'SP-' + Math.floor(1000 + Math.random() * 9000); }
-        }
+        };
 
         window.saveProfile = async function() {
             if(!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Login required!"); return; }
             const username = document.getElementById('profile-username').value.trim(); const ign = document.getElementById('profile-ign').value.trim(); const gameUid = document.getElementById('profile-game-uid').value.trim(); const dpSrc = document.getElementById('profile-dp-img').src; const playerId = document.getElementById('profile-player-id').value;
             if(!username || !ign || !gameUid) { window.showToast("Fill all fields!"); return; }
-            
             const userSnap = await getDoc(doc(db, 'users', window.loggedEmail));
             if(userSnap.exists()) {
                 const oldData = userSnap.data();
                 const isDpChanged = oldData.dpBase64 && dpSrc.startsWith('data:image') && oldData.dpBase64 !== dpSrc;
-                
                 if (isDpChanged && oldData.lastDpUpdate) {
                     const daysSince = (Date.now() - oldData.lastDpUpdate) / (1000 * 60 * 60 * 24);
-                    if (daysSince < 14) {
-                        window.showToast(`You can only change DP once every 14 days (${Math.ceil(14 - daysSince)}d left).`);
-                        return;
-                    }
+                    if (daysSince < 14) { window.showToast(`You can only change DP once every 14 days (${Math.ceil(14 - daysSince)}d left).`); return; }
                 }
             }
-
             const snaps = await getDocs(query(collection(db, 'users'), where('username', '==', username)));
             if(!snaps.empty && snaps.docs[0].id !== window.loggedEmail) { window.showToast("Username taken!"); return; }
-            
             const updateData = { email: window.loggedEmail, username, ign, gameUid, playerId, dpBase64: dpSrc.startsWith('data:image') ? dpSrc : '', updatedAt: Date.now() };
             if (!userSnap.exists() || !userSnap.data().dpBase64 || userSnap.data().dpBase64 !== dpSrc) { updateData.lastDpUpdate = Date.now(); }
-
             await setDoc(doc(db, 'users', window.loggedEmail), updateData, { merge: true });
             window.showToast("Profile Saved!"); window.loadProfileUI();
         };
 
-        window.openFullScreenChat = function() { 
+        window.openFullScreenChat = function() {
             if (window.loggedEmail === 'guest') { window.showToast("Guest users cannot chat. Please login with Google."); return; }
-            document.getElementById('chat-fullscreen').classList.add('active'); 
-            setTimeout(() => { const box = document.getElementById('chat-messages'); if(box) box.scrollTop = box.scrollHeight; }, 100); 
-            checkChatBanStatus(); 
+            document.getElementById('chat-fullscreen').classList.add('active');
+            setTimeout(() => { const box = document.getElementById('chat-messages'); if(box) box.scrollTop = box.scrollHeight; }, 100);
+            checkChatBanStatus();
         };
-        
         window.closeFullScreenChat = function() { document.getElementById('chat-fullscreen').classList.remove('active'); };
-        
+
         function checkChatBanStatus() {
             const banWarning = document.getElementById('chat-banned-warning'); const inputArea = document.getElementById('chat-input-area');
             if(myChatBannedUntil > Date.now()) { banWarning.classList.remove('hidden'); inputArea.classList.add('hidden'); } else {
@@ -1311,109 +1282,78 @@
             });
         };
 
+        // ============ ✅ FIXED: CLEANUP OLD CHATS (Promise.all + Error Tracking) ============
         window.cleanupOldChats = function() {
             window.askConfirm("Cleanup Old Chats", "Delete all chat messages older than 48 hours?", async () => {
                 const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
                 try {
                     const snaps = await getDocs(query(collection(db, 'chats'), where('timestamp', '<', cutoffTime)));
-                    snaps.forEach(async (d) => { await deleteDoc(d.ref); });
-                    window.showToast("Old chats cleaned!");
-                } catch(e) { window.showToast("Error cleaning chats: " + e.message); }
+                    if (snaps.empty) { window.showToast("ℹ️ No old messages (>48h) found."); return; }
+                    let deleted = 0, failed = 0, firstError = '';
+                    await Promise.all(snaps.docs.map(async (d) => {
+                        try { await deleteDoc(d.ref); deleted++; }
+                        catch (err) { failed++; if (!firstError) firstError = `${err.code}: ${err.message}`; console.error('❌ Delete failed:', d.id, err.code, err.message); }
+                    }));
+                    if (failed === 0) { window.showToast(`✅ Cleaned ${deleted} old messages!`); }
+                    else if (deleted > 0) { window.showToast(`⚠️ Deleted ${deleted}, failed ${failed}. ${firstError}`); }
+                    else { window.showToast(`❌ All ${failed} deletes failed — ${firstError}`); }
+                } catch (e) { console.error('Cleanup fatal error:', e); window.showToast("Error: " + e.message); }
             }, "Yes, Clean");
         };
 
         window.renderChatMessages = function() {
             const container = document.getElementById('chat-messages'); if (!container) return;
             if (allChatMessages.length === 0) { container.innerHTML = `<div class="text-center text-xs text-slate-500 py-4 mt-10">No messages yet.</div>`; return; }
-            
             container.innerHTML = allChatMessages.map(msg => {
-                const isOwn = (msg.userEmail === window.loggedEmail); 
+                const isOwn = (msg.userEmail === window.loggedEmail);
                 const rowClass = isOwn ? 'chat-row own' : 'chat-row';
                 const bubbleClass = isOwn ? 'chat-bubble chat-own' : 'chat-bubble chat-other';
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
                 const uData = userCache[msg.userEmail] || {};
                 const dp = uData.dpBase64 || `https://ui-avatars.com/api/?name=${uData.username || msg.displayName || 'U'}&background=random`;
                 const nameDisplay = isOwn ? 'You' : window.escapeHTML(uData.username || msg.displayName || window.maskEmail(msg.userEmail));
-
                 let roleIcon = '';
                 if (msg.userEmail === SUPER_ADMIN) roleIcon = ICON_SUPER;
                 else if (window.authorizedAdmins.includes(msg.userEmail)) roleIcon = ICON_ADMIN;
                 else if (window.authorizedHosts.includes(msg.userEmail)) roleIcon = ICON_HOST;
-
                 const editedText = msg.isEdited ? ' (edited)' : '';
-
-                return `
-                    <div class="${rowClass}">
-                        <img src="${dp}" class="chat-avatar" alt="Avatar">
-                        <div class="chat-content">
-                            <span class="chat-meta">${roleIcon} ${nameDisplay} • ${time}${editedText}</span>
-                            <div class="${bubbleClass}" onclick="showChatMenu(event, '${msg.id}', '${msg.userEmail}', '${window.escapeHTML(msg.message)}')">
-                                ${window.escapeHTML(msg.message)}
-                            </div>
-                        </div>
-                    </div>
-                `;
+                return `<div class="${rowClass}"><img src="${dp}" class="chat-avatar" alt="Avatar"><div class="chat-content"><span class="chat-meta">${roleIcon} ${nameDisplay} • ${time}${editedText}</span><div class="${bubbleClass}" onclick="showChatMenu(event, '${msg.id}', '${msg.userEmail}', '${window.escapeHTML(msg.message)}')">${window.escapeHTML(msg.message)}</div></div></div>`;
             }).join('');
-            
             container.scrollTop = container.scrollHeight;
         }
 
         window.showChatMenu = async function(e, msgId, senderEmail, msgText) {
             e.stopPropagation();
             currentChatTargetId = msgId; currentChatTargetEmail = senderEmail; currentChatTargetText = msgText;
-            
             const isAdmin = (window.loggedEmail === SUPER_ADMIN) || window.authorizedAdmins.includes(window.loggedEmail);
             const isOwn = (senderEmail === window.loggedEmail);
-            
             const menu = document.getElementById('chat-action-menu');
             const btnUnsend = document.getElementById('chat-action-unsend'); const btnEdit = document.getElementById('chat-action-edit'); const btnDelete = document.getElementById('chat-action-delete'); const btnBan = document.getElementById('chat-action-ban'); const btnUnban = document.getElementById('chat-action-unban');
-
             [btnUnsend, btnEdit, btnDelete, btnBan, btnUnban].forEach(b => b.style.display = 'none');
-
             if (isOwn) { btnUnsend.style.display = 'flex'; btnEdit.style.display = 'flex'; }
-            if (isAdmin && !isOwn) { 
+            if (isAdmin && !isOwn) {
                 btnDelete.style.display = 'flex';
                 const userSnap = await getDoc(doc(db, 'users', senderEmail));
                 if(userSnap.exists() && userSnap.data().chatBannedUntil > Date.now()) { currentTargetIsBanned = true; btnUnban.style.display = 'flex'; } else { currentTargetIsBanned = false; btnBan.style.display = 'flex'; }
             }
-
             const touchX = e.touches ? e.touches[0].clientX : e.clientX; const touchY = e.touches ? e.touches[0].clientY : e.clientY;
             menu.style.display = 'flex'; menu.style.left = Math.min(touchX, window.innerWidth - 170) + 'px'; menu.style.top = Math.min(touchY, window.innerHeight - 250) + 'px';
         };
-
         window.closeChatMenu = function() { document.getElementById('chat-action-menu').style.display = 'none'; };
 
         window.handleChatAction = async function(action) {
             if (!currentChatTargetId) return;
-            const targetId = currentChatTargetId;
-            const targetEmail = currentChatTargetEmail;
-            const targetText = currentChatTargetText;
+            const targetId = currentChatTargetId; const targetEmail = currentChatTargetEmail; const targetText = currentChatTargetText;
             window.closeChatMenu();
-
             if (action === 'unsend' || action === 'delete') {
-                window.askConfirm("Delete Message", "Are you sure you want to delete this message?", async () => {
-                    await deleteDoc(doc(db, 'chats', targetId));
-                    window.showToast("Message deleted");
-                }, "Delete");
+                window.askConfirm("Delete Message", "Are you sure you want to delete this message?", async () => { await deleteDoc(doc(db, 'chats', targetId)); window.showToast("Message deleted"); }, "Delete");
             } else if (action === 'edit') {
                 const input = document.getElementById('chat-input');
-                if (input) {
-                    input.value = targetText;
-                    input.focus();
-                    await deleteDoc(doc(db, 'chats', targetId));
-                    window.showToast("Edit message in input box & send");
-                }
+                if (input) { input.value = targetText; input.focus(); await deleteDoc(doc(db, 'chats', targetId)); window.showToast("Edit message in input box & send"); }
             } else if (action === 'ban') {
-                window.askConfirm("Ban User", `Ban ${window.maskEmail(targetEmail)} from chatting for 24 hours?`, async () => {
-                    await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: Date.now() + (24 * 60 * 60 * 1000) }, { merge: true });
-                    window.showToast("User banned for 24h");
-                }, "Ban User");
+                window.askConfirm("Ban User", `Ban ${window.maskEmail(targetEmail)} from chatting for 24 hours?`, async () => { await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: Date.now() + (24 * 60 * 60 * 1000) }, { merge: true }); window.showToast("User banned for 24h"); }, "Ban User");
             } else if (action === 'unban') {
-                window.askConfirm("Unban User", `Remove chat ban for ${window.maskEmail(targetEmail)}?`, async () => {
-                    await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: 0 }, { merge: true });
-                    window.showToast("User unbanned");
-                }, "Unban");
+                window.askConfirm("Unban User", `Remove chat ban for ${window.maskEmail(targetEmail)}?`, async () => { await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: 0 }, { merge: true }); window.showToast("User unbanned"); }, "Unban");
             }
         };
 
@@ -1423,15 +1363,9 @@
             if (currentChatMode === 'off') { window.showToast("Chat disabled."); return; }
             const isAdmin = (window.loggedEmail === SUPER_ADMIN) || window.authorizedAdmins.includes(window.loggedEmail);
             if (currentChatMode === 'admin' && !isAdmin) { window.showToast("Admins only."); return; }
-            
             const input = document.getElementById('chat-input'); const msg = input.value.trim(); if (!msg) return; input.value = '';
             let displayName = window.maskEmail(window.loggedEmail); if(currentUserProfile && currentUserProfile.username) displayName = currentUserProfile.username;
-            
-            try { 
-                await addDoc(collection(db, 'chats'), { 
-                    message: msg, userEmail: window.loggedEmail, displayName: displayName, isEdited: false, timestamp: Date.now() 
-                }); 
-            } catch(e) { window.showToast(e.message); }
+            try { await addDoc(collection(db, 'chats'), { message: msg, userEmail: window.loggedEmail, displayName: displayName, isEdited: false, timestamp: Date.now() }); } catch(e) { window.showToast(e.message); }
         };
 
         window.updateChatMode = async function(mode) { await setDoc(doc(db, 'settings', 'chatConfig'), { mode: mode }, { merge: true }); window.showToast("Mode updated"); };
@@ -1440,47 +1374,23 @@
             const c = document.getElementById('public-matches-container'); if (!c) return;
             if (allMatches.length === 0) { c.innerHTML = `<div class="cyber-card p-4 text-center text-xs">No matches.</div>`; return; }
             const isSuper = (window.loggedEmail === SUPER_ADMIN); const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail)); const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail)); const showGmailToStaff = isAdmin || isHost;
-            
+
             c.innerHTML = allMatches.map((m, idx) => {
                 const groups = m.groups ? m.groups.split(',').map(g => g.trim().toUpperCase()) : ['TEAM A', 'TEAM B']; const whatsappMap = m.whatsappMap || {}; const status = m.status || 'not_started';
-                
                 let statusBadge = status === 'playing' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 animate-pulse">LIVE</span>` : (status === 'ended' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300">ENDED</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">UPCOMING</span>`);
-                
-                let typeBadge = m.type === 'free' 
-                    ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 ml-1">FREE ENTRY</span>` 
-                    : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 ml-1">PAID ₹${m.fee}</span>`;
-
+                let typeBadge = m.type === 'free' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 ml-1">FREE ENTRY</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 ml-1">PAID ₹${m.fee}</span>`;
                 const slotsHTML = groups.map(grp => {
                     const teamsInGroup = allTeams.filter(t => t.matchId === m.id && (t.slotGroup || 'TEAM A').toUpperCase() === grp && t.status !== 'banned'); const groupWaLink = whatsappMap[grp] || ''; const isFull = teamsInGroup.length >= (m.slots || 12);
-                    
                     const teamsListHtml = teamsInGroup.map((tm, tIdx) => {
                         let staffDetails = '';
                         if (showGmailToStaff) {
-                            staffDetails = `
-                                <div class="text-[9px] font-mono mt-1 text-emerald-400 space-y-0.5">
-                                    <div>Leader: ${window.escapeHTML(tm.leaderName)} | Ph: ${window.escapeHTML(tm.phoneNumber || 'Private')}</div>
-                                    <div>UIDs: ${window.escapeHTML(tm.gameUid)}, ${window.escapeHTML(tm.member2Uid)}, ${window.escapeHTML(tm.member3Uid)}, ${window.escapeHTML(tm.member4Uid)}</div>
-                                    ${tm.sub1Uid ? `<div>Subs: ${window.escapeHTML(tm.sub1Uid)}, ${window.escapeHTML(tm.sub2Uid)}</div>` : ''}
-                                    ${tm.transitionId ? `<div>UTR: ${window.escapeHTML(tm.transitionId)}</div>` : ''}
-                                    <div class="text-[9px] text-slate-500 font-sans">Gmail: ${window.maskEmail(tm.userEmail) || 'N/A'}</div>
-                                    <button type="button" onclick="copyTeamDetails('${tm.id}')" class="mt-1 px-2 py-0.5 bg-blue-600 text-white rounded font-bold text-[9px] cursor-pointer">📋 Copy All</button>
-                                </div>
-                            `;
+                            staffDetails = `<div class="text-[9px] font-mono mt-1 text-emerald-400 space-y-0.5"><div>Leader: ${window.escapeHTML(tm.leaderName)} | Ph: ${window.escapeHTML(tm.phoneNumber || 'Private')}</div><div>UIDs: ${window.escapeHTML(tm.gameUid)}, ${window.escapeHTML(tm.member2Uid)}, ${window.escapeHTML(tm.member3Uid)}, ${window.escapeHTML(tm.member4Uid)}</div>${tm.sub1Uid ? `<div>Subs: ${window.escapeHTML(tm.sub1Uid)}, ${window.escapeHTML(tm.sub2Uid)}</div>` : ''}${tm.transitionId ? `<div>UTR: ${window.escapeHTML(tm.transitionId)}</div>` : ''}<div class="text-[9px] text-slate-500 font-sans">Gmail: ${window.maskEmail(tm.userEmail) || 'N/A'}</div><button type="button" onclick="copyTeamDetails('${tm.id}')" class="mt-1 px-2 py-0.5 bg-blue-600 text-white rounded font-bold text-[9px] cursor-pointer">📋 Copy All</button></div>`;
                         }
-                        return `<div class="cyber-card px-2.5 py-1.5 rounded flex flex-col gap-1 text-xs">
-                            <div class="flex justify-between items-center w-full">
-                                <span class="font-bold">#${tIdx+1} ${window.escapeHTML(tm.teamName)}</span>
-                                ${groupWaLink ? `<a href="${groupWaLink}" target="_blank" class="text-emerald-500 font-bold text-xs">Chat</a>` : ''}
-                            </div>
-                            ${staffDetails}
-                        </div>`;
+                        return `<div class="cyber-card px-2.5 py-1.5 rounded flex flex-col gap-1 text-xs"><div class="flex justify-between items-center w-full"><span class="font-bold">#${tIdx+1} ${window.escapeHTML(tm.teamName)}</span>${groupWaLink ? `<a href="${groupWaLink}" target="_blank" class="text-emerald-500 font-bold text-xs">Chat</a>` : ''}</div>${staffDetails}</div>`;
                     }).join('');
-
                     return `<div class="cyber-card rounded-xl p-3 space-y-2"><div class="flex items-center justify-between"><div class="text-xs font-bold uppercase">Group ${grp}</div><button onclick="selectMatchSlot('${m.id}', '${window.escapeHTML(m.title || '').replace(/'/g, "\\'")}', '${grp}', '${m.type}', '${m.prize || ''}', '${m.fee || ''}', '${m.upiId || ''}', '${m.qrDataURL || ''}', ${m.upiEnabled !== false}, ${m.qrEnabled !== false}, ${m.slots || 12})" class="btn-theme px-3 py-1.5 text-xs ${isFull ? 'opacity-50 cursor-not-allowed' : ''}" ${isFull ? 'disabled' : ''}>${isFull ? 'Slots Full' : 'Join'}</button></div>${teamsInGroup.length > 0 ? `<div class="mt-2 space-y-1.5 pt-2 border-t" style="border-color: var(--border-color);"><div class="text-[10px] font-bold uppercase flex items-center justify-between" style="color: var(--accent-primary);"><span>Squads (${teamsInGroup.length}/${m.slots || 12}):</span>${groupWaLink ? `<a href="${groupWaLink}" target="_blank" class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px] shadow">Join WhatsApp</a>` : ''}</div><div class="space-y-1">${teamsListHtml}</div></div>` : ''}</div>`;
                 }).join('');
-                
                 let liveStreamBtn = m.youtubeLink ? `<a href="${m.youtubeLink}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold shadow mb-2">🔴 Watch Live</a>` : '';
-                
                 return `<div class="cyber-card p-4 space-y-3"><div class="flex justify-between items-start cursor-pointer" onclick="toggleMatchExpand('${m.id}')"><div><div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-bold" style="color: var(--accent-primary);">#${idx + 1}</span>${statusBadge}${typeBadge}</div><h3 class="text-sm font-bold">${window.escapeHTML(m.title)}</h3><p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted);">🗺️ ${window.escapeHTML(m.map)} | 📅 ${window.escapeHTML(m.time)} | 💰 Prize: ₹${window.escapeHTML(m.prize || '0')}</p>${liveStreamBtn}</div><span class="text-xs font-semibold underline" style="color: var(--accent-primary);">Slots</span></div><div id="slots-box-${m.id}" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t" style="border-color: var(--border-color);">${slotsHTML}</div></div>`;
             }).join('');
             window.renderAdminMatches();
@@ -1490,38 +1400,19 @@
             const container = document.getElementById('roadmap-container'); if (!container) return;
             container.innerHTML = allMatches.length === 0 ? `<div class="cyber-card p-4 text-center text-xs">No roadmap data.</div>` : allMatches.map(m => `
                 <div class="cyber-card p-3 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-xs font-bold">${window.escapeHTML(m.title)}</h3>
-                        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 uppercase">Stage: ${window.escapeHTML(m.stage || 'Finals')}</span>
-                    </div>
+                    <div class="flex justify-between items-center"><h3 class="text-xs font-bold">${window.escapeHTML(m.title)}</h3><span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 uppercase">Stage: ${window.escapeHTML(m.stage || 'Finals')}</span></div>
                     ${m.publishedScoreboards ? m.publishedScoreboards.map(sb => `
                         <div class="space-y-1.5 pt-1.5 border-t" style="border-color: var(--border-color);">
-                            <div class="grid grid-cols-4 gap-1 text-[10px] font-bold uppercase pb-1" style="color: var(--text-muted);">
-                                <span>Team</span><span class="text-center">Place</span><span class="text-center">Kills</span><span class="text-right">Total</span>
-                            </div>
+                            <div class="grid grid-cols-4 gap-1 text-[10px] font-bold uppercase pb-1" style="color: var(--text-muted);"><span>Team</span><span class="text-center">Place</span><span class="text-center">Kills</span><span class="text-right">Total</span></div>
                             ${sb.rankings.map((r, i) => {
                                 const isWinner = (m.stage === 'Finals' && i === 0 && m.status === 'ended');
-                                return `
-                                    <div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''} cursor-pointer hover:border-emerald-500 transition-colors" onclick="showPlayerStats('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}')">
-                                        <div class="flex justify-between items-center">
-                                            <span>#${i+1} ${window.escapeHTML(r.teamName)}</span>
-                                            <span class="text-emerald-400">${r.totalScore} Pts</span>
-                                        </div>
-                                        <div class="grid grid-cols-3 gap-1 text-[10px] font-mono font-normal" style="color: var(--text-muted);">
-                                            <span>Place: ${r.isEliminated ? 'Eliminated' : '#' + r.place}</span>
-                                            <span class="text-center">Kills: ${r.kills}</span>
-                                            <span class="text-right">Total: ${r.totalScore}</span>
-                                        </div>
-                                        ${isWinner ? `<div class="mt-1 p-1 bg-amber-500 text-black text-center text-[10px] font-extrabold rounded uppercase">👑 WINNER - Won ₹${window.escapeHTML(m.prize || '500')}!</div>` : ''}
-                                    </div>
-                                `;
+                                return `<div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''} cursor-pointer hover:border-emerald-500 transition-colors" onclick="showPlayerStats('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}')"><div class="flex justify-between items-center"><span>#${i+1} ${window.escapeHTML(r.teamName)}</span><span class="text-emerald-400">${r.totalScore} Pts</span></div><div class="grid grid-cols-3 gap-1 text-[10px] font-mono font-normal" style="color: var(--text-muted);"><span>Place: ${r.isEliminated ? 'Eliminated' : '#' + r.place}</span><span class="text-center">Kills: ${r.kills}</span><span class="text-right">Total: ${r.totalScore}</span></div>${isWinner ? `<div class="mt-1 p-1 bg-amber-500 text-black text-center text-[10px] font-extrabold rounded uppercase">👑 WINNER - Won ₹${window.escapeHTML(m.prize || '500')}!</div>` : ''}</div>`;
                             }).join('')}
-                        </div>
-                    `).join('') : '<p class="text-[11px]" style="color: var(--text-muted);">Results pending...</p>'}
+                        </div>`).join('') : '<p class="text-[11px]" style="color: var(--text-muted);">Results pending...</p>'}
                 </div>
             `).join('');
         };
-        
+
         window.showPlayerStats = function(teamName) {
             const teamMatches = allMatches.filter(m => m.publishedScoreboards && m.publishedScoreboards.some(sb => sb.rankings.some(r => r.teamName === teamName)));
             let totalMatches = teamMatches.length; let totalWins = 0; let totalKills = 0;
@@ -1530,12 +1421,12 @@
         };
 
         window.toggleMatchExpand = function(id) { const el = document.getElementById(`slots-box-${id}`); if(el) el.classList.toggle('hidden'); };
-        
+
         window.renderAdminMatches = function() {
             const c = document.getElementById('admin-matches-list'); const hc = document.getElementById('host-matches-list');
             const isSuper = (window.loggedEmail === SUPER_ADMIN); const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail)); const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
             const listHTML = allMatches.length === 0 ? `<div class="text-xs text-slate-500">No matches.</div>` : allMatches.map(m => {
-                let canEdit = isAdmin || (isHost && m.createdBy === window.loggedEmail); 
+                let canEdit = isAdmin || (isHost && m.createdBy === window.loggedEmail);
                 let canDelete = isSuper || isAdmin || (isHost && m.createdBy === window.loggedEmail);
                 return `<div class="cyber-card p-2.5 rounded flex items-center justify-between text-xs"><div><div class="font-bold">${window.escapeHTML(m.title)}</div><div class="text-[10px]" style="color: var(--text-muted);">Status: ${m.status} | Type: ${m.type} | By: ${window.maskEmail(m.createdBy)}</div></div><div class="flex items-center gap-1.5"><select onchange="updateMatchStatus('${m.id}', this.value)" class="cyber-input rounded p-1 text-[10px]"><option value="not_started" ${m.status==='not_started'?'selected':''}>Upcoming</option><option value="playing" ${m.status==='playing'?'selected':''}>Playing</option><option value="ended" ${m.status==='ended'?'selected':''}>Ended</option></select><button onclick="editMatch('${m.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer ${canEdit ? '' : 'hidden'}">Edit</button><button onclick="deleteMatch('${m.id}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer ${canDelete ? '' : 'hidden'}">Delete</button></div></div>`;
             }).join('');
@@ -1548,27 +1439,22 @@
                 window.showToast('Status updated');
             }, "Yes, Update");
         };
-        
+
         window.deleteMatch = function(id) {
             const isSuper = (window.loggedEmail === SUPER_ADMIN); const isAdmin = isSuper || (window.authorizedAdmins && window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail)); const isHost = isSuper || (window.authorizedHosts && window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail));
             const matchObj = allMatches.find(m => m.id === id); if(!matchObj) return;
             if (!isSuper && !isAdmin) { if (!isHost) { window.showToast("No permission!"); return; } if (matchObj.createdBy !== window.loggedEmail) { window.showToast("Hosts can only delete their own!"); return; } }
-            
             window.askConfirm("Delete Match", `Are you sure you want to delete '${matchObj.title}' and all its registered teams?`, async () => {
-                await deleteDoc(doc(db, 'matches', id)); 
+                await deleteDoc(doc(db, 'matches', id));
                 const regSnaps = await getDocs(query(collection(db, 'registrations'), where('matchId', '==', id)));
-                regSnaps.forEach(async (d) => {
-                    await deleteDoc(d.ref);
-                    try { await deleteDoc(doc(db, 'registrations_private', d.id)); } catch(e) {}
-                });
+                regSnaps.forEach(async (d) => { await deleteDoc(d.ref); try { await deleteDoc(doc(db, 'registrations_private', d.id)); } catch(e) {} });
                 window.showToast("Match and teams deleted!");
             }, "Yes, Delete");
         };
 
         window.editMatch = function(id) {
             const m = allMatches.find(item => item.id === id); if(!m) return;
-            window.editingMatchId = id; 
-            
+            window.editingMatchId = id;
             const isSuper = (window.loggedEmail === SUPER_ADMIN);
             if (isSuper) {
                 document.getElementById('cm-title').value = m.title || ''; document.getElementById('cm-stage').value = m.stage || 'Semifinals'; document.getElementById('cm-type').value = m.type || 'paid'; toggleMatchTypeFields(m.type || 'paid');
@@ -1592,11 +1478,8 @@
             const matchId = mode === 'sa' ? document.getElementById('sa-calc-match-select').value : document.getElementById('ah-calc-match-select').value;
             if (!matchId) return;
             window.askConfirm("Publish Scoreboard", "Are you sure you want to publish this scoreboard and mark the match as ENDED?", async () => {
-                const placePts = {}; 
-                for(let i=1; i<=10; i++) { 
-                    const inputId = mode === 'sa' ? `pts-${i}` : `ah-pts-${i}`; 
-                    placePts[i] = parseFloat(document.getElementById(inputId)?.value) || 0; 
-                }
+                const placePts = {};
+                for(let i=1; i<=10; i++) { const inputId = mode === 'sa' ? `pts-${i}` : `ah-pts-${i}`; placePts[i] = parseFloat(document.getElementById(inputId)?.value) || 0; }
                 const ptsPerKill = parseFloat(document.getElementById(mode === 'sa' ? 'pts-kill' : 'ah-pts-kill')?.value) || 0;
                 const rankings = []; const rowsSelector = mode === 'sa' ? '#sa-host-teams-rows .team-calc-row' : '#ah-host-teams-rows .team-calc-row';
                 document.querySelectorAll(rowsSelector).forEach(row => {
@@ -1611,17 +1494,12 @@
             }, "Yes, Publish");
         };
 
-        // Populate scoreboard and squad dropdowns
         window.populateAllDropdowns = function() {
             const options = `<option value="">-- Choose Match --</option>` + allMatches.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
-            
-            // Scoreboard Dropdowns
             const saSel = document.getElementById('sa-calc-match-select');
             const ahSel = document.getElementById('ah-calc-match-select');
             if (saSel) { const current = saSel.value; saSel.innerHTML = options; saSel.value = current; }
             if (ahSel) { const current = ahSel.value; ahSel.innerHTML = options; ahSel.value = current; }
-
-            // Squad Filter Dropdowns
             const saSquadFilter = document.getElementById('sa-squad-match-filter');
             const ahSquadFilter = document.getElementById('ah-squad-match-filter');
             const squadOptions = `<option value="">-- All Matches --</option>` + allMatches.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
@@ -1629,7 +1507,6 @@
             if (ahSquadFilter) { const current = ahSquadFilter.value; ahSquadFilter.innerHTML = squadOptions; ahSquadFilter.value = current; }
         }
 
-        // Super Admin Match Form Submission
         document.getElementById('create-match-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             window.askConfirm("Publish / Update Match", "Do you want to publish/update this tournament match now?", () => {
@@ -1646,7 +1523,6 @@
             }, "Yes, Publish");
         });
 
-        // Admin/Host Match Form Submission
         document.getElementById('create-match-form-ah')?.addEventListener('submit', (e) => {
             e.preventDefault();
             window.askConfirm("Publish / Update Match", "Do you want to publish/update this tournament match now?", () => {
@@ -1663,149 +1539,69 @@
             }, "Yes, Publish");
         });
 
-        // FIXED: Strict Phone & 12-Digit UTR Validation + Splits Public Squad Info & Private Vault Info
-        document.getElementById('registration-paid-form')?.addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
+        document.getElementById('registration-paid-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
             const matchId = selectedMatchForReg ? selectedMatchForReg.id : 'general';
             const newTeamName = document.getElementById('paid-teamName').value.trim().toUpperCase();
             const newUid = document.getElementById('paid-gameUid').value.trim();
             const phone = document.getElementById('paid-phoneNumber').value.trim();
             const utr = document.getElementById('paid-transitionId').value.trim();
-
-            if (!/^[6-9][0-9]{9}$/.test(phone)) {
-                window.showToast("❌ Enter a valid 10-digit mobile number!");
-                return;
-            }
-            if (!/^[0-9]{12}$/.test(utr) || /^(\d)\1{11}$/.test(utr) || utr === '123456789012') {
-                window.showToast("❌ Enter a valid 12-digit numeric UPI UTR number!");
-                return;
-            }
-
+            if (!/^[6-9][0-9]{9}$/.test(phone)) { window.showToast("❌ Enter a valid 10-digit mobile number!"); return; }
+            if (!/^[0-9]{12}$/.test(utr) || /^(\d)\1{11}$/.test(utr) || utr === '123456789012') { window.showToast("❌ Enter a valid 12-digit numeric UPI UTR number!"); return; }
             const dupTeam = allTeams.find(t => t.matchId === matchId && t.teamName === newTeamName);
             if(dupTeam) { window.showToast("❌ Team Name already registered for this match!"); return; }
             const dupUid = allTeams.find(t => t.matchId === matchId && (t.gameUid === newUid || t.member2Uid === newUid || t.member3Uid === newUid || t.member4Uid === newUid));
             if(dupUid) { window.showToast("❌ One of the UIDs is already registered!"); return; }
-
             window.askConfirm("Confirm Registration", `Submit registration for team '${newTeamName}'? Please ensure all UIDs and 12-digit UTR are accurate.`, async () => {
-                const newTeamId = 'T' + (100 + allTeams.length + 1); 
+                const newTeamId = 'T' + (100 + allTeams.length + 1);
                 try {
                     await runTransaction(db, async (transaction) => {
                         const matchRef = doc(db, 'matches', matchId);
                         const matchDoc = await transaction.get(matchRef);
                         if (!matchDoc.exists()) throw "Match does not exist!";
-                        
                         const current = matchDoc.data().currentSlots || 0;
                         const max = matchDoc.data().slots || 12;
                         if (current >= max) throw "Slots Full!";
-
                         const newRegRef = doc(collection(db, 'registrations'));
                         const privRegRef = doc(db, 'registrations_private', newRegRef.id);
-
-                        // 1. Public Squad Document (NO Phone, NO UTR, NO Email exposed to public scrapers!)
-                        transaction.set(newRegRef, {
-                            teamId: newTeamId,
-                            teamName: newTeamName,
-                            leaderName: document.getElementById('paid-leaderName').value.trim(),
-                            gameUid: newUid,
-                            member2Uid: document.getElementById('paid-member2Uid').value.trim(),
-                            member3Uid: document.getElementById('paid-member3Uid').value.trim(),
-                            member4Uid: document.getElementById('paid-member4Uid').value.trim(),
-                            sub1Uid: document.getElementById('paid-sub1Uid').value.trim(),
-                            sub2Uid: document.getElementById('paid-sub2Uid').value.trim(),
-                            matchId: matchId,
-                            slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A',
-                            status: 'active',
-                            createdAt: Date.now()
-                        });
-
-                        // 2. Private Registration Vault (Only readable by Admin, Host, or this User)
-                        transaction.set(privRegRef, {
-                            regId: newRegRef.id,
-                            matchId: matchId,
-                            teamName: newTeamName,
-                            hometown: document.getElementById('paid-hometown').value.trim(),
-                            phoneNumber: phone,
-                            transitionId: utr,
-                            userEmail: window.loggedEmail,
-                            createdAt: Date.now()
-                        });
-
+                        transaction.set(newRegRef, { teamId: newTeamId, teamName: newTeamName, leaderName: document.getElementById('paid-leaderName').value.trim(), gameUid: newUid, member2Uid: document.getElementById('paid-member2Uid').value.trim(), member3Uid: document.getElementById('paid-member3Uid').value.trim(), member4Uid: document.getElementById('paid-member4Uid').value.trim(), sub1Uid: document.getElementById('paid-sub1Uid').value.trim(), sub2Uid: document.getElementById('paid-sub2Uid').value.trim(), matchId: matchId, slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A', status: 'active', createdAt: Date.now() });
+                        transaction.set(privRegRef, { regId: newRegRef.id, matchId: matchId, teamName: newTeamName, hometown: document.getElementById('paid-hometown').value.trim(), phoneNumber: phone, transitionId: utr, userEmail: window.loggedEmail, createdAt: Date.now() });
                         transaction.update(matchRef, { currentSlots: increment(1) });
                     });
-                    window.showToast(`Success! ID: ${newTeamId}`); window.switchTab('matches'); 
-                } catch (err) {
-                    window.showToast("Registration failed: " + err);
-                }
+                    window.showToast(`Success! ID: ${newTeamId}`); window.switchTab('matches');
+                } catch (err) { window.showToast("Registration failed: " + err); }
             }, "Yes, Submit");
         });
 
-        document.getElementById('registration-free-form')?.addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
+        document.getElementById('registration-free-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
             const matchId = selectedMatchForReg ? selectedMatchForReg.id : 'general';
             const newTeamName = document.getElementById('free-teamName').value.trim().toUpperCase();
             const newUid = document.getElementById('free-gameUid').value.trim();
             const phone = document.getElementById('free-phoneNumber').value.trim();
-
-            if (!/^[6-9][0-9]{9}$/.test(phone)) {
-                window.showToast("❌ Enter a valid 10-digit mobile number!");
-                return;
-            }
-
+            if (!/^[6-9][0-9]{9}$/.test(phone)) { window.showToast("❌ Enter a valid 10-digit mobile number!"); return; }
             const dupTeam = allTeams.find(t => t.matchId === matchId && t.teamName === newTeamName);
             if(dupTeam) { window.showToast("❌ Team Name already registered for this match!"); return; }
             const dupUid = allTeams.find(t => t.matchId === matchId && (t.gameUid === newUid || t.member2Uid === newUid || t.member3Uid === newUid || t.member4Uid === newUid));
             if(dupUid) { window.showToast("❌ One of the UIDs is already registered!"); return; }
-
             window.askConfirm("Confirm Registration", `Submit free registration for team '${newTeamName}'?`, async () => {
-                const newTeamId = 'T' + (100 + allTeams.length + 1); 
+                const newTeamId = 'T' + (100 + allTeams.length + 1);
                 try {
                     await runTransaction(db, async (transaction) => {
                         const matchRef = doc(db, 'matches', matchId);
                         const matchDoc = await transaction.get(matchRef);
                         if (!matchDoc.exists()) throw "Match does not exist!";
-                        
                         const current = matchDoc.data().currentSlots || 0;
                         const max = matchDoc.data().slots || 12;
                         if (current >= max) throw "Slots Full!";
-
                         const newRegRef = doc(collection(db, 'registrations'));
                         const privRegRef = doc(db, 'registrations_private', newRegRef.id);
-
-                        // 1. Public Squad Document (NO Phone, NO Email exposed to public scrapers!)
-                        transaction.set(newRegRef, {
-                            teamId: newTeamId,
-                            teamName: newTeamName,
-                            leaderName: document.getElementById('free-leaderName').value.trim(),
-                            gameUid: newUid,
-                            member2Uid: document.getElementById('free-member2Uid').value.trim(),
-                            member3Uid: document.getElementById('free-member3Uid').value.trim(),
-                            member4Uid: document.getElementById('free-member4Uid').value.trim(),
-                            sub1Uid: document.getElementById('free-sub1Uid').value.trim(),
-                            sub2Uid: document.getElementById('free-sub2Uid').value.trim(),
-                            matchId: matchId,
-                            slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A',
-                            status: 'active',
-                            createdAt: Date.now()
-                        });
-
-                        // 2. Private Registration Vault
-                        transaction.set(privRegRef, {
-                            regId: newRegRef.id,
-                            matchId: matchId,
-                            teamName: newTeamName,
-                            hometown: document.getElementById('free-hometown').value.trim(),
-                            phoneNumber: phone,
-                            transitionId: '',
-                            userEmail: window.loggedEmail,
-                            createdAt: Date.now()
-                        });
-
+                        transaction.set(newRegRef, { teamId: newTeamId, teamName: newTeamName, leaderName: document.getElementById('free-leaderName').value.trim(), gameUid: newUid, member2Uid: document.getElementById('free-member2Uid').value.trim(), member3Uid: document.getElementById('free-member3Uid').value.trim(), member4Uid: document.getElementById('free-member4Uid').value.trim(), sub1Uid: document.getElementById('free-sub1Uid').value.trim(), sub2Uid: document.getElementById('free-sub2Uid').value.trim(), matchId: matchId, slotGroup: selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A', status: 'active', createdAt: Date.now() });
+                        transaction.set(privRegRef, { regId: newRegRef.id, matchId: matchId, teamName: newTeamName, hometown: document.getElementById('free-hometown').value.trim(), phoneNumber: phone, transitionId: '', userEmail: window.loggedEmail, createdAt: Date.now() });
                         transaction.update(matchRef, { currentSlots: increment(1) });
                     });
-                    window.showToast(`Success! ID: ${newTeamId}`); window.switchTab('matches'); 
-                } catch (err) {
-                    window.showToast("Registration failed: " + err);
-                }
+                    window.showToast(`Success! ID: ${newTeamId}`); window.switchTab('matches');
+                } catch (err) { window.showToast("Registration failed: " + err); }
             }, "Yes, Submit");
         });
 
@@ -1815,43 +1611,33 @@
             const hostHtml = window.authorizedHosts.map(email => `<div class="cyber-card p-2 rounded flex justify-between items-center text-xs"><span class="flex items-center gap-1">${ICON_HOST} ${window.escapeHTML(email)}</span><button onclick="removeStaff('${window.escapeHTML(email)}', 'host')" class="px-2 py-0.5 bg-rose-600 text-white rounded font-bold text-[10px]">Remove</button></div>`).join('');
             if(hostsContainer) hostsContainer.innerHTML = hostHtml; if(hostsContainerAH) hostsContainerAH.innerHTML = hostHtml;
         };
-        
-        window.removeStaff = function(email, role) { 
+
+        window.removeStaff = function(email, role) {
             const isSuper = (window.loggedEmail === SUPER_ADMIN);
             const isAdmin = isSuper || window.authorizedAdmins.map(e => e.toLowerCase()).includes(window.loggedEmail);
-            
             if(role === 'admin' && !isSuper) { window.showToast("Only Super Admin can remove Admins!"); return; }
             if(role === 'host' && !isAdmin) { window.showToast("Only Admins can remove Hosts!"); return; }
-            
             window.askConfirm("Remove Staff", `Are you sure you want to remove ${email} from ${role.toUpperCase()} role?`, async () => {
-                if(role==='admin'){ window.authorizedAdmins = window.authorizedAdmins.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); } 
-                else { window.authorizedHosts = window.authorizedHosts.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); } 
+                if(role==='admin'){ window.authorizedAdmins = window.authorizedAdmins.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); }
+                else { window.authorizedHosts = window.authorizedHosts.filter(e => e.toLowerCase() !== email.toLowerCase()); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); }
                 window.showToast("Removed"); window.renderStaffsLists();
             }, "Yes, Remove");
         };
-        
-        window.handleAddStaff = function(email, role) { 
-            email = email.trim().toLowerCase(); 
-            if(!email || !email.includes('@')) { window.showToast("Invalid email"); return; } 
-            
+
+        window.handleAddStaff = function(email, role) {
+            email = email.trim().toLowerCase();
+            if(!email || !email.includes('@')) { window.showToast("Invalid email"); return; }
             const isSuper = (window.loggedEmail === SUPER_ADMIN);
             const isAdmin = isSuper || window.authorizedAdmins.map(e => e.toLowerCase()).includes(window.loggedEmail);
-
             if (role === 'admin' && !isSuper) { window.showToast("Only Super Admin can add Admins!"); return; }
             if (role === 'host' && !isAdmin) { window.showToast("Only Admins can add Hosts!"); return; }
-            
             window.askConfirm("Add Staff", `Add ${email} as ${role.toUpperCase()}?`, async () => {
-                if (role === 'admin') { 
-                    if(!window.authorizedAdmins.includes(email)) window.authorizedAdmins.push(email); 
-                    await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); 
-                } else { 
-                    if(!window.authorizedHosts.includes(email)) window.authorizedHosts.push(email); 
-                    await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); 
-                } 
+                if (role === 'admin') { if(!window.authorizedAdmins.includes(email)) window.authorizedAdmins.push(email); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); }
+                else { if(!window.authorizedHosts.includes(email)) window.authorizedHosts.push(email); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); }
                 window.showToast("Added"); window.renderStaffsLists();
             }, "Yes, Add");
         }
-        
+
         document.getElementById('add-staff-form')?.addEventListener('submit', (e) => { e.preventDefault(); window.handleAddStaff(document.getElementById('staff-email-input').value, document.getElementById('staff-role-select').value); e.target.reset(); });
         document.getElementById('add-host-form-ah')?.addEventListener('submit', (e) => { e.preventDefault(); window.handleAddStaff(document.getElementById('host-email-input-ah').value, 'host'); e.target.reset(); });
 
@@ -1871,79 +1657,45 @@
         };
 
         window.renderSquadsManagementList = function(teamsList = allTeams) {
-            // SA Container
-            const containerSA = document.getElementById('teams-container-sa'); 
+            const containerSA = document.getElementById('teams-container-sa');
             if(containerSA) {
                 const totalPages = Math.ceil(teamsList.length / SQUADS_PER_PAGE) || 1;
                 if (currentSquadPageSA > totalPages) currentSquadPageSA = totalPages;
                 document.getElementById('squad-page-info-sa').textContent = `Page ${currentSquadPageSA} / ${totalPages}`;
                 const startIdx = (currentSquadPageSA - 1) * SQUADS_PER_PAGE;
                 const paginatedTeams = teamsList.slice(startIdx, startIdx + SQUADS_PER_PAGE);
-
-                if(paginatedTeams.length === 0) { 
-                    containerSA.innerHTML = `<div class="cyber-card p-4 text-center text-xs">No squads.</div>`; 
-                } else {
-                    containerSA.innerHTML = paginatedTeams.map(t => generateSquadCardHTML(t)).join('');
-                }
+                if(paginatedTeams.length === 0) { containerSA.innerHTML = `<div class="cyber-card p-4 text-center text-xs">No squads.</div>`; }
+                else { containerSA.innerHTML = paginatedTeams.map(t => generateSquadCardHTML(t)).join(''); }
             }
-
-            // AH Container
-            const containerAH = document.getElementById('teams-container-ah'); 
+            const containerAH = document.getElementById('teams-container-ah');
             if(containerAH) {
                 const totalPages = Math.ceil(teamsList.length / SQUADS_PER_PAGE) || 1;
                 if (currentSquadPageAH > totalPages) currentSquadPageAH = totalPages;
                 document.getElementById('squad-page-info-ah').textContent = `Page ${currentSquadPageAH} / ${totalPages}`;
                 const startIdx = (currentSquadPageAH - 1) * SQUADS_PER_PAGE;
                 const paginatedTeams = teamsList.slice(startIdx, startIdx + SQUADS_PER_PAGE);
-
-                if(paginatedTeams.length === 0) { 
-                    containerAH.innerHTML = `<div class="cyber-card p-4 text-center text-xs">No squads.</div>`; 
-                } else {
-                    containerAH.innerHTML = paginatedTeams.map(t => generateSquadCardHTML(t)).join('');
-                }
+                if(paginatedTeams.length === 0) { containerAH.innerHTML = `<div class="cyber-card p-4 text-center text-xs">No squads.</div>`; }
+                else { containerAH.innerHTML = paginatedTeams.map(t => generateSquadCardHTML(t)).join(''); }
             }
         };
 
         function generateSquadCardHTML(t) {
-            return `
-                <div class="cyber-card p-3 rounded space-y-2 text-xs">
-                    <div class="flex justify-between items-center border-b pb-1" style="border-color: var(--border-color);">
-                        <div class="font-bold uppercase text-sm" style="color: var(--accent-primary);">${window.escapeHTML(t.teamName)}</div>
-                        <button type="button" onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}', '${t.matchId}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px] cursor-pointer">Remove</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
-                        <div>ID: ${t.teamId}</div>
-                        <div>Ph: ${window.escapeHTML(t.phoneNumber || 'Private')}</div>
-                        <div>Leader: ${window.escapeHTML(t.leaderName)}</div>
-                        <div>City: ${window.escapeHTML(t.hometown || 'N/A')}</div>
-                        <div class="col-span-2">UIDs: ${window.escapeHTML(t.gameUid)}, ${window.escapeHTML(t.member2Uid)}, ${window.escapeHTML(t.member3Uid)}, ${window.escapeHTML(t.member4Uid)}</div>
-                        ${t.sub1Uid ? `<div class="col-span-2">Subs: ${window.escapeHTML(t.sub1Uid)}, ${window.escapeHTML(t.sub2Uid)}</div>` : ''}
-                        <div class="col-span-2">UTR: ${window.escapeHTML(t.transitionId) || 'N/A'}</div>
-                        <div class="col-span-2 text-slate-500">Mail: ${window.maskEmail(t.userEmail)}</div>
-                    </div>
-                    <button type="button" onclick="copyTeamDetails('${t.id}')" class="w-full py-1 bg-blue-600 text-white rounded font-bold text-[10px] mt-1 cursor-pointer">📋 Copy Full Details</button>
-                </div>
-            `;
+            return `<div class="cyber-card p-3 rounded space-y-2 text-xs"><div class="flex justify-between items-center border-b pb-1" style="border-color: var(--border-color);"><div class="font-bold uppercase text-sm" style="color: var(--accent-primary);">${window.escapeHTML(t.teamName)}</div><button type="button" onclick="removeIndividualTeam('${t.id}', '${window.escapeHTML(t.teamName)}', '${t.matchId}')" class="px-2 py-1 bg-rose-600 text-white rounded font-bold text-[10px] cursor-pointer">Remove</button></div><div class="grid grid-cols-2 gap-1 font-mono text-[10px]"><div>ID: ${t.teamId}</div><div>Ph: ${window.escapeHTML(t.phoneNumber || 'Private')}</div><div>Leader: ${window.escapeHTML(t.leaderName)}</div><div>City: ${window.escapeHTML(t.hometown || 'N/A')}</div><div class="col-span-2">UIDs: ${window.escapeHTML(t.gameUid)}, ${window.escapeHTML(t.member2Uid)}, ${window.escapeHTML(t.member3Uid)}, ${window.escapeHTML(t.member4Uid)}</div>${t.sub1Uid ? `<div class="col-span-2">Subs: ${window.escapeHTML(t.sub1Uid)}, ${window.escapeHTML(t.sub2Uid)}</div>` : ''}<div class="col-span-2">UTR: ${window.escapeHTML(t.transitionId) || 'N/A'}</div><div class="col-span-2 text-slate-500">Mail: ${window.maskEmail(t.userEmail)}</div></div><button type="button" onclick="copyTeamDetails('${t.id}')" class="w-full py-1 bg-blue-600 text-white rounded font-bold text-[10px] mt-1 cursor-pointer">📋 Copy Full Details</button></div>`;
         }
-        
-        window.removeIndividualTeam = function(teamId, teamName, matchId) { 
+
+        window.removeIndividualTeam = function(teamId, teamName, matchId) {
             window.askConfirm("Remove Team", `Are you sure you want to remove squad '${teamName}'?`, async () => {
-                await deleteDoc(doc(db, 'registrations', teamId)); 
+                await deleteDoc(doc(db, 'registrations', teamId));
                 try { await deleteDoc(doc(db, 'registrations_private', teamId)); } catch(e) {}
-                if(matchId && matchId !== 'general') {
-                    await updateDoc(doc(db, 'matches', matchId), { currentSlots: increment(-1) });
-                }
+                if(matchId && matchId !== 'general') { await updateDoc(doc(db, 'matches', matchId), { currentSlots: increment(-1) }); }
                 window.showToast("Removed!");
             }, "Yes, Remove");
         };
-        
+
         window.removeAllSquads = function() {
             window.askConfirm("Remove ALL Squads", "WARNING: This will permanently delete ALL registered squads across all matches! Proceed?", async () => {
                 const snaps = await getDocs(collection(db, 'registrations'));
-                snaps.forEach(async (d) => {
-                    await deleteDoc(d.ref);
-                    try { await deleteDoc(doc(db, 'registrations_private', d.id)); } catch(e) {}
-                });
+                snaps.forEach(async (d) => { await deleteDoc(d.ref); try { await deleteDoc(doc(db, 'registrations_private', d.id)); } catch(e) {} });
                 window.showToast("All removed!");
             }, "Yes, Delete All");
         };
@@ -1957,91 +1709,41 @@
                 window.showToast("Toggled");
             }, "Yes, Toggle");
         };
-        
+
         window.saveLogoSettings = function() { const file = document.getElementById('logo-file-input').files[0]; if(!file) return window.showToast("Select file"); if(file.size > 716800) return window.showToast("Image is too large! Max 700KB allowed."); window.compressImageAndGetBase64(file, async (b64) => { try { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: b64 }, { merge: true }); window.showToast("Logo saved"); } catch(err) { window.showToast("Error: " + err.message); } }); };
-        window.removeLogoSettings = function() {
-            window.askConfirm("Remove Brand Logo", "Remove the custom logo and restore the default icon?", async () => {
-                await setDoc(doc(db, 'settings', 'config'), { logoDataURL: "" }, { merge: true });
-                window.showToast("Logo removed");
-            }, "Remove");
-        };
+        window.removeLogoSettings = function() { window.askConfirm("Remove Brand Logo", "Remove the custom logo and restore the default icon?", async () => { await setDoc(doc(db, 'settings', 'config'), { logoDataURL: "" }, { merge: true }); window.showToast("Logo removed"); }, "Remove"); };
         window.saveSongSettings = function() { const file = document.getElementById('music-file-input').files[0]; if(!file) return window.showToast("Select file"); if(file.size > 716800) return window.showToast("Song is too large! Max 700KB allowed."); const reader = new FileReader(); reader.onload = async (e) => { try { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: e.target.result }, { merge: true }); window.showToast("Song saved"); } catch(err) { window.showToast("Error: " + err.message); } }; reader.readAsDataURL(file); };
-        window.removeSongSettings = function() {
-            window.askConfirm("Remove Background Song", "Are you sure you want to remove the background music?", async () => {
-                await setDoc(doc(db, 'settings', 'config'), { musicDataURL: "" }, { merge: true });
-                window.showToast("Song removed");
-            }, "Remove");
-        };
-        
-        document.getElementById('tournament-settings-form')?.addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
-            const data = { 
-                brandName: document.getElementById('edit-brand-name').value, 
-                heroBadge: document.getElementById('edit-hero-badge').value,
-                heroTitle: document.getElementById('edit-hero-title').value, 
-                heroSubtitle: document.getElementById('edit-hero-subtitle').value,
-                f1: document.getElementById('edit-f1').value,
-                f2: document.getElementById('edit-f2').value,
-                f3: document.getElementById('edit-f3').value,
-                f4: document.getElementById('edit-f4').value,
-                rules: document.getElementById('edit-rules').value
-            }; 
-            await setDoc(doc(db, 'settings', 'config'), data, { merge: true }); 
-            window.showToast("Text saved"); 
+        window.removeSongSettings = function() { window.askConfirm("Remove Background Song", "Are you sure you want to remove the background music?", async () => { await setDoc(doc(db, 'settings', 'config'), { musicDataURL: "" }, { merge: true }); window.showToast("Song removed"); }, "Remove"); };
+
+        document.getElementById('tournament-settings-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = { brandName: document.getElementById('edit-brand-name').value, heroBadge: document.getElementById('edit-hero-badge').value, heroTitle: document.getElementById('edit-hero-title').value, heroSubtitle: document.getElementById('edit-hero-subtitle').value, f1: document.getElementById('edit-f1').value, f2: document.getElementById('edit-f2').value, f3: document.getElementById('edit-f3').value, f4: document.getElementById('edit-f4').value, rules: document.getElementById('edit-rules').value };
+            await setDoc(doc(db, 'settings', 'config'), data, { merge: true });
+            window.showToast("Text saved");
         });
 
         window.compressImageAndGetBase64 = function(file, callback) { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = function(e) { const img = new Image(); img.src = e.target.result; img.onload = function() { const canvas = document.createElement('canvas'); const MAX=250; let w=img.width, h=img.height; if(w>h){ if(w>MAX){ h*=MAX/w; w=MAX; } } else { if(h>MAX){ w*=MAX/h; h=MAX; } } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); callback(canvas.toDataURL('image/jpeg',0.7)); } } };
         window.selectMatchSlot = function(id, title, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots) { if (window.loggedEmail === 'guest') { window.showToast("Login required!"); return; } selectedMatchForReg = { id, title: `${title} (${group})`, group, type, prize, entryFee, upiId, qrDataURL, upiEnabled, qrEnabled, maxSlots }; if (type === 'free') { document.getElementById('reg-free-match-title').textContent = `${title} - Prize: ₹${prize}`; window.switchTab('register-free'); } else { document.getElementById('reg-paid-match-title').textContent = `${title} - Fee: ₹${entryFee} | Prize: ₹${prize}`; let hasPay = false; if (upiEnabled && upiId) { document.getElementById('reg-upi-pay-link').href = `upi://pay?pa=${upiId}&pn=SattaPai&am=${entryFee}.00&cu=INR`; document.getElementById('reg-paid-payment-box').classList.remove('hidden'); hasPay = true; } if (qrEnabled && qrDataURL) { document.getElementById('reg-qr-img').src = qrDataURL; hasPay = true; } if(!hasPay) document.getElementById('reg-paid-payment-box').classList.add('hidden'); window.switchTab('register-paid'); } };
-        
+
         window.toggleMatchTypeFields = function(type) { const upi = document.getElementById('cm-upi-container'); const fee = document.getElementById('cm-fee-container'); const toggles = document.getElementById('cm-payment-toggles'); const qr = document.getElementById('cm-qr-upload-container'); if(type === 'free') { fee.classList.add('hidden'); upi.classList.add('hidden'); toggles.classList.add('hidden'); qr.classList.add('hidden'); } else { fee.classList.remove('hidden'); upi.classList.remove('hidden'); toggles.classList.remove('hidden'); qr.classList.remove('hidden'); } };
         window.toggleMatchTypeFieldsAH = function(type) { const upi = document.getElementById('cm-upi-container-ah'); const fee = document.getElementById('cm-fee-container-ah'); const toggles = document.getElementById('cm-payment-toggles-ah'); const qr = document.getElementById('cm-qr-upload-container-ah'); if(type === 'free') { fee.classList.add('hidden'); upi.classList.add('hidden'); toggles.classList.add('hidden'); qr.classList.add('hidden'); } else { fee.classList.remove('hidden'); upi.classList.remove('hidden'); toggles.classList.remove('hidden'); qr.classList.remove('hidden'); } };
-        
+
         window.updateDynamicWhatsAppInputs = function() { const groupsStr = document.getElementById('cm-groups')?.value || 'TEAM A, TEAM B'; const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const container = document.getElementById('whatsapp-inputs-list'); if(!container) return; container.innerHTML = groups.map((g, idx) => `<div class="flex items-center gap-1.5"><span class="text-[10px] font-bold w-16 truncate" style="color: var(--accent-primary);">${g}:</span><input type="text" id="wa-link-${idx}" placeholder="WhatsApp Link" class="cyber-input flex-1 px-2 py-1 text-xs"></div>`).join(''); };
         window.updateDynamicWhatsAppInputsAH = function() { const groupsStr = document.getElementById('cm-groups-ah')?.value || 'TEAM A, TEAM B'; const groups = groupsStr.split(',').map(g => g.trim().toUpperCase()).filter(g => g.length > 0); const container = document.getElementById('whatsapp-inputs-list-ah'); if(!container) return; container.innerHTML = groups.map((g, idx) => `<div class="flex items-center gap-1.5"><span class="text-[10px] font-bold w-16 truncate" style="color: var(--accent-primary);">${g}:</span><input type="text" id="wa-link-ah-${idx}" placeholder="WhatsApp Link" class="cyber-input flex-1 px-2 py-1 text-xs"></div>`).join(''); };
-        
+
         window.switchSASub = function(sub) { ['score', 'match', 'users', 'staffs', 'squads', 'settings'].forEach(t => { document.getElementById('sas-sec-' + t)?.classList.add('hidden'); document.getElementById('sas-btn-' + t)?.classList.replace('btn-theme', 'cyber-card'); }); document.getElementById('sas-sec-' + sub)?.classList.remove('hidden'); document.getElementById('sas-btn-' + sub)?.classList.replace('cyber-card', 'btn-theme'); };
         window.switchAHSub = function(sub) { ['match', 'score', 'staffs', 'squads'].forEach(t => { document.getElementById('ah-sec-' + t)?.classList.add('hidden'); document.getElementById('ah-btn-' + t)?.classList.replace('btn-theme', 'cyber-card'); }); document.getElementById('ah-sec-' + sub)?.classList.remove('hidden'); document.getElementById('ah-btn-' + sub)?.classList.replace('cyber-card', 'btn-theme'); };
-        
-        window.checkLoginState = function() { 
-            const ov=document.getElementById('google-login-overlay'), sa=document.getElementById('console-super-admin'), ah=document.getElementById('console-admin-host'), us=document.getElementById('console-user'), pb=document.getElementById('menu-admin-portal-btn'); 
-            if(!window.loggedEmail){ 
-                if(ov) ov.classList.remove('hidden'); 
-                if(pb) pb.classList.add('hidden'); 
-                return; 
-            } 
-            if(ov) ov.classList.add('hidden'); 
-            
-            const isS=(window.loggedEmail===SUPER_ADMIN), 
-                  isA=isS||window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail), 
-                  isH=isS||window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail); 
-                  
-            if(isS||isA||isH){ 
-                if(pb) pb.classList.remove('hidden'); 
-            }else{ 
-                if(pb) pb.classList.add('hidden'); 
-            } 
-            
-            if(isS){ 
-                if(sa) sa.classList.remove('hidden'); 
-                if(ah) ah.classList.add('hidden'); 
-                if(us) us.classList.add('hidden'); 
-            } else if(isA || isH){ 
-                if(sa) sa.classList.add('hidden'); 
-                if(ah) ah.classList.remove('hidden'); 
-                if(us) us.classList.add('hidden'); 
-                
-                const staffsBtn = document.getElementById('ah-btn-staffs');
-                if(staffsBtn) {
-                    if(isA) staffsBtn.classList.remove('hidden');
-                    else staffsBtn.classList.add('hidden');
-                }
-                document.getElementById('ah-title-lbl').textContent = isA ? "🛡️ Admin Console" : "🎮 Match Host Console";
-            } else { 
-                if(sa) sa.classList.add('hidden'); 
-                if(ah) ah.classList.add('hidden'); 
-                if(us) us.classList.remove('hidden'); 
-                document.getElementById('user-email-lbl').textContent=window.loggedEmail==='guest'?'Guest':window.maskEmail(window.loggedEmail); 
-            } 
+
+        window.checkLoginState = function() {
+            const ov=document.getElementById('google-login-overlay'), sa=document.getElementById('console-super-admin'), ah=document.getElementById('console-admin-host'), us=document.getElementById('console-user'), pb=document.getElementById('menu-admin-portal-btn');
+            if(!window.loggedEmail){ if(ov) ov.classList.remove('hidden'); if(pb) pb.classList.add('hidden'); if(typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState(); return; }
+            if(ov) ov.classList.add('hidden');
+            const isS=(window.loggedEmail===SUPER_ADMIN), isA=isS||window.authorizedAdmins.map(e=>e.toLowerCase()).includes(window.loggedEmail), isH=isS||window.authorizedHosts.map(e=>e.toLowerCase()).includes(window.loggedEmail);
+            if(isS||isA||isH){ if(pb) pb.classList.remove('hidden'); }else{ if(pb) pb.classList.add('hidden'); }
+            if(isS){ if(sa) sa.classList.remove('hidden'); if(ah) ah.classList.add('hidden'); if(us) us.classList.add('hidden'); }
+            else if(isA || isH){ if(sa) sa.classList.add('hidden'); if(ah) ah.classList.remove('hidden'); if(us) us.classList.add('hidden'); const staffsBtn = document.getElementById('ah-btn-staffs'); if(staffsBtn) { if(isA) staffsBtn.classList.remove('hidden'); else staffsBtn.classList.add('hidden'); } document.getElementById('ah-title-lbl').textContent = isA ? "🛡️ Admin Console" : "🎮 Match Host Console"; }
+            else { if(sa) sa.classList.add('hidden'); if(ah) ah.classList.add('hidden'); if(us) us.classList.remove('hidden'); document.getElementById('user-email-lbl').textContent=window.loggedEmail==='guest'?'Guest':window.maskEmail(window.loggedEmail); }
+            if(typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState();
         };
 
         window.trackVisitorStats = async function() { try{ const sRef=doc(db,'settings','analytics'), snap=await getDoc(sRef), now=Date.now(), tma=now-180000, da=now-86400000; let v=[], tot=1; if(snap.exists()){ const d=snap.data(); v=d.visitors||[]; tot=(d.total||0)+1; } v.push({id:window.loggedEmail||('g_'+Math.random()),time:now}); const alc=v.filter(x=>x.time>tma).length; v=v.filter(x=>x.time>da); await setDoc(sRef,{total:tot,visitors:v},{merge:true}); if(document.getElementById('stat-total-visitors')) document.getElementById('stat-total-visitors').textContent=tot; if(document.getElementById('stat-daily-visitors')) document.getElementById('stat-daily-visitors').textContent=v.length; if(document.getElementById('stat-live-users')) document.getElementById('stat-live-users').textContent=Math.max(1,alc); }catch(e){} };
@@ -2063,16 +1765,16 @@
         };
         onAuthStateChanged(auth, u=>{ if(u){ window.loggedEmail=u.email.toLowerCase(); try { localStorage.setItem('satta_pai_auth_email',window.loggedEmail); } catch(e){} }else{ try { if(localStorage.getItem('satta_pai_auth_email')!=='guest'){ window.loggedEmail=localStorage.getItem('satta_pai_auth_email')||''; } } catch(e){} } window.checkLoginState(); window.setupPrivateDataListeners(); });
 
-        onSnapshot(collection(db, 'matches'), snap => { 
-            allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); 
-            window.allMatches = allMatches; // Keep global reference in sync for copy functions!
-            window.renderPublicMatches(); 
-            window.renderRoadmapTab(); 
-            window.populateAllDropdowns(); 
+        onSnapshot(collection(db, 'matches'), snap => {
+            allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+            window.allMatches = allMatches;
+            window.renderPublicMatches();
+            window.renderRoadmapTab();
+            window.populateAllDropdowns();
         });
-        
-        onSnapshot(collection(db, 'registrations'), snap => { 
-            publicTeams = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+
+        onSnapshot(collection(db, 'registrations'), snap => {
+            publicTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             mergePublicAndPrivateTeams();
         });
     </script>
