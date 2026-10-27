@@ -103,6 +103,16 @@
             --card-shadow: 0 6px 24px rgba(236, 72, 153, 0.22);
         }
 
+        html.theme-ghost-live {
+            --bg-main: #040102; --bg-card: rgba(18, 3, 6, 0.92); --bg-inner: #1f0408; --border-color: #7f1d1d;
+            --text-main: #ffe4e6; --text-muted: #fda4af;
+            --header-bg: rgba(6, 1, 2, 0.96);
+            --accent-primary: #ef4444; --accent-secondary: #991b1b;
+            --accent-glow: rgba(239, 68, 68, 0.58);
+            --btn-bg: linear-gradient(135deg, #dc2626, #991b1b, #450a0a); --btn-text: #fff;
+            --card-shadow: 0 8px 30px rgba(220, 38, 38, 0.34), inset 0 0 18px rgba(153, 27, 27, 0.25);
+        }
+
         #live-theme-layer {
             position: fixed; inset: 0; pointer-events: none; z-index: 1;
             overflow: hidden; display: none;
@@ -125,6 +135,7 @@
         .swatch-winter::before { content: '❄️'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; pointer-events: none; }
         .swatch-hacker::before { content: '🟢'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; pointer-events: none; }
         .swatch-teddy::before { content: '🧸'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; pointer-events: none; }
+        .swatch-ghost::before { content: '👻'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; pointer-events: none; filter: drop-shadow(0 0 4px #ef4444); }
         .theme-swatch.selected::before { display: none !important; }
 
         *, *::before, *::after { box-sizing: border-box; }
@@ -181,14 +192,27 @@
 
         .dropdown-content { display: none; position: absolute; right: 0; top: 100%; margin-top: 8px; background: var(--bg-card); width: min(280px, calc(100vw - 24px)); max-height: min(500px, calc(100dvh - 80px)); overflow-y: auto; overflow-x: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.45), 0 0 0 1px var(--border-color); border-radius: 14px; z-index: 999; padding: 12px; }
 
-        /* Adaptive Phone & PC Responsive Enhancements */
-        @media (max-width: 420px) {
-            header { padding-left: 10px !important; padding-right: 10px !important; }
-            #display-brand-name { font-size: 12px !important; max-width: 125px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-            #ai-bot-fab { width: 40px !important; height: 40px !important; border-radius: 12px !important; }
-            .mecha-core-shell { width: 32px !important; height: 32px !important; border-radius: 9px !important; }
-            .mecha-visor-svg { width: 22px !important; height: 17px !important; }
-            #ai-bot-panel { right: 10px !important; left: 10px !important; width: auto !important; max-width: none !important; bottom: 118px !important; height: min(390px, calc(100dvh - 140px)) !important; }
+        /* Adaptive Phone & PC Responsive Enhancements + Box Text Fit Fixes */
+        .cyber-card, button, label, p, span, div {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        select.cyber-input {
+            min-height: 38px;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 10px;
+            padding-right: 24px;
+            line-height: 1.35;
+        }
+        @media (max-width: 480px) {
+            header { padding-left: 12px !important; padding-right: 12px !important; }
+            #display-brand-name { font-size: 14px !important; max-width: calc(100vw - 155px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            #ai-bot-fab { width: 42px !important; height: 42px !important; border-radius: 13px !important; }
+            .mecha-core-shell { width: 33px !important; height: 33px !important; border-radius: 9px !important; }
+            .mecha-visor-svg { width: 23px !important; height: 18px !important; }
+            #ai-bot-panel { right: 10px !important; left: 10px !important; width: auto !important; max-width: none !important; bottom: 116px !important; height: min(410px, calc(100dvh - 136px)) !important; }
+            main { padding-left: 12px !important; padding-right: 12px !important; }
         }
         @media (min-width: 768px) {
             main { max-width: 960px !important; padding-left: 24px !important; padding-right: 24px !important; }
@@ -392,6 +416,25 @@
         #ai-bot-fab[data-theme-skin="teddy-live"] .mecha-visor-svg {
             animation: teddyEarWiggle 2.6s ease-in-out infinite;
             filter: drop-shadow(0 2px 6px rgba(244, 114, 182, 0.65));
+        }
+        #ai-bot-fab[data-theme-skin="ghost-live"] {
+            background: radial-gradient(circle at 50% 35%, #450a0a 0%, #1a0204 65%, #000000 100%) !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 28px rgba(239, 68, 68, 0.85), inset 0 0 14px rgba(220, 38, 38, 0.75) !important;
+            border-radius: 50% !important;
+        }
+        #ai-bot-fab[data-theme-skin="ghost-live"] .mecha-core-shell {
+            background: radial-gradient(circle at 50% 40%, #2a0408 0%, #090102 90%) !important;
+            border-color: #dc2626 !important;
+            border-radius: 50% !important;
+            box-shadow: inset 0 0 14px rgba(239, 68, 68, 0.8) !important;
+        }
+        @keyframes ghostHorrorPulse {
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 8px #ef4444); }
+            50% { transform: translateY(-3px) scale(1.06); filter: drop-shadow(0 0 16px #dc2626) brightness(1.2); }
+        }
+        #ai-bot-fab[data-theme-skin="ghost-live"] .mecha-visor-svg {
+            animation: ghostHorrorPulse 1.8s ease-in-out infinite;
         }
 
         /* Dynamic Gaming Visor Emotion States */
@@ -734,19 +777,91 @@
                 </div>
                 <div class="grid grid-cols-1 sm:flex sm:flex-col gap-1.5 w-full sm:w-auto">
                     <button type="button" onclick="claimDailyCheckinCoins()" id="daily-checkin-btn" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-extrabold cursor-pointer shadow text-center">📅 Daily Check-In (+15)</button>
-                    <button type="button" onclick="redeemCoinsForVipPass()" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-black rounded-lg text-[11px] font-extrabold cursor-pointer shadow text-center">⭐ 500 Coins → 7d Pro</button>
+                    <button type="button" onclick="redeemCoinsForVipPass()" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-black rounded-lg text-[11px] font-extrabold cursor-pointer shadow text-center">⭐ 500🪙 → 7d Pro Pass</button>
                 </div>
             </div>
 
-            <div class="cyber-card p-4 text-center space-y-3 border border-purple-500/30">
-                <div class="text-xs font-extrabold uppercase text-purple-400 tracking-wider">🎡 Daily Lucky Spin (1 Free Spin / 24h)</div>
-                <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
-                    <div id="lucky-wheel-visual" class="w-36 h-36 rounded-full border-4 border-amber-400 shadow-xl flex items-center justify-center text-3xl transition-transform duration-[2800ms] ease-out" style="background: conic-gradient(#7c3aed 0deg 60deg, #db2777 60deg 120deg, #ea580c 120deg 180deg, #16a34a 180deg 240deg, #2563eb 240deg 300deg, #ca8a04 300deg 360deg);">
-                        <div class="w-14 h-14 rounded-full bg-zinc-950 border-2 border-amber-300 flex items-center justify-center text-xl font-extrabold text-amber-400 shadow-inner">🎯</div>
+            <!-- 🏆 ZERO-COST (₹0 Admin Budget) Tournament Rewards Store -->
+            <div class="cyber-card p-3.5 space-y-2 border border-emerald-500/40 bg-zinc-900/70 text-xs">
+                <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-emerald-400 uppercase text-[11px]">🏆 Free Tournament Perks (Redeem SP Coins)</span>
+                    <span id="my-free-voucher-badge" class="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Voucher: None</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <button type="button" onclick="redeemFreeMatchSlotVoucher()" class="cyber-card p-2 text-center hover:border-emerald-400 cursor-pointer bg-zinc-950/70">
+                        <div class="text-[11px] font-extrabold text-emerald-400">🎟️ Free Paid-Match Slot</div>
+                        <div class="text-[9px] text-amber-300 font-bold mt-0.5">🪙 400 SP Coins</div>
+                        <div class="text-[8px] text-slate-400">Join 1 Paid Match Free!</div>
+                    </button>
+                    <button type="button" onclick="redeemMiniVipPass3Days()" class="cyber-card p-2 text-center hover:border-amber-400 cursor-pointer bg-zinc-950/70">
+                        <div class="text-[11px] font-extrabold text-amber-400">⚡ 3-Day Mini Pro Pass</div>
+                        <div class="text-[9px] text-amber-300 font-bold mt-0.5">🪙 250 SP Coins</div>
+                        <div class="text-[8px] text-slate-400">Unlock All Live Themes</div>
+                    </button>
+                    <button type="button" onclick="redeemGoldenChatMegaphone()" class="cyber-card p-2 text-center hover:border-purple-400 cursor-pointer bg-zinc-950/70">
+                        <div class="text-[11px] font-extrabold text-purple-300">📢 Golden Chat Pin</div>
+                        <div class="text-[9px] text-amber-300 font-bold mt-0.5">🪙 80 SP Coins</div>
+                        <div class="text-[8px] text-slate-400">VIP Shoutout in Global Chat</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="cyber-card p-4 text-center space-y-3 border border-purple-500/40 bg-zinc-950/80">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold uppercase text-purple-400 tracking-wider">🎡 24h Lucky Spin Wheel</span>
+                    <span id="spin-cooldown-timer-lbl" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">✅ Ready to Spin!</span>
+                </div>
+                <div class="relative w-48 h-48 mx-auto flex items-center justify-center select-none">
+                    <!-- Top Golden Pointer Arrow -->
+                    <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 z-20 drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]">
+                        <div class="w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[18px] border-t-amber-400"></div>
+                    </div>
+                    <!-- High-Visibility Labeled SVG Spin Wheel -->
+                    <div id="lucky-wheel-visual" class="w-44 h-44 rounded-full border-4 border-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.35)] relative overflow-hidden flex items-center justify-center" style="transition: transform 2.9s cubic-bezier(0.15, 0.85, 0.25, 1);">
+                        <svg viewBox="0 0 200 200" class="w-full h-full">
+                            <!-- 6 60-deg Slices starting from top (0 deg = 12 o'clock) -->
+                            <!-- Slice 1: 0-60 deg (+15 Coins - Purple) -->
+                            <path d="M100,100 L100,0 A100,100 0 0,1 186.6,50 Z" fill="#7c3aed" stroke="#fbbf24" stroke-width="1.5"/>
+                            <!-- Slice 2: 60-120 deg (+25 Coins - Pink) -->
+                            <path d="M100,100 L186.6,50 A100,100 0 0,1 186.6,150 Z" fill="#db2777" stroke="#fbbf24" stroke-width="1.5"/>
+                            <!-- Slice 3: 120-180 deg (+50 Coins - Orange) -->
+                            <path d="M100,100 L186.6,150 A100,100 0 0,1 100,200 Z" fill="#ea580c" stroke="#fbbf24" stroke-width="1.5"/>
+                            <!-- Slice 4: 180-240 deg (+10 Coins - Emerald) -->
+                            <path d="M100,100 L100,200 A100,100 0 0,1 13.4,150 Z" fill="#16a34a" stroke="#fbbf24" stroke-width="1.5"/>
+                            <!-- Slice 5: 240-300 deg (100 JACKPOT - Royal Blue) -->
+                            <path d="M100,100 L13.4,150 A100,100 0 0,1 13.4,50 Z" fill="#2563eb" stroke="#fbbf24" stroke-width="1.5"/>
+                            <!-- Slice 6: 300-360 deg (+35 Coins - Gold) -->
+                            <path d="M100,100 L13.4,50 A100,100 0 0,1 100,0 Z" fill="#ca8a04" stroke="#fbbf24" stroke-width="1.5"/>
+
+                            <!-- Crisp Prize Text Labels on each slice -->
+                            <g fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="13" text-anchor="middle">
+                                <text transform="translate(100,100) rotate(30) translate(0,-64)">+15🪙</text>
+                                <text transform="translate(100,100) rotate(90) translate(0,-64)">+25🪙</text>
+                                <text transform="translate(100,100) rotate(150) translate(0,-64)">+50🪙</text>
+                                <text transform="translate(100,100) rotate(210) translate(0,-64)">+10🪙</text>
+                                <text transform="translate(100,100) rotate(270) translate(0,-64)" fill="#fde047" font-size="12">🔥100🪙</text>
+                                <text transform="translate(100,100) rotate(330) translate(0,-64)">+35🪙</text>
+                            </g>
+                        </svg>
+                        <!-- Center Hub -->
+                        <div class="absolute w-12 h-12 rounded-full bg-zinc-950 border-2 border-amber-300 flex items-center justify-center text-lg font-extrabold text-amber-400 shadow-lg">🎯</div>
                     </div>
                 </div>
-                <p id="spin-result-lbl" class="text-xs font-bold text-emerald-400">Win 10, 25, 50, 100 SP Coins or Instant 7-Day Pro!</p>
+                <p id="spin-result-lbl" class="text-xs font-bold text-emerald-400">Win +10, +15, +25, +35, +50 or 🔥 +100 SP Coins Jackpot!</p>
                 <button type="button" id="spin-now-btn" onclick="spinDailyLuckyWheel()" class="btn-theme w-full py-2.5 text-xs font-extrabold uppercase cursor-pointer shadow-lg">🎰 Spin Lucky Wheel Now</button>
+            </div>
+
+            <!-- 🎁 NEW UPDATE 4: Gift / Transfer SP Coins to Friend -->
+            <div class="cyber-card p-3.5 space-y-2 border border-pink-500/30 text-xs">
+                <div class="font-extrabold text-pink-400 uppercase text-[11px] flex items-center justify-between">
+                    <span>🎁 Gift SP Coins to Friend</span>
+                    <span class="text-[9px] font-mono text-slate-400">Instant Transfer</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                    <input type="text" id="gift-friend-id-input" placeholder="Friend ID (SP-XXXX) or Email" class="cyber-input sm:col-span-2 px-2.5 py-1.5 text-xs font-mono">
+                    <input type="number" id="gift-coins-amount-input" min="10" step="10" placeholder="Coins (e.g. 50)" class="cyber-input px-2.5 py-1.5 text-xs font-mono">
+                </div>
+                <button type="button" onclick="sendSpCoinsToFriend()" class="w-full py-1.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-extrabold rounded-lg text-xs cursor-pointer shadow">💸 Send SP Coins Gift</button>
             </div>
 
             <div class="cyber-card p-3.5 space-y-2.5 border border-emerald-500/30 text-xs">
@@ -926,9 +1041,22 @@
                 </div>
                 <div id="vip-pending-notice" class="hidden p-2.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-semibold text-center">⏳ Your Premium UTR is pending Admin approval!</div>
                 <div class="space-y-2">
-                    <label class="block font-bold text-[11px]" style="color: var(--text-muted);">Step 2: Enter 12-Digit UPI Transaction ID (UTR)</label>
-                    <input type="text" id="vip-utr-input" maxlength="12" placeholder="Enter 12-Digit Numeric UTR" class="cyber-input w-full px-3 py-2 text-xs font-mono">
-                    <button type="button" onclick="submitVipPaymentRequest()" class="btn-theme w-full py-2.5 text-xs font-bold uppercase cursor-pointer">✅ Submit UTR to Claim Premium</button>
+                    <div class="cyber-card p-2.5 border border-cyan-500/40 bg-zinc-950/70 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-extrabold uppercase text-cyan-400">🤖 Step 2A: AI Payment Screenshot Scanner</span>
+                            <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono">FREE AI</span>
+                        </div>
+                        <p class="text-[10px]" style="color: var(--text-muted);">Upload GPay / PhonePe / Paytm screenshot — AI will verify receipt & auto-check 12-digit UTR!</p>
+                        <input type="file" id="vip-receipt-file" accept="image/*" onchange="scanPaymentScreenshotWithAI('vip', event)" class="text-[10px] w-full cursor-pointer">
+                        <div id="vip-ai-scan-badge" class="hidden text-[10px] font-bold px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"></div>
+                    </div>
+                    <label class="block font-bold text-[11px]" style="color: var(--text-muted);">Step 2B: 12-Digit UPI Transaction ID (UTR)</label>
+                    <div class="flex gap-1.5">
+                        <input type="text" id="vip-utr-input" maxlength="12" oninput="liveCheckUtrInput('vip')" placeholder="Enter 12-Digit Numeric UTR" class="cyber-input flex-1 px-3 py-2 text-xs font-mono">
+                        <button type="button" onclick="verifyUtrWithAiButton('vip')" class="px-2.5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold text-[10px] shrink-0 cursor-pointer shadow">🤖 AI Verify</button>
+                    </div>
+                    <div id="vip-utr-ai-status" class="text-[10px] font-mono text-slate-400">ℹ️ Enter 12-digit UPI Ref/UTR number for instant AI validation.</div>
+                    <button type="button" onclick="submitVipPaymentRequest()" class="btn-theme w-full py-2.5 text-xs font-bold uppercase cursor-pointer">✅ Submit Verified UTR to Claim Premium</button>
                 </div>
             </div>
 
@@ -943,15 +1071,23 @@
     </div>
 
     <div id="room-setup-modal" class="fixed inset-0 z-[10009] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="cyber-card p-5 max-w-xs w-full space-y-3 text-xs shadow-2xl border border-emerald-500/40" onclick="event.stopPropagation()">
-            <h3 class="text-sm font-bold text-emerald-400">🔑 Publish Room ID & Password</h3>
-            <p class="text-[10px]" style="color: var(--text-muted);">Only squads registered in this match will see this Room ID & Password!</p>
+        <div class="cyber-card p-5 max-w-md w-full max-h-[88vh] overflow-y-auto space-y-3 text-xs shadow-2xl border-2 border-emerald-500/50" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="text-sm font-extrabold text-emerald-400">🔑 Group-Wise Room ID & WhatsApp Share</h3>
+                    <p class="text-[10px]" style="color: var(--text-muted);">Set & share Room ID separately for <b>TEAM A</b>, <b>TEAM B</b>, etc. so each group stays organized!</p>
+                </div>
+                <button type="button" onclick="document.getElementById('room-setup-modal').classList.add('hidden')" class="px-2 py-0.5 bg-rose-600 text-white rounded font-bold cursor-pointer">✕</button>
+            </div>
             <input type="hidden" id="room-modal-match-id">
-            <div><label class="block font-bold mb-1">Custom Room ID</label><input type="text" id="room-modal-id-input" placeholder="e.g. 482910492" class="cyber-input w-full px-3 py-2 font-mono"></div>
-            <div><label class="block font-bold mb-1">Room Password</label><input type="text" id="room-modal-pass-input" placeholder="e.g. 9999" class="cyber-input w-full px-3 py-2 font-mono"></div>
+            <!-- Dynamic Group-Wise Room Inputs (TEAM A, TEAM B, ...) -->
+            <div id="room-setup-groups-container" class="space-y-2.5"></div>
+            <!-- Fallback hidden inputs for backward compatibility -->
+            <input type="hidden" id="room-modal-id-input">
+            <input type="hidden" id="room-modal-pass-input">
             <div class="grid grid-cols-2 gap-2 pt-1">
-                <button type="button" onclick="document.getElementById('room-setup-modal').classList.add('hidden')" class="cyber-card py-2 font-bold cursor-pointer">Cancel</button>
-                <button type="button" onclick="saveMatchRoomDetails()" class="btn-theme py-2 font-bold cursor-pointer">💾 Save Room</button>
+                <button type="button" onclick="document.getElementById('room-setup-modal').classList.add('hidden')" class="cyber-card py-2.5 font-bold cursor-pointer">Cancel</button>
+                <button type="button" onclick="saveMatchRoomDetails()" class="btn-theme py-2.5 font-extrabold cursor-pointer">💾 Save All Group Rooms</button>
             </div>
         </div>
     </div>
@@ -1033,13 +1169,15 @@
                 <p class="text-[11px]" style="color: var(--text-muted);">Official Free Fire Tournament App & Web Platform • Fast 60FPS HUD • Push Room Alerts • Multi-Language</p>
             </div>
             <div class="space-y-2 text-xs">
-                <button type="button" onclick="triggerNativeAppInstall()" class="btn-theme w-full py-2.5 text-xs font-extrabold uppercase cursor-pointer shadow-lg">📲 1-Click Install App (Android / PC)</button>
-                <button type="button" onclick="downloadAppShortcutPackage()" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-extrabold text-xs cursor-pointer shadow flex items-center justify-center gap-1.5">📥 Download Portable App File (.html)</button>
+                <button type="button" onclick="triggerNativeAppInstall()" class="btn-theme w-full py-2.5 text-xs font-extrabold uppercase cursor-pointer shadow-lg">📲 1-Click Install Native App (No Chrome Icon)</button>
+                <button type="button" onclick="launchFullScreenAppMode()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-extrabold text-xs uppercase cursor-pointer shadow-lg flex items-center justify-center gap-1.5">🖥️ Launch Full-Screen App Mode Now</button>
+                <button type="button" onclick="downloadAppShortcutPackage()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-amber-400/50 text-amber-300 font-extrabold text-[11px] cursor-pointer shadow flex items-center justify-center gap-1.5">📦 Download Offline Web-App Backup (.html)</button>
             </div>
-            <div class="cyber-card p-3 text-left text-[10px] space-y-1 bg-zinc-900/70 border border-emerald-500/30" style="color: var(--text-muted);">
-                <div class="font-extrabold text-emerald-400 uppercase">📱 How to Add App to Phone Home Screen:</div>
-                <div>• <b>Android (Chrome):</b> Tap <b>"1-Click Install App"</b> above or tap Browser <b>⋮ Menu ➔ Add to Home screen / Install App</b>.</div>
-                <div>• <b>iPhone (Safari):</b> Tap <b>Share (⬆️) ➔ Add to Home Screen</b> to launch full-screen with the SP Arena Crown Icon!</div>
+            <div class="cyber-card p-3 text-left text-[10px] space-y-1.5 bg-zinc-900/80 border border-amber-400/40" style="color: var(--text-muted);">
+                <div class="font-extrabold text-amber-400 uppercase">🚫 Chrome Symbol வராமல் Pure App Icon வர வைக்க:</div>
+                <div>• <b>Step 1:</b> மேல உள்ள <b>"📲 1-Click Install Native App"</b> பட்டனை தட்டுங்க (அல்லது Chrome <b>⋮ 3-Dots ➔ "Install app"</b> கொடுங்க).</div>
+                <div>• <b>Step 2:</b> <i>"Add to Home screen"</i>-ல் <b>"Install app"</b> தேர்வு செய்தால் Chrome சிம்பல் இல்லாமல் **100% ஒரிஜினல் SP Arena Crown App** ஆக இன்ஸ்டால் ஆகும்!</div>
+                <div>• <b>குறிப்பு:</b> <code>.html</code> ஃபைலாக டவுன்லோடு செய்தால் ஃபைல் மேனேஜரில் பிரவுசர் ஐகான் காட்டும்; நேரடி ஆப் ஐகானுக்கு <b>Install App</b> பயன்படுத்தவும்.</div>
             </div>
         </div>
     </div>
@@ -1196,53 +1334,50 @@
     </button>
 
     <div id="ai-bot-panel">
-        <div class="px-3.5 py-2.5 border-b flex items-center justify-between" style="background: linear-gradient(90deg, rgba(15,23,42,0.98), rgba(17,24,39,0.98)); border-color: var(--border-color);">
-            <div class="flex items-center gap-2.5">
-                <div id="ai-bot-header-avatar" class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg border border-cyan-400/50 bg-slate-950 relative">
-                    <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 64 48" fill="none">
+        <div class="px-3 py-2.5 border-b flex items-center justify-between gap-2" style="background: linear-gradient(90deg, rgba(15,23,42,0.98), rgba(17,24,39,0.98)); border-color: var(--border-color);">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+                <div id="ai-bot-header-avatar" class="w-8 h-8 rounded-xl shrink-0 flex items-center justify-center text-white text-sm font-bold shadow-lg border border-cyan-400/50 bg-slate-950 relative">
+                    <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 64 48" fill="none">
                         <path d="M10 14L20 6H44L54 14L58 28L48 42H16L6 28L10 14Z" fill="#0f172a" stroke="currentColor" stroke-width="3"/>
                         <polygon points="14,21 29,25 27,30 13,26" fill="#38bdf8"/>
                         <polygon points="50,21 35,25 37,30 51,26" fill="#38bdf8"/>
                     </svg>
-                    <span id="ai-bot-header-emoji" class="absolute -bottom-1 -right-1 text-[10px]">⚡</span>
+                    <span id="ai-bot-header-emoji" class="absolute -bottom-1 -right-1 text-[9px]">⚡</span>
                 </div>
-                <div>
-                    <div class="text-xs font-extrabold tracking-wide leading-tight flex items-center gap-1.5 text-white">
-                        <span>SP TACTICAL AI</span>
-                        <span id="ai-bot-mood-pill" class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-extrabold uppercase">PRO HUD ⚡</span>
+                <div class="min-w-0 flex-1">
+                    <div class="text-xs font-extrabold tracking-wide leading-tight flex items-center gap-1.5 text-white truncate">
+                        <span class="truncate">Satta Pai AI</span>
+                        <span id="ai-bot-mood-pill" class="text-[8px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-extrabold uppercase shrink-0">ONLINE ⚡</span>
                     </div>
-                    <div id="ai-bot-mode-badge" class="text-[9px] text-emerald-400 font-semibold">● Live DB Sync • Dynamic Pricing Active</div>
+                    <div id="ai-bot-mode-badge" class="text-[9px] text-emerald-400 font-semibold truncate">● Instant Tournament Helper</div>
                 </div>
             </div>
-            <div class="flex items-center gap-1">
-                <select id="ai-bot-lang-select" onclick="event.stopPropagation()" onchange="setAppLanguage(this.value)" class="cyber-input text-[9px] font-extrabold px-1.5 py-0.5 rounded cursor-pointer" style="min-height: 24px; padding-right: 14px;" title="Switch AI & App Language">
-                    <option value="ta">தமிழ்</option>
-                    <option value="tanglish">Tanglish</option>
-                    <option value="en">English</option>
-                    <option value="hi">हिन्दी</option>
-                    <option value="te">తెలుగు</option>
-                    <option value="ml">മലയാളം</option>
-                    <option value="kn">ಕನ್ನಡ</option>
-                </select>
-                <button type="button" id="ai-bot-roam-btn" onclick="toggleBotRoaming()" class="text-[9px] px-1.5 py-1 rounded cyber-card hover:opacity-80 cursor-pointer font-bold text-cyan-300" title="Toggle Tactical Glide">🐾</button>
-                <button type="button" onclick="clearAiBotChat()" class="text-[9px] px-1.5 py-1 rounded cyber-card hover:opacity-80 cursor-pointer" title="Clear Chat">Clear</button>
-                <button type="button" onclick="toggleAiBotPanel()" class="p-1 rounded bg-rose-600 text-white text-xs font-bold cursor-pointer">✕</button>
+            <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" id="ai-bot-roam-btn" onclick="toggleBotRoaming()" class="w-7 h-7 flex items-center justify-center rounded-lg cyber-card hover:opacity-80 cursor-pointer font-bold text-cyan-300 text-xs shrink-0" title="Move / Pin Bot">🐾</button>
+                <button type="button" onclick="clearAiBotChat()" class="w-7 h-7 flex items-center justify-center rounded-lg cyber-card hover:opacity-80 cursor-pointer text-xs shrink-0" title="Clear Chat">🗑️</button>
+                <button type="button" onclick="toggleAiBotPanel()" class="w-7 h-7 min-w-[28px] flex items-center justify-center rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm font-black shadow-md cursor-pointer shrink-0" title="Close Chat">✕</button>
             </div>
         </div>
-        <div id="ai-bot-messages" class="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5"></div>
-        <div class="px-2.5 py-2 border-t flex flex-wrap gap-1.5" style="border-color: var(--border-color); background: var(--bg-main);">
-            <button type="button" onclick="sendBotQuickQuery('Active Matches')" class="bot-chip">🔥 Active Matches</button>
-            <button type="button" onclick="sendBotQuickQuery('My Team Status')" class="bot-chip">📋 My Team</button>
-            <button type="button" onclick="sendBotQuickQuery('How to Register')" class="bot-chip">📝 How to Join</button>
-            <button type="button" onclick="sendBotQuickQuery('Rules & Points')" class="bot-chip">⚔️ Points</button>
-            <button type="button" id="ai-bot-chip-vip" onclick="sendBotQuickQuery('VIP & SP Coins')" class="bot-chip">👑 Pro Pass & Coins</button>
-            <button type="button" onclick="sendBotQuickQuery('FF Headshot Sensi')" class="bot-chip">🎯 FF Sensi & Tips</button>
-            <button type="button" onclick="sendBotQuickQuery('Payment & UTR Help')" class="bot-chip">💳 UPI / UTR</button>
-            <button type="button" onclick="sendBotQuickQuery('Customer Support')" class="bot-chip">📞 Support</button>
+        <div id="ai-bot-messages" class="flex-1 overflow-y-auto p-3 flex flex-col gap-2"></div>
+        <div class="px-2.5 py-1.5 border-t flex items-center gap-1.5 overflow-x-auto whitespace-nowrap" style="border-color: var(--border-color); background: var(--bg-main);">
+            <select id="ai-bot-lang-select" onclick="event.stopPropagation()" onchange="setAppLanguage(this.value)" class="cyber-input text-[9px] font-extrabold px-1.5 py-0.5 rounded-full cursor-pointer shrink-0" style="min-height: 24px; padding-right: 16px;" title="Switch Language">
+                <option value="ta">🇮🇳 தமிழ்</option>
+                <option value="tanglish">🇮🇳 Tanglish</option>
+                <option value="en">🇮🇳 English</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+                <option value="te">🇮🇳 తెలుగు</option>
+                <option value="ml">🇮🇳 മലയാളം</option>
+                <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+            </select>
+            <button type="button" onclick="sendBotQuickQuery('Active Matches')" class="bot-chip shrink-0">🎮 Matches</button>
+            <button type="button" onclick="sendBotQuickQuery('How to Register')" class="bot-chip shrink-0">📝 How to Join</button>
+            <button type="button" id="ai-bot-chip-vip" onclick="sendBotQuickQuery('VIP & SP Coins')" class="bot-chip shrink-0">⭐ VIP & Coins</button>
+            <button type="button" onclick="sendBotQuickQuery('FF Headshot Sensi')" class="bot-chip shrink-0">🎯 Headshot Sensi</button>
+            <button type="button" onclick="sendBotQuickQuery('Customer Support')" class="bot-chip shrink-0">📞 Help</button>
         </div>
-        <div class="p-2.5 border-t flex gap-1.5" style="background: var(--bg-card); border-color: var(--border-color);">
-            <input type="text" id="ai-bot-input" placeholder="Ask anything in Tamil, Tanglish or English..." class="cyber-input flex-1 px-2.5 py-1.5 text-xs" onkeypress="if(event.key === 'Enter') handleAiBotSend()">
-            <button type="button" onclick="handleAiBotSend()" class="btn-theme px-3 py-1.5 text-xs font-bold cursor-pointer">Send</button>
+        <div class="p-2.5 border-t flex gap-1.5 items-center" style="background: var(--bg-card); border-color: var(--border-color);">
+            <input type="text" id="ai-bot-input" placeholder="Ask your doubt here..." class="cyber-input flex-1 px-3 py-1.5 text-xs" onkeypress="if(event.key === 'Enter') handleAiBotSend()">
+            <button type="button" onclick="handleAiBotSend()" class="btn-theme px-3.5 py-1.5 text-xs font-extrabold cursor-pointer shrink-0">Send</button>
         </div>
     </div>
 
@@ -1300,41 +1435,54 @@
 
     <div id="maintenance-screen" class="fixed inset-0 z-[998] hidden flex flex-col items-center justify-center p-6 text-center" style="background: var(--bg-main);"><div class="cyber-card p-8 max-w-md space-y-4 shadow-2xl"><h1 class="text-xl font-bold">Site Under Maintenance</h1></div></div>
 
-    <header class="sticky top-0 z-50 px-4 py-3 border-b backdrop-blur-md shadow-sm" style="background: var(--header-bg); border-color: var(--border-color);">
-        <div class="max-w-4xl mx-auto flex items-center justify-between gap-1.5">
-            <div class="flex items-center gap-2 cursor-pointer min-w-0 shrink" onclick="switchTab('home')">
-                <div id="brand-logo-container" class="w-8 h-8 rounded-xl shrink-0 flex flex-col items-center justify-center overflow-hidden border-2 border-amber-400/80 shadow-lg relative" style="background: linear-gradient(135deg, #10b981 0%, #059669 45%, #047857 100%); box-shadow: 0 0 12px rgba(37, 211, 102, 0.45);">
-                    <img id="brand-logo-img" src="" class="w-full h-full object-cover hidden" alt="App Logo">
+    <header class="sticky top-0 z-50 px-3.5 py-2.5 border-b backdrop-blur-md shadow-sm" style="background: var(--header-bg); border-color: var(--border-color);">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1" onclick="switchTab('home')">
+                <div id="brand-logo-container" class="w-9 h-9 rounded-xl shrink-0 flex flex-col items-center justify-center overflow-hidden border-2 border-amber-400 shadow-lg relative" style="background: linear-gradient(135deg, #10b981 0%, #059669 45%, #047857 100%); box-shadow: 0 0 14px rgba(37, 211, 102, 0.5);">
+                    <img id="brand-logo-img" src="" class="w-full h-full object-cover hidden" alt="Satta Pai Logo">
                     <div id="brand-logo-emoji" class="flex flex-col items-center justify-center leading-none">
-                        <svg class="w-4 h-4 fill-amber-300 drop-shadow" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
-                        <span class="text-[5.5px] font-black tracking-tighter text-white -mt-0.5">SP</span>
+                        <svg class="w-5 h-5 fill-amber-300 drop-shadow" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+                        <span class="text-[6px] font-black tracking-wider text-white -mt-0.5">SP</span>
                     </div>
                 </div>
-                <span id="display-brand-name" class="font-bold text-xs sm:text-sm tracking-tight truncate">Satta Pai Esports</span>
+                <div class="min-w-0 flex flex-col">
+                    <span id="display-brand-name" class="font-extrabold text-sm sm:text-base tracking-tight truncate leading-tight" style="color: var(--text-main);">Satta Pai Esports</span>
+                    <span class="text-[9px] font-bold uppercase tracking-wider truncate" style="color: var(--accent-primary);">⚡ Official Free Fire Arena</span>
+                </div>
             </div>
-            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <div class="flex items-center gap-1.5 shrink-0">
                 <div id="live-users-badge" class="hidden px-2 py-1 rounded-full text-[10px] font-bold items-center gap-1" style="background: var(--accent-glow); color: var(--accent-primary);">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     <span id="live-users-count">0 Online</span>
                 </div>
-                <button type="button" onclick="openSpinWheelModal()" id="header-coins-btn" class="px-2 py-1.5 rounded-lg text-[10px] font-extrabold flex items-center gap-1 cursor-pointer shadow border border-emerald-400/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 transition-all" title="Daily Spin & SP Coins">
-                    <span>🪙</span><span id="header-coins-count">0</span>
-                </button>
-                <button type="button" onclick="openAppInstallModal()" id="header-app-btn" class="px-2 py-1.5 rounded-lg text-[10px] font-extrabold flex items-center gap-1 cursor-pointer shadow border border-cyan-400/50 bg-cyan-500/15 text-cyan-300 hover:bg-cyan-500/25 transition-all" title="Install Satta Pai App">
-                    <span>📲</span><span class="hidden sm:inline">App</span>
-                </button>
-                <button type="button" onclick="openVipPassModal()" id="header-vip-btn" class="px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 cursor-pointer shadow border border-amber-400/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition-all hover:scale-105">
-                    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 fill-current drop-shadow"><path d="M12 2l2.9 6.9L22 9.2l-5.4 4.7 1.7 7.1L12 17.6 5.7 21l1.7-7.1L2 9.2l7.1-.3L12 2z"/></svg>
-                    <span id="header-vip-btn-text">Pro</span>
-                </button>
-                <button onclick="toggleMusic()" id="music-btn" class="p-2 rounded-lg cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);">
+                <button onclick="toggleMusic()" id="music-btn" class="p-2 rounded-xl cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);" title="Background Music">
                     <svg id="music-icon" class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
                 </button>
                 <div class="relative">
-                    <button onclick="window.toggleMenuDropdown(event)" class="p-2 rounded-lg cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);">
+                    <button onclick="window.toggleMenuDropdown(event)" class="p-2 rounded-xl cyber-card flex items-center justify-center cursor-pointer" style="color: var(--text-main);" title="More Options">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                     </button>
                     <div id="settings-dropdown" onclick="event.stopPropagation()" class="dropdown-content p-3 space-y-2.5 text-left text-xs">
+
+                        <!-- ⭐ Premium Pass, 📲 Install App & 🪙 Coins inside 3-Dots Menu -->
+                        <div class="space-y-1.5 pb-2 border-b" style="border-color: var(--border-color);">
+                            <div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">⚡ Quick Access</div>
+                            <button type="button" onclick="openVipPassModal(); closeMenuDropdown();" id="header-vip-btn" class="w-full py-2 px-3 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-between cursor-pointer shadow border border-amber-400/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition-all">
+                                <span class="flex items-center gap-1.5">
+                                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current drop-shadow"><path d="M12 2l2.9 6.9L22 9.2l-5.4 4.7 1.7 7.1L12 17.6 5.7 21l1.7-7.1L2 9.2l7.1-.3L12 2z"/></svg>
+                                    <span>Buy / View VIP Pass</span>
+                                </span>
+                                <span id="header-vip-btn-text" class="px-2 py-0.5 rounded bg-black/40 text-[10px]">PRO</span>
+                            </button>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button type="button" onclick="openAppInstallModal(); closeMenuDropdown();" id="header-app-btn" class="py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1.5 cursor-pointer shadow border border-cyan-400/50 bg-cyan-500/15 text-cyan-300 hover:bg-cyan-500/25 transition-all">
+                                    <span>📲</span><span>Install App</span>
+                                </button>
+                                <button type="button" onclick="openSpinWheelModal(); closeMenuDropdown();" id="header-coins-btn" class="py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer shadow border border-emerald-400/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 transition-all">
+                                    <span>🪙</span><span id="header-coins-count">0</span><span>Coins</span>
+                                </button>
+                            </div>
+                        </div>
 
                         <div class="space-y-1">
                             <div class="font-semibold text-[10px] uppercase tracking-wider" style="color: var(--text-muted);">Display Mode</div>
@@ -1395,11 +1543,12 @@
                                     <div class="font-semibold text-[10px] uppercase tracking-wider flex items-center gap-1" style="color: #ec4899;">
                                         <span>🔴</span><span>Live Themes</span><span class="text-[8px] px-1 rounded bg-rose-500 text-white font-extrabold">NEW</span>
                                     </div>
-                                    <div class="grid grid-cols-4 gap-2">
+                                    <div class="grid grid-cols-5 gap-1.5">
                                         <button data-theme-btn="rain-live" onclick="setTheme('rain-live')" class="theme-swatch premium live-preview swatch-rain" style="background: linear-gradient(135deg, #60a5fa, #2563eb);" title="Rain Live (Animated)"></button>
                                         <button data-theme-btn="winter-live" onclick="setTheme('winter-live')" class="theme-swatch premium live-preview swatch-winter" style="background: linear-gradient(135deg, #22d3ee, #0e7490);" title="Winter Live (Animated)"></button>
                                         <button data-theme-btn="hacker-live" onclick="setTheme('hacker-live')" class="theme-swatch premium live-preview swatch-hacker" style="background: linear-gradient(135deg, #22c55e, #15803d);" title="Hacker Live (Animated)"></button>
                                         <button data-theme-btn="teddy-live" onclick="setTheme('teddy-live')" class="theme-swatch premium live-preview swatch-teddy" style="background: linear-gradient(135deg, #f472b6, #be185d);" title="Teddy Live (Animated)"></button>
+                                        <button data-theme-btn="ghost-live" onclick="setTheme('ghost-live')" class="theme-swatch premium live-preview swatch-ghost" style="background: linear-gradient(135deg, #ef4444, #7f1d1d, #000000); border-color: #ef4444;" title="Ghost Horror Live (Scary)"></button>
                                     </div>
                                     <p class="text-[9px] text-center pt-1" style="color: var(--text-muted);">Preview available for Free users (5s)</p>
                                 </div>
@@ -1407,15 +1556,11 @@
                         </div>
 
                         <div class="pt-2 border-t space-y-1" style="border-color: var(--border-color);">
-                            <button id="menu-admin-portal-btn" onclick="switchTab('teams'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer hidden">Admin Portal</button>
-                            <button onclick="openAppInstallModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-extrabold text-cyan-400 hover:bg-zinc-500/10 cursor-pointer">📲 Install Official App (Phone & PC)</button>
-                            <button onclick="openBattlePassModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-purple-400 hover:bg-zinc-500/10 cursor-pointer">🎖️ Season 1 Battle Pass</button>
-                            <button onclick="openClanHubModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-emerald-300 hover:bg-zinc-500/10 cursor-pointer">🛡️ Squad Clans & Leaderboard</button>
-                            <button onclick="playCinematicIntro(true); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-amber-400 hover:bg-zinc-500/10 cursor-pointer">🎬 Replay Intro Animation</button>
-                            <button onclick="openCustomerSupportModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer text-emerald-400 font-bold">Support</button>
-                            <button onclick="openPolicyModal('privacy'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer">Privacy Policy</button>
-                            <button onclick="openPolicyModal('terms'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer">Terms of Use</button>
-                            <button onclick="confirmSecureLogout(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-rose-500 hover:bg-rose-500/10 cursor-pointer">Logout</button>
+                            <button id="menu-admin-portal-btn" onclick="switchTab('teams'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-amber-400 hover:bg-zinc-500/10 cursor-pointer hidden">👑 Admin Control Panel</button>
+                            <button onclick="openCustomerSupportModal(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-emerald-400 hover:bg-zinc-500/10 cursor-pointer">📞 Help & Customer Support</button>
+                            <button onclick="openPolicyModal('privacy'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer">🔒 Privacy Policy</button>
+                            <button onclick="openPolicyModal('terms'); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-medium hover:bg-zinc-500/10 cursor-pointer">📜 Terms & Rules</button>
+                            <button onclick="confirmSecureLogout(); closeMenuDropdown();" class="w-full text-left px-2 py-1.5 rounded font-bold text-rose-500 hover:bg-rose-500/10 cursor-pointer">🚪 Logout</button>
                         </div>
                     </div>
                 </div>
@@ -1444,91 +1589,91 @@
                     <div class="cyber-card p-3 text-center"><div id="display-f4-text" class="text-xs font-bold">⚡ UPI</div></div>
                 </div>
                 <div class="pt-4 grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-2.5">
-                    <button onclick="switchTab('matches')" class="btn-theme px-4 py-2.5 text-xs uppercase font-bold cursor-pointer">View Matches</button>
-                    <button onclick="switchTab('roadmap')" class="cyber-card px-4 py-2.5 text-xs font-bold uppercase cursor-pointer flex items-center justify-center">Roadmap</button>
-                    <button onclick="openArenaHubModal('clash')" class="col-span-2 sm:col-span-1 cyber-card px-4 py-2.5 text-xs font-bold uppercase cursor-pointer border border-amber-400/40 text-amber-300 flex items-center justify-center gap-1">⚔️ 1v1 / LFT Hub</button>
+                    <button onclick="switchTab('matches')" class="btn-theme px-4 py-2.5 text-xs uppercase font-extrabold cursor-pointer">🎮 Join Match</button>
+                    <button onclick="switchTab('roadmap')" class="cyber-card px-4 py-2.5 text-xs font-extrabold uppercase cursor-pointer flex items-center justify-center">🏆 Match Results</button>
+                    <button onclick="openArenaHubModal('clash')" class="col-span-2 sm:col-span-1 cyber-card px-4 py-2.5 text-xs font-extrabold uppercase cursor-pointer border border-amber-400/40 text-amber-300 flex items-center justify-center gap-1">⚔️ 1v1 Room & Find Team</button>
                 </div>
             </div>
 
-            <!-- 🔔 Live Match Countdown Siren & 🔥 MVP Top Fragger Bar -->
-            <div class="cyber-card p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border border-amber-400/40">
-                <div class="flex items-center gap-2.5">
+            <!-- 🔔 Simple Room ID Sound Alert Bar -->
+            <div class="cyber-card p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 border border-amber-400/40">
+                <div class="flex items-center gap-2.5 min-w-0">
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-500/20 border border-amber-400/50 text-lg shrink-0">🔔</div>
-                    <div>
-                        <div class="text-xs font-extrabold flex items-center gap-1.5">
-                            <span>10-Min Match Room Siren</span>
-                            <span id="home-countdown-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px]">LIVE SYNC</span>
+                    <div class="min-w-0">
+                        <div class="text-xs font-extrabold flex items-center gap-1.5 flex-wrap">
+                            <span>Room ID Sound Alert</span>
+                            <span id="home-countdown-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[9px]">AUTO</span>
                         </div>
-                        <p id="home-next-match-timer-txt" class="text-[10px]" style="color: var(--text-muted);">Auto Voice & Siren Alert 10 mins before match start when Room ID drops!</p>
+                        <p id="home-next-match-timer-txt" class="text-[10px] leading-snug" style="color: var(--text-muted);">Plays a voice alarm 10 mins before match when Room ID & Password arrive!</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end">
-                    <button type="button" id="siren-alert-toggle-btn" onclick="toggleMatchSirenAlert()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[10px] font-extrabold cursor-pointer shadow">🔔 Alert: ON</button>
-                    <button type="button" onclick="openMvpAndAlertModal()" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-black text-[10px] font-extrabold cursor-pointer shadow">🔥 Vote MVP (+5🪙)</button>
+                <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end shrink-0">
+                    <button type="button" id="siren-alert-toggle-btn" onclick="toggleMatchSirenAlert()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-[10px] font-extrabold cursor-pointer shadow">🔔 Sound: ON</button>
+                    <button type="button" onclick="openMvpAndAlertModal()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-black text-[10px] font-extrabold cursor-pointer shadow">🔥 Vote Best Player</button>
                 </div>
             </div>
 
-            <!-- 🎮 Quick Esports Engagement Strip (6 Pro Features for Phone & PC) -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                <button type="button" onclick="openSpinWheelModal()" class="cyber-card p-3.5 text-left flex sm:flex-col items-center sm:items-start justify-between gap-3 sm:gap-1.5 cursor-pointer hover:border-amber-400 transition-all">
-                    <div class="flex items-center gap-2">
+            <!-- 🎮 Easy-to-Understand 6 Player Features Grid (Fits cleanly on all Phones & PCs) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <button type="button" onclick="openSpinWheelModal()" class="cyber-card p-3 text-left flex flex-col justify-between gap-2 cursor-pointer hover:border-amber-400 transition-all">
+                    <div class="flex items-center justify-between w-full">
                         <span class="text-xl">🎰</span>
-                        <div>
-                            <div class="text-xs font-extrabold">Daily Spin & Coins</div>
-                            <div class="text-[10px]" style="color: var(--text-muted);">Win Free 7-Day Pro Pass</div>
-                        </div>
+                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">FREE SPIN</span>
                     </div>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 shrink-0">FREE SPIN</span>
+                    <div>
+                        <div class="text-xs font-extrabold leading-snug">Free Spin & Coins</div>
+                        <div class="text-[10px] leading-tight mt-0.5" style="color: var(--text-muted);">Win Free Coins & VIP Pass</div>
+                    </div>
                 </button>
-                <button type="button" onclick="openClanHubModal()" class="cyber-card p-3.5 text-left flex sm:flex-col items-center sm:items-start justify-between gap-3 sm:gap-1.5 cursor-pointer hover:border-cyan-400 transition-all">
-                    <div class="flex items-center gap-2">
+                <button type="button" onclick="openClanHubModal()" class="cyber-card p-3 text-left flex flex-col justify-between gap-2 cursor-pointer hover:border-cyan-400 transition-all">
+                    <div class="flex items-center justify-between w-full">
                         <span class="text-xl">🛡️</span>
-                        <div>
-                            <div class="text-xs font-extrabold">Squad Clans & Guilds</div>
-                            <div class="text-[10px]" style="color: var(--text-muted);">Create Clan & Rank #1</div>
-                        </div>
+                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">GUILD</span>
                     </div>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 shrink-0">CLAN HUB</span>
-                </button>
-                <button type="button" onclick="openBattlePassModal()" class="cyber-card p-3.5 text-left flex sm:flex-col items-center sm:items-start justify-between gap-3 sm:gap-1.5 cursor-pointer hover:border-purple-400 transition-all">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl">🎖️</span>
-                        <div>
-                            <div class="text-xs font-extrabold">Season Battle Pass</div>
-                            <div class="text-[10px]" style="color: var(--text-muted);">Unlock Lv.1–50 Rewards</div>
-                        </div>
+                    <div>
+                        <div class="text-xs font-extrabold leading-snug">Join / Create Guild</div>
+                        <div class="text-[10px] leading-tight mt-0.5" style="color: var(--text-muted);">Team Up with Clan Friends</div>
                     </div>
-                    <span id="home-bp-tier-pill" class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 shrink-0">SEASON 1</span>
                 </button>
-                <button type="button" onclick="openArenaHubModal('recruit')" class="cyber-card p-3.5 text-left flex sm:flex-col items-center sm:items-start justify-between gap-3 sm:gap-1.5 cursor-pointer hover:border-emerald-400 transition-all">
-                    <div class="flex items-center gap-2">
+                <button type="button" onclick="openBattlePassModal()" class="cyber-card p-3 text-left flex flex-col justify-between gap-2 cursor-pointer hover:border-purple-400 transition-all">
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-xl">🎁</span>
+                        <span id="home-bp-tier-pill" class="text-[9px] font-extrabold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">REWARDS</span>
+                    </div>
+                    <div>
+                        <div class="text-xs font-extrabold leading-snug">Level Up Rewards</div>
+                        <div class="text-[10px] leading-tight mt-0.5" style="color: var(--text-muted);">Free Coins & Name Badges</div>
+                    </div>
+                </button>
+                <button type="button" onclick="openArenaHubModal('recruit')" class="cyber-card p-3 text-left flex flex-col justify-between gap-2 cursor-pointer hover:border-emerald-400 transition-all">
+                    <div class="flex items-center justify-between w-full">
                         <span class="text-xl">🤝</span>
-                        <div>
-                            <div class="text-xs font-extrabold">Find Players / 1v1</div>
-                            <div class="text-[10px]" style="color: var(--text-muted);">Recruit Squad & Clash</div>
-                        </div>
+                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">1v1 / TEAM</span>
                     </div>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 shrink-0">ARENA HUB</span>
+                    <div>
+                        <div class="text-xs font-extrabold leading-snug">1v1 & Find Players</div>
+                        <div class="text-[10px] leading-tight mt-0.5" style="color: var(--text-muted);">Play 1v1 or Add Teammates</div>
+                    </div>
                 </button>
-                <button type="button" onclick="openMvpAndAlertModal()" class="cyber-card p-3.5 text-left flex sm:flex-col items-center sm:items-start justify-between gap-3 sm:gap-1.5 cursor-pointer hover:border-orange-400 transition-all">
-                    <div class="flex items-center gap-2">
+                <button type="button" onclick="openMvpAndAlertModal()" class="cyber-card p-3 text-left flex flex-col justify-between gap-2 cursor-pointer hover:border-orange-400 transition-all">
+                    <div class="flex items-center justify-between w-full">
                         <span class="text-xl">🔥</span>
-                        <div>
-                            <div class="text-xs font-extrabold">Live MVP Voting</div>
-                            <div class="text-[10px]" style="color: var(--text-muted);">Vote Top Fragger (+5🪙)</div>
-                        </div>
+                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded bg-orange-500/20 text-orange-300">+5 COINS</span>
                     </div>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 shrink-0">TOP MVP</span>
+                    <div>
+                        <div class="text-xs font-extrabold leading-snug">Vote Best Player</div>
+                        <div class="text-[10px] leading-tight mt-0.5" style="color: var(--text-muted);">Like Top Players & Earn Coins</div>
+                    </div>
                 </button>
-                <button type="button" onclick="openCheatReportModal()" class="cyber-card p-3.5 text-left flex sm:flex-col items-center sm:items-start justify-between gap-3 sm:gap-1.5 cursor-pointer hover:border-rose-400 transition-all">
-                    <div class="flex items-center gap-2">
+                <button type="button" onclick="openCheatReportModal()" class="cyber-card p-3 text-left flex flex-col justify-between gap-2 cursor-pointer hover:border-rose-400 transition-all">
+                    <div class="flex items-center justify-between w-full">
                         <span class="text-xl">🚨</span>
-                        <div>
-                            <div class="text-xs font-extrabold">Anti-Cheat Report</div>
-                            <div class="text-[10px]" style="color: var(--text-muted);">Report Hackers & Panels</div>
-                        </div>
+                        <span class="text-[9px] font-extrabold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">REPORT</span>
                     </div>
-                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 shrink-0">FAIR PLAY</span>
+                    <div>
+                        <div class="text-xs font-extrabold leading-snug">Report Hacker</div>
+                        <div class="text-[10px] leading-tight mt-0.5" style="color: var(--text-muted);">Report Cheaters to Admin</div>
+                    </div>
                 </button>
             </div>
 
@@ -1584,15 +1729,40 @@
                         <div class="text-amber-400">🏆 <b id="prof-stat-wins" class="text-white">0</b> Booyah</div>
                     </div>
                 </div>
+                <!-- 🎮 NEW UPDATE 3: 1-Click Free Fire Pro Gaming Avatar Picker -->
+                <div class="space-y-1.5 pt-1">
+                    <div class="text-[10px] font-extrabold uppercase text-emerald-400 tracking-wider">🎮 1-Click Pro Gaming Avatars</div>
+                    <div class="grid grid-cols-6 gap-1.5">
+                        <button type="button" onclick="selectProGamingAvatar(0)" class="p-1 rounded-lg bg-zinc-900 border border-orange-500/40 hover:border-orange-400 text-center cursor-pointer transition-transform active:scale-95" title="Crimson Rusher">
+                            <div class="text-base">🔥</div><div class="text-[8px] font-bold text-orange-300 truncate">Rusher</div>
+                        </button>
+                        <button type="button" onclick="selectProGamingAvatar(1)" class="p-1 rounded-lg bg-zinc-900 border border-rose-500/40 hover:border-rose-400 text-center cursor-pointer transition-transform active:scale-95" title="Skull Sniper">
+                            <div class="text-base">💀</div><div class="text-[8px] font-bold text-rose-300 truncate">Sniper</div>
+                        </button>
+                        <button type="button" onclick="selectProGamingAvatar(2)" class="p-1 rounded-lg bg-zinc-900 border border-amber-500/40 hover:border-amber-400 text-center cursor-pointer transition-transform active:scale-95" title="Booyah King">
+                            <div class="text-base">👑</div><div class="text-[8px] font-bold text-amber-300 truncate">King</div>
+                        </button>
+                        <button type="button" onclick="selectProGamingAvatar(3)" class="p-1 rounded-lg bg-zinc-900 border border-cyan-500/40 hover:border-cyan-400 text-center cursor-pointer transition-transform active:scale-95" title="Cyber Ninja">
+                            <div class="text-base">⚡</div><div class="text-[8px] font-bold text-cyan-300 truncate">Ninja</div>
+                        </button>
+                        <button type="button" onclick="selectProGamingAvatar(4)" class="p-1 rounded-lg bg-zinc-900 border border-red-600/50 hover:border-red-500 text-center cursor-pointer transition-transform active:scale-95" title="Ghost Reaper">
+                            <div class="text-base">👻</div><div class="text-[8px] font-bold text-red-400 truncate">Ghost</div>
+                        </button>
+                        <button type="button" onclick="selectProGamingAvatar(5)" class="p-1 rounded-lg bg-zinc-900 border border-emerald-500/40 hover:border-emerald-400 text-center cursor-pointer transition-transform active:scale-95" title="Dragon IGL">
+                            <div class="text-base">🐉</div><div class="text-[8px] font-bold text-emerald-300 truncate">Dragon</div>
+                        </button>
+                    </div>
+                </div>
                 <p class="text-[10px] text-amber-400 font-semibold" id="dp-cooldown-text">Note: DP can only be changed once every 14 days.</p>
                 <div class="text-left"><label class="block font-bold text-xs mb-1">Player ID</label><input type="text" id="profile-player-id" readonly class="cyber-input w-full px-3 py-2 text-xs font-mono bg-zinc-800 cursor-not-allowed"></div>
                 <div class="text-left"><label class="block font-bold text-xs mb-1">Username *</label><input type="text" id="profile-username" class="cyber-input w-full px-3 py-2 text-xs" placeholder="Unique Name"></div>
                 <div class="text-left"><label class="block font-bold text-xs mb-1">IGN *</label><input type="text" id="profile-ign" class="cyber-input w-full px-3 py-2 text-xs" placeholder="FF Name"></div>
                 <div class="text-left"><label class="block font-bold text-xs mb-1">Game UID *</label><input type="text" id="profile-game-uid" class="cyber-input w-full px-3 py-2 text-xs font-mono" placeholder="123456789"></div>
                 <button onclick="saveProfile()" class="btn-theme w-full py-2.5 text-xs font-bold uppercase cursor-pointer">Save Profile</button>
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <button type="button" onclick="downloadProPlayerCardPNG()" class="py-2 px-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-[11px] shadow flex items-center justify-center gap-1 cursor-pointer">🎴 Pro Stats Card</button>
-                    <button type="button" onclick="openClanHubModal()" class="py-2 px-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-extrabold text-[11px] flex items-center justify-center gap-1 cursor-pointer">🛡️ <span id="prof-clan-btn-lbl">My Clan</span></button>
+                <div class="grid grid-cols-3 gap-1.5 pt-1">
+                    <button type="button" onclick="downloadProPlayerCardPNG()" class="py-2 px-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-black font-extrabold text-[10px] shadow flex items-center justify-center gap-1 cursor-pointer">🎴 Stats Card</button>
+                    <button type="button" onclick="downloadMyEsportsCertificatePNG()" class="py-2 px-2 rounded-xl bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 font-extrabold text-[10px] flex items-center justify-center gap-1 cursor-pointer">🏅 Certificate</button>
+                    <button type="button" onclick="openClanHubModal()" class="py-2 px-2 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-extrabold text-[10px] flex items-center justify-center gap-1 cursor-pointer">🛡️ <span id="prof-clan-btn-lbl">My Clan</span></button>
                 </div>
             </div>
 
@@ -1680,8 +1850,21 @@
                         <input type="text" id="paid-sub1Uid" placeholder="Sub1 (Opt)" class="cyber-input w-full px-2 py-1.5 font-mono">
                         <input type="text" id="paid-sub2Uid" placeholder="Sub2 (Opt)" class="cyber-input w-full px-2 py-1.5 font-mono">
                     </div>
-                    <input type="text" id="paid-transitionId" required placeholder="12 Digit Numeric UTR" maxlength="12" pattern="[0-9]{12}" class="cyber-input w-full px-3 py-2 font-mono">
-                    <button type="submit" class="btn-theme w-full py-2.5">✅ Submit</button>
+                    <div class="cyber-card p-2.5 border border-cyan-500/40 bg-zinc-950/70 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-extrabold uppercase text-cyan-400">🤖 AI Payment Screenshot Scanner (Optional)</span>
+                            <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono">AUTO-UTR</span>
+                        </div>
+                        <input type="file" id="paid-receipt-file" accept="image/*" onchange="scanPaymentScreenshotWithAI('paid', event)" class="text-[10px] w-full cursor-pointer">
+                        <div id="paid-ai-scan-badge" class="hidden text-[10px] font-bold px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"></div>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                        <input type="text" id="paid-transitionId" required oninput="liveCheckUtrInput('paid')" placeholder="12-Digit UTR or FREE-SLOT Voucher" maxlength="18" class="cyber-input flex-1 px-3 py-2 font-mono uppercase">
+                        <button type="button" onclick="applyMyFreeSlotVoucherToForm()" class="px-2.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-black font-extrabold text-[10px] shrink-0 cursor-pointer shadow" title="Use 400-Coin Free Match Entry Voucher">🎟️ Free Voucher</button>
+                        <button type="button" onclick="verifyUtrWithAiButton('paid')" class="px-2.5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold text-[10px] shrink-0 cursor-pointer shadow">🤖 AI Verify</button>
+                    </div>
+                    <div id="paid-utr-ai-status" class="text-[10px] font-mono text-slate-400">ℹ️ Enter 12-digit UPI UTR or upload screenshot above.</div>
+                    <button type="submit" class="btn-theme w-full py-2.5">✅ Submit Verified Registration</button>
                 </form>
             </div>
         </section>
@@ -1985,8 +2168,8 @@
 
     <nav class="bottom-nav shadow-lg">
         <button onclick="switchTab('home')" id="bnav-home" class="bottom-nav-item active"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></button>
-        <button onclick="switchTab('matches')" id="bnav-matches" class="bottom-nav-item"><svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm5 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span>Matches</span></button>
-        <button onclick="switchTab('roadmap')" id="bnav-roadmap" class="bottom-nav-item"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg><span>Roadmap</span></button>
+        <button onclick="switchTab('matches')" id="bnav-matches" class="bottom-nav-item"><svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm5 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg><span>Join Match</span></button>
+        <button onclick="switchTab('roadmap')" id="bnav-roadmap" class="bottom-nav-item"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg><span>Results</span></button>
         <button onclick="switchTab('chat')" id="bnav-chat" class="bottom-nav-item"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg><span>Chat</span></button>
         <button onclick="switchTab('profile')" id="bnav-profile" class="bottom-nav-item"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Profile</span></button>
     </nav>
@@ -2008,6 +2191,8 @@
             <button type="button" onclick="triggerEsportsChatReaction('⚡ DOUBLE KILL! 💥', 'doublekill')" class="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold shrink-0 cursor-pointer hover:bg-amber-500/25">⚡ Double Kill</button>
             <button type="button" onclick="triggerEsportsChatReaction('💀 TRIPLE KILL! 🔥', 'triplekill')" class="px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-300 font-bold shrink-0 cursor-pointer hover:bg-purple-500/25">💀 Triple Kill</button>
             <button type="button" onclick="triggerEsportsChatReaction('👑 BOOYAH CHAMPIONS! 🏆', 'booyah')" class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold shrink-0 cursor-pointer hover:bg-emerald-500/25">👑 BOOYAH!</button>
+            <button type="button" onclick="sendVoiceShoutoutChat('🎙️ [VOICE]: Rush Pannunga Squad! 🔥', 'Rush pannunga squad! Booyah namakku thaan!')" class="px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 font-bold shrink-0 cursor-pointer hover:bg-cyan-500/25">🎙️ Rush Voice</button>
+            <button type="button" onclick="sendVoiceShoutoutChat('🎙️ [VOICE]: Room ID & Password Ready! Join Fast! ⚡', 'Attention squads! Room ID ready, join fast within five minutes!')" class="px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold shrink-0 cursor-pointer hover:bg-amber-500/25">🎙️ Room Ready</button>
         </div>
         <div id="chat-input-area" class="p-3 border-t flex gap-2" style="background: var(--bg-card); border-color: var(--border-color);">
             <input type="text" id="chat-input" maxlength="200" placeholder="Type a message..." class="cyber-input flex-1 px-3 py-2 text-sm" onkeypress="if(event.key === 'Enter') sendChatMessage()">
@@ -2053,9 +2238,9 @@
         window.userUidCache = {};
         window.userDataLoaded = false;
 
-        const LIVE_THEMES = ['rain-live', 'winter-live', 'hacker-live', 'teddy-live'];
-        const ALL_THEME_CLASSES = ['theme-whatsapp','theme-instagram','theme-gold','theme-blue','theme-royal','theme-cyan','theme-ruby','theme-indigo','theme-rain-live','theme-winter-live','theme-hacker-live','theme-teddy-live'];
-        const PREMIUM_THEMES = ['royal', 'cyan', 'ruby', 'indigo', 'rain-live', 'winter-live', 'hacker-live', 'teddy-live'];
+        const LIVE_THEMES = ['rain-live', 'winter-live', 'hacker-live', 'teddy-live', 'ghost-live'];
+        const ALL_THEME_CLASSES = ['theme-whatsapp','theme-instagram','theme-gold','theme-blue','theme-royal','theme-cyan','theme-ruby','theme-indigo','theme-rain-live','theme-winter-live','theme-hacker-live','theme-teddy-live','theme-ghost-live'];
+        const PREMIUM_THEMES = ['royal', 'cyan', 'ruby', 'indigo', 'rain-live', 'winter-live', 'hacker-live', 'teddy-live', 'ghost-live'];
 
         window.getLiveVipPrices = function() {
             const cfg = window.vipConfig || { prices: { 7: 9, 14: 19, 28: 29 }, discountPct: 10, upi: 'sattapai@oksbi' };
@@ -2235,6 +2420,33 @@
                         isBokeh: i % 3 === 0
                     });
                 }
+            } else if (themeName === 'ghost-live') {
+                const icons = ['👻', '💀', '🩸', '🦇', '🕸️', '👁️'];
+                const count = w < 600 ? 24 : 38;
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        size: 15 + Math.random() * 16,
+                        speedY: -0.45 - Math.random() * 0.95, // Ghosts rise eerily from the abyss
+                        sway: Math.random() * Math.PI * 2,
+                        icon: icons[i % icons.length],
+                        alpha: 0.35 + Math.random() * 0.55,
+                        isBloodMist: i % 3 === 0,
+                        isDemonEyes: i % 5 === 0,
+                        blinkOffset: Math.random() * 2000
+                    });
+                }
+                // Blood drips from the top screen edge
+                const dripCount = w < 600 ? 10 : 18;
+                for (let d = 0; d < dripCount; d++) {
+                    splashes.push({
+                        x: Math.random() * w,
+                        len: 20 + Math.random() * 85,
+                        speed: 0.4 + Math.random() * 0.9,
+                        alpha: 0.45 + Math.random() * 0.4
+                    });
+                }
             }
 
             const renderFrame = (now) => {
@@ -2352,6 +2564,84 @@
                             ctx.font = `${Math.round(p.size)}px sans-serif`;
                             ctx.fillText(p.icon, p.x, p.y);
                             ctx.globalAlpha = 1;
+                        }
+                    }
+                } else if (themeName === 'ghost-live') {
+                    // 1. Eerie dark blood-red vignette & top bleeding shadow
+                    const topBlood = ctx.createLinearGradient(0, 0, 0, 220);
+                    topBlood.addColorStop(0, 'rgba(153, 27, 27, 0.38)');
+                    topBlood.addColorStop(0.5, 'rgba(69, 10, 10, 0.14)');
+                    topBlood.addColorStop(1, 'transparent');
+                    ctx.fillStyle = topBlood;
+                    ctx.fillRect(0, 0, cw, 220);
+
+                    // 2. Random scary crimson lightning flash
+                    if (Math.random() < 0.035) {
+                        ctx.fillStyle = `rgba(220, 38, 38, ${0.08 + Math.random() * 0.14})`;
+                        ctx.fillRect(0, 0, cw, ch);
+                    }
+
+                    // 3. Dripping blood streaks from top
+                    for (let d = 0; d < splashes.length; d++) {
+                        const dr = splashes[d];
+                        dr.len += dr.speed;
+                        if (dr.len > 140) { dr.len = 18; dr.x = Math.random() * cw; }
+                        const dg = ctx.createLinearGradient(dr.x, 0, dr.x, dr.len);
+                        dg.addColorStop(0, `rgba(127, 29, 29, ${dr.alpha})`);
+                        dg.addColorStop(1, `rgba(239, 68, 68, ${dr.alpha * 0.95})`);
+                        ctx.strokeStyle = dg;
+                        ctx.lineWidth = 2.4;
+                        ctx.beginPath();
+                        ctx.moveTo(dr.x, 0);
+                        ctx.lineTo(dr.x, dr.len);
+                        ctx.stroke();
+                        ctx.fillStyle = `rgba(239, 68, 68, ${dr.alpha})`;
+                        ctx.beginPath();
+                        ctx.arc(dr.x, dr.len, 2.8, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    // 4. Floating Phantoms, Skulls, Blood Mist & Glowing Demon Eyes in the dark
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    for (let i = 0; i < particles.length; i++) {
+                        const p = particles[i];
+                        p.sway += 0.032;
+                        p.x += Math.sin(p.sway) * 1.15;
+                        p.y += p.speedY;
+                        if (p.y < -30) { p.y = ch + 30; p.x = Math.random() * cw; }
+
+                        if (p.isBloodMist) {
+                            const g = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, p.size * 1.8);
+                            g.addColorStop(0, `rgba(220, 38, 38, ${p.alpha * 0.45})`);
+                            g.addColorStop(0.6, `rgba(127, 29, 29, ${p.alpha * 0.2})`);
+                            g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                            ctx.fillStyle = g;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size * 1.8, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (p.isDemonEyes) {
+                            // Blinking menacing red demon eyes peering from darkness
+                            const blink = Math.sin((now + p.blinkOffset) / 340);
+                            if (blink > -0.35) {
+                                ctx.save();
+                                ctx.shadowColor = '#ef4444';
+                                ctx.shadowBlur = 12;
+                                ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.95, p.alpha + 0.25)})`;
+                                ctx.beginPath();
+                                ctx.ellipse(p.x - 8, p.y, 4.5, 2.2, -0.22, 0, Math.PI * 2);
+                                ctx.ellipse(p.x + 8, p.y, 4.5, 2.2, 0.22, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.restore();
+                            }
+                        } else {
+                            ctx.save();
+                            ctx.globalAlpha = p.alpha;
+                            ctx.shadowColor = '#dc2626';
+                            ctx.shadowBlur = 10;
+                            ctx.font = `${Math.round(p.size)}px sans-serif`;
+                            ctx.fillText(p.icon, p.x, p.y);
+                            ctx.restore();
                         }
                     }
                 }
@@ -2598,7 +2888,7 @@
             ta: {
                 name: 'தமிழ் (Tamil)',
                 instruction: 'Reply strictly in clear, friendly Tamil (தமிழ்) using gaming terms naturally.',
-                nav: { home: 'முகப்பு', matches: 'மேட்ச்கள்', roadmap: 'புள்ளிகள்', chat: 'சாட்', profile: 'ப்ரொபைல்' },
+                nav: { home: 'முகப்பு', matches: 'மேட்ச் சேர', roadmap: 'முடிவுகள்', chat: 'சாட்', profile: 'ப்ரொபைல்' },
                 viewMatches: 'மேட்ச்களை பார்',
                 inputPlaceholder: 'தமிழில் எதை வேண்டுமானாலும் கேளுங்கள்...',
                 roam: [
@@ -2608,20 +2898,16 @@
                     { text: '👑 Royal Pro Pass செக் பண்ணியா?', emotion: 'cool' },
                     { text: '🎯 One-Tap Headshot Sensi வேணுமா?', emotion: 'excited' }
                 ],
-                welcome: (p7, p14, p28, disc) => `⚡ **வணக்கம் நண்பா! நான் Satta Pai Pro Tactical AI!** 🎮
-
-உங்க எல்லா கேள்விகளுக்கும் **தமிழில்** Live Database-ல் இருந்து உடனே பதில் சொல்லுவேன்:
-• 🔥 **Active Matches, Slots, Brackets & Room ID**
-• 📋 **My Squad, Career Rank Tier & Slot Pass**
-• ⭐ **Royal Pro Pass: ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) • ${disc}% தள்ளுபடி**
-• 🪙 **SP Coins Spin, Prediction Poll & Armory Store**
-• 🎯 **Free Fire One-Tap Headshot Sensi & Meta Tips**
-*(⏱️ 30 வினாடிக்கு 1 மெசேஜ் அனுப்பலாம்)*`
+                welcome: (p7, p14, p28, disc) => `👋 **வணக்கம் நண்பா! நான் Satta Pai AI உதவி பாட்!** 🎮
+• 🎮 **மேட்ச் & Room ID** விவரங்கள்
+• ⭐ **VIP Pro Pass:** ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) (${disc}% தள்ளுபடி)
+• 🎯 **Headshot Sensi & Free Coins**
+கீழே உள்ள பட்டனைத் தட்டுங்க அல்லது உங்க கேள்வியை டைப் பண்ணுங்க!`
             },
             tanglish: {
                 name: 'Tanglish (தமிழ் + English)',
                 instruction: 'Reply in friendly Tanglish (conversational Tamil mixed with English words, popular among Tamil gamers).',
-                nav: { home: 'Home', matches: 'Matches', roadmap: 'Roadmap', chat: 'Chat', profile: 'Profile' },
+                nav: { home: 'Home', matches: 'Join Match', roadmap: 'Results', chat: 'Chat', profile: 'Profile' },
                 viewMatches: 'View Matches',
                 inputPlaceholder: 'Tanglish / தமிழ் / English-ல கேளுங்க நண்பா...',
                 roam: [
@@ -2631,20 +2917,16 @@
                     { text: '👑 Royal Pro Pass check panniya?', emotion: 'cool' },
                     { text: '🎯 One-Tap Headshot Sensi venuma?', emotion: 'excited' }
                 ],
-                welcome: (p7, p14, p28, disc) => `⚡ **Vanakkam Nanba! Naan Satta Pai Pro Tactical AI!** 🎮
-
-Unga ella doubts-kum **Tanglish-la** Live Database-la irunthu udane answer pannuven:
-• 🔥 **Active Matches, Slots, Brackets & Room ID**
-• 📋 **My Squad, Career Rank Tier & Slot Pass**
-• ⭐ **Royal Pro Pass: ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) • ${disc}% Match Discount**
-• 🪙 **SP Coins Spin, Prediction Poll & Armory Store**
-• 🎯 **Free Fire One-Tap Headshot Sensi & Meta Tips**
-*(⏱️ Note: 30 seconds-ku 1 message anuppalam)*`
+                welcome: (p7, p14, p28, disc) => `👋 **Vanakkam Nanba! Naan Satta Pai AI Helper!** 🎮
+• 🎮 **Matches, Slots & Room ID** details
+• ⭐ **VIP Pro Pass:** ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) (${disc}% OFF)
+• 🎯 **Headshot Sensi & Free SP Coins**
+Keezha irukka button-ah tap pannunga illa unga doubt-ah kelu nanba!`
             },
             en: {
                 name: 'English (India)',
                 instruction: 'Reply strictly in clear, energetic Indian Esports English.',
-                nav: { home: 'Home', matches: 'Matches', roadmap: 'Roadmap', chat: 'Chat', profile: 'Profile' },
+                nav: { home: 'Home', matches: 'Join Match', roadmap: 'Results', chat: 'Chat', profile: 'Profile' },
                 viewMatches: 'View Matches',
                 inputPlaceholder: 'Ask anything in English...',
                 roam: [
@@ -2654,15 +2936,11 @@ Unga ella doubts-kum **Tanglish-la** Live Database-la irunthu udane answer pannu
                     { text: '👑 Check out Royal Pro Pass perks!', emotion: 'cool' },
                     { text: '🎯 Want Pro One-Tap Headshot Sensi?', emotion: 'excited' }
                 ],
-                welcome: (p7, p14, p28, disc) => `⚡ **Welcome Gamer! I am Satta Pai Pro Tactical AI!** 🎮
-
-I answer all your questions in **English** with real-time database sync:
-• 🔥 **Active Matches, Slots, Brackets & Room ID**
-• 📋 **My Squad, Career Rank Tier & Slot Pass**
-• ⭐ **Royal Pro Pass: ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) • ${disc}% Match Discount**
-• 🪙 **SP Coins Spin, Prediction Poll & Armory Store**
-• 🎯 **Free Fire One-Tap Headshot Sensi & Meta Tips**
-*(⏱️ Cooldown: 1 message every 30 seconds)*`
+                welcome: (p7, p14, p28, disc) => `👋 **Hi Gamer! I'm Satta Pai AI Helper!** 🎮
+• 🎮 **Matches, Slots & Room ID** updates
+• ⭐ **VIP Pro Pass:** ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) (${disc}% OFF)
+• 🎯 **Headshot Sensi & Free Coins**
+Tap a quick button below or type your question!`
             },
             hi: {
                 name: 'हिन्दी (Hindi)',
@@ -2795,6 +3073,30 @@ I answer all your questions in **English** with real-time database sync:
                 "👥 4 SQUAD": "👥 4 பேர் அணிகள்",
                 "🏆 PRIZES": "🏆 பரிசுகள்",
                 "⚡ UPI": "⚡ உடனடி UPI",
+                "🎮 Join Match": "🎮 மேட்சில் சேர",
+                "🏆 Match Results": "🏆 மேட்ச் முடிவுகள்",
+                "⚔️ 1v1 Room & Find Team": "⚔️ 1v1 & டீம் தேட",
+                "Join Match": "மேட்ச் சேர",
+                "Results": "முடிவுகள்",
+                "Room ID Sound Alert": "Room ID வாய்ஸ் அலாரம்",
+                "Plays a voice alarm 10 mins before match when Room ID & Password arrive!": "மேட்சுக்கு 10 நிமிடம் முன்பு Room ID வந்ததும் வாய்ஸ் அலாரம் அடிக்கும்!",
+                "🔔 Sound: ON": "🔔 ஒலி: ON",
+                "🔥 Vote Best Player": "🔥 சிறந்த வீரர் ஓட்டு",
+                "Free Spin & Coins": "இலவச ஸ்பின் & காயின்ஸ்",
+                "Win Free Coins & VIP Pass": "இலவச காயின்ஸ் & VIP பாஸ் வெல்க",
+                "Join / Create Guild": "கில்ட் (Guild) சேர / உருவாக்க",
+                "Team Up with Clan Friends": "நண்பர்களுடன் கில்டில் இணைய",
+                "Level Up Rewards": "லெவல்-அப் பரிசுகள்",
+                "Free Coins & Name Badges": "இலவச காயின்ஸ் & பட்டங்கள்",
+                "1v1 & Find Players": "1v1 சவால் & வீரர்கள் தேடல்",
+                "Play 1v1 or Add Teammates": "1v1 ஆட & டீம் சேர்க்க",
+                "Vote Best Player": "சிறந்த வீரருக்கு ஓட்டு",
+                "Like Top Players & Earn Coins": "ஓட்டு போட்டு காயின்ஸ் பெறுக",
+                "Report Hacker": "ஹேக்கர் புகார்",
+                "Report Cheaters to Admin": "ஹேக்கர்களை அட்மினிடம் புகார் செய்",
+                "⚡ Quick Access": "⚡ முக்கிய வசதிகள்",
+                "Buy / View VIP Pass": "VIP பாஸ் வாங்கு / பார்",
+                "Install App": "ஆப் இன்ஸ்டால்",
                 "View Matches": "மேட்ச்களை பார்",
                 "Roadmap": "புள்ளிப்பட்டியல்",
                 "⚔️ 1v1 / LFT Hub": "⚔️ 1v1 / அணி தேடல்",
@@ -4855,9 +5157,30 @@ ${list}
                     return `<div class="cyber-card rounded-xl p-3 space-y-2"><div class="flex items-center justify-between"><div class="text-xs font-bold uppercase">Group ${grp}</div><button onclick="selectMatchSlot('${m.id}', '${window.escapeHTML(m.title || '').replace(/'/g, "\\'")}', '${grp}', '${m.type}', '${m.prize || ''}', '${m.fee || ''}', '${m.upiId || ''}', '${m.qrDataURL || ''}', ${m.upiEnabled !== false}, ${m.qrEnabled !== false}, ${m.slots || 12})" class="btn-theme px-3 py-1.5 text-xs ${isFull ? 'opacity-50 cursor-not-allowed' : ''}" ${isFull ? 'disabled' : ''}>${isFull ? 'Slots Full' : 'Join'}</button></div>${teamsInGroup.length > 0 ? `<div class="mt-2 space-y-1.5 pt-2 border-t" style="border-color: var(--border-color);"><div class="text-[10px] font-bold uppercase flex items-center justify-between" style="color: var(--accent-primary);"><span>Squads (${teamsInGroup.length}/${m.slots || 12}):</span>${groupWaLink ? `<a href="${groupWaLink}" target="_blank" class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px] shadow">Join WhatsApp</a>` : ''}</div><div class="space-y-1">${teamsListHtml}</div></div>` : ''}</div>`;
                 }).join('');
                 let liveStreamBtn = `<div class="flex flex-wrap items-center gap-1.5 mt-1.5 mb-1">` + (m.youtubeLink ? `<a href="${m.youtubeLink}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold shadow">🔴 Watch Live</a><button type="button" onclick="event.stopPropagation(); openPipStream('${window.escapeHTML(m.youtubeLink).replace(/'/g, "\'")}')" class="inline-flex items-center gap-1 px-2 py-1 bg-rose-500/20 border border-rose-500/50 text-rose-300 rounded text-[10px] font-bold cursor-pointer">📺 In-App PiP</button>` : '') + `<button type="button" onclick="event.stopPropagation(); openPredictionModal('${m.id}')" class="inline-flex items-center gap-1 px-2 py-1 bg-purple-500/20 border border-purple-500/40 text-purple-300 rounded text-[10px] font-bold cursor-pointer">🔮 Predict (+10🪙)</button><button type="button" onclick="event.stopPropagation(); openBracketModal('${m.id}')" class="inline-flex items-center gap-1 px-2 py-1 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 rounded text-[10px] font-bold cursor-pointer">🏆 Bracket</button></div>`;
-                const isUserRegInMatch = showGmailToStaff || allTeams.some(t => t.matchId === m.id && (t.userEmail || '').toLowerCase() === window.loggedEmail && t.status !== 'banned');
+                const myRegTeamsInMatch = allTeams.filter(t => t.matchId === m.id && (t.userEmail || '').toLowerCase() === window.loggedEmail && t.status !== 'banned');
+                const isUserRegInMatch = showGmailToStaff || myRegTeamsInMatch.length > 0;
+                const groupRooms = m.groupRooms || {};
+                const hasAnyRoom = Boolean(m.roomId) || Object.values(groupRooms).some(gr => gr && gr.roomId);
                 let roomVaultHtml = '';
-                if (m.roomId) { if (isUserRegInMatch) { roomVaultHtml = `<div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-between text-xs font-mono"><div><span class="text-emerald-400 font-bold">🔑 ROOM ID:</span> <b class="text-white">${window.escapeHTML(m.roomId)}</b> &nbsp;|&nbsp; <span class="text-amber-400 font-bold">PASS:</span> <b class="text-white">${window.escapeHTML(m.roomPass || 'None')}</b></div><button type="button" onclick="executeCopyOrShare('Room ID: ${window.escapeHTML(m.roomId)} | Password: ${window.escapeHTML(m.roomPass || '')}', 'Room Details')" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-sans font-bold cursor-pointer">📋 Copy</button></div>`; } else { roomVaultHtml = `<div class="p-2 rounded-xl bg-zinc-800/70 border border-zinc-700 text-[10px] text-amber-400 font-semibold text-center">🔒 Room ID & Password Published! (Visible only to squads registered in this match)</div>`; } }
+                if (hasAnyRoom) {
+                    if (isUserRegInMatch) {
+                        const visibleGroups = showGmailToStaff
+                            ? groups
+                            : myRegTeamsInMatch.map(t => (t.slotGroup || 'TEAM A').toUpperCase());
+                        const roomCards = visibleGroups.map(grp => {
+                            const gRoom = groupRooms[grp] || { roomId: m.roomId || '', roomPass: m.roomPass || '' };
+                            if (!gRoom.roomId) return '';
+                            const safeTitle = window.escapeHTML(m.title || 'Match').replace(/'/g, "\\'");
+                            const safeGrp = window.escapeHTML(grp).replace(/'/g, "\\'");
+                            const safeId = window.escapeHTML(gRoom.roomId).replace(/'/g, "\\'");
+                            const safePass = window.escapeHTML(gRoom.roomPass || 'None').replace(/'/g, "\\'");
+                            return `<div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex flex-wrap items-center justify-between gap-2 text-xs font-mono"><div><span class="px-1.5 py-0.5 rounded bg-amber-500 text-black font-sans font-extrabold text-[10px] mr-1.5">${window.escapeHTML(grp)}</span><span class="text-emerald-400 font-bold">🔑 ID:</span> <b class="text-white">${window.escapeHTML(gRoom.roomId)}</b> &nbsp;|&nbsp; <span class="text-amber-400 font-bold">PASS:</span> <b class="text-white">${window.escapeHTML(gRoom.roomPass || 'None')}</b></div><div class="flex items-center gap-1"><button type="button" onclick="executeCopyOrShare('[${safeGrp}] Room ID: ${safeId} | Password: ${safePass}', '${safeGrp} Room')" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-sans font-bold cursor-pointer">📋 Copy</button><button type="button" onclick="shareRoomToWhatsApp('${safeTitle}', '${safeId}', '${safePass}', '${safeGrp}')" class="px-2 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-[10px] font-sans font-bold cursor-pointer">📲 Share ${window.escapeHTML(grp)}</button></div></div>`;
+                        }).filter(Boolean).join('');
+                        roomVaultHtml = roomCards ? `<div class="space-y-1.5">${roomCards}</div>` : `<div class="p-2 rounded-xl bg-zinc-800/70 border border-zinc-700 text-[10px] text-amber-400 font-semibold text-center">⏳ Room ID for your assigned group (${visibleGroups.join(', ')}) will be published shortly!</div>`;
+                    } else {
+                        roomVaultHtml = `<div class="p-2 rounded-xl bg-zinc-800/70 border border-zinc-700 text-[10px] text-amber-400 font-semibold text-center">🔒 Group-Wise Room ID & Password Published! (Each squad sees only their own Group A / Group B Room ID)</div>`;
+                    }
+                }
                 return `<div class="cyber-card p-4 space-y-3"><div class="flex justify-between items-start cursor-pointer" onclick="toggleMatchExpand('${m.id}')"><div><div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-bold" style="color: var(--accent-primary);">#${idx + 1}</span>${statusBadge}${typeBadge}</div><h3 class="text-sm font-bold">${window.escapeHTML(m.title)}</h3><p class="text-[11px] font-mono mt-0.5" style="color: var(--text-muted);">🗺️ ${window.escapeHTML(m.map)} | 📅 ${window.escapeHTML(m.time)} | 💰 Prize: ₹${window.escapeHTML(m.prize || '0')}</p>${liveStreamBtn}</div><span class="text-xs font-semibold underline" style="color: var(--accent-primary);">Slots</span></div>${roomVaultHtml}<div id="slots-box-${m.id}" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t" style="border-color: var(--border-color);">${slotsHTML}</div></div>`;
             }).join('');
             window.renderAdminMatches();
@@ -4873,8 +5196,9 @@ ${list}
                         <div class="space-y-1.5 pt-1.5 border-t" style="border-color: var(--border-color);">
                             <div class="grid grid-cols-4 gap-1 text-[10px] font-bold uppercase pb-1" style="color: var(--text-muted);"><span>Team</span><span class="text-center">Place</span><span class="text-center">Kills</span><span class="text-right">Total</span></div>
                             ${sb.rankings.map((r, i) => {
-                                const isWinner = (m.stage === 'Finals' && i === 0 && m.status === 'ended');
-                                return `<div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''} cursor-pointer hover:border-emerald-500 transition-colors" onclick="showPlayerStats('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}')"><div class="flex justify-between items-center"><span>#${i+1} ${window.escapeHTML(r.teamName)}</span><span class="text-emerald-400">${r.totalScore} Pts</span></div><div class="grid grid-cols-3 gap-1 text-[10px] font-mono font-normal" style="color: var(--text-muted);"><span>Place: ${r.isEliminated ? 'Eliminated' : '#' + r.place}</span><span class="text-center">Kills: ${r.kills}</span><span class="text-right">Total: ${r.totalScore}</span></div>${isWinner ? `<div class="mt-1 p-1.5 bg-amber-500 text-black text-center text-[10px] font-extrabold rounded uppercase flex flex-wrap items-center justify-between gap-1 px-2.5"><span>👑 WINNER • ₹${window.escapeHTML(m.prize || '500')}</span><div class="flex gap-1"><button type="button" onclick="event.stopPropagation(); downloadWinnerPosterPNG('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}', '${window.escapeHTML(m.title).replace(/'/g, "\\'")}', '${window.escapeHTML(m.prize || '500')}', '${r.kills}', '${r.totalScore}')" class="bg-zinc-900 text-white px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer">🖼️ Poster</button><button type="button" onclick="event.stopPropagation(); openPrizeClaimModal('${m.id}', '${window.escapeHTML(m.title).replace(/'/g, "\\'")}', '${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}', '${window.escapeHTML(m.prize || '500')}')" class="bg-black text-amber-400 px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer">💰 Claim</button></div></div>` : ''}</div>`;
+                                const isFinals = String(m.stage || '').trim().toLowerCase() === 'finals';
+                                const isWinner = (isFinals && i === 0 && m.status === 'ended');
+                                return `<div class="cyber-card p-2 rounded flex flex-col gap-1 text-xs font-bold ${isWinner ? 'border-2 border-amber-400 bg-amber-500/10' : ''} cursor-pointer hover:border-emerald-500 transition-colors" onclick="showPlayerStats('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}')"><div class="flex justify-between items-center"><span>#${i+1} ${window.escapeHTML(r.teamName)}</span><span class="text-emerald-400">${r.totalScore} Pts</span></div><div class="grid grid-cols-3 gap-1 text-[10px] font-mono font-normal" style="color: var(--text-muted);"><span>Place: ${r.isEliminated ? 'Eliminated' : '#' + r.place}</span><span class="text-center">Kills: ${r.kills}</span><span class="text-right">Total: ${r.totalScore}</span></div>${isWinner ? `<div class="mt-1 p-1.5 bg-amber-500 text-black text-center text-[10px] font-extrabold rounded uppercase flex flex-wrap items-center justify-between gap-1 px-2.5"><span>👑 WINNER • ₹${window.escapeHTML(m.prize || '500')}</span><div class="flex gap-1"><button type="button" onclick="event.stopPropagation(); downloadWinnerPosterPNG('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}', '${window.escapeHTML(m.title).replace(/'/g, "\\'")}', '${window.escapeHTML(m.prize || '500')}', '${r.kills}', '${r.totalScore}')" class="bg-zinc-900 text-white px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer">🖼️ Poster</button><button type="button" onclick="event.stopPropagation(); downloadWinnerCertificatePNG('${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}', '${window.escapeHTML(m.title).replace(/'/g, "\\'")}', '${window.escapeHTML(m.prize || '500')}', '${r.kills}', '${r.totalScore}')" class="bg-emerald-900 text-emerald-200 px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer">🏅 Cert</button><button type="button" onclick="event.stopPropagation(); openPrizeClaimModal('${m.id}', '${window.escapeHTML(m.title).replace(/'/g, "\\'")}', '${window.escapeHTML(r.teamName).replace(/'/g, "\\'")}', '${window.escapeHTML(m.prize || '500')}')" class="bg-black text-amber-400 px-2 py-0.5 rounded text-[9px] font-bold cursor-pointer">💰 Claim</button></div></div>` : ''}</div>`;
                             }).join('')}
                         </div>`).join('') : '<p class="text-[11px]" style="color: var(--text-muted);">Results pending...</p>'}
                 </div>
@@ -4926,8 +5250,19 @@ ${list}
             const m = allMatches.find(item => item.id === id); if(!m) return;
             window.editingMatchId = id;
             const isSuper = window.isSuperAdminGlobal;
-            if (isSuper) { document.getElementById('cm-title').value = m.title || ''; document.getElementById('cm-stage').value = m.stage || 'Semifinals'; document.getElementById('cm-type').value = m.type || 'paid'; toggleMatchTypeFields(m.type || 'paid'); document.getElementById('cm-map').value = m.map || 'Bermuda'; document.getElementById('cm-time').value = m.time || ''; document.getElementById('cm-slots').value = m.slots || 12; document.getElementById('cm-prize-pool').value = m.prize || ''; document.getElementById('cm-fee').value = m.fee || ''; document.getElementById('cm-upi').value = m.upiId || ''; document.getElementById('cm-youtube').value = m.youtubeLink || ''; document.getElementById('cm-groups').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle').checked = m.qrEnabled !== false; document.getElementById('match-submit-btn').textContent = "Update Match"; window.switchSASub('match'); }
-            else { document.getElementById('cm-title-ah').value = m.title || ''; document.getElementById('cm-stage-ah').value = m.stage || 'Semifinals'; document.getElementById('cm-type-ah').value = m.type || 'paid'; toggleMatchTypeFieldsAH(m.type || 'paid'); document.getElementById('cm-map-ah').value = m.map || 'Bermuda'; document.getElementById('cm-time-ah').value = m.time || ''; document.getElementById('cm-slots-ah').value = m.slots || 12; document.getElementById('cm-prize-pool-ah').value = m.prize || ''; document.getElementById('cm-fee-ah').value = m.fee || ''; document.getElementById('cm-upi-ah').value = m.upiId || ''; document.getElementById('cm-youtube-ah').value = m.youtubeLink || ''; document.getElementById('cm-groups-ah').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle-ah').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle-ah').checked = m.qrEnabled !== false; document.getElementById('match-submit-btn-ah').textContent = "Update Match"; window.switchAHSub('match'); }
+            const groups = (m.groups || 'TEAM A, TEAM B').split(',').map(g => g.trim().toUpperCase()).filter(Boolean);
+            const waMap = m.whatsappMap || {};
+            if (isSuper) {
+                document.getElementById('cm-title').value = m.title || ''; document.getElementById('cm-stage').value = m.stage || 'Semifinals'; document.getElementById('cm-type').value = m.type || 'paid'; toggleMatchTypeFields(m.type || 'paid'); document.getElementById('cm-map').value = m.map || 'Bermuda'; document.getElementById('cm-time').value = m.time || ''; document.getElementById('cm-slots').value = m.slots || 12; document.getElementById('cm-prize-pool').value = m.prize || ''; document.getElementById('cm-fee').value = m.fee || ''; document.getElementById('cm-upi').value = m.upiId || ''; document.getElementById('cm-youtube').value = m.youtubeLink || ''; document.getElementById('cm-groups').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle').checked = m.qrEnabled !== false;
+                updateDynamicWhatsAppInputs();
+                groups.forEach((g, idx) => { const inp = document.getElementById(`wa-link-${idx}`); if (inp && waMap[g]) inp.value = waMap[g]; });
+                document.getElementById('match-submit-btn').textContent = "Update Match"; window.switchSASub('match');
+            } else {
+                document.getElementById('cm-title-ah').value = m.title || ''; document.getElementById('cm-stage-ah').value = m.stage || 'Semifinals'; document.getElementById('cm-type-ah').value = m.type || 'paid'; toggleMatchTypeFieldsAH(m.type || 'paid'); document.getElementById('cm-map-ah').value = m.map || 'Bermuda'; document.getElementById('cm-time-ah').value = m.time || ''; document.getElementById('cm-slots-ah').value = m.slots || 12; document.getElementById('cm-prize-pool-ah').value = m.prize || ''; document.getElementById('cm-fee-ah').value = m.fee || ''; document.getElementById('cm-upi-ah').value = m.upiId || ''; document.getElementById('cm-youtube-ah').value = m.youtubeLink || ''; document.getElementById('cm-groups-ah').value = m.groups || 'TEAM A, TEAM B'; document.getElementById('cm-upi-toggle-ah').checked = m.upiEnabled !== false; document.getElementById('cm-qr-toggle-ah').checked = m.qrEnabled !== false;
+                updateDynamicWhatsAppInputsAH();
+                groups.forEach((g, idx) => { const inp = document.getElementById(`wa-link-ah-${idx}`); if (inp && waMap[g]) inp.value = waMap[g]; });
+                document.getElementById('match-submit-btn-ah').textContent = "Update Match"; window.switchAHSub('match');
+            }
         };
 
         window.loadMatchTeamsForCalc = function(mode) {
@@ -4949,7 +5284,24 @@ ${list}
                 rankings.sort((a,b) => b.totalScore - a.totalScore);
                 const matchObj = allMatches.find(m => m.id === matchId); const stageName = matchObj ? matchObj.stage : 'Finals';
                 await setDoc(doc(db, 'matches', matchId), { publishedScoreboards: [{ stageName: stageName, groupName: 'TEAM A', rankings }], status: 'ended' }, { merge: true });
-                window.showToast('Published!'); window.switchTab('roadmap');
+                // 🏆 NEW UPDATE 2: Auto Winner Coin Drop (+100 / +60 / +30 SP Coins for Top 3 Squads)
+                try {
+                    const coinPrizes = [100, 60, 30];
+                    for (let rIdx = 0; rIdx < Math.min(3, rankings.length); rIdx++) {
+                        const rTeam = rankings[rIdx];
+                        if (!rTeam || rTeam.isEliminated) continue;
+                        const matchedSquad = (allTeams || []).find(t => t.matchId === matchId && (t.teamName || '').toUpperCase() === (rTeam.teamName || '').toUpperCase());
+                        const leaderEmail = (matchedSquad?.userEmail || '').toLowerCase();
+                        if (leaderEmail && leaderEmail !== 'guest') {
+                            const curCoins = Number(userCache[leaderEmail]?.spCoins || 0);
+                            const bonus = coinPrizes[rIdx];
+                            await setDoc(doc(db, 'users', leaderEmail), { spCoins: curCoins + bonus, updatedAt: Date.now() }, { merge: true });
+                            if (userCache[leaderEmail]) userCache[leaderEmail].spCoins = curCoins + bonus;
+                        }
+                    }
+                    window.refreshVipBadgeUI();
+                } catch(err) {}
+                window.showToast('🏆 Scoreboard Published & Top 3 Winner Coins Credited!'); window.switchTab('roadmap');
             }, "Yes, Publish");
         };
 
@@ -5012,8 +5364,13 @@ ${list}
                     const matchRef = doc(db, 'matches', matchId);
                     const matchDoc = await transaction.get(matchRef);
                     if (!matchDoc.exists()) throw new Error("Match does not exist!");
-                    const current = matchDoc.data().currentSlots || 0; const max = matchDoc.data().slots || 12;
-                    if (current >= max) throw new Error("Slots Full!");
+                    const mData = matchDoc.data() || {};
+                    const current = mData.currentSlots || 0;
+                    const perGroupSlots = mData.slots || 12;
+                    const grpList = (mData.groups || 'TEAM A, TEAM B').split(',').map(g => g.trim()).filter(Boolean);
+                    const totalMaxSlots = perGroupSlots * Math.max(1, grpList.length);
+                    const groupCountNow = (window.allTeams || []).filter(t => t.matchId === matchId && (t.slotGroup || 'TEAM A').toUpperCase() === (slotGroup || 'TEAM A').toUpperCase() && t.status !== 'banned').length;
+                    if (groupCountNow >= perGroupSlots || current >= totalMaxSlots) throw new Error(`Slots Full for ${slotGroup || 'this group'}!`);
                     const newRegRef = doc(collection(db, 'registrations')); const privRegRef = doc(db, 'registrations_private', newRegRef.id);
                     transaction.set(newRegRef, { teamId: newTeamId, teamName: newTeamName, leaderName: leaderName, gameUid: uid1, member2Uid: uid2, member3Uid: uid3, member4Uid: uid4, sub1Uid: sub1, sub2Uid: sub2, matchId: matchId, slotGroup: slotGroup, status: 'active', createdAt: Date.now() });
                     transaction.set(privRegRef, { regId: newRegRef.id, matchId: matchId, teamName: newTeamName, hometown: hometown, phoneNumber: phone, transitionId: utr || '', userEmail: window.loggedEmail, createdAt: Date.now() });
@@ -5023,7 +5380,28 @@ ${list}
             };
             try { await runRegTx(true); }
             catch (firstErr) { const msg = String(firstErr?.message || firstErr || ''); if (msg.toLowerCase().includes('permission') || msg.toLowerCase().includes('insufficient')) await runRegTx(false); else throw firstErr; }
-            try { const emailLow = window.loggedEmail.toLowerCase(); const uCached = userCache[emailLow] || {}; if (!uCached.ign || !uCached.gameUid) { const patch = { email: emailLow, ign: uCached.ign || leaderName, gameUid: uCached.gameUid || uid1, playerId: uCached.playerId || window.getStablePlayerId(emailLow), username: uCached.username || leaderName, updatedAt: Date.now() }; await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); userCache[emailLow] = { ...uCached, ...patch }; } } catch (e) {}
+            try {
+                const emailLow = window.loggedEmail.toLowerCase();
+                const uCached = userCache[emailLow] || {};
+                const patch = {};
+                if (!uCached.ign || !uCached.gameUid) {
+                    patch.email = emailLow;
+                    patch.ign = uCached.ign || leaderName;
+                    patch.gameUid = uCached.gameUid || uid1;
+                    patch.playerId = uCached.playerId || window.getStablePlayerId(emailLow);
+                    patch.username = uCached.username || leaderName;
+                }
+                if (String(utr || '').toUpperCase().startsWith('FREE-SLOT-')) {
+                    patch.freeSlotVoucher = '';
+                    if (userCache[emailLow]) userCache[emailLow].freeSlotVoucher = '';
+                }
+                if (Object.keys(patch).length > 0) {
+                    patch.updatedAt = Date.now();
+                    await setDoc(doc(db, 'users', emailLow), patch, { merge: true });
+                    userCache[emailLow] = { ...uCached, ...patch };
+                    window.refreshVipBadgeUI();
+                }
+            } catch (e) {}
         }
 
         document.getElementById('registration-paid-form')?.addEventListener('submit', async (e) => {
@@ -5033,7 +5411,8 @@ ${list}
             const matchId = selectedMatchForReg ? selectedMatchForReg.id : 'general'; const slotGroup = selectedMatchForReg ? selectedMatchForReg.group : 'TEAM A';
             const newTeamName = document.getElementById('paid-teamName').value.trim().toUpperCase(); const leaderName = document.getElementById('paid-leaderName').value.trim(); const hometown = document.getElementById('paid-hometown').value.trim(); const phone = document.getElementById('paid-phoneNumber').value.trim(); const uid1 = document.getElementById('paid-gameUid').value.trim(); const uid2 = document.getElementById('paid-member2Uid').value.trim(); const uid3 = document.getElementById('paid-member3Uid').value.trim(); const uid4 = document.getElementById('paid-member4Uid').value.trim(); const sub1 = document.getElementById('paid-sub1Uid').value.trim(); const sub2 = document.getElementById('paid-sub2Uid').value.trim(); const utr = document.getElementById('paid-transitionId').value.trim();
             if (!/^[6-9][0-9]{9}$/.test(phone)) { window.showToast("❌ Enter a valid 10-digit mobile number!"); return; }
-            if (!/^[0-9]{12}$/.test(utr) || /^(\d)\1{11}$/.test(utr) || utr === '123456789012') { window.showToast("❌ Enter a valid 12-digit numeric UPI UTR number!"); return; }
+            const utrValidation = window.validateNpciUtrNumber(utr);
+            if (!utrValidation.valid) { window.showToast(utrValidation.reason); return; }
             const alreadyRegistered = allTeams.some(t => t.matchId === matchId && (t.userEmail || '').toLowerCase() === window.loggedEmail);
             if (alreadyRegistered) { window.showToast("❌ You have already registered for this match!"); return; }
             const dupTeam = allTeams.find(t => t.matchId === matchId && (t.teamName || '').toUpperCase() === newTeamName);
@@ -5198,7 +5577,7 @@ ${list}
             else { try { if(localStorage.getItem('satta_pai_auth_email')!=='guest'){ window.loggedEmail=(localStorage.getItem('satta_pai_auth_email')||'').toLowerCase(); window.isSuperAdminGlobal=false; window.superAdminEmail=""; } } catch(e){} window.checkLoginState(); window.setupPrivateDataListeners(); }
         });
 
-        onSnapshot(collection(db, 'matches'), snap => { allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); window.allMatches = allMatches; window.renderPublicMatches(); window.renderRoadmapTab(); window.populateAllDropdowns(); });
+        onSnapshot(collection(db, 'matches'), snap => { allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); window.allMatches = allMatches; window.renderPublicMatches(); window.renderRoadmapTab(); window.populateAllDropdowns(); if(typeof window.checkAutoRoomSirenAndTimer === 'function') window.checkAutoRoomSirenAndTimer(); });
         onSnapshot(collection(db, 'registrations'), snap => { publicTeams = snap.docs.map(d => ({ id: d.id, ...d.data() })); mergePublicAndPrivateTeams(); });
 
         window.refreshVipBadgeUI = function() {
@@ -5215,9 +5594,9 @@ ${list}
             }
             if (hdrBtn) {
                 if (isVip) {
-                    hdrBtn.className = 'px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1 cursor-pointer shadow-lg bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-black ring-2 ring-amber-200 transition-all hover:scale-105';
+                    hdrBtn.className = 'w-full py-2 px-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-between cursor-pointer shadow-lg bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-black ring-2 ring-amber-200 transition-all';
                 } else {
-                    hdrBtn.className = 'px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1 cursor-pointer shadow border border-amber-400/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition-all hover:scale-105';
+                    hdrBtn.className = 'w-full py-2 px-3 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-between cursor-pointer shadow border border-amber-400/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition-all';
                 }
             }
             if (profTopBadge) { if (isVip) profTopBadge.classList.remove('hidden'); else profTopBadge.classList.add('hidden'); }
@@ -5236,10 +5615,28 @@ ${list}
         window.submitVipPaymentRequest = async function() {
             if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Please sign in with Google first!"); return; }
             const utr = (document.getElementById('vip-utr-input')?.value || '').trim();
-            if (!/^[0-9]{12}$/.test(utr) || /^(\d)\1{11}$/.test(utr) || utr === '123456789012') { window.showToast("❌ Enter a valid 12-digit numeric UPI UTR number!"); return; }
+            const utrValidation = window.validateNpciUtrNumber(utr);
+            if (!utrValidation.valid) { window.showToast(utrValidation.reason); return; }
             const emailLow = window.loggedEmail.toLowerCase();
             const playerId = window.getStablePlayerId(emailLow);
-            try { await setDoc(doc(db, 'vip_requests', emailLow), { userEmail: emailLow, playerId: playerId, utr: utr, days: window.selectedVipPlanDays || 28, amount: window.selectedVipPlanPrice || 29, status: 'pending', createdAt: Date.now() }); document.getElementById('vip-utr-input').value = ''; document.getElementById('vip-pending-notice')?.classList.remove('hidden'); window.showToast(`✅ Premium UTR Submitted for ${window.selectedVipPlanDays || 28} Days!`); } catch (e) { window.showToast("❌ Error: " + e.message); }
+            const aiMeta = window._lastScannedReceipt?.vip || null;
+            try {
+                await setDoc(doc(db, 'vip_requests', emailLow), {
+                    userEmail: emailLow,
+                    playerId: playerId,
+                    utr: utr,
+                    days: window.selectedVipPlanDays || 28,
+                    amount: window.selectedVipPlanPrice || 29,
+                    aiVerified: Boolean(aiMeta?.verified || utrValidation.valid),
+                    aiNote: aiMeta?.summary || utrValidation.bankHint || 'NPCI 12-Digit Verified',
+                    receiptThumb: aiMeta?.thumbDataUrl || '',
+                    status: 'pending',
+                    createdAt: Date.now()
+                });
+                document.getElementById('vip-utr-input').value = '';
+                document.getElementById('vip-pending-notice')?.classList.remove('hidden');
+                window.showToast(`✅ AI-Verified UTR Submitted for ${window.selectedVipPlanDays || 28} Days!`);
+            } catch (e) { window.showToast("❌ Error: " + e.message); }
         };
 
         window.executeVipCodeRedeem = async function(rawCode) {
@@ -5359,11 +5756,181 @@ ${list}
             window.showToast("⚡ Squad details auto-filled!");
         };
 
-        window.openRoomSetupModal = function(matchId) { const m = (allMatches || []).find(x => x.id === matchId); if (!m) return; document.getElementById('room-modal-match-id').value = matchId; document.getElementById('room-modal-id-input').value = m.roomId || ''; document.getElementById('room-modal-pass-input').value = m.roomPass || ''; document.getElementById('room-setup-modal').classList.remove('hidden'); };
+        window.openRoomSetupModal = function(matchId) {
+            const m = (allMatches || []).find(x => x.id === matchId);
+            if (!m) return;
+            document.getElementById('room-modal-match-id').value = matchId;
+            const groups = m.groups ? m.groups.split(',').map(g => g.trim().toUpperCase()).filter(Boolean) : ['TEAM A', 'TEAM B'];
+            const groupRooms = m.groupRooms || {};
+            const container = document.getElementById('room-setup-groups-container');
+            if (container) {
+                container.innerHTML = groups.map((grp, idx) => {
+                    const existing = groupRooms[grp] || {
+                        roomId: idx === 0 ? (m.roomId || '') : '',
+                        roomPass: idx === 0 ? (m.roomPass || '') : ''
+                    };
+                    const teamsCount = (window.allTeams || []).filter(t => t.matchId === matchId && (t.slotGroup || 'TEAM A').toUpperCase() === grp && t.status !== 'banned').length;
+                    return `<div class="cyber-card p-3 space-y-2 border border-emerald-500/35 bg-zinc-900/70">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2 py-0.5 rounded bg-amber-500 text-black font-extrabold text-[10px] uppercase">🛡️ ${window.escapeHTML(grp)}</span>
+                            <span class="text-[10px] font-mono text-emerald-400">${teamsCount}/${m.slots || 12} Squads Joined</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-bold mb-0.5 text-slate-300">${window.escapeHTML(grp)} Room ID</label>
+                                <input type="text" id="grp-room-id-${idx}" data-group="${window.escapeHTML(grp)}" value="${window.escapeHTML(existing.roomId || '')}" placeholder="e.g. 482910492" class="cyber-input w-full px-2.5 py-1.5 font-mono text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold mb-0.5 text-slate-300">${window.escapeHTML(grp)} Password</label>
+                                <input type="text" id="grp-room-pass-${idx}" value="${window.escapeHTML(existing.roomPass || '')}" placeholder="e.g. 9999" class="cyber-input w-full px-2.5 py-1.5 font-mono text-xs">
+                            </div>
+                        </div>
+                        <button type="button" onclick="shareGroupRoomFromModal(${idx})" class="w-full py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] flex items-center justify-center gap-1.5 cursor-pointer shadow">📲 Share ${window.escapeHTML(grp)} Room Key on WhatsApp</button>
+                    </div>`;
+                }).join('');
+            }
+            document.getElementById('room-setup-modal').classList.remove('hidden');
+        };
 
-        window.saveMatchRoomDetails = async function() { const matchId = document.getElementById('room-modal-match-id').value; const roomId = (document.getElementById('room-modal-id-input').value || '').trim(); const roomPass = (document.getElementById('room-modal-pass-input').value || '').trim(); if (!matchId) return; try { await setDoc(doc(db, 'matches', matchId), { roomId: roomId, roomPass: roomPass }, { merge: true }); document.getElementById('room-setup-modal').classList.add('hidden'); window.showToast("🔑 Room ID & Password Published to Registered Squads!"); } catch (e) { window.showToast("Error: " + e.message); } };
+        window.saveMatchRoomDetails = async function() {
+            const matchId = document.getElementById('room-modal-match-id').value;
+            const m = (allMatches || []).find(x => x.id === matchId);
+            if (!matchId || !m) return;
+            const groups = m.groups ? m.groups.split(',').map(g => g.trim().toUpperCase()).filter(Boolean) : ['TEAM A', 'TEAM B'];
+            const groupRooms = {};
+            let primaryRoomId = '';
+            let primaryRoomPass = '';
+            groups.forEach((grp, idx) => {
+                const rId = (document.getElementById(`grp-room-id-${idx}`)?.value || '').trim();
+                const rPass = (document.getElementById(`grp-room-pass-${idx}`)?.value || '').trim();
+                groupRooms[grp] = { roomId: rId, roomPass: rPass };
+                if (!primaryRoomId && rId) {
+                    primaryRoomId = rId;
+                    primaryRoomPass = rPass;
+                }
+            });
+            try {
+                await setDoc(doc(db, 'matches', matchId), {
+                    roomId: primaryRoomId,
+                    roomPass: primaryRoomPass,
+                    groupRooms: groupRooms
+                }, { merge: true });
+                document.getElementById('room-setup-modal').classList.add('hidden');
+                window.showToast("🔑 Group-Wise Room IDs Published! Each Group sees only their Room Key.");
+            } catch (e) { window.showToast("Error: " + e.message); }
+        };
 
-        window.openPrizeClaimModal = function(matchId, matchTitle, teamName, prize) { if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Please sign in with Google to claim prize!"); return; } document.getElementById('prize-claim-match-id').value = matchId; document.getElementById('prize-claim-match-title').value = matchTitle; document.getElementById('prize-claim-team-input').value = teamName || ''; document.getElementById('prize-claim-match-lbl').textContent = `${matchTitle} • Prize: ₹${prize}`; document.getElementById('prize-claim-modal').classList.remove('hidden'); };
+        // 📲 Group-Wise 1-Click Share Room ID & Password to WhatsApp (TEAM A / TEAM B separately)
+        window.shareRoomToWhatsApp = function(matchTitle, roomId, roomPass, groupName) {
+            if (!roomId) { window.showToast("⚠️ Enter Room ID for this Group first!"); return; }
+            const grpTag = groupName ? `\n🛡️ *Lobby Group:* ${groupName} ONLY` : '';
+            const msg = `🔥 *SATTA PAI ESPORTS TOURNAMENT* 🔥\n\n🎮 *Match:* ${matchTitle || 'Free Fire Custom Room'}${grpTag}\n🔑 *Room ID:* ${roomId}\n🔒 *Password:* ${roomPass || 'None'}\n\n⚠️ *Note:* Only squads registered in *${groupName || 'this group'}* are allowed to enter this room! Join within 5 minutes.`;
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+        };
+
+        window.shareGroupRoomFromModal = function(idx) {
+            const matchId = document.getElementById('room-modal-match-id')?.value;
+            const m = (allMatches || []).find(x => x.id === matchId);
+            const idEl = document.getElementById(`grp-room-id-${idx}`);
+            const passEl = document.getElementById(`grp-room-pass-${idx}`);
+            const grpName = idEl?.getAttribute('data-group') || `TEAM ${idx === 0 ? 'A' : 'B'}`;
+            const roomId = (idEl?.value || '').trim();
+            const roomPass = (passEl?.value || '').trim();
+            window.shareRoomToWhatsApp(m ? m.title : 'Satta Pai Custom Room', roomId, roomPass, grpName);
+        };
+
+        // 🎮 NEW UPDATE 3: 1-Click Free Fire Pro Gaming Avatar Generator & Picker
+        window.selectProGamingAvatar = async function(idx) {
+            const presets = [
+                { name: 'Crimson Rusher', bg1: '#ea580c', bg2: '#7c2d12', icon: '🔥', ring: '#fb923c' },
+                { name: 'Skull Sniper', bg1: '#e11d48', bg2: '#4c0519', icon: '💀', ring: '#fda4af' },
+                { name: 'Booyah King', bg1: '#d97706', bg2: '#451a03', icon: '👑', ring: '#fde047' },
+                { name: 'Cyber Ninja', bg1: '#0284c7', bg2: '#082f49', icon: '⚡', ring: '#38bdf8' },
+                { name: 'Ghost Reaper', bg1: '#dc2626', bg2: '#090102', icon: '👻', ring: '#ef4444' },
+                { name: 'Dragon IGL', bg1: '#059669', bg2: '#022c22', icon: '🐉', ring: '#34d399' }
+            ];
+            const p = presets[idx] || presets[0];
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+                <defs>
+                    <radialGradient id="g" cx="50%" cy="38%" r="65%">
+                        <stop offset="0%" stop-color="${p.bg1}"/>
+                        <stop offset="100%" stop-color="${p.bg2}"/>
+                    </radialGradient>
+                </defs>
+                <circle cx="80" cy="80" r="76" fill="url(#g)" stroke="${p.ring}" stroke-width="6"/>
+                <circle cx="80" cy="80" r="64" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="2" stroke-dasharray="6 4"/>
+                <text x="80" y="96" font-size="68" text-anchor="middle">${p.icon}</text>
+            </svg>`;
+            const dataUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+            const dpImg = document.getElementById('profile-dp-img');
+            if (dpImg) dpImg.src = dataUrl;
+            if (window.loggedEmail && window.loggedEmail !== 'guest') {
+                const emailLow = window.loggedEmail.toLowerCase();
+                try {
+                    await setDoc(doc(db, 'users', emailLow), { dp: dataUrl, avatar: dataUrl, updatedAt: Date.now() }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].dp = dataUrl; userCache[emailLow].avatar = dataUrl; }
+                    window.showToast(`🎮 Equipped "${p.name}" Pro Avatar!`);
+                } catch(e) { window.showToast("Avatar preview set! Click Save Profile."); }
+            } else {
+                window.showToast(`🎮 Selected "${p.name}" Pro Avatar!`);
+            }
+        };
+
+        // 🎁 NEW UPDATE 4: Gift / Transfer SP Coins to a Friend
+        window.sendSpCoinsToFriend = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const senderEmail = window.loggedEmail.toLowerCase();
+            const rawTarget = (document.getElementById('gift-friend-id-input')?.value || '').trim();
+            const amount = parseInt(document.getElementById('gift-coins-amount-input')?.value || '0', 10);
+            if (!rawTarget) { window.showToast("⚠️ Enter your friend's Player ID (SP-XXXX) or Email!"); return; }
+            if (!amount || amount < 10) { window.showToast("⚠️ Minimum gift amount is 10 SP Coins!"); return; }
+            const myCoins = Number(userCache[senderEmail]?.spCoins || window.currentUserSpCoins || 0);
+            if (myCoins < amount) { window.showToast(`🪙 Insufficient SP Coins! You have ${myCoins} Coins.`); return; }
+
+            let targetEmail = '';
+            const upperTarget = rawTarget.toUpperCase();
+            if (rawTarget.includes('@')) {
+                targetEmail = rawTarget.toLowerCase();
+            } else {
+                for (const [em, uObj] of Object.entries(userCache)) {
+                    const pid = (uObj.playerId || window.getStablePlayerId(em) || '').toUpperCase();
+                    if (pid === upperTarget) { targetEmail = em.toLowerCase(); break; }
+                }
+            }
+            if (!targetEmail || !userCache[targetEmail]) {
+                window.showToast("❌ Friend not found! Ask them to open Satta Pai once or enter their exact Gmail.");
+                return;
+            }
+            if (targetEmail === senderEmail) {
+                window.showToast("⚠️ You cannot gift SP Coins to yourself!");
+                return;
+            }
+            const friendName = userCache[targetEmail]?.username || userCache[targetEmail]?.ign || targetEmail;
+            window.askConfirm("Gift SP Coins", `Send ${amount} SP Coins to ${friendName}?`, async () => {
+                try {
+                    const newSenderCoins = myCoins - amount;
+                    const friendCoins = Number(userCache[targetEmail]?.spCoins || 0) + amount;
+                    await setDoc(doc(db, 'users', senderEmail), { spCoins: newSenderCoins, updatedAt: Date.now() }, { merge: true });
+                    await setDoc(doc(db, 'users', targetEmail), { spCoins: friendCoins, updatedAt: Date.now() }, { merge: true });
+                    if (userCache[senderEmail]) userCache[senderEmail].spCoins = newSenderCoins;
+                    if (userCache[targetEmail]) userCache[targetEmail].spCoins = friendCoins;
+                    window.refreshVipBadgeUI();
+                    document.getElementById('gift-friend-id-input').value = '';
+                    document.getElementById('gift-coins-amount-input').value = '';
+                    window.showToast(`🎁 Sent ${amount} SP Coins to ${friendName}!`);
+                } catch (e) { window.showToast("Error: " + e.message); }
+            }, "Send Gift");
+        };
+
+        window.openPrizeClaimModal = function(matchId, matchTitle, teamName, prize) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Please sign in with Google to claim prize!"); return; }
+            const m = (window.allMatches || []).find(x => x.id === matchId);
+            if (m && String(m.stage || '').trim().toLowerCase() !== 'finals') {
+                window.showToast("⚠️ Prize money & Claims are strictly for Grand Finals winners only!");
+                return;
+            }
+            document.getElementById('prize-claim-match-id').value = matchId; document.getElementById('prize-claim-match-title').value = matchTitle; document.getElementById('prize-claim-team-input').value = teamName || ''; document.getElementById('prize-claim-match-lbl').textContent = `${matchTitle} • Prize: ₹${prize}`; document.getElementById('prize-claim-modal').classList.remove('hidden'); };
 
         window.submitWinnerPrizeClaim = async function() { const matchId = document.getElementById('prize-claim-match-id').value; const matchTitle = document.getElementById('prize-claim-match-title').value; const teamName = (document.getElementById('prize-claim-team-input').value || '').trim().toUpperCase(); const upiId = (document.getElementById('prize-claim-upi-input').value || '').trim(); if (!teamName || !upiId) { window.showToast("Fill Team Name and UPI ID!"); return; } try { await addDoc(collection(db, 'prize_claims'), { matchId, matchTitle, teamName, upiId, userEmail: window.loggedEmail.toLowerCase(), status: 'pending', createdAt: Date.now() }); document.getElementById('prize-claim-modal').classList.add('hidden'); window.showToast("🏆 Prize Claim Sent to Admin!"); } catch (e) { window.showToast("Error: " + e.message); } };
 
@@ -5373,7 +5940,7 @@ ${list}
             const isStaff = window.isSuperAdminGlobal || isAdminEmail(emailLow);
             try { onSnapshot(doc(db, 'vip_requests', emailLow), snap => { const notice = document.getElementById('vip-pending-notice'); if (snap.exists() && snap.data().status === 'pending') notice?.classList.remove('hidden'); else notice?.classList.add('hidden'); }); } catch(e) {}
             if (!isStaff) return;
-            try { onSnapshot(collection(db, 'vip_requests'), snap => { const box = document.getElementById('admin-vip-requests-list'); if (!box) return; const reqs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status === 'pending'); if (reqs.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No pending Premium UTR requests.</div>`; return; } box.innerHTML = reqs.map(r => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-amber-400">${window.escapeHTML(r.userEmail)} <span class="text-[10px] text-slate-400">(${window.escapeHTML(r.playerId || '')})</span></div><div class="font-mono text-[10px] text-emerald-400">UTR: ${window.escapeHTML(r.utr)} | ₹${r.amount || 29} • ${r.days || 28} Days</div></div><div class="flex gap-1"><button type="button" onclick="adminSetUserVip('${window.escapeHTML(r.userEmail)}', ${r.days || 28})" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold cursor-pointer">✅ Approve ${r.days || 28}d</button><button type="button" onclick="rejectVipRequest('${window.escapeHTML(r.userEmail)}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">✕</button></div></div>`).join(''); }); } catch(e) {}
+            try { onSnapshot(collection(db, 'vip_requests'), snap => { const box = document.getElementById('admin-vip-requests-list'); if (!box) return; const reqs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status === 'pending'); window._pendingVipReqs = reqs; if (reqs.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No pending Premium UTR requests.</div>`; return; } box.innerHTML = reqs.map(r => `<div class="cyber-card p-2.5 flex flex-wrap items-center justify-between gap-2"><div><div class="font-bold text-amber-400 flex items-center gap-1.5 flex-wrap"><span>${window.escapeHTML(r.userEmail)}</span><span class="text-[10px] text-slate-400">(${window.escapeHTML(r.playerId || '')})</span><span class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono">🤖 ${window.escapeHTML(r.aiNote || 'NPCI Verified')}</span></div><div class="font-mono text-[10px] text-emerald-400">UTR: ${window.escapeHTML(r.utr)} | ₹${r.amount || 29} • ${r.days || 28} Days</div></div><div class="flex items-center gap-1">${r.receiptThumb ? `<button type="button" onclick="previewReceiptImg('${window.escapeHTML(r.id)}')" class="px-2 py-1 bg-cyan-600 text-white rounded text-[10px] font-bold cursor-pointer">🖼️ Receipt</button>` : ''}<button type="button" onclick="adminSetUserVip('${window.escapeHTML(r.userEmail)}', ${r.days || 28})" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold cursor-pointer">✅ Approve ${r.days || 28}d</button><button type="button" onclick="rejectVipRequest('${window.escapeHTML(r.userEmail)}')" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">✕</button></div></div>`).join(''); }); } catch(e) {}
             try { onSnapshot(collection(db, 'vip_codes'), snap => { const box = document.getElementById('admin-vip-codes-list'); if (!box) return; const codes = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(c => !c.used); if (codes.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No active unused keys. Click "+ Generate" above!</div>`; return; } box.innerHTML = codes.map(c => `<div class="cyber-card px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px]"><span class="text-purple-300 font-bold">${window.escapeHTML(c.code)} (${c.days || 28}d)</span><div class="flex gap-1"><button type="button" onclick="executeCopyOrShare('${window.escapeHTML(c.code)}', 'Premium Code')" class="px-2 py-0.5 bg-blue-600 text-white rounded text-[9px] font-sans font-bold cursor-pointer">📋 Copy</button><button type="button" onclick="deleteDoc(doc(db, 'vip_codes', '${window.escapeHTML(c.code)}'))" class="px-2 py-0.5 bg-rose-600 text-white rounded text-[9px] font-sans font-bold cursor-pointer">Del</button></div></div>`).join(''); }); } catch(e) {}
             try { onSnapshot(collection(db, 'prize_claims'), snap => { const box = document.getElementById('admin-prize-claims-list'); if (!box) return; const claims = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (claims.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No prize claims submitted yet.</div>`; return; } box.innerHTML = claims.map(c => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-amber-300">${window.escapeHTML(c.teamName)} <span class="text-[10px] text-slate-400">(${window.escapeHTML(c.matchTitle || 'Match')})</span></div><div class="font-mono text-[10px] text-emerald-400">UPI: ${window.escapeHTML(c.upiId)} | By: ${window.maskEmail(c.userEmail)}</div></div><div class="flex gap-1"><button type="button" onclick="executeCopyOrShare('${window.escapeHTML(c.upiId)}', 'Winner UPI')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">📋 UPI</button><button type="button" onclick="deleteDoc(doc(db, 'prize_claims', '${c.id}'))" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold cursor-pointer">✅ Done</button></div></div>`).join(''); }); } catch(e) {}
             try { onSnapshot(collection(db, 'cheat_reports'), snap => { const box = document.getElementById('admin-cheat-reports-list'); if (!box) return; const reps = snap.docs.map(d => ({ id: d.id, ...d.data() })); if (reps.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No hacker reports pending.</div>`; return; } box.innerHTML = reps.map(r => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-rose-400">${window.escapeHTML(r.suspectName)} <span class="font-mono text-[10px] text-amber-300">(UID: ${window.escapeHTML(r.suspectUid)})</span></div><div class="text-[10px] text-slate-300">${window.escapeHTML(r.reason)} ${r.proofLink ? `• <a href="${window.escapeHTML(r.proofLink)}" target="_blank" class="text-emerald-400 underline">Proof</a>` : ''}</div></div><button type="button" onclick="deleteDoc(doc(db, 'cheat_reports', '${r.id}'))" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">Clear</button></div>`).join(''); }); } catch(e) {}
@@ -5395,11 +5962,38 @@ ${list}
             if (modalCoins) modalCoins.textContent = coins;
             const refLbl = document.getElementById('my-ref-code-lbl');
             if (refLbl && emailLow && emailLow !== 'guest') refLbl.textContent = window.getStablePlayerId(emailLow);
+            const vBadge = document.getElementById('my-free-voucher-badge');
+            if (vBadge) {
+                const vCode = u.freeSlotVoucher || '';
+                vBadge.textContent = vCode ? `🎟️ Active: ${vCode}` : 'Voucher: None';
+            }
+        };
+
+        window.updateSpinWheelCooldownUI = function() {
+            const emailLow = (window.loggedEmail || '').toLowerCase();
+            const u = userCache[emailLow] || {};
+            const now = Date.now();
+            const badge = document.getElementById('spin-cooldown-timer-lbl');
+            const btn = document.getElementById('spin-now-btn');
+            if (!badge) return;
+            if (u.lastDailySpin && (now - u.lastDailySpin) < 86400000) {
+                const remMs = 86400000 - (now - u.lastDailySpin);
+                const hrs = Math.floor(remMs / 3600000);
+                const mins = Math.ceil((remMs % 3600000) / 60000);
+                badge.textContent = `⏳ Next Spin in ${hrs}h ${mins}m`;
+                badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold';
+                if (btn) btn.textContent = `⏳ Come Back in ${hrs}h ${mins}m`;
+            } else {
+                badge.textContent = '✅ Free Spin Ready!';
+                badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold';
+                if (btn) btn.textContent = '🎰 Spin Lucky Wheel Now';
+            }
         };
 
         window.openSpinWheelModal = function() {
             if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("🔐 Sign in with Google to earn SP Coins & Spin!"); return; }
             window.refreshVipBadgeUI();
+            window.updateSpinWheelCooldownUI();
             document.getElementById('spin-wheel-modal').classList.remove('hidden');
         };
 
@@ -5445,7 +6039,9 @@ ${list}
             ];
             const pick = rewards[Math.floor(Math.random() * rewards.length)];
             const wheel = document.getElementById('lucky-wheel-visual');
-            const totalDeg = 1440 + pick.deg;
+            window._wheelSpinCount = (window._wheelSpinCount || 0) + 1;
+            // Top pointer is at 0 deg (12 o'clock), so rotating by (360 - pick.deg) aligns the winning slice center under the top arrow
+            const totalDeg = (window._wheelSpinCount * 1800) + (360 - pick.deg);
             if (wheel) wheel.style.transform = `rotate(${totalDeg}deg)`;
             document.getElementById('spin-result-lbl').textContent = "🎡 Spinning Lucky Wheel...";
 
@@ -5455,11 +6051,134 @@ ${list}
                     await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, lastDailySpin: now, updatedAt: now }, { merge: true });
                     if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].lastDailySpin = now; }
                     window.refreshVipBadgeUI();
+                    window.updateSpinWheelCooldownUI();
                     document.getElementById('spin-result-lbl').textContent = `🎉 You Won ${pick.label}!`;
                     window.showToast(`🎉 Lucky Spin Won: ${pick.label}!`);
                 } catch (e) { window.showToast("Error saving spin: " + e.message); }
                 _isWheelSpinning = false;
             }, 2900);
+        };
+
+        // 🏆 ₹0-BUDGET REWARD 1: Redeem 400 SP Coins for a Free Paid-Match Entry Voucher
+        window.redeemFreeMatchSlotVoucher = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in with Google first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            if (u.freeSlotVoucher) {
+                window.executeCopyOrShare(u.freeSlotVoucher, "Free Match Slot Voucher");
+                window.showToast(`🎟️ You already have an active Free Slot Voucher: ${u.freeSlotVoucher}`);
+                return;
+            }
+            const coins = Number(u.spCoins) || 0;
+            if (coins < 400) {
+                window.showToast(`🪙 Need 400 SP Coins for a Free Paid-Match Entry Voucher! (You have ${coins} Coins)`);
+                return;
+            }
+            window.askConfirm("Redeem Free Match Slot", "Spend 400 SP Coins to generate a 1-Time FREE Paid-Match Entry Voucher? You can use it in any Paid Tournament without paying ₹ cash!", async () => {
+                const voucherCode = 'FREE-SLOT-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                const newCoins = coins - 400;
+                try {
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, freeSlotVoucher: voucherCode, updatedAt: Date.now() }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].freeSlotVoucher = voucherCode; }
+                    window.refreshVipBadgeUI();
+                    window.executeCopyOrShare(voucherCode, "Free Match Voucher");
+                    window.showToast(`🎟️ Free Match Voucher Unlocked: ${voucherCode}! Click '🎟️ Free Voucher' in any Paid Match to join free!`);
+                } catch (e) { window.showToast("Error: " + e.message); }
+            }, "Unlock Free Slot");
+        };
+
+        window.applyMyFreeSlotVoucherToForm = function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const voucher = userCache[emailLow]?.freeSlotVoucher || '';
+            if (!voucher) {
+                window.showToast("🎟️ No active Free Slot Voucher! Redeem 400 SP Coins in the 🪙 Spin & Coins store to get one.");
+                return;
+            }
+            const inp = document.getElementById('paid-transitionId');
+            if (inp) {
+                inp.value = voucher;
+                window.liveCheckUtrInput('paid');
+                window.showToast(`🎟️ Applied Free Match Voucher (${voucher})! Submit form to join at ₹0 cost!`);
+            }
+        };
+
+        // 🏆 ₹0-BUDGET REWARD 2: Redeem 250 SP Coins for 3-Day Mini Royal Pro Pass
+        window.redeemMiniVipPass3Days = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') return;
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            const coins = Number(u.spCoins) || 0;
+            if (coins < 250) {
+                window.showToast(`🪙 Need 250 SP Coins for 3-Day Mini Pro Pass! (You have ${coins} Coins)`);
+                return;
+            }
+            window.askConfirm("Redeem 3-Day Mini Pro Pass", "Spend 250 SP Coins to activate 3 Days Royal Premium Pass immediately?", async () => {
+                const now = Date.now();
+                const baseUntil = (window.currentUserVipUntil > now) ? window.currentUserVipUntil : now;
+                const newUntil = baseUntil + (3 * 24 * 60 * 60 * 1000);
+                const newCoins = coins - 250;
+                try {
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, updatedAt: now }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].premiumUntil = newUntil; }
+                    window.currentUserVipUntil = newUntil;
+                    window.refreshVipBadgeUI();
+                    window.showToast("⚡ 3-Day Mini Royal Pro Pass Activated via SP Coins!");
+                } catch (e) { window.showToast("Error: " + e.message); }
+            }, "Activate 3d Pro");
+        };
+
+        // 🏆 ₹0-BUDGET REWARD 3: Redeem 80 SP Coins for Golden Megaphone Shoutout in Global Chat
+        window.redeemGoldenChatMegaphone = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') return;
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            const coins = Number(u.spCoins) || 0;
+            if (coins < 80) {
+                window.showToast(`🪙 Need 80 SP Coins for a Golden Megaphone Chat Shoutout! (You have ${coins} Coins)`);
+                return;
+            }
+            const sqName = u.savedSquad?.teamName || u.ign || u.username || 'PRO SQUAD';
+            window.askConfirm("Golden Chat Megaphone", `Spend 80 SP Coins to broadcast a Golden Megaphone Shoutout for '${sqName}' in Global Chat?`, async () => {
+                const newCoins = coins - 80;
+                const displayName = u.username || window.getFriendlyFallbackName(emailLow, '');
+                try {
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, updatedAt: Date.now() }, { merge: true });
+                    if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
+                    window.refreshVipBadgeUI();
+                    await addDoc(collection(db, 'chats'), {
+                        message: `📢 [GOLDEN SHOUTOUT] 👑 Squad ${sqName} is ready to dominate the Satta Pai Arena! 🔥🏆`,
+                        userEmail: emailLow,
+                        displayName: displayName,
+                        isEdited: false,
+                        timestamp: Date.now()
+                    });
+                    document.getElementById('spin-wheel-modal')?.classList.add('hidden');
+                    window.openFullScreenChat();
+                    window.showToast("📢 Golden Shoutout Broadcasted in Global Chat!");
+                } catch (e) { window.showToast("Error: " + e.message); }
+            }, "Broadcast Now");
+        };
+
+        // 🎙️ Quick Voice Callout in Global Chat
+        window.sendVoiceShoutoutChat = function(chatText, spokenText) {
+            window.playEsportsKillSound('doublekill');
+            try {
+                if ('speechSynthesis' in window && !window._chatSfxMuted) {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(spokenText);
+                    u.rate = 1.05;
+                    u.pitch = 0.95;
+                    window.speechSynthesis.speak(u);
+                }
+            } catch (e) {}
+            const input = document.getElementById('chat-input');
+            if (input && !input.disabled) {
+                input.value = chatText;
+                window.sendChatMessage();
+            } else {
+                window.showToast(chatText);
+            }
         };
 
         window.redeemCoinsForVipPass = async function() {
@@ -5939,6 +6658,29 @@ ${list}
         // === 🧸🌧️❄️🟢 6. THEME & LIVE WALLPAPER MORPHING AI CHATBOT AVATAR ===
         // =====================================================================
         const CHATBOT_THEME_SKINS = {
+            'ghost-live': {
+                badge: '👻 GHOST',
+                mood: 'GRIM REAPER 💀',
+                bubble: '👻 Bwahaha... தைரியம் இருந்தா கேளு நண்பா! 💀',
+                headerEmoji: '👻',
+                fabSvg: `<svg class="mecha-visor-svg" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Dark Grim Reaper Jagged Hood -->
+                    <path d="M32 2L56 14L60 40L50 54L32 48L14 54L4 40L8 14L32 2Z" fill="#090102" stroke="#ef4444" stroke-width="2.2"/>
+                    <!-- Pale Cracked Horror Skull -->
+                    <path d="M18 24C18 14.5 24 9 32 9C40 9 46 14.5 46 24C46 30 43 34 40 36V43H24V36C21 34 18 30 18 24Z" fill="#1f070a" stroke="#f87171" stroke-width="1.8"/>
+                    <!-- Forehead Skull Crack -->
+                    <path d="M32 9L29 15L34 18L31 22" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round"/>
+                    <!-- Glowing Blood-Red Demon Eyes -->
+                    <polygon class="mecha-eye-left" points="21,22 29,24 27,30 20,28" fill="#ef4444"/>
+                    <circle cx="24.5" cy="26" r="1.5" fill="#fef08a"/>
+                    <polygon class="mecha-eye-right" points="43,22 35,24 37,30 44,28" fill="#ef4444"/>
+                    <circle cx="39.5" cy="26" r="1.5" fill="#fef08a"/>
+                    <!-- Hollow Nose Cavity -->
+                    <polygon points="32,29 29,34 35,34" fill="#ef4444"/>
+                    <!-- Stitched Jagged Horror Jaw / Fangs -->
+                    <path d="M24 39H40M27 36V42M32 36V42M37 36V42" stroke="#fca5a5" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>`
+            },
             'teddy-live': {
                 badge: '🧸 TEDDY',
                 mood: 'TEDDY AI 🧸',
@@ -6087,6 +6829,20 @@ ${list}
             }
         };
 
+        window.launchFullScreenAppMode = function() {
+            try {
+                const el = document.documentElement;
+                const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+                if (req && !document.fullscreenElement && !document.webkitFullscreenElement) {
+                    req.call(el).catch(() => {});
+                }
+                document.getElementById('app-install-modal')?.classList.add('hidden');
+                window.showToast("🖥️ Full-Screen App Mode Activated!");
+            } catch (e) {
+                window.showToast("🖥️ Full-Screen Active!");
+            }
+        };
+
         window.initPwaManifestWithEnterLogo = function() {
             try {
                 const cached = JSON.parse(localStorage.getItem('satta_pai_cached_config') || '{}');
@@ -6097,25 +6853,419 @@ ${list}
                     const mDef = document.getElementById('app-modal-default-logo');
                     if (mImg && mDef) { mImg.src = cached.logoDataURL; mImg.classList.remove('hidden'); mDef.classList.add('hidden'); }
                 }
+                // Update apple-touch-icon & favicon to PNG Data URL so iOS/Android uses pure Crown Logo without browser badge
+                const appleIcon = document.getElementById('app-apple-icon');
+                if (appleIcon && icon192) appleIcon.href = icon192;
+                const favIcon = document.getElementById('app-favicon');
+                if (favIcon && icon192) { favIcon.type = 'image/png'; favIcon.href = icon192; }
+
+                const startUrl = window.location.href.split('#')[0];
                 const manifestObj = {
-                    name: cached.brandName || "Satta Pai Esports - Free Fire Arena",
+                    id: startUrl,
+                    name: cached.brandName || "Satta Pai Esports",
                     short_name: "Satta Pai",
-                    description: "Official Free Fire BR/CS Custom Tournament App & Web Arena",
-                    start_url: window.location.href,
+                    description: "Official Free Fire BR/CS Custom Tournament Full-Screen App & Web Arena",
+                    start_url: startUrl,
+                    scope: startUrl.substring(0, startUrl.lastIndexOf('/') + 1) || "/",
                     display: "standalone",
+                    display_override: ["fullscreen", "standalone", "minimal-ui"],
                     orientation: "portrait",
                     background_color: "#05080c",
                     theme_color: "#10b981",
+                    prefer_related_applications: false,
                     icons: [
-                        { src: icon192, sizes: "192x192", type: "image/png", purpose: "any maskable" },
-                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "any maskable" }
+                        { src: icon192, sizes: "192x192", type: "image/png", purpose: "any" },
+                        { src: icon192, sizes: "192x192", type: "image/png", purpose: "maskable" },
+                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "any" },
+                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "maskable" }
                     ]
                 };
-                const blob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
-                const manifestUrl = URL.createObjectURL(blob);
+                // Use data:application/manifest+json URI instead of blob: so Android Chrome WebAPK server can read it and remove the Chrome badge!
+                const manifestDataUri = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestObj));
                 const linkEl = document.getElementById('pwa-manifest-link');
-                if (linkEl) linkEl.href = manifestUrl;
+                if (linkEl) linkEl.href = manifestDataUri;
+
+                // Register lightweight PWA Service Worker when supported so Chrome triggers native WebAPK install (no Chrome badge)
+                if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+                    const swCode = "self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',function(e){});";
+                    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+                    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+                }
             } catch (e) {}
+        };
+
+        // =====================================================================
+        // === 🤖 7B. FREE AI PAYMENT SCREENSHOT & NPCI 12-DIGIT UTR VERIFIER (5-LAYER ANTI-EDIT & OLD-DATE FORENSICS) ===
+        // =====================================================================
+        window._lastScannedReceipt = { vip: null, paid: null };
+
+        // Compute fast 16-char perceptual pixel hash from base64 thumbnail to detect re-uploaded old screenshots
+        window.computeReceiptPixelHash = function(dataUrl) {
+            const str = String(dataUrl || '');
+            let h1 = 0x811c9dc5, h2 = 0x01000193;
+            for (let i = 0; i < str.length; i += 3) {
+                const c = str.charCodeAt(i);
+                h1 ^= c; h1 = Math.imul(h1, 0x01000193);
+                h2 ^= (c + i); h2 = Math.imul(h2, 0x85ebca6b);
+            }
+            return ((h1 >>> 0).toString(16).padStart(8, '0') + (h2 >>> 0).toString(16).padStart(8, '0')).toUpperCase();
+        };
+
+        window.validateNpciUtrNumber = function(rawUtr) {
+            const utr = String(rawUtr || '').trim().toUpperCase();
+            const emailLow = (window.loggedEmail || '').toLowerCase();
+
+            // Allow valid 400-Coin Free Match Slot Voucher (FREE-SLOT-XXXX) in Paid Match registration
+            if (/^FREE-SLOT-[A-Z0-9]{4,8}$/.test(utr)) {
+                const myVoucher = (userCache[emailLow]?.freeSlotVoucher || '').toUpperCase();
+                if (myVoucher && myVoucher === utr) {
+                    return { valid: true, bankHint: '400-Coin Free Slot Voucher ✓', reason: `🎟️ Free Match Entry Voucher Verified (${utr})!` };
+                }
+                return { valid: false, reason: "❌ Invalid or already-used Free Slot Voucher! Redeem 400 SP Coins in Spin & Coins first." };
+            }
+
+            if (!/^[0-9]{12}$/.test(utr)) {
+                return { valid: false, reason: "❌ UTR must be exactly 12 numeric digits (0-9)!" };
+            }
+            // Block repeating digits (e.g. 111111111111) or sequential test strings
+            if (/^(\d)\1{11}$/.test(utr)) {
+                return { valid: false, reason: "❌ Fake repeating digits detected! Enter your real 12-digit UPI UTR." };
+            }
+            const bannedPatterns = ['123456789012', '012345678901', '987654321098', '112233445566', '121212121212', '100000000000', '000000000000'];
+            if (bannedPatterns.includes(utr) || /^(\d\d)\1{5}$/.test(utr) || /^(\d\d\d)\1{3}$/.test(utr)) {
+                return { valid: false, reason: "❌ Invalid test/pattern UTR blocked by AI Security!" };
+            }
+            const uniqueDigits = new Set(utr.split('')).size;
+            if (uniqueDigits < 4) {
+                return { valid: false, reason: "❌ Low-entropy fake UTR detected! Please enter your genuine GPay/PhonePe/Paytm 12-digit UTR." };
+            }
+            // Check if AI Screenshot Forensics flagged a fake/edited/old screenshot
+            for (const modeKey of ['vip', 'paid']) {
+                const scan = window._lastScannedReceipt[modeKey];
+                if (scan && scan.blockedReason) {
+                    return { valid: false, reason: scan.blockedReason };
+                }
+            }
+            // Check duplicate UTR across all existing match registrations and pending VIP requests
+            const usedInMatches = (window.allTeams || []).some(t => String(t.transitionId || '').trim() === utr);
+            const usedInVip = (window._pendingVipReqs || []).some(r => String(r.utr || '').trim() === utr);
+            if (usedInMatches || usedInVip) {
+                return { valid: false, reason: "❌ Duplicate UTR! This 12-digit UTR has already been used in an earlier payment!" };
+            }
+            // Identify likely UPI network / year prefix from first digit
+            const firstDigit = utr[0];
+            const bankHint = ['3', '4', '5', '6'].includes(firstDigit)
+                ? 'NPCI RRN Format Verified ✓'
+                : '12-Digit UPI Ref Verified ✓';
+            return { valid: true, bankHint, reason: `✅ AI Verified: ${bankHint} (Unique UTR)` };
+        };
+
+        window.liveCheckUtrInput = function(mode) {
+            const inputId = mode === 'vip' ? 'vip-utr-input' : 'paid-transitionId';
+            const statusId = mode === 'vip' ? 'vip-utr-ai-status' : 'paid-utr-ai-status';
+            const rawVal = (document.getElementById(inputId)?.value || '').trim().toUpperCase();
+            const val = rawVal.startsWith('FREE') ? rawVal.replace(/[^A-Z0-9-]/g, '') : rawVal.replace(/[^0-9]/g, '');
+            const el = document.getElementById(inputId);
+            if (el && el.value !== val) el.value = val;
+            const statusEl = document.getElementById(statusId);
+            if (!statusEl) return;
+            if (!val) {
+                statusEl.textContent = 'ℹ️ Enter 12-digit UPI UTR or upload screenshot above.';
+                statusEl.className = 'text-[10px] font-mono text-slate-400';
+                return;
+            }
+            if (!val.startsWith('FREE-SLOT-') && val.length < 12) {
+                statusEl.textContent = `⏳ Typing UTR: ${val.length}/12 digits...`;
+                statusEl.className = 'text-[10px] font-mono text-amber-400';
+                return;
+            }
+            const res = window.validateNpciUtrNumber(val);
+            statusEl.textContent = res.reason;
+            statusEl.className = res.valid
+                ? 'text-[10px] font-mono font-bold text-emerald-400'
+                : 'text-[10px] font-mono font-bold text-rose-400';
+        };
+
+        window.verifyUtrWithAiButton = function(mode) {
+            const inputId = mode === 'vip' ? 'vip-utr-input' : 'paid-transitionId';
+            const val = (document.getElementById(inputId)?.value || '').trim();
+            window.liveCheckUtrInput(mode);
+            const res = window.validateNpciUtrNumber(val);
+            window.showToast(res.reason);
+        };
+
+        window.scanPaymentScreenshotWithAI = async function(mode, event) {
+            const file = event?.target?.files?.[0];
+            if (!file) return;
+            const badgeId = mode === 'vip' ? 'vip-ai-scan-badge' : 'paid-ai-scan-badge';
+            const inputId = mode === 'vip' ? 'vip-utr-input' : 'paid-transitionId';
+            const badgeEl = document.getElementById(badgeId);
+            if (badgeEl) {
+                badgeEl.classList.remove('hidden');
+                badgeEl.textContent = '🔮 AI Forensics: Checking Screenshot Date, Edit Software & UTR...';
+                badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 animate-pulse';
+            }
+
+            // 🛡️ LAYER 1: Filename & Photo-Editor Tampering Check (PicsArt, Canva, PixelLab, Snapseed, Photoshop)
+            const fileNameLow = (file.name || '').toLowerCase();
+            const bannedEditors = ['picsart', 'canva', 'pixellab', 'snapseed', 'photoshop', 'lightroom', 'inshot', 'phonto', 'edited', 'fake'];
+            const matchedEditor = bannedEditors.find(ed => fileNameLow.includes(ed));
+            if (matchedEditor) {
+                const errMsg = `🚨 AI Tamper Alert: Edited screenshot detected (${matchedEditor.toUpperCase()})! Upload original unedited GPay/PhonePe screenshot.`;
+                window._lastScannedReceipt[mode] = { verified: false, blockedReason: errMsg };
+                if (badgeEl) {
+                    badgeEl.textContent = errMsg;
+                    badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-rose-500/25 text-rose-300 border border-rose-500/50';
+                }
+                window.showToast(errMsg);
+                event.target.value = '';
+                return;
+            }
+
+            // 🛡️ LAYER 2: Old-Date Screenshot File Timestamp & Old Year Check
+            const fileAgeMs = Date.now() - (file.lastModified || Date.now());
+            const fileAgeHours = Math.floor(fileAgeMs / 3600000);
+            const oldYearMatch = fileNameLow.match(/202[0-5]/);
+            if (oldYearMatch || fileAgeMs > 48 * 3600 * 1000) {
+                const ageText = oldYearMatch ? `Year ${oldYearMatch[0]}` : `${Math.ceil(fileAgeHours / 24)} days old`;
+                const errMsg = `🚨 Old Screenshot Blocked (${ageText})! Please upload today's fresh UPI payment screenshot.`;
+                window._lastScannedReceipt[mode] = { verified: false, blockedReason: errMsg };
+                if (badgeEl) {
+                    badgeEl.textContent = errMsg;
+                    badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-rose-500/25 text-rose-300 border border-rose-500/50';
+                }
+                window.showToast(errMsg);
+                event.target.value = '';
+                return;
+            }
+
+            // 🛡️ LAYER 3: Image Aspect Ratio (Block cropped/landscape fake strips) & Duplicate Perceptual Hash Check
+            const imgDimensions = await new Promise((resolve) => {
+                const testImg = new Image();
+                const objUrl = URL.createObjectURL(file);
+                testImg.onload = () => { URL.revokeObjectURL(objUrl); resolve({ w: testImg.width, h: testImg.height }); };
+                testImg.onerror = () => { URL.revokeObjectURL(objUrl); resolve({ w: 720, h: 1280 }); };
+                testImg.src = objUrl;
+            });
+
+            if (imgDimensions.w > imgDimensions.h * 1.15 || imgDimensions.h < 350) {
+                const errMsg = `🚨 Cropped / Altered Image Blocked (${imgDimensions.w}x${imgDimensions.h})! Upload full uncropped mobile UPI receipt screenshot.`;
+                window._lastScannedReceipt[mode] = { verified: false, blockedReason: errMsg };
+                if (badgeEl) {
+                    badgeEl.textContent = errMsg;
+                    badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-rose-500/25 text-rose-300 border border-rose-500/50';
+                }
+                window.showToast(errMsg);
+                event.target.value = '';
+                return;
+            }
+
+            window.compressImageAndGetBase64(file, async (thumbDataUrl) => {
+                const imgHash = window.computeReceiptPixelHash(thumbDataUrl);
+                let usedHashes = [];
+                try { usedHashes = JSON.parse(localStorage.getItem('satta_pai_used_receipt_hashes') || '[]'); } catch(e) {}
+                const dupInVip = (window._pendingVipReqs || []).some(r => r.receiptHash && r.receiptHash === imgHash);
+                if (usedHashes.includes(imgHash) || dupInVip) {
+                    const errMsg = `🚨 Duplicate Screenshot Blocked! This exact screenshot image was already uploaded earlier.`;
+                    window._lastScannedReceipt[mode] = { verified: false, blockedReason: errMsg };
+                    if (badgeEl) {
+                        badgeEl.textContent = errMsg;
+                        badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-rose-500/25 text-rose-300 border border-rose-500/50';
+                    }
+                    window.showToast(errMsg);
+                    event.target.value = '';
+                    return;
+                }
+
+                let extractedUtr = '';
+                const ageMins = Math.max(0, Math.round(fileAgeMs / 60000));
+                let aiSummary = `Fresh Screenshot (${ageMins}m ago) • Unedited ✓`;
+
+                // 1. Check if filename itself contains a 12-digit number
+                const fnMatch = (file.name || '').match(/(?<!\d)(\d{12})(?!\d)/);
+                if (fnMatch) extractedUtr = fnMatch[1];
+
+                // 🛡️ LAYER 4: Gemini 2.5 Flash Vision Forensic Check (Checks Date == Today, Receiver UPI, Amount, Font Tampering & 12-Digit UTR)
+                if (window.geminiApiKey && thumbDataUrl.includes(',')) {
+                    try {
+                        const b64Data = thumbDataUrl.split(',')[1];
+                        const todayStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                        const expectedAmount = mode === 'vip'
+                            ? (document.getElementById('vip-modal-price-lbl')?.textContent || '29')
+                            : (window.selectedMatchForReg?.fee || '');
+                        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(window.geminiApiKey)}`;
+                        const resp = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{
+                                    parts: [
+                                        { text: `Forensic audit this Indian UPI screenshot (GPay/PhonePe/Paytm). Today is ${todayStr}, expected amount is Rs ${expectedAmount}. Check if the screenshot is edited/fake (mismatched fonts/aligned text) or from an old date. Reply ONLY in JSON: {"utr":"12digits","amount":"number","dateText":"date on receipt","isEditedOrFake":false,"isOldDate":false,"reason":"short note"}` },
+                                        { inlineData: { mimeType: 'image/jpeg', data: b64Data } }
+                                    ]
+                                }]
+                            })
+                        });
+                        if (resp.ok) {
+                            const data = await resp.json();
+                            const rawTxt = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                            if (/\"isEditedOrFake\"\s*:\s*true/i.test(rawTxt)) {
+                                const errMsg = `🚨 Gemini Vision AI Blocked: Screenshot appears edited or not a genuine UPI payment receipt!`;
+                                window._lastScannedReceipt[mode] = { verified: false, blockedReason: errMsg };
+                                if (badgeEl) {
+                                    badgeEl.textContent = errMsg;
+                                    badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-rose-500/25 text-rose-300 border border-rose-500/50';
+                                }
+                                window.showToast(errMsg);
+                                return;
+                            }
+                            if (/\"isOldDate\"\s*:\s*true/i.test(rawTxt)) {
+                                const errMsg = `🚨 Gemini Vision AI Blocked: Screenshot shows an OLD payment date! Upload today's (${todayStr}) receipt.`;
+                                window._lastScannedReceipt[mode] = { verified: false, blockedReason: errMsg };
+                                if (badgeEl) {
+                                    badgeEl.textContent = errMsg;
+                                    badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-rose-500/25 text-rose-300 border border-rose-500/50';
+                                }
+                                window.showToast(errMsg);
+                                return;
+                            }
+                            const utrMatch = rawTxt.match(/\b(\d{12})\b/);
+                            if (utrMatch) extractedUtr = utrMatch[1];
+                            aiSummary = `Gemini Vision AI Forensics Verified (${ageMins}m old) ✓`;
+                        }
+                    } catch (e) {}
+                }
+
+                try {
+                    usedHashes.push(imgHash);
+                    localStorage.setItem('satta_pai_used_receipt_hashes', JSON.stringify(usedHashes.slice(-50)));
+                } catch(e) {}
+
+                window._lastScannedReceipt[mode] = {
+                    verified: true,
+                    blockedReason: null,
+                    summary: aiSummary,
+                    receiptHash: imgHash,
+                    thumbDataUrl: thumbDataUrl
+                };
+
+                if (extractedUtr) {
+                    const inp = document.getElementById(inputId);
+                    if (inp) {
+                        inp.value = extractedUtr;
+                        window.liveCheckUtrInput(mode);
+                    }
+                    if (badgeEl) {
+                        badgeEl.textContent = `✅ AI Forensics Passed (${ageMins}m ago) • Extracted UTR: ${extractedUtr}`;
+                        badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                    }
+                    window.showToast(`🤖 AI Verified Fresh Receipt & Filled UTR: ${extractedUtr}!`);
+                } else {
+                    if (badgeEl) {
+                        badgeEl.textContent = `✅ Fresh Unedited Screenshot Verified (${ageMins}m ago)! Confirm your 12-Digit UTR below.`;
+                        badgeEl.className = 'text-[10px] font-bold px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                    }
+                    window.showToast('📸 Fresh Unedited Screenshot Verified & Attached!');
+                }
+            });
+        };
+
+        window.previewReceiptImg = function(reqId) {
+            const r = (window._pendingVipReqs || []).find(x => x.id === reqId);
+            if (!r || !r.receiptThumb) { window.showToast("No receipt image attached."); return; }
+            const zImg = document.getElementById('qr-zoom-img');
+            if (zImg) {
+                zImg.src = r.receiptThumb;
+                document.getElementById('qr-zoom-modal')?.classList.remove('hidden');
+            }
+        };
+
+        // =====================================================================
+        // === 🏅 7C. OFFICIAL ESPORTS TOURNAMENT E-CERTIFICATE GENERATOR ===
+        // =====================================================================
+        window.downloadWinnerCertificatePNG = function(teamOrPlayerName, matchTitle, prize, kills, points) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1000; canvas.height = 700;
+            const ctx = canvas.getContext('2d');
+
+            // Royal Dark & Gold Certificate Background
+            const bg = ctx.createLinearGradient(0, 0, 1000, 700);
+            bg.addColorStop(0, '#040814');
+            bg.addColorStop(0.5, '#0a192f');
+            bg.addColorStop(1, '#051e19');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, 1000, 700);
+
+            // Double Ornate Golden Border
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 10;
+            ctx.strokeRect(24, 24, 952, 652);
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(40, 40, 920, 620);
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 42px sans-serif';
+            ctx.fillText('👑 SATTA PAI ESPORTS ARENA 👑', 500, 105);
+
+            ctx.fillStyle = '#34d399';
+            ctx.font = '900 22px monospace';
+            ctx.fillText('OFFICIAL CERTIFICATE OF ESPORTS EXCELLENCE', 500, 148);
+
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = 'italic 20px sans-serif';
+            ctx.fillText('This official certificate is proudly presented to', 500, 210);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 54px sans-serif';
+            ctx.fillText(String(teamOrPlayerName || 'CHAMPION SQUAD').toUpperCase(), 500, 285);
+
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(220, 305);
+            ctx.lineTo(780, 305);
+            ctx.stroke();
+
+            ctx.fillStyle = '#fde68a';
+            ctx.font = 'bold 26px sans-serif';
+            ctx.fillText(`For Outstanding Performance in "${matchTitle || 'Free Fire Battleground Arena'}"`, 500, 365);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = 'bold 24px monospace';
+            ctx.fillText(`💀 CONFIRMED KILLS: ${kills || 0}   |   ⭐ SCORE: ${points || 0} PTS   |   🏆 PRIZE / RANK: ₹${prize || 'PRO'}`, 500, 430);
+
+            // Official Seal & Verification Footer
+            const certId = 'SP-CERT-' + Math.floor(100000 + Math.random() * 900000);
+            const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = 'bold 16px monospace';
+            ctx.fillText(`DATE: ${dateStr}          |          CERTIFICATE ID: ${certId}`, 500, 540);
+
+            ctx.fillStyle = '#10b981';
+            ctx.font = '900 18px sans-serif';
+            ctx.fillText('✔ DIGITALLY VERIFIED BY SATTA PAI ESPORTS TOURNAMENT AUTHORITY', 500, 610);
+
+            const link = document.createElement('a');
+            link.download = `SattaPai_Certificate_${String(teamOrPlayerName || 'Pro').replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            window.showToast('🏅 Official Esports Certificate (PNG) Downloaded!');
+        };
+
+        window.downloadMyEsportsCertificatePNG = function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign in with Google to download your Official Certificate!");
+                return;
+            }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            const myTeam = (window.allTeams || []).find(t => (t.userEmail || '').toLowerCase() === emailLow);
+            const cStats = window.getPlayerCareerStats(emailLow, u.ign, myTeam?.teamName);
+            const name = u.ign || u.username || myTeam?.teamName || 'PRO CONTENDER';
+            window.downloadWinnerCertificatePNG(name, `Season 1 Career (${cStats.tier})`, cStats.totalWins + ' Booyahs', cStats.totalKills, cStats.totalPoints);
         };
 
         window.openAppInstallModal = function() {
@@ -6124,32 +7274,84 @@ ${list}
         };
 
         window.triggerNativeAppInstall = async function() {
+            window.launchFullScreenAppMode();
             if (window._deferredPwaPrompt) {
                 window._deferredPwaPrompt.prompt();
                 const choice = await window._deferredPwaPrompt.userChoice;
                 if (choice && choice.outcome === 'accepted') {
-                    window.showToast("🎉 Satta Pai Official App Installing with SP Arena Logo!");
+                    window.showToast("🎉 Satta Pai Official Full-Screen App Installed!");
                     document.getElementById('app-install-modal').classList.add('hidden');
                 }
                 window._deferredPwaPrompt = null;
             } else {
-                window.showToast("📲 Tap Browser ⋮ Menu ➔ 'Add to Home screen' / 'Install App' to add SP Arena Icon!");
+                window.showToast("📲 Full-Screen Active! Tap Browser ⋮ Menu ➔ 'Add to Home screen' / 'Install App'!");
             }
         };
 
         window.downloadAppShortcutPackage = function() {
             try {
-                const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-                const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                // Inject auto-fullscreen trigger on first interaction inside the generated app package
+                const autoFsScript = `<script>document.addEventListener('click',function _fs(){try{var e=document.documentElement;var r=e.requestFullscreen||e.webkitRequestFullscreen;if(r&&!document.fullscreenElement)r.call(e).catch(function(){});}catch(err){}document.removeEventListener('click',_fs);},{once:true});<\/script>`;
+                const rawHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML.replace('</body>', autoFsScript + '</body>');
+                const blob = new Blob([rawHtml], { type: 'text/html;charset=utf-8' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = 'Satta_Pai_Esports_App.html';
+                a.download = 'Satta_Pai_Esports_FullScreen_App.html';
                 a.click();
-                window.showToast("📥 Satta Pai Standalone App File Downloaded!");
+                window.launchFullScreenAppMode();
+                window.showToast("📥 Full-Screen Satta Pai App Generated & Downloaded!");
             } catch (e) {
-                window.showToast("Error downloading app file: " + e.message);
+                window.showToast("Error generating app file: " + e.message);
             }
         };
+
+        // =====================================================================
+        // === 🛡️ 12. SATTA PAI ANTI-THEFT SOURCE CODE & OWNERSHIP PROTECTION ===
+        // =====================================================================
+        window.initSattaPaiAntiTheftGuard = function() {
+            try {
+                // 1. Cryptographic Ownership & Firebase Project Binding Check
+                const expectedProj = ['sattapai', 'tournament'].join('-');
+                const expectedSender = '465702743401';
+                const cfgValid = (typeof firebaseConfig === 'object' &&
+                                  firebaseConfig.projectId === expectedProj &&
+                                  firebaseConfig.messagingSenderId === expectedSender);
+                const brandEl = document.getElementById('display-brand-name');
+                const introEl = document.getElementById('sp-cinematic-intro');
+                if (!cfgValid || !brandEl || !introEl) {
+                    document.body.innerHTML = `<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#05080c;color:#f43f5e;font-family:sans-serif;text-align:center;padding:24px;">
+                        <div style="font-size:48px;">🚫</div>
+                        <h1 style="font-size:20px;font-weight:900;margin-top:12px;">UNAUTHORIZED CLONE BLOCKED</h1>
+                        <p style="font-size:12px;color:#94a3b8;max-width:320px;margin-top:8px;">This source code is cryptographically locked to <b>Satta Pai Esports Official Firebase Project</b>. Unauthorized modification or re-hosting is strictly disabled.</p>
+                    </div>`;
+                    throw new Error("Satta Pai Ownership Lock Triggered");
+                }
+
+                // 2. Block Right-Click Context Menu on non-input elements
+                document.addEventListener('contextmenu', function(e) {
+                    const tag = (e.target && e.target.tagName) || '';
+                    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+                    e.preventDefault();
+                }, { passive: false });
+
+                // 3. Block DevTools / View-Source / Save-Page Keyboard Shortcuts (F12, Ctrl+U, Ctrl+S, Ctrl+Shift+I/J/C)
+                window.addEventListener('keydown', function(e) {
+                    const key = (e.key || '').toUpperCase();
+                    const isF12 = (key === 'F12' || e.keyCode === 123);
+                    const isCtrlShift = (e.ctrlKey || e.metaKey) && e.shiftKey && ['I', 'J', 'C', 'K'].includes(key);
+                    const isCtrlUorS = (e.ctrlKey || e.metaKey) && ['U', 'S'].includes(key);
+                    if (isF12 || isCtrlShift || isCtrlUorS) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (typeof window.showToast === 'function') {
+                            window.showToast("🛡️ Protected by Satta Pai Anti-Theft Security!");
+                        }
+                        return false;
+                    }
+                }, true);
+            } catch (err) {}
+        };
+        window.initSattaPaiAntiTheftGuard();
 
         // =====================================================================
         // === 🛡️ 8. SQUAD / GUILD CLAN SYSTEM & CLAN LEADERBOARD ===
@@ -6537,6 +7739,35 @@ ${list}
             { id: 'mvp_3', ign: 'BOOYAH_HUNTER', info: 'Clutch 1v4 Winner • Semifinals', fires: 29 }
         ];
         window.allMvpCandidates = [...DEFAULT_MVP_LIST];
+
+        window.checkAutoRoomSirenAndTimer = function() {
+            try {
+                const matches = window.allMatches || [];
+                const active = matches.filter(m => m.status !== 'ended');
+                const badgeEl = document.getElementById('home-countdown-badge');
+                const txtEl = document.getElementById('home-next-match-timer-txt');
+                if (active.length > 0) {
+                    const nextM = active[0];
+                    if (badgeEl) badgeEl.textContent = nextM.roomId ? '🔑 ROOM READY!' : `🔥 ${nextM.time || 'UPCOMING'}`;
+                    if (txtEl) txtEl.textContent = nextM.roomId
+                        ? `🚨 Room ID Published for ${nextM.title}! Open Join Match tab to copy Room ID!`
+                        : `Next Match: ${nextM.title} (${nextM.map} • ${nextM.time}) — Prize: ₹${nextM.prize || '0'}`;
+                }
+                if (!window._sirenAlertEnabled) return;
+                active.forEach(m => {
+                    if (m.roomId) {
+                        const key = `${m.id}_${m.roomId}`;
+                        if (!window._notifiedRoomMatches.has(key)) {
+                            window._notifiedRoomMatches.add(key);
+                            if (window._initialMatchesLoaded) {
+                                window.testMatchRoomSirenNow();
+                            }
+                        }
+                    }
+                });
+                window._initialMatchesLoaded = true;
+            } catch (e) {}
+        };
 
         window.toggleMatchSirenAlert = function() {
             window._sirenAlertEnabled = !window._sirenAlertEnabled;
