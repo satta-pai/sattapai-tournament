@@ -130,6 +130,31 @@
             white-space: nowrap;
             animation: tickerMarquee 22s linear infinite;
         }
+        .killfeed-marquee {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.25rem;
+            white-space: nowrap;
+            animation: tickerMarquee 20s linear infinite;
+        }
+        .killfeed-marquee:hover {
+            animation-play-state: paused;
+        }
+        .kill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 9999px;
+            background: rgba(225, 29, 72, 0.18);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            font-size: 11px;
+            font-family: 'Inter', monospace, sans-serif;
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.55);
+            flex-shrink: 0;
+            user-select: none;
+        }
 
         .swatch-rain::before { content: '🌧️'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; pointer-events: none; }
         .swatch-winter::before { content: '❄️'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; pointer-events: none; }
@@ -679,7 +704,7 @@
         }
     </style>
 </head>
-<body id="body-root">
+<body id="body-root" role="application" aria-label="Satta Pai Esports Arena">
 
     <!-- 🎬 SATTA PAI ESPORTS — UNIQUE CINEMATIC INTRO SPLASH (YouTube / Gaming Style) -->
     <div id="sp-cinematic-intro" onclick="skipCinematicIntro()">
@@ -1171,13 +1196,13 @@
             <div class="space-y-2 text-xs">
                 <button type="button" onclick="triggerNativeAppInstall()" class="btn-theme w-full py-2.5 text-xs font-extrabold uppercase cursor-pointer shadow-lg">📲 1-Click Install Native App (No Chrome Icon)</button>
                 <button type="button" onclick="launchFullScreenAppMode()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-extrabold text-xs uppercase cursor-pointer shadow-lg flex items-center justify-center gap-1.5">🖥️ Launch Full-Screen App Mode Now</button>
-                <button type="button" onclick="downloadAppShortcutPackage()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-amber-400/50 text-amber-300 font-extrabold text-[11px] cursor-pointer shadow flex items-center justify-center gap-1.5">📦 Download Offline Web-App Backup (.html)</button>
+                
             </div>
             <div class="cyber-card p-3 text-left text-[10px] space-y-1.5 bg-zinc-900/80 border border-amber-400/40" style="color: var(--text-muted);">
                 <div class="font-extrabold text-amber-400 uppercase">🚫 Chrome Symbol வராமல் Pure App Icon வர வைக்க:</div>
                 <div>• <b>Step 1:</b> மேல உள்ள <b>"📲 1-Click Install Native App"</b> பட்டனை தட்டுங்க (அல்லது Chrome <b>⋮ 3-Dots ➔ "Install app"</b> கொடுங்க).</div>
                 <div>• <b>Step 2:</b> <i>"Add to Home screen"</i>-ல் <b>"Install app"</b> தேர்வு செய்தால் Chrome சிம்பல் இல்லாமல் **100% ஒரிஜினல் SP Arena Crown App** ஆக இன்ஸ்டால் ஆகும்!</div>
-                <div>• <b>குறிப்பு:</b> <code>.html</code> ஃபைலாக டவுன்லோடு செய்தால் ஃபைல் மேனேஜரில் பிரவுசர் ஐகான் காட்டும்; நேரடி ஆப் ஐகானுக்கு <b>Install App</b> பயன்படுத்தவும்.</div>
+                <div>• <b>Tip:</b> ஆப் இன்ஸ்டால் செய்த பிறகு ஹோம் ஸ்கிரீனில் இருந்து ஓபன் செய்தால் முழு 60FPS ஃபுல்-ஸ்கிரீன் எக்ஸ்பீரியன்ஸ் கிடைக்கும்.</div>
             </div>
         </div>
     </div>
@@ -1414,7 +1439,7 @@
     <div id="customer-support-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <div class="cyber-card p-6 max-w-sm w-full space-y-3 text-center shadow-2xl">
             <h3 class="text-sm font-bold text-emerald-400">Customer Support</h3>
-            <div class="text-xs space-y-2 text-left cyber-card p-3 font-mono"><div>Email: <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline">satta0pai@gmail.com</a></div><div>Telegram: <a href="https://t.me/CHELLAM_STORE" target="_blank" class="text-emerald-400 underline">@CHELLAM_STORE</a></div></div>
+            <div class="text-xs space-y-2 text-left cyber-card p-3 font-mono"><div>Email: <a id="support-email-link" href="#" class="text-emerald-400 underline">Contact Support</a></div><div>Telegram: <a href="https://t.me/CHELLAM_STORE" target="_blank" class="text-emerald-400 underline">@CHELLAM_STORE</a></div></div>
             <button onclick="closeCustomerSupportModal()" class="w-full py-2 btn-theme text-xs font-bold cursor-pointer">Close</button>
         </div>
     </div>
@@ -1687,13 +1712,44 @@
             </div>
         </section>
 
-        <section id="section-matches" class="hidden space-y-3">
-            <button onclick="switchTab('home')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
-            <h2 class="text-base font-bold">Active Matches</h2>
+        <section id="section-matches" hidden aria-hidden="true" inert class="hidden space-y-3">
+            <div class="flex items-center justify-between">
+                <button onclick="switchTab('home')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
+                <div class="flex items-center gap-1.5">
+                    <button type="button" onclick="openLiveKillsLeaderboardModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-[10px] font-extrabold cursor-pointer shadow flex items-center gap-1">
+                        <span>📊</span><span>Live Kills Table</span>
+                    </button>
+                    <button type="button" id="host-post-kill-btn" onclick="openPostKillModal()" class="hidden px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 text-white text-[10px] font-extrabold cursor-pointer shadow flex items-center gap-1">
+                        <span>➕</span><span>Post Kill</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 🩸 LIVE KILL-FEED TICKER ON MATCH PAGE (REAL-TIME ESPORTS MARQUEE) -->
+            <div id="live-killfeed-bar" class="cyber-card p-3 space-y-2 border-2 border-rose-500/50 bg-zinc-950/90 shadow-xl overflow-hidden relative">
+                <div class="flex items-center justify-between gap-2 flex-wrap">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+                        <span class="font-black text-xs uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                            <span>💀 LIVE KILL-FEED TICKER</span>
+                            <span id="killfeed-live-match-tag" class="text-[9px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">STREAM ONLINE</span>
+                        </span>
+                    </div>
+                    <span id="killfeed-top-fragger-lbl" class="text-[10px] font-mono text-amber-300 font-extrabold truncate">👑 Top Fragger: Scanning...</span>
+                </div>
+                <!-- Scrolling Marquee Ticker Track -->
+                <div class="w-full overflow-hidden py-1.5 rounded-lg bg-zinc-900/90 border border-white/10 relative">
+                    <div id="killfeed-ticker-track" class="killfeed-marquee">
+                        <span class="kill-badge"><span>⚡ Loading Real-Time Battleground Kills Stream...</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-base font-bold pt-1">Active Matches</h2>
             <div id="public-matches-container" class="space-y-2"></div>
         </section>
 
-        <section id="section-roadmap" class="hidden space-y-3">
+        <section id="section-roadmap" hidden aria-hidden="true" inert class="hidden space-y-3">
             <button onclick="switchTab('home')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
             <div class="cyber-card p-4 space-y-2.5 border border-amber-500/40">
                 <div class="flex items-center justify-between">
@@ -1706,7 +1762,7 @@
             <div id="roadmap-container" class="space-y-3"></div>
         </section>
 
-        <section id="section-profile" class="hidden space-y-4">
+        <section id="section-profile" hidden aria-hidden="true" inert class="hidden space-y-4">
             <button onclick="switchTab('home')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
             <div class="flex items-center justify-between max-w-sm mx-auto">
                 <h2 class="text-base font-bold">My Profile</h2>
@@ -1814,7 +1870,7 @@
             </div>
         </section>
 
-        <section id="section-chat" class="hidden space-y-3">
+        <section id="section-chat" hidden aria-hidden="true" inert class="hidden space-y-3">
             <button onclick="switchTab('home')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
             <div class="cyber-card p-10 text-center space-y-4">
                 <h2 class="text-lg font-bold flex items-center justify-center gap-2"><svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg> Global Chat</h2>
@@ -1822,7 +1878,7 @@
             </div>
         </section>
 
-        <section id="section-register-paid" class="hidden">
+        <section id="section-register-paid" hidden aria-hidden="true" inert class="hidden">
             <div class="cyber-card p-5 max-w-lg mx-auto space-y-4">
                 <button onclick="switchTab('matches')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
                 <h2 class="text-lg font-bold">Paid Registration</h2>
@@ -1869,7 +1925,7 @@
             </div>
         </section>
 
-        <section id="section-register-free" class="hidden">
+        <section id="section-register-free" hidden aria-hidden="true" inert class="hidden">
             <div class="cyber-card p-5 max-w-lg mx-auto space-y-4">
                 <button onclick="switchTab('matches')" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
                 <h2 class="text-lg font-bold text-emerald-400">Free Registration</h2>
@@ -1897,9 +1953,100 @@
             </div>
         </section>
 
-        <section id="section-teams" class="hidden space-y-4">
-            <div id="console-super-admin" class="cyber-card p-4 space-y-4 hidden">
-                <div class="flex justify-between pb-2 border-b"><h2 class="text-sm font-bold">👑 Super Admin</h2><button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs">Logout</button></div>
+            
+    <!-- 💀 Live Kills Leaderboard Modal -->
+    <div id="live-kills-modal" class="fixed inset-0 z-[10009] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-5 max-w-md w-full max-h-[85vh] overflow-y-auto space-y-3 text-xs shadow-2xl border-2 border-rose-500/60" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="text-sm font-extrabold text-rose-400 uppercase tracking-wide">💀 Live Tournament Kill-Feed Leaderboard</h3>
+                    <p id="live-kills-modal-match-title" class="text-[10px] text-slate-300 font-semibold">Real-Time Match Kills & Top Fraggers</p>
+                </div>
+                <button type="button" onclick="document.getElementById('live-kills-modal').classList.add('hidden')" class="px-2 py-0.5 bg-rose-600 text-white rounded font-bold cursor-pointer">✕</button>
+            </div>
+            <div class="cyber-card p-2.5 bg-zinc-900/70 border border-rose-500/30 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-300">Total Match Kills: <b id="live-kills-total-count" class="text-rose-400 font-mono">0</b></span>
+                <span class="font-bold text-amber-400">🔥 +3 Pts / Kill</span>
+            </div>
+            <div id="live-kills-table-container" class="space-y-1.5 max-h-64 overflow-y-auto"></div>
+            <div class="pt-1">
+                <button type="button" onclick="document.getElementById('live-kills-modal').classList.add('hidden')" class="w-full py-2 cyber-card font-bold text-xs cursor-pointer">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ➕ Host / Admin Post Live Kill Modal -->
+    <div id="post-kill-modal" class="fixed inset-0 z-[10009] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-5 max-w-sm w-full space-y-3 text-xs shadow-2xl border-2 border-rose-500/60" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b pb-2" style="border-color: var(--border-color);">
+                <h3 class="text-sm font-extrabold text-rose-400 uppercase">➕ Broadcast Live Kill Event</h3>
+                <button type="button" onclick="document.getElementById('post-kill-modal').classList.add('hidden')" class="px-2 py-0.5 bg-rose-600 text-white rounded font-bold cursor-pointer">✕</button>
+            </div>
+            <p class="text-[10px]" style="color: var(--text-muted);">Broadcast in-game kill events live to all players & spectators on the match page.</p>
+            <div>
+                <label class="block text-[10px] font-bold mb-0.5 text-slate-300">Select Match</label>
+                <select id="post-kill-match-select" class="cyber-input w-full px-2.5 py-1.5 text-xs"></select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[10px] font-bold mb-0.5 text-slate-300">Killer Player / Squad *</label>
+                    <input type="text" id="post-kill-killer" placeholder="e.g. SP_STRIKER" class="cyber-input w-full px-2.5 py-1.5 uppercase font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold mb-0.5 text-slate-300">Victim (Optional)</label>
+                    <input type="text" id="post-kill-victim" placeholder="e.g. TN_SNIPER" class="cyber-input w-full px-2.5 py-1.5 uppercase">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[10px] font-bold mb-0.5 text-slate-300">Weapon</label>
+                    <select id="post-kill-weapon" class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                        <option value="MP40" selected>MP40 (SMG)</option>
+                        <option value="M1887">M1887 (Shotgun)</option>
+                        <option value="AWM">AWM (Sniper)</option>
+                        <option value="AK47">AK47 (AR)</option>
+                        <option value="Woodpecker">Woodpecker</option>
+                        <option value="Desert Eagle">Desert Eagle</option>
+                        <option value="Grenade">Grenade 💥</option>
+                        <option value="Vehicle">Vehicle 🚗</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold mb-0.5 text-slate-300">Kill Type</label>
+                    <select id="post-kill-type" class="cyber-input w-full px-2.5 py-1.5 text-xs">
+                        <option value="headshot" selected>🎯 Headshot Kill</option>
+                        <option value="knockout">🩸 Knockout</option>
+                        <option value="elimination">💀 Elimination</option>
+                        <option value="wipe">💥 Squad Wipe</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pt-1">
+                <button type="button" onclick="submitLiveKillBroadcast()" class="btn-theme w-full py-2.5 text-xs font-extrabold uppercase cursor-pointer shadow-lg">📢 Broadcast Live Kill Event</button>
+            </div>
+        </div>
+    </div>
+
+            </main>
+
+    <!-- 🛡️ SECURED ADMIN PORTAL & TEMPLATE VAULT (OUTSIDE MAIN - 100% BLOCKED FROM CHROME READER MODE) -->
+    <div id="admin-secured-portal" class="max-w-4xl mx-auto px-4 pt-4" hidden aria-hidden="true" inert style="display:none;">
+        <section id="section-teams" hidden aria-hidden="true" inert class="hidden space-y-4">
+            <div id="console-super-admin" class="cyber-card p-4 space-y-4 hidden" hidden aria-hidden="true" inert></div>
+            <div id="console-admin-host" class="cyber-card p-4 space-y-4 hidden" hidden aria-hidden="true" inert></div>
+            <div id="console-user" class="cyber-card p-6 text-center space-y-3 hidden" hidden aria-hidden="true" inert>
+                <img id="user-dash-dp" src="" class="w-16 h-16 rounded-full mx-auto object-cover border-2 border-emerald-500 hidden">
+                <h2 class="text-base font-bold" id="user-dash-name">Username</h2>
+                <p class="text-xs" style="color: var(--text-muted);" id="user-email-lbl"></p>
+                <div class="cyber-card p-3 text-xs space-y-2 text-left"><b>📋 Bookings:</b><div id="user-bookings-list">None</div></div>
+                <button onclick="confirmSecureLogout()" class="px-4 py-2 bg-rose-600 text-white rounded text-xs font-bold cursor-pointer">Logout</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Inert templates: Completely invisible to Chrome Reader Mode and Accessibility DOM Scrapers -->
+    <template id="template-super-admin">
+<div class="flex justify-between pb-2 border-b"><h2 class="text-sm font-bold">👑 Super Admin</h2><button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs">Logout</button></div>
                 <div class="flex flex-wrap gap-1.5 sm:gap-2 pb-2 text-xs">
                     <button onclick="switchSASub('score')" id="sas-btn-score" class="px-3 py-2 rounded-lg btn-theme whitespace-nowrap cursor-pointer">Scoreboard</button>
                     <button onclick="switchSASub('match')" id="sas-btn-match" class="px-3 py-2 rounded-lg cyber-card whitespace-nowrap cursor-pointer">Match Mgr</button>
@@ -1961,7 +2108,7 @@
                 </div>
 
                 <div id="sas-sec-staffs" class="hidden space-y-3 text-xs">
-                    <form id="add-staff-form" class="cyber-card p-3 space-y-2"><input type="email" id="staff-email-input" required placeholder="staff@gmail.com" class="cyber-input w-full px-2 py-1.5"><select id="staff-role-select" class="cyber-input w-full px-2 py-1.5"><option value="host">Host</option><option value="admin">Admin</option></select><button type="submit" class="btn-theme w-full py-2">Add Staff</button></form>
+                    <form id="add-staff-form" class="cyber-card p-3 space-y-2"><input type="email" id="staff-email-input" required placeholder="e.g. staff.id@domain.com" class="cyber-input w-full px-2 py-1.5"><select id="staff-role-select" class="cyber-input w-full px-2 py-1.5"><option value="host">Host</option><option value="admin">Admin</option></select><button type="submit" class="btn-theme w-full py-2">Add Staff</button></form>
                     <div class="cyber-card p-3 space-y-1"><b>Admins:</b><div id="admins-list-container"></div></div><div class="cyber-card p-3 space-y-1"><b>Hosts:</b><div id="hosts-list-container"></div></div>
                 </div>
 
@@ -2017,7 +2164,7 @@
 
                     <div class="cyber-card p-3 space-y-2">
                         <b>⚡ Direct Grant / Revoke Premium by Email</b>
-                        <input type="email" id="direct-vip-email" placeholder="player@gmail.com" class="cyber-input w-full px-2 py-1.5">
+                        <input type="email" id="direct-vip-email" placeholder="e.g. player.id@domain.com" class="cyber-input w-full px-2 py-1.5">
                         <div class="grid grid-cols-4 gap-1.5 pt-1">
                             <button type="button" onclick="grantVipToEmail(7)" class="py-1.5 bg-amber-500 text-black font-bold rounded text-[10px] cursor-pointer">+7d</button>
                             <button type="button" onclick="grantVipToEmail(14)" class="py-1.5 bg-amber-500 text-black font-bold rounded text-[10px] cursor-pointer">+14d</button>
@@ -2078,10 +2225,10 @@
                         <button type="submit" class="btn-theme w-full py-2">Save All Texts</button>
                     </form>
                 </div>
-            </div>
+    </template>
 
-            <div id="console-admin-host" class="cyber-card p-4 space-y-4 hidden">
-                <div class="flex justify-between pb-2 border-b"><h2 class="text-sm font-bold" id="ah-title-lbl">Console</h2><button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs">Logout</button></div>
+    <template id="template-admin-host">
+<div class="flex justify-between pb-2 border-b"><h2 class="text-sm font-bold" id="ah-title-lbl">Console</h2><button onclick="confirmSecureLogout()" class="px-3 py-1 bg-rose-600 text-white rounded text-xs">Logout</button></div>
                 <div class="flex flex-wrap gap-1.5 sm:gap-2 pb-2 text-xs">
                     <button onclick="switchAHSub('match')" id="ah-btn-match" class="px-3 py-2 rounded-lg btn-theme whitespace-nowrap cursor-pointer">Match Mgr</button>
                     <button onclick="switchAHSub('score')" id="ah-btn-score" class="px-3 py-2 rounded-lg cyber-card whitespace-nowrap cursor-pointer">Scoreboard</button>
@@ -2148,23 +2295,14 @@
                     <div class="cyber-card p-3 space-y-2">
                         <h3 class="font-bold text-sm" style="color: var(--accent-primary);">👥 Add Host</h3>
                         <form id="add-host-form-ah" class="space-y-2">
-                            <input type="email" id="host-email-input-ah" required placeholder="host@gmail.com" class="cyber-input w-full px-2 py-1.5">
+                            <input type="email" id="host-email-input-ah" required placeholder="e.g. host.id@domain.com" class="cyber-input w-full px-2 py-1.5">
                             <button type="submit" class="btn-theme w-full py-2">Add Host</button>
                         </form>
                     </div>
                     <div class="cyber-card p-3 space-y-2"><b>Authorized Hosts:</b><div id="hosts-list-container-ah"></div></div>
                 </div>
-            </div>
+    </template>
 
-            <div id="console-user" class="cyber-card p-6 text-center space-y-3 hidden">
-                <img id="user-dash-dp" src="" class="w-16 h-16 rounded-full mx-auto object-cover border-2 border-emerald-500 hidden">
-                <h2 class="text-base font-bold" id="user-dash-name">Username</h2>
-                <p class="text-xs" style="color: var(--text-muted);" id="user-email-lbl"></p>
-                <div class="cyber-card p-3 text-xs space-y-2 text-left"><b>📋 Bookings:</b><div id="user-bookings-list">None</div></div>
-                <button onclick="confirmSecureLogout()" class="px-4 py-2 bg-rose-600 text-white rounded text-xs font-bold">Logout</button>
-            </div>
-        </section>
-    </main>
 
     <nav class="bottom-nav shadow-lg">
         <button onclick="switchTab('home')" id="bnav-home" class="bottom-nav-item active"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></button>
@@ -4529,12 +4667,45 @@ ${list}
         window.playCinematicIntro(false);
 
         window.switchTab = function(tab) {
-            ['home', 'matches', 'roadmap', 'register-paid', 'register-free', 'teams', 'chat', 'profile'].forEach(s => { const sec = document.getElementById('section-' + s); if (sec) sec.classList.add('hidden'); });
-            const target = document.getElementById('section-' + tab); if(target) target.classList.remove('hidden');
-            ['home', 'matches', 'roadmap', 'chat', 'profile'].forEach(s => { const bnav = document.getElementById('bnav-' + s); if(bnav) bnav.classList.remove('active'); });
-            const activeBnav = document.getElementById('bnav-' + tab); if(activeBnav) activeBnav.classList.add('active');
-            if(tab === 'teams' && typeof window.checkLoginState === 'function') window.checkLoginState();
-            if(tab === 'profile' && typeof window.loadProfileUI === 'function') window.loadProfileUI();
+            const allTabs = ['home', 'matches', 'roadmap', 'register-paid', 'register-free', 'teams', 'chat', 'profile'];
+            allTabs.forEach(s => {
+                const sec = document.getElementById('section-' + s);
+                if (sec) {
+                    sec.classList.add('hidden');
+                    sec.setAttribute('hidden', '');
+                    sec.setAttribute('aria-hidden', 'true');
+                    sec.setAttribute('inert', '');
+                }
+            });
+            const portal = document.getElementById('admin-secured-portal');
+            if (portal) {
+                if (tab === 'teams') {
+                    portal.removeAttribute('hidden');
+                    portal.removeAttribute('aria-hidden');
+                    portal.removeAttribute('inert');
+                    portal.style.display = 'block';
+                } else {
+                    portal.setAttribute('hidden', '');
+                    portal.setAttribute('aria-hidden', 'true');
+                    portal.setAttribute('inert', '');
+                    portal.style.display = 'none';
+                }
+            }
+            const target = document.getElementById('section-' + tab);
+            if (target) {
+                target.classList.remove('hidden');
+                target.removeAttribute('hidden');
+                target.removeAttribute('aria-hidden');
+                target.removeAttribute('inert');
+            }
+            ['home', 'matches', 'roadmap', 'chat', 'profile'].forEach(s => {
+                const bnav = document.getElementById('bnav-' + s);
+                if (bnav) bnav.classList.remove('active');
+            });
+            const activeBnav = document.getElementById('bnav-' + tab);
+            if (activeBnav) activeBnav.classList.add('active');
+            if (tab === 'teams' && typeof window.checkLoginState === 'function') window.checkLoginState();
+            if (tab === 'profile' && typeof window.loadProfileUI === 'function') window.loadProfileUI();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
@@ -4572,12 +4743,15 @@ ${list}
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDoc, onSnapshot, getDocs, query, where, orderBy, updateDoc, increment, runTransaction } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
         import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
 
         const firebaseConfig = { apiKey: "AIzaSyAMs5OGAD7bOtbRoQ-0DMv-lLf-SRxyHS8", authDomain: "sattapai-tournament.firebaseapp.com", projectId: "sattapai-tournament", storageBucket: "sattapai-tournament.firebasestorage.app", messagingSenderId: "465702743401", appId: "1:465702743401:web:1072a897dc24f0b380e1f8", measurementId: "G-5CQJ29EP02" };
         const app = initializeApp(firebaseConfig);
         try { initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider('6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY'), isTokenAutoRefreshEnabled: true }); } catch (err) { console.warn("App Check init warning:", err); }
         const auth = getAuth(app); const provider = new GoogleAuthProvider(); const db = getFirestore(app);
+        const fbFunctions = getFunctions(app, 'asia-south1');
+        window.fbApp = app; window.fbDb = db; window.fbFunctions = fbFunctions; window.httpsCallable = httpsCallable; window.userCache = userCache;
         window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc; window.addDoc = addDoc; window.collection = collection; window.updateDoc = updateDoc; window.increment = increment;
 
         let publicTeams = [];
@@ -4593,7 +4767,7 @@ ${list}
         let selectedMatchForReg = null;
         window.editingMatchId = null;
 
-        function isSuperAdminEmail(email) { if (!email) return false; const low = email.toLowerCase(); return (window.superAdminEmail && low === window.superAdminEmail) || !!(userCache[low] && userCache[low].isSuperAdmin); }
+        function isSuperAdminEmail(email) { if (!email) return false; const low = email.toLowerCase(); return Boolean(window.isSuperAdminGlobal && window.superAdminEmail && low === window.superAdminEmail.toLowerCase()); }
         function isAdminEmail(email) { if (!email) return false; const low = email.toLowerCase(); return isSuperAdminEmail(low) || (window.authorizedAdmins || []).map(e => e.toLowerCase()).includes(low); }
         function isHostEmail(email) { if (!email) return false; const low = email.toLowerCase(); return isAdminEmail(low) || (window.authorizedHosts || []).map(e => e.toLowerCase()).includes(low); }
 
@@ -4620,7 +4794,11 @@ ${list}
                 playerId,
                 premiumUntil: pUntil,
                 isPremium: isPrem,
-                isSuperAdmin: Boolean(d.isSuperAdmin || ex.isSuperAdmin),
+                isSuperAdmin: false, // Server-verified via settings/superAdmin.uid only
+                bpBonusXp: Number(d.bpBonusXp || ex.bpBonusXp || 0),
+                claimedBpTiers: Array.isArray(d.claimedBpTiers) ? d.claimedBpTiers : (ex.claimedBpTiers || []),
+                lastBpDaily: Number(d.lastBpDaily || ex.lastBpDaily || 0),
+                freeSlotVoucher: d.freeSlotVoucher || ex.freeSlotVoucher || '',
                 savedSquad: d.savedSquad || ex.savedSquad || null,
                 spCoins: coins,
                 armoryTitle: d.armoryTitle || ex.armoryTitle || '',
@@ -4683,14 +4861,17 @@ ${list}
                 const stableId = window.getStablePlayerId(email);
                 const googleName = (user.displayName || email.split('@')[0] || 'Player').trim();
                 if (!snap.exists()) {
-                    const mergedNew = normalizeUserRecord({
-                        ...legacyData,
+                    const safeCreateDoc = {
                         email: email,
                         username: legacyData.username || legacyData.name || legacyData.displayName || googleName,
+                        ign: legacyData.ign || legacyData.ffName || '',
+                        gameUid: legacyData.gameUid || legacyData.ffUid || '',
                         playerId: legacyData.playerId || stableId,
+                        dpBase64: legacyData.dpBase64 || legacyData.dp || '',
                         updatedAt: Date.now()
-                    }, email);
-                    await setDoc(userRef, mergedNew, { merge: true });
+                    };
+                    await setDoc(userRef, safeCreateDoc, { merge: true });
+                    const mergedNew = normalizeUserRecord(safeCreateDoc, email);
                     currentUserProfile = mergedNew;
                     userCache[email] = mergedNew;
                 } else {
@@ -4720,10 +4901,16 @@ ${list}
             try {
                 const superDoc = await getDoc(doc(db, 'settings', 'superAdmin'));
                 if (superDoc.exists() && superDoc.data().uid === user.uid) {
-                    window.isSuperAdminGlobal = true; window.superAdminEmail = emailLow;
-                    try { await setDoc(doc(db, 'users', emailLow), { isSuperAdmin: true }, { merge: true }); if (userCache[emailLow]) userCache[emailLow].isSuperAdmin = true; } catch(err) {}
-                } else { window.isSuperAdminGlobal = false; }
-            } catch(e) { window.isSuperAdminGlobal = false; }
+                    window.isSuperAdminGlobal = true;
+                    window.superAdminEmail = emailLow;
+                } else {
+                    window.isSuperAdminGlobal = false;
+                    window.superAdminEmail = "";
+                }
+            } catch(e) {
+                window.isSuperAdminGlobal = false;
+                window.superAdminEmail = "";
+            }
             window.checkLoginState();
             window.setupPrivateDataListeners();
             window.refreshVipBadgeUI();
@@ -4816,7 +5003,12 @@ ${list}
                     try { localStorage.setItem('satta_pai_cached_config', JSON.stringify(safeCache)); } catch(e){}
                     window.syncAllVipPricesEverywhere();
                 }
-                trackVisitorStats(); renderStaffsLists(); window.checkLoginState(); initializeChat(); window.loadProfileUI(); window.loadSettings(); window.setupPrivateDataListeners(); window.initLiveUsersCounter();
+                const supportLink = document.getElementById('support-email-link');
+            if (supportLink) {
+                supportLink.href = 'mailto:' + ['satta0pai', 'gmail.com'].join('@');
+                supportLink.textContent = ['satta0pai', 'gmail.com'].join('@');
+            }
+                trackVisitorStats(); renderStaffsLists(); window.initDeviceSecurityAudit(); window.checkLoginState(); initializeChat(); window.loadProfileUI(); window.loadSettings(); window.setupPrivateDataListeners(); window.initLiveUsersCounter();
                 setInterval(() => { if (window.loggedEmail && window.loggedEmail !== 'guest' && typeof window.presenceHeartbeat === 'function') window.presenceHeartbeat(); }, 90000);
                 if (typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState();
 
@@ -5139,10 +5331,247 @@ ${list}
 
         window.updateChatMode = async function(mode) { await setDoc(doc(db, 'settings', 'chatConfig'), { mode: mode }, { merge: true }); window.showToast("Mode updated"); };
 
+        
+        // =====================================================================
+        // === 💀 LIVE KILL-FEED TICKER & ESPORTS REAL-TIME SCOREBOARD ENGINE ===
+        // =====================================================================
+        window.activeLiveKillFeed = [];
+
+        window.renderLiveKillFeedTicker = function() {
+            const track = document.getElementById('killfeed-ticker-track');
+            const topLbl = document.getElementById('killfeed-top-fragger-lbl');
+            const tagLbl = document.getElementById('killfeed-live-match-tag');
+            if (!track) return;
+
+            // Find currently playing or newest active match
+            const matches = window.allMatches || [];
+            const playingMatch = matches.find(m => m.status === 'playing') || matches[0];
+
+            if (!playingMatch) {
+                track.innerHTML = `<span class="kill-badge"><span>⏳ Waiting for match start... Kills stream will start automatically!</span></span>`;
+                if (topLbl) topLbl.textContent = '👑 Top Fragger: None';
+                return;
+            }
+
+            if (tagLbl) {
+                tagLbl.textContent = playingMatch.status === 'playing' ? '🔴 LIVE STREAM' : (playingMatch.status === 'ended' ? '🏁 MATCH ENDED' : 'UPCOMING MATCH');
+            }
+
+            let kills = Array.isArray(playingMatch.liveKillFeed) && playingMatch.liveKillFeed.length > 0
+                ? playingMatch.liveKillFeed
+                : [];
+
+            // If match is playing or active and no kills entered yet, generate dynamic match squad feed
+            if (kills.length === 0) {
+                const teams = (window.allTeams || []).filter(t => t.matchId === playingMatch.id);
+                if (teams.length > 0) {
+                    track.innerHTML = `<span class="kill-badge"><span class="text-amber-400 font-extrabold">⚔️ ${window.escapeHTML(playingMatch.title || 'Live Match')}</span><span class="text-slate-300 font-semibold">• Match in progress • ${teams.length} Squads Active • Awaiting Live Kills</span></span>`;
+                } else {
+                    track.innerHTML = `<span class="kill-badge"><span class="text-amber-400 font-extrabold">⚔️ ${window.escapeHTML(playingMatch.title || 'Live Match')}</span><span class="text-slate-300 font-semibold">• Match in progress • Waiting for Host Kill Broadcasts</span></span>`;
+                }
+                if (topLbl) topLbl.textContent = '👑 Top Fragger: Awaiting Kills (💀 0)';
+                return;
+            }
+
+            window.activeLiveKillFeed = kills;
+
+            // Compute top fragger
+            const killTally = {};
+            kills.forEach(k => {
+                const name = (k.killer || 'Pro').toUpperCase();
+                killTally[name] = Math.max(killTally[name] || 0, Number(k.kills || 1));
+            });
+            const sortedKillers = Object.entries(killTally).sort((a, b) => b[1] - a[1]);
+            const topKiller = sortedKillers[0];
+            if (topLbl && topKiller) {
+                topLbl.textContent = `👑 Top Fragger: ${topKiller[0]} (💀 ${topKiller[1]} Kills)`;
+            }
+
+            // Generate ticker HTML (duplicated for smooth infinite marquee wrap)
+            const badgesHtml = kills.map(k => {
+                const headshotIcon = k.isHeadshot ? '🎯' : '💥';
+                return `<span class="kill-badge">
+                    <span class="text-rose-400 font-extrabold">🩸 ${window.escapeHTML(k.killer)}</span>
+                    <span class="text-amber-400 font-bold">${headshotIcon} ${window.escapeHTML(k.weapon || 'FF Weapon')}</span>
+                    ${k.victim ? `<span class="text-slate-400 font-medium">💀 ${window.escapeHTML(k.victim)}</span>` : ''}
+                    <span class="px-1.5 py-0.5 rounded bg-amber-500 text-black font-black text-[9px] font-mono">${k.kills || 1} KILLS</span>
+                </span>`;
+            }).join('');
+
+            track.innerHTML = badgesHtml + badgesHtml; // Double up for seamless marquee loop
+        };
+
+        window.openLiveKillsLeaderboardModal = function() {
+            const matches = window.allMatches || [];
+            const playingMatch = matches.find(m => m.status === 'playing') || matches[0];
+            const titleEl = document.getElementById('live-kills-modal-match-title');
+            const totalEl = document.getElementById('live-kills-total-count');
+            const tableEl = document.getElementById('live-kills-table-container');
+
+            if (titleEl) {
+                titleEl.textContent = playingMatch ? `${playingMatch.title} • Live Kill Leaderboard` : 'Live Kill Leaderboard';
+            }
+
+            const kills = window.activeLiveKillFeed || [];
+            const tally = {};
+            kills.forEach(k => {
+                const name = (k.killer || 'Pro').toUpperCase();
+                const count = Number(k.kills || 1);
+                if (!tally[name]) tally[name] = { name, kills: count, weapon: k.weapon || 'MP40', isHeadshot: k.isHeadshot };
+                else tally[name].kills = Math.max(tally[name].kills, count);
+            });
+
+            const sorted = Object.values(tally).sort((a, b) => b.kills - a.kills);
+            const totalKills = sorted.reduce((sum, item) => sum + item.kills, 0);
+            if (totalEl) totalEl.textContent = totalKills;
+
+            if (!tableEl) return;
+            if (sorted.length === 0) {
+                tableEl.innerHTML = `<div class="cyber-card p-4 text-center text-slate-400">No kills recorded yet in this match.</div>`;
+            } else {
+                tableEl.innerHTML = sorted.map((item, idx) => {
+                    const medal = idx === 0 ? '👑 #1' : (idx === 1 ? '🥈 #2' : (idx === 2 ? '🥉 #3' : `#${idx + 1}`));
+                    const isTop = idx === 0;
+                    return `<div class="cyber-card p-2.5 flex items-center justify-between gap-2 ${isTop ? 'border border-amber-400/60 bg-amber-500/10' : ''}">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono font-bold ${isTop ? 'text-amber-400' : 'text-slate-400'} text-xs">${medal}</span>
+                            <div>
+                                <div class="font-extrabold text-white text-xs">${window.escapeHTML(item.name)}</div>
+                                <div class="text-[9px] text-slate-400 font-mono">Fav Gun: ${item.weapon} • Points: +${item.kills * 3} Pts</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 font-extrabold font-mono text-[10px]">💀 ${item.kills} Kills</span>
+                            <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold text-[9px]">ALIVE</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+            document.getElementById('live-kills-modal')?.classList.remove('hidden');
+        };
+
+        window.openPostKillModal = function() {
+            const matches = window.allMatches || [];
+            const sel = document.getElementById('post-kill-match-select');
+            if (sel) {
+                sel.innerHTML = matches.map(m => `<option value="${m.id}">${m.title} (${(m.status||'UPCOMING').toUpperCase()})</option>`).join('');
+            }
+            document.getElementById('post-kill-modal')?.classList.remove('hidden');
+        };
+
+        window.submitLiveKillBroadcast = async function() {
+            const sel = document.getElementById('post-kill-match-select');
+            const matchId = sel ? sel.value : '';
+            const killer = (document.getElementById('post-kill-killer')?.value || '').trim().toUpperCase();
+            const victim = (document.getElementById('post-kill-victim')?.value || '').trim().toUpperCase();
+            const weapon = document.getElementById('post-kill-weapon')?.value || 'MP40';
+            const killType = document.getElementById('post-kill-type')?.value || 'headshot';
+
+            if (!matchId || !killer) {
+                window.showToast("⚠️ Select match and enter Killer Name / Squad!");
+                return;
+            }
+
+            const m = (window.allMatches || []).find(x => x.id === matchId);
+            const currentFeed = Array.isArray(m?.liveKillFeed) ? [...m.liveKillFeed] : [];
+
+            // Calculate updated kills count for this killer
+            const prevKills = currentFeed.filter(k => (k.killer || '').toUpperCase() === killer).length;
+            const newKillEvent = {
+                id: 'k_' + Date.now(),
+                killer,
+                victim: victim || 'Enemy Player',
+                weapon,
+                killType,
+                isHeadshot: (killType === 'headshot'),
+                kills: prevKills + 1,
+                time: Date.now()
+            };
+
+            currentFeed.unshift(newKillEvent);
+            if (currentFeed.length > 25) currentFeed.pop();
+
+            try {
+                await setDoc(doc(db, 'matches', matchId), { liveKillFeed: currentFeed, status: 'playing' }, { merge: true });
+                window.playEsportsKillSound('doublekill');
+                document.getElementById('post-kill-killer').value = '';
+                document.getElementById('post-kill-victim').value = '';
+                document.getElementById('post-kill-modal')?.classList.add('hidden');
+                window.showToast(`🩸 Live Kill Broadcasted: ${killer} eliminated ${victim || 'Enemy'} with ${weapon}!`);
+                window.renderLiveKillFeedTicker();
+            } catch (e) {
+                window.showToast("Error broadcasting kill: " + e.message);
+            }
+        };
+
+        // =====================================================================
+        // === 🛡️ HARDWARE & DEVICE FINGERPRINTING (ANTI-SMURF SECURITY) ===
+        // =====================================================================
+        window.getDeviceFingerprintHash = async function() {
+            try {
+                const parts = [
+                    navigator.userAgent || '',
+                    navigator.language || '',
+                    screen.colorDepth || '',
+                    `${screen.width}x${screen.height}`,
+                    navigator.hardwareConcurrency || '',
+                    Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+                ];
+                // Canvas Fingerprint
+                const c = document.createElement('canvas');
+                c.width = 180; c.height = 40;
+                const ctx = c.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(100, 2, 50, 18);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fillText('SP_SECURE_2026', 4, 12);
+                parts.push(c.toDataURL());
+
+                const raw = parts.join('|||');
+                let hash = 0;
+                for (let i = 0; i < raw.length; i++) {
+                    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+                    hash |= 0;
+                }
+                const fp = 'DEV-' + Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+                try { localStorage.setItem('satta_pai_device_id', fp); } catch(e) {}
+                return fp;
+            } catch(e) {
+                return 'DEV-SECURE';
+            }
+        };
+
+        window.initDeviceSecurityAudit = async function() {
+            try {
+                const devId = await window.getDeviceFingerprintHash();
+                // Check if device is banned in config
+                const cfgSnap = await getDoc(doc(db, 'settings', 'config'));
+                if (cfgSnap.exists()) {
+                    const d = cfgSnap.data();
+                    const bannedDevs = Array.isArray(d.banned_devices) ? d.banned_devices : [];
+                    if (bannedDevs.includes(devId)) {
+                        document.body.innerHTML = `<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#030712;color:#f43f5e;font-family:sans-serif;text-align:center;padding:24px;">
+                            <div style="font-size:56px;">🚫</div>
+                            <h1 style="font-size:22px;font-weight:900;margin-top:14px;color:#ef4444;">DEVICE PERMANENTLY BANNED</h1>
+                            <p style="font-size:12px;color:#94a3b8;max-width:340px;margin-top:8px;line-height:1.6;">This device (<b>${devId}</b>) has been banned by Satta Pai Anti-Cheat Security due to fair play violations or multi-account abuse. Creating new accounts on this phone is permanently blocked.</p>
+                        </div>`;
+                        throw new Error("Device banned: " + devId);
+                    }
+                }
+            } catch(e) {}
+        };
+
         window.renderPublicMatches = function() {
             const c = document.getElementById('public-matches-container'); if (!c) return;
             if (allMatches.length === 0) { c.innerHTML = `<div class="cyber-card p-4 text-center text-xs">No matches.</div>`; return; }
             const isSuper = window.isSuperAdminGlobal; const isAdmin = isSuper || isAdminEmail(window.loggedEmail); const isHost = isSuper || isHostEmail(window.loggedEmail); const showGmailToStaff = isAdmin || isHost;
+            window.renderLiveKillFeedTicker();
+            // Toggle host post kill button
+            const isHostOrAdmin = window.isSuperAdminGlobal || isAdminEmail(window.loggedEmail) || isHostEmail(window.loggedEmail);
+            const hostPostBtn = document.getElementById('host-post-kill-btn');
+            if (hostPostBtn) { if (isHostOrAdmin) hostPostBtn.classList.remove('hidden'); else hostPostBtn.classList.add('hidden'); }
             c.innerHTML = allMatches.map((m, idx) => {
                 const groups = m.groups ? m.groups.split(',').map(g => g.trim().toUpperCase()) : ['TEAM A', 'TEAM B']; const whatsappMap = m.whatsappMap || {}; const status = m.status || 'not_started';
                 let statusBadge = status === 'playing' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 animate-pulse">LIVE</span>` : (status === 'ended' ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300">ENDED</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300">UPCOMING</span>`);
@@ -5358,51 +5787,33 @@ ${list}
         }
 
         async function executeMatchRegistration({ matchId, slotGroup, newTeamId, newTeamName, leaderName, hometown, phone, uid1, uid2, uid3, uid4, sub1, sub2, utr }) {
-            const phoneDocRef = doc(db, 'match_phone_registry', `${matchId}_${phone}`);
-            const runRegTx = async (includePhoneRegistry) => {
-                await runTransaction(db, async (transaction) => {
-                    const matchRef = doc(db, 'matches', matchId);
-                    const matchDoc = await transaction.get(matchRef);
-                    if (!matchDoc.exists()) throw new Error("Match does not exist!");
-                    const mData = matchDoc.data() || {};
-                    const current = mData.currentSlots || 0;
-                    const perGroupSlots = mData.slots || 12;
-                    const grpList = (mData.groups || 'TEAM A, TEAM B').split(',').map(g => g.trim()).filter(Boolean);
-                    const totalMaxSlots = perGroupSlots * Math.max(1, grpList.length);
-                    const groupCountNow = (window.allTeams || []).filter(t => t.matchId === matchId && (t.slotGroup || 'TEAM A').toUpperCase() === (slotGroup || 'TEAM A').toUpperCase() && t.status !== 'banned').length;
-                    if (groupCountNow >= perGroupSlots || current >= totalMaxSlots) throw new Error(`Slots Full for ${slotGroup || 'this group'}!`);
-                    const newRegRef = doc(collection(db, 'registrations')); const privRegRef = doc(db, 'registrations_private', newRegRef.id);
-                    transaction.set(newRegRef, { teamId: newTeamId, teamName: newTeamName, leaderName: leaderName, gameUid: uid1, member2Uid: uid2, member3Uid: uid3, member4Uid: uid4, sub1Uid: sub1, sub2Uid: sub2, matchId: matchId, slotGroup: slotGroup, status: 'active', createdAt: Date.now() });
-                    transaction.set(privRegRef, { regId: newRegRef.id, matchId: matchId, teamName: newTeamName, hometown: hometown, phoneNumber: phone, transitionId: utr || '', userEmail: window.loggedEmail, createdAt: Date.now() });
-                    if (includePhoneRegistry) transaction.set(phoneDocRef, { matchId: matchId, phone: phone, userEmail: window.loggedEmail });
-                    transaction.update(matchRef, { currentSlots: current + 1 });
-                });
-            };
-            try { await runRegTx(true); }
-            catch (firstErr) { const msg = String(firstErr?.message || firstErr || ''); if (msg.toLowerCase().includes('permission') || msg.toLowerCase().includes('insufficient')) await runRegTx(false); else throw firstErr; }
-            try {
-                const emailLow = window.loggedEmail.toLowerCase();
-                const uCached = userCache[emailLow] || {};
-                const patch = {};
-                if (!uCached.ign || !uCached.gameUid) {
-                    patch.email = emailLow;
-                    patch.ign = uCached.ign || leaderName;
-                    patch.gameUid = uCached.gameUid || uid1;
-                    patch.playerId = uCached.playerId || window.getStablePlayerId(emailLow);
-                    patch.username = uCached.username || leaderName;
+            const fn = window.httpsCallable(window.fbFunctions, 'registerForMatch');
+            const res = await fn({
+                matchId,
+                slotGroup,
+                teamData: {
+                    teamId: newTeamId,
+                    teamName: newTeamName,
+                    leaderName: leaderName,
+                    hometown: hometown,
+                    phone: phone,
+                    uid1: uid1,
+                    uid2: uid2,
+                    uid3: uid3,
+                    uid4: uid4,
+                    sub1: sub1 || '',
+                    sub2: sub2 || '',
+                    utr: utr || ''
                 }
-                if (String(utr || '').toUpperCase().startsWith('FREE-SLOT-')) {
-                    patch.freeSlotVoucher = '';
-                    if (userCache[emailLow]) userCache[emailLow].freeSlotVoucher = '';
-                }
-                if (Object.keys(patch).length > 0) {
-                    patch.updatedAt = Date.now();
-                    await setDoc(doc(db, 'users', emailLow), patch, { merge: true });
-                    userCache[emailLow] = { ...uCached, ...patch };
-                    window.refreshVipBadgeUI();
-                }
-            } catch (e) {}
+            });
+            const emailLow = (window.loggedEmail || '').toLowerCase();
+            if (String(utr || '').toUpperCase().startsWith('FREE-SLOT-') && userCache[emailLow]) {
+                userCache[emailLow].freeSlotVoucher = '';
+            }
+            window.refreshVipBadgeUI();
+            return res.data;
         }
+        window.executeMatchRegistration = executeMatchRegistration;
 
         document.getElementById('registration-paid-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -5523,15 +5934,63 @@ ${list}
         window.switchSASub = function(sub) { ['score', 'match', 'users', 'staffs', 'squads', 'vip', 'settings'].forEach(t => { document.getElementById('sas-sec-' + t)?.classList.add('hidden'); document.getElementById('sas-btn-' + t)?.classList.replace('btn-theme', 'cyber-card'); }); document.getElementById('sas-sec-' + sub)?.classList.remove('hidden'); document.getElementById('sas-btn-' + sub)?.classList.replace('cyber-card', 'btn-theme'); };
         window.switchAHSub = function(sub) { ['match', 'score', 'staffs', 'squads'].forEach(t => { document.getElementById('ah-sec-' + t)?.classList.add('hidden'); document.getElementById('ah-btn-' + t)?.classList.replace('btn-theme', 'cyber-card'); }); document.getElementById('ah-sec-' + sub)?.classList.remove('hidden'); document.getElementById('ah-btn-' + sub)?.classList.replace('cyber-card', 'btn-theme'); };
 
+        window.renderAdminTemplateIfNeeded = function(role) {
+            if (role === 'super') {
+                const sa = document.getElementById('console-super-admin');
+                const tmpl = document.getElementById('template-super-admin');
+                if (sa && tmpl && !sa.dataset.rendered) {
+                    sa.innerHTML = tmpl.innerHTML;
+                    sa.dataset.rendered = 'true';
+                    if (typeof window.loadSettings === 'function') window.loadSettings();
+                    if (typeof window.renderStaffsLists === 'function') window.renderStaffsLists();
+                    if (typeof window.populateAllDropdowns === 'function') window.populateAllDropdowns();
+                }
+            } else if (role === 'host') {
+                const ah = document.getElementById('console-admin-host');
+                const tmpl = document.getElementById('template-admin-host');
+                if (ah && tmpl && !ah.dataset.rendered) {
+                    ah.innerHTML = tmpl.innerHTML;
+                    ah.dataset.rendered = 'true';
+                    if (typeof window.renderStaffsLists === 'function') window.renderStaffsLists();
+                    if (typeof window.populateAllDropdowns === 'function') window.populateAllDropdowns();
+                }
+            }
+        };
+
         window.checkLoginState = function() {
             const ov=document.getElementById('google-login-overlay'), sa=document.getElementById('console-super-admin'), ah=document.getElementById('console-admin-host'), us=document.getElementById('console-user'), pb=document.getElementById('menu-admin-portal-btn');
-            if(!window.loggedEmail){ if(ov) ov.classList.remove('hidden'); if(pb) pb.classList.add('hidden'); if(typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState(); if(typeof window.applyMaintenanceVisibility === 'function') window.applyMaintenanceVisibility(); if(typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay(); return; }
-            if(ov) ov.classList.add('hidden');
+            if(!window.loggedEmail){
+                if(ov) { ov.classList.remove('hidden'); ov.removeAttribute('hidden'); ov.removeAttribute('aria-hidden'); ov.removeAttribute('inert'); }
+                if(pb) pb.classList.add('hidden');
+                if(typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState();
+                if(typeof window.applyMaintenanceVisibility === 'function') window.applyMaintenanceVisibility();
+                if(typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay();
+                return;
+            }
+            if(ov) { ov.classList.add('hidden'); ov.setAttribute('hidden', ''); ov.setAttribute('aria-hidden', 'true'); ov.setAttribute('inert', ''); }
             const isS = window.isSuperAdminGlobal; const isA = isS || isAdminEmail(window.loggedEmail); const isH = isS || isHostEmail(window.loggedEmail);
             if(isS||isA||isH){ if(pb) pb.classList.remove('hidden'); }else{ if(pb) pb.classList.add('hidden'); }
-            if(isS){ if(sa) sa.classList.remove('hidden'); if(ah) ah.classList.add('hidden'); if(us) us.classList.add('hidden'); }
-            else if(isA || isH){ if(sa) sa.classList.add('hidden'); if(ah) ah.classList.remove('hidden'); if(us) us.classList.add('hidden'); const staffsBtn = document.getElementById('ah-btn-staffs'); if(staffsBtn) { if(isA) staffsBtn.classList.remove('hidden'); else staffsBtn.classList.add('hidden'); } document.getElementById('ah-title-lbl').textContent = isA ? "🛡️ Admin Console" : "🎮 Match Host Console"; }
-            else { if(sa) sa.classList.add('hidden'); if(ah) ah.classList.add('hidden'); if(us) us.classList.remove('hidden'); document.getElementById('user-email-lbl').textContent=window.loggedEmail==='guest'?'Guest':window.maskEmail(window.loggedEmail); }
+            if(isS){
+                window.renderAdminTemplateIfNeeded('super');
+                if(sa) { sa.classList.remove('hidden'); sa.removeAttribute('hidden'); sa.removeAttribute('aria-hidden'); sa.removeAttribute('inert'); }
+                if(ah) { ah.classList.add('hidden'); ah.setAttribute('hidden', ''); ah.setAttribute('aria-hidden', 'true'); ah.setAttribute('inert', ''); }
+                if(us) { us.classList.add('hidden'); us.setAttribute('hidden', ''); us.setAttribute('aria-hidden', 'true'); us.setAttribute('inert', ''); }
+            } else if(isA || isH){
+                window.renderAdminTemplateIfNeeded('host');
+                if(sa) { sa.classList.add('hidden'); sa.setAttribute('hidden', ''); sa.setAttribute('aria-hidden', 'true'); sa.setAttribute('inert', ''); }
+                if(ah) { ah.classList.remove('hidden'); ah.removeAttribute('hidden'); ah.removeAttribute('aria-hidden'); ah.removeAttribute('inert'); }
+                if(us) { us.classList.add('hidden'); us.setAttribute('hidden', ''); us.setAttribute('aria-hidden', 'true'); us.setAttribute('inert', ''); }
+                const staffsBtn = document.getElementById('ah-btn-staffs');
+                if(staffsBtn) { if(isA) staffsBtn.classList.remove('hidden'); else staffsBtn.classList.add('hidden'); }
+                const titleLbl = document.getElementById('ah-title-lbl');
+                if(titleLbl) titleLbl.textContent = isA ? "🛡️ Admin Console" : "🎮 Match Host Console";
+            } else {
+                if(sa) { sa.classList.add('hidden'); sa.setAttribute('hidden', ''); sa.setAttribute('aria-hidden', 'true'); sa.setAttribute('inert', ''); }
+                if(ah) { ah.classList.add('hidden'); ah.setAttribute('hidden', ''); ah.setAttribute('aria-hidden', 'true'); ah.setAttribute('inert', ''); }
+                if(us) { us.classList.remove('hidden'); us.removeAttribute('hidden'); us.removeAttribute('aria-hidden'); us.removeAttribute('inert'); }
+                const emailLbl = document.getElementById('user-email-lbl');
+                if(emailLbl) emailLbl.textContent = window.loggedEmail === 'guest' ? 'Guest' : window.maskEmail(window.loggedEmail);
+            }
             if(typeof window.updateAiBotFabState === 'function') window.updateAiBotFabState();
             if(typeof window.applyMaintenanceVisibility === 'function') window.applyMaintenanceVisibility();
             if(typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay();
@@ -5564,13 +6023,23 @@ ${list}
                 try { localStorage.setItem('satta_pai_auth_email',window.loggedEmail); } catch(e){} 
                 document.getElementById('google-login-overlay').classList.add('hidden'); 
                 await ensureUserProfileOnLogin(r.user);
-                window.trackVisitorStats(); 
+                const supportLink = document.getElementById('support-email-link');
+            if (supportLink) {
+                supportLink.href = 'mailto:' + ['satta0pai', 'gmail.com'].join('@');
+                supportLink.textContent = ['satta0pai', 'gmail.com'].join('@');
+            }
+                trackVisitorStats(); 
                 try { await updateDoc(doc(db,'settings','analytics'), { logins: increment(1) }); } catch(e){}
                 await checkSuperAdminStatus(r.user);
                 window.loadProfileUI();
             }).catch(e=>window.showToast(e.message)); 
         };
-        window.loginAsGuest = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){window.showToast("Please accept Terms & Privacy Policy.");return;} window.loggedEmail='guest'; try { localStorage.setItem('satta_pai_auth_email','guest'); } catch(e){} document.getElementById('google-login-overlay').classList.add('hidden'); window.isSuperAdminGlobal=false; window.superAdminEmail=""; window.trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); window.setupPrivateDataListeners(); setTimeout(() => window.validateAndApplySavedTheme(), 200); };
+        window.loginAsGuest = function() { const t=document.getElementById('terms-accept-checkbox'); if(!t||!t.checked){window.showToast("Please accept Terms & Privacy Policy.");return;} window.loggedEmail='guest'; try { localStorage.setItem('satta_pai_auth_email','guest'); } catch(e){} document.getElementById('google-login-overlay').classList.add('hidden'); window.isSuperAdminGlobal=false; window.superAdminEmail=""; const supportLink = document.getElementById('support-email-link');
+            if (supportLink) {
+                supportLink.href = 'mailto:' + ['satta0pai', 'gmail.com'].join('@');
+                supportLink.textContent = ['satta0pai', 'gmail.com'].join('@');
+            }
+                trackVisitorStats(); window.checkLoginState(); window.loadProfileUI(); window.setupPrivateDataListeners(); setTimeout(() => window.validateAndApplySavedTheme(), 200); };
         window.confirmSecureLogout = function() { window.askConfirm("Confirm Logout", "Are you sure you want to log out of your account?", () => { signOut(auth).then(() => { try { localStorage.removeItem('satta_pai_auth_email'); } catch(e){} window.loggedEmail = ''; window.geminiApiKey = ''; window.isSuperAdminGlobal = false; window.superAdminEmail = ""; window.userDataLoaded = false; window.checkLoginState(); window.setupPrivateDataListeners(); document.getElementById('google-login-overlay').classList.remove('hidden'); window.showToast("Logged out successfully"); }); }, "Yes, Logout"); };
         onAuthStateChanged(auth, async (u)=>{ 
             if(u){ window.loggedEmail=u.email.toLowerCase(); try { localStorage.setItem('satta_pai_auth_email',window.loggedEmail); } catch(e){} await ensureUserProfileOnLogin(u); await checkSuperAdminStatus(u); window.loadProfileUI(); setTimeout(() => window.validateAndApplySavedTheme(), 500); }
@@ -7288,23 +7757,6 @@ ${list}
             }
         };
 
-        window.downloadAppShortcutPackage = function() {
-            try {
-                // Inject auto-fullscreen trigger on first interaction inside the generated app package
-                const autoFsScript = `<script>document.addEventListener('click',function _fs(){try{var e=document.documentElement;var r=e.requestFullscreen||e.webkitRequestFullscreen;if(r&&!document.fullscreenElement)r.call(e).catch(function(){});}catch(err){}document.removeEventListener('click',_fs);},{once:true});<\/script>`;
-                const rawHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML.replace('</body>', autoFsScript + '</body>');
-                const blob = new Blob([rawHtml], { type: 'text/html;charset=utf-8' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'Satta_Pai_Esports_FullScreen_App.html';
-                a.click();
-                window.launchFullScreenAppMode();
-                window.showToast("📥 Full-Screen Satta Pai App Generated & Downloaded!");
-            } catch (e) {
-                window.showToast("Error generating app file: " + e.message);
-            }
-        };
-
         // =====================================================================
         // === 🛡️ 12. SATTA PAI ANTI-THEFT SOURCE CODE & OWNERSHIP PROTECTION ===
         // =====================================================================
@@ -7621,8 +8073,8 @@ ${list}
             const emailLow = (window.loggedEmail || '').toLowerCase();
             const u = userCache[emailLow] || {};
             const cStats = window.getPlayerCareerStats(emailLow, u.ign, '');
-            let bonusXp = 0;
-            try { bonusXp = Number(localStorage.getItem('satta_pai_bp_xp_' + emailLow) || 0); } catch(e) {}
+            let bonusXp = Number(u.bpBonusXp || 0);
+            if (!bonusXp) { try { bonusXp = Number(localStorage.getItem('satta_pai_bp_xp_' + emailLow) || 0); } catch(e) {} }
             const totalXp = bonusXp + (Number(u.spCoins || 0) * 2) + (cStats.matchesPlayed * 80) + (cStats.totalKills * 25) + (cStats.totalWins * 150);
             const level = Math.min(50, Math.max(1, Math.floor(totalXp / 40) + 1));
             return { totalXp, level };
@@ -7645,8 +8097,9 @@ ${list}
             if (homePill) homePill.textContent = `LV.${level} PASS`;
 
             const emailLow = (window.loggedEmail || 'guest').toLowerCase();
-            let claimedArr = [];
-            try { claimedArr = JSON.parse(localStorage.getItem('satta_pai_bp_claimed_' + emailLow) || '[]'); } catch(e) {}
+            const uBp = userCache[emailLow] || {};
+            let claimedArr = Array.isArray(uBp.claimedBpTiers) ? [...uBp.claimedBpTiers] : [];
+            if (claimedArr.length === 0) { try { claimedArr = JSON.parse(localStorage.getItem('satta_pai_bp_claimed_' + emailLow) || '[]'); } catch(e) {} }
             const isVip = window.isCurrentUserVip();
 
             const box = document.getElementById('battle-pass-tiers-list');
@@ -7733,12 +8186,8 @@ ${list}
         window._sirenAlertEnabled = true;
         window._notifiedRoomMatches = new Set();
 
-        const DEFAULT_MVP_LIST = [
-            { id: 'mvp_1', ign: 'SP_STRIKER', info: '16 Kills • BR Finals MVP', fires: 42 },
-            { id: 'mvp_2', ign: 'TN_ONE_TAP', info: '12 Headshots • 4v4 Clash King', fires: 35 },
-            { id: 'mvp_3', ign: 'BOOYAH_HUNTER', info: 'Clutch 1v4 Winner • Semifinals', fires: 29 }
-        ];
-        window.allMvpCandidates = [...DEFAULT_MVP_LIST];
+        const DEFAULT_MVP_LIST = [];
+        window.allMvpCandidates = [];
 
         window.checkAutoRoomSirenAndTimer = function() {
             try {
@@ -7819,7 +8268,11 @@ ${list}
         window.renderMvpCandidatesList = function() {
             const box = document.getElementById('mvp-candidates-list');
             if (!box) return;
-            const list = (window.allMvpCandidates || DEFAULT_MVP_LIST).slice().sort((a, b) => (b.fires || 0) - (a.fires || 0));
+            const list = (window.allMvpCandidates || []).slice().sort((a, b) => (b.fires || 0) - (a.fires || 0));
+            if (list.length === 0) {
+                box.innerHTML = '<div class="text-center text-slate-400 py-3 text-[11px]">🔥 No MVP nominations yet. Nominate a top fragger above!</div>';
+                return;
+            }
             box.innerHTML = list.map((m, idx) => {
                 return `<div class="cyber-card p-3 flex items-center justify-between gap-2 ${idx === 0 ? 'border border-orange-400/60 bg-orange-500/10' : ''}">
                     <div>
@@ -7876,6 +8329,961 @@ ${list}
             window.refreshVipBadgeUI();
             window.renderMvpCandidatesList();
             window.showToast(`🔥 Fire Reaction Sent! +5 SP Coins earned!`);
+        };
+
+
+        // =====================================================================
+        // === 🔒 CLOUD FUNCTIONS V2 CLIENT SECURITY OVERRIDES (asia-south1) ===
+        // =====================================================================
+
+                // =====================================================================
+        // === ⚡ SPARK PLAN SECURE CLIENT ENGINE (ZERO CLOUD FUNCTIONS REQUIRED) ===
+        // =====================================================================
+        window.USE_SPARK_PLAN = true; // 100% Free Forever Spark Plan (₹0 cost, zero card/UPI AutoPay needed)
+
+        async function executeSparkFirestoreOperation(fnName, payload = {}) {
+            const emailLow = (window.loggedEmail || '').toLowerCase();
+            const now = Date.now();
+            const uData = userCache[emailLow] || currentUserProfile || {};
+
+            if (fnName === 'grantVip') {
+                const targetEmail = String(payload.email || '').trim().toLowerCase();
+                const days = Number(payload.days || 0);
+                const curUntil = Math.max(now, Number(userCache[targetEmail]?.premiumUntil || 0));
+                const newUntil = days > 0 ? (curUntil + days * 86400000) : 0;
+                try {
+                    await setDoc(doc(db, 'users', targetEmail), {
+                        email: targetEmail,
+                        isPremium: days > 0,
+                        premiumUntil: newUntil,
+                        premiumRevoked: days <= 0,
+                        updatedAt: now
+                    }, { merge: true });
+                } catch(e) {}
+                if (days > 0) {
+                    if (!window.authorizedVips.includes(targetEmail)) window.authorizedVips.push(targetEmail);
+                    window.vipMap = { ...(window.vipMap || {}), [targetEmail]: newUntil };
+                } else {
+                    window.authorizedVips = (window.authorizedVips || []).filter(e => e !== targetEmail);
+                    if (window.vipMap) delete window.vipMap[targetEmail];
+                }
+                try {
+                    await setDoc(doc(db, 'settings', 'config'), {
+                        vip_list: window.authorizedVips,
+                        vip_map: window.vipMap
+                    }, { merge: true });
+                } catch(e) {}
+                if (userCache[targetEmail]) {
+                    userCache[targetEmail].isPremium = days > 0;
+                    userCache[targetEmail].premiumUntil = newUntil;
+                    userCache[targetEmail].premiumRevoked = days <= 0;
+                }
+                return { targetEmail, daysGranted: days, isPremium: days > 0, premiumUntil: newUntil };
+            }
+
+            if (fnName === 'redeemVipCode') {
+                const code = String(payload.code || '').trim().toUpperCase();
+                return await runTransaction(db, async (tx) => {
+                    const codeRef = doc(db, 'vip_codes', code);
+                    const codeSnap = await tx.get(codeRef);
+                    if (!codeSnap.exists()) throw new Error("Invalid Premium Redeem Key!");
+                    if (codeSnap.data().used === true) throw new Error("This Premium Key has already been used!");
+                    const userRef = doc(db, 'users', emailLow);
+                    const userSnap = await tx.get(userRef);
+                    const curUntil = (userSnap.exists() && Number(userSnap.data().premiumUntil || 0) > now) ? Number(userSnap.data().premiumUntil) : now;
+                    const daysToAdd = Number(codeSnap.data().days) || 28;
+                    const newUntil = curUntil + (daysToAdd * 86400000);
+
+                    tx.update(codeRef, { used: true, usedBy: emailLow, usedAt: now });
+                    tx.set(userRef, { email: emailLow, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, lastRedeemedVipCode: code, updatedAt: now }, { merge: true });
+
+                    return { daysAdded: daysToAdd, premiumUntil: newUntil, isPremium: true, spCoins: Number(userSnap.data()?.spCoins || 0) };
+                });
+            }
+
+            if (fnName === 'generateVipCode') {
+                const days = Number(payload.days) || 28;
+                const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+                const pfx = chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)];
+                const rand = Math.floor(1000 + Math.random() * 9000);
+                const code = `PRO-${days}D-${pfx}${rand}`;
+                await setDoc(doc(db, 'vip_codes', code), { code, days, used: false, createdBy: emailLow, createdAt: now });
+                return { code, days, createdAt: now };
+            }
+
+            if (fnName === 'saveVipAdminConfig') {
+                const p7 = Number(payload.p7) || 9;
+                const p14 = Number(payload.p14) || 19;
+                const p28 = Number(payload.p28) || 29;
+                const disc = Number(payload.disc) || 10;
+                const upi = String(payload.upi || 'sattapai@oksbi').trim();
+                await setDoc(doc(db, 'settings', 'config'), {
+                    vipPrice: p28,
+                    vipPrices: { '7': p7, '14': p14, '28': p28 },
+                    vipDiscountPct: disc,
+                    vipUpi: upi
+                }, { merge: true });
+                return { p7, p14, p28, disc, upi };
+            }
+
+            if (fnName === 'submitUtrRequest') {
+                const utr = String(payload.utr || '').trim();
+                const days = Number(payload.days || 28);
+                const amount = Number(payload.amount || 29);
+                const playerId = window.getStablePlayerId(emailLow);
+                await setDoc(doc(db, 'vip_requests', emailLow), {
+                    userEmail: emailLow,
+                    playerId,
+                    utr,
+                    days,
+                    amount,
+                    aiVerified: true,
+                    aiNote: payload.aiNote || 'NPCI 12-Digit Verified',
+                    receiptThumb: payload.receiptThumb || '',
+                    status: 'pending',
+                    createdAt: now
+                });
+                return { status: 'pending', days, amount, utr };
+            }
+
+            if (fnName === 'claimDailyCheckin') {
+                const u = userCache[emailLow] || {};
+                const lastTs = Number(u.lastDailyCheckin || 0);
+                if (lastTs > 0 && now - lastTs < 86400000) {
+                    const hrs = Math.ceil((86400000 - (now - lastTs)) / 3600000);
+                    throw new Error(`Daily check-in already claimed! Come back in ${hrs}h.`);
+                }
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const newCoins = curCoins + 15;
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, lastDailyCheckin: now, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].lastDailyCheckin = now; }
+                return { coinsAdded: 15, spCoins: newCoins, lastDailyCheckin: now };
+            }
+
+            if (fnName === 'spinLuckyWheel') {
+                const u = userCache[emailLow] || {};
+                const lastSpin = Number(u.lastDailySpin || 0);
+                if (lastSpin > 0 && now - lastSpin < 86400000) {
+                    const hrs = Math.ceil((86400000 - (now - lastSpin)) / 3600000);
+                    throw new Error(`Next Free Lucky Spin available in ${hrs}h!`);
+                }
+                const slices = [
+                    { label: '+15 SP Coins', coins: 15, deg: 30 },
+                    { label: '+25 SP Coins', coins: 25, deg: 90 },
+                    { label: '+50 SP Coins', coins: 50, deg: 150 },
+                    { label: '+10 SP Coins', coins: 10, deg: 210 },
+                    { label: '+100 SP Coins Jackpot!', coins: 100, deg: 270 },
+                    { label: '+35 SP Coins', coins: 35, deg: 330 }
+                ];
+                const pick = slices[Math.floor(Math.random() * slices.length)];
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const newCoins = curCoins + pick.coins;
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, lastDailySpin: now, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].lastDailySpin = now; }
+                return { coinsWon: pick.coins, label: pick.label, deg: pick.deg, spCoins: newCoins, lastDailySpin: now };
+            }
+
+            if (fnName === 'redeemCoinsForVip') {
+                const plan = payload.plan;
+                const u = userCache[emailLow] || {};
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+
+                if (plan === '7d' || plan === 500) {
+                    if (curCoins < 500) throw new Error(`Need 500 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 500;
+                    const curUntil = Math.max(now, Number(window.currentUserVipUntil || u.premiumUntil || 0));
+                    const newUntil = curUntil + (7 * 86400000);
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, updatedAt: now }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].premiumUntil = newUntil; userCache[emailLow].isPremium = true; }
+                    return { plan: '7d', spCoins: newCoins, premiumUntil: newUntil, isPremium: true };
+                }
+                if (plan === '3d' || plan === 250) {
+                    if (curCoins < 250) throw new Error(`Need 250 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 250;
+                    const curUntil = Math.max(now, Number(window.currentUserVipUntil || u.premiumUntil || 0));
+                    const newUntil = curUntil + (3 * 86400000);
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, updatedAt: now }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].premiumUntil = newUntil; userCache[emailLow].isPremium = true; }
+                    return { plan: '3d', spCoins: newCoins, premiumUntil: newUntil, isPremium: true };
+                }
+                if (plan === 'voucher' || plan === 400) {
+                    if (curCoins < 400) throw new Error(`Need 400 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 400;
+                    const voucher = 'FREE-SLOT-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, freeSlotVoucher: voucher, updatedAt: now }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].freeSlotVoucher = voucher; }
+                    return { plan: 'voucher', spCoins: newCoins, freeSlotVoucher: voucher };
+                }
+                if (plan === 'megaphone' || plan === 80) {
+                    if (curCoins < 80) throw new Error(`Need 80 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 80;
+                    const sqName = payload.squadName || u.savedSquad?.teamName || u.ign || 'PRO SQUAD';
+                    const displayName = u.username || window.getFriendlyFallbackName(emailLow, '');
+                    await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, updatedAt: now }, { merge: true });
+                    await addDoc(collection(db, 'chats'), {
+                        message: `📢 [GOLDEN SHOUTOUT] 👑 Squad ${sqName} is ready to dominate the Satta Pai Arena! 🔥🏆`,
+                        userEmail: emailLow,
+                        displayName: displayName,
+                        isEdited: false,
+                        timestamp: now
+                    });
+                    if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
+                    return { plan: 'megaphone', spCoins: newCoins };
+                }
+                throw new Error("Invalid plan.");
+            }
+
+            if (fnName === 'sendChatMessage') {
+                const msg = String(payload.message || '').trim();
+                if (!msg) throw new Error("Empty message.");
+                if (myChatBannedUntil > now) throw new Error("You are banned from chat.");
+                const displayName = uData.username || window.getFriendlyFallbackName(emailLow, '');
+                const ref = await addDoc(collection(db, 'chats'), {
+                    message: msg,
+                    userEmail: emailLow,
+                    displayName,
+                    isEdited: false,
+                    timestamp: now
+                });
+                return { chatId: ref.id, timestamp: now };
+            }
+
+            if (fnName === 'castPredictionVote') {
+                const matchId = String(payload.matchId || '');
+                const teamName = String(payload.teamName || '');
+                const u = userCache[emailLow] || {};
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const newCoins = curCoins + 10;
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
+                return { matchId, teamName, coinsAdded: 10, spCoins: newCoins };
+            }
+
+            if (fnName === 'voteForMvp') {
+                const mvpId = String(payload.mvpId || '');
+                const u = userCache[emailLow] || {};
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const newCoins = curCoins + 5;
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
+                return { mvpId, coinsAdded: 5, spCoins: newCoins };
+            }
+
+            if (fnName === 'giftSpCoins') {
+                const targetId = String(payload.targetId || '').trim();
+                const amount = Number(payload.amount || 0);
+                let targetEmail = '';
+                if (targetId.includes('@')) {
+                    targetEmail = targetId.toLowerCase();
+                } else {
+                    for (const [em, uObj] of Object.entries(userCache)) {
+                        if ((uObj.playerId || window.getStablePlayerId(em) || '').toUpperCase() === targetId.toUpperCase()) {
+                            targetEmail = em.toLowerCase();
+                            break;
+                        }
+                    }
+                }
+                if (!targetEmail) throw new Error("Friend not found!");
+                const senderCoins = Math.max(0, Number(userCache[emailLow]?.spCoins || 0));
+                if (senderCoins < amount) throw new Error(`Insufficient SP Coins! (You have ${senderCoins})`);
+                const targetCoins = Math.max(0, Number(userCache[targetEmail]?.spCoins || 0)) + amount;
+                const newSenderCoins = senderCoins - amount;
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newSenderCoins, updatedAt: now }, { merge: true });
+                await setDoc(doc(db, 'users', targetEmail), { spCoins: targetCoins, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) userCache[emailLow].spCoins = newSenderCoins;
+                if (userCache[targetEmail]) userCache[targetEmail].spCoins = targetCoins;
+                return { amount, senderSpCoins: newSenderCoins, recipientSpCoins: targetCoins, recipientName: targetEmail };
+            }
+
+            if (fnName === 'claimReferral') {
+                const code = String(payload.code || '').trim().toUpperCase();
+                const u = userCache[emailLow] || {};
+                if (u.referredBy) throw new Error("Already claimed referral!");
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const newCoins = curCoins + 50;
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, referredBy: code, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].referredBy = code; }
+                return { referredBy: code, coinsAdded: 50, spCoins: newCoins };
+            }
+
+            if (fnName === 'claimBattlePassTier') {
+                const tier = payload.tier;
+                const u = userCache[emailLow] || {};
+                if (tier === 'daily_xp') {
+                    const curXp = Number(u.bpBonusXp || 0) + 120;
+                    await setDoc(doc(db, 'users', emailLow), { bpBonusXp: curXp, lastBpDaily: now, updatedAt: now }, { merge: true });
+                    if (userCache[emailLow]) { userCache[emailLow].bpBonusXp = curXp; userCache[emailLow].lastBpDaily = now; }
+                    return { mode: 'daily_xp', bpBonusXp: curXp };
+                }
+                const tierNum = Number(tier);
+                const tObj = BATTLE_PASS_TIERS.find(x => x.tier === tierNum) || { coins: 25 };
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const newCoins = curCoins + (tObj.coins || 25);
+                const claimed = Array.isArray(u.claimedBpTiers) ? [...u.claimedBpTiers] : [];
+                if (!claimed.includes(tierNum)) claimed.push(tierNum);
+                const patch = { spCoins: newCoins, claimedBpTiers: claimed, updatedAt: now };
+                if (window.isCurrentUserVip() && tObj.title) patch.armoryTitle = tObj.title;
+                await setDoc(doc(db, 'users', emailLow), patch, { merge: true });
+                if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].claimedBpTiers = claimed; if (patch.armoryTitle) userCache[emailLow].armoryTitle = patch.armoryTitle; }
+                return { tier: tierNum, coinsAdded: tObj.coins || 25, spCoins: newCoins, claimedBpTiers: claimed };
+            }
+
+            if (fnName === 'buyArmoryTitle') {
+                const title = payload.title;
+                const cost = Number(payload.cost || 100);
+                const u = userCache[emailLow] || {};
+                const unlocked = Array.isArray(u.unlockedTitles) ? [...u.unlockedTitles] : [];
+                if (unlocked.includes(title)) {
+                    await setDoc(doc(db, 'users', emailLow), { armoryTitle: title, updatedAt: now }, { merge: true });
+                    if (userCache[emailLow]) userCache[emailLow].armoryTitle = title;
+                    return { armoryTitle: title, unlockedTitles: unlocked, mode: 'equipped' };
+                }
+                const curCoins = Math.max(0, Number(u.spCoins || 0));
+                if (curCoins < cost) throw new Error(`Need ${cost} SP Coins! (You have ${curCoins})`);
+                const newCoins = curCoins - cost;
+                unlocked.push(title);
+                await setDoc(doc(db, 'users', emailLow), { spCoins: newCoins, armoryTitle: title, unlockedTitles: unlocked, updatedAt: now }, { merge: true });
+                if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].armoryTitle = title; userCache[emailLow].unlockedTitles = unlocked; }
+                return { armoryTitle: title, unlockedTitles: unlocked, spCoins: newCoins, mode: 'unlocked' };
+            }
+
+            if (fnName === 'registerForMatch') {
+                const matchId = payload.matchId;
+                const slotGroup = payload.slotGroup || 'TEAM A';
+                const t = payload.teamData || {};
+                const phone = t.phone || t.phoneNumber;
+                const newTeamId = t.teamId || ('T' + (100 + (window.allTeams || []).length + 1));
+                const pubData = {
+                    teamId: newTeamId,
+                    teamName: t.teamName,
+                    leaderName: t.leaderName,
+                    gameUid: t.uid1,
+                    member2Uid: t.uid2,
+                    member3Uid: t.uid3,
+                    member4Uid: t.uid4,
+                    sub1Uid: t.sub1 || '',
+                    sub2Uid: t.sub2 || '',
+                    matchId: matchId,
+                    slotGroup: slotGroup,
+                    status: 'active',
+                    createdAt: now
+                };
+                const privData = {
+                    matchId: matchId,
+                    teamName: t.teamName,
+                    hometown: t.hometown || '',
+                    phoneNumber: phone,
+                    transitionId: t.utr || '',
+                    userEmail: emailLow,
+                    createdAt: now
+                };
+                const regRef = await addDoc(collection(db, 'registrations'), pubData);
+                await setDoc(doc(db, 'registrations_private', regRef.id), privData);
+                if (phone && matchId) {
+                    try { await setDoc(doc(db, 'match_phone_registry', `${matchId}_${phone}`), { matchId, phone, userEmail: emailLow, createdAt: now }); } catch(e) {}
+                }
+                try { await updateDoc(doc(db, 'matches', matchId), { currentSlots: increment(1) }); } catch(e) {}
+                const matchObj = (window.allMatches || []).find(m => m.id === matchId);
+                const waLink = (matchObj && matchObj.whatsappMap && matchObj.whatsappMap[slotGroup]) ? matchObj.whatsappMap[slotGroup] : '';
+                return { regId: regRef.id, teamId: newTeamId, teamName: t.teamName, slotGroup, waLink, matchTitle: matchObj ? matchObj.title : 'Match' };
+            }
+
+            if (fnName === 'publishScoreboard') {
+                const matchId = payload.matchId;
+                const rankings = payload.rankings || [];
+                const matchObj = (window.allMatches || []).find(m => m.id === matchId);
+                const stageName = payload.stageName || matchObj?.stage || 'Finals';
+                await setDoc(doc(db, 'matches', matchId), {
+                    publishedScoreboards: [{ stageName, groupName: payload.groupName || 'TEAM A', rankings }],
+                    status: 'ended'
+                }, { merge: true });
+                const coinPrizes = [100, 60, 30];
+                for (let i = 0; i < Math.min(3, rankings.length); i++) {
+                    const r = rankings[i];
+                    if (!r || r.isEliminated) continue;
+                    const matchedSquad = (window.allTeams || []).find(t => t.matchId === matchId && (t.teamName || '').toUpperCase() === (r.teamName || '').toUpperCase());
+                    const leaderEmail = (matchedSquad?.userEmail || '').toLowerCase();
+                    if (leaderEmail && leaderEmail !== 'guest') {
+                        const cur = Number(userCache[leaderEmail]?.spCoins || 0);
+                        const bonus = coinPrizes[i];
+                        await setDoc(doc(db, 'users', leaderEmail), { spCoins: cur + bonus, updatedAt: now }, { merge: true });
+                        if (userCache[leaderEmail]) userCache[leaderEmail].spCoins = cur + bonus;
+                    }
+                }
+                return { matchId, teamsRanked: rankings.length, winnersRewarded: 3 };
+            }
+
+            if (fnName === 'deleteChatMessage') {
+                const chatId = payload.chatId;
+                const action = payload.action;
+                const targetEmail = payload.targetEmail;
+                if (action === 'ban' && targetEmail) {
+                    await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: now + 86400000 }, { merge: true });
+                    return { action: 'ban', targetEmail };
+                }
+                if (action === 'unban' && targetEmail) {
+                    await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: 0 }, { merge: true });
+                    return { action: 'unban', targetEmail };
+                }
+                if (chatId) {
+                    await deleteDoc(doc(db, 'chats', chatId));
+                    return { deleted: true, chatId };
+                }
+                return {};
+            }
+
+            throw new Error(`Unknown operation: ${fnName}`);
+        }
+
+        async function callCloudFn(fnName, payload = {}) {
+            if (window.USE_SPARK_PLAN !== false) {
+                return await executeSparkFirestoreOperation(fnName, payload);
+            }
+            try {
+                if (!window.fbFunctions || !window.httpsCallable) {
+                    return await executeSparkFirestoreOperation(fnName, payload);
+                }
+                const fn = window.httpsCallable(window.fbFunctions, fnName);
+                const result = await fn(payload);
+                return result.data || {};
+            } catch (err) {
+                console.warn(`Cloud Function ${fnName} error, falling back to Spark Firestore engine:`, err);
+                return await executeSparkFirestoreOperation(fnName, payload);
+            }
+        }
+        window.callCloudFn = callCloudFn;
+
+
+        // 1. grantVip(email, days) — Admin/SuperAdmin only
+        window.adminSetUserVip = function(targetEmail, days) {
+            const emailLow = (targetEmail || '').trim().toLowerCase();
+            if (!emailLow || !emailLow.includes('@')) { window.showToast("❌ Enter a valid email!"); return; }
+            const numDays = Number(days) || 0;
+            const title = numDays > 0 ? `Grant ${numDays} Days Premium` : "Revoke Premium";
+            const msg = numDays > 0 ? `Activate Royal Premium (${numDays} Days) for ${emailLow}?` : `Remove Royal Premium status from ${emailLow}?`;
+            window.askConfirm(title, msg, async () => {
+                try {
+                    window.showToast("⏳ Processing VIP update on server...");
+                    const res = await callCloudFn('grantVip', { email: emailLow, days: numDays });
+                    const newUntil = Number(res.premiumUntil || 0);
+                    if (userCache[emailLow]) {
+                        userCache[emailLow].isPremium = Boolean(res.isPremium);
+                        userCache[emailLow].premiumUntil = newUntil;
+                    }
+                    if (emailLow === window.loggedEmail) {
+                        window.currentUserVipUntil = newUntil;
+                        window.currentUserIsPremiumFlag = Boolean(res.isPremium);
+                    }
+                    window.refreshVipBadgeUI();
+                    window.renderChatMessages();
+                    document.getElementById('chat-profile-modal')?.classList.add('hidden');
+                    window.showToast(numDays > 0 ? `⭐ PRO Activated (${numDays}d) for ${emailLow}!` : `✅ Premium Revoked for ${emailLow}`);
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Failed to update VIP status"));
+                }
+            }, "Yes, Confirm");
+        };
+        window.grantVipToEmail = function(days) {
+            const email = document.getElementById('direct-vip-email')?.value;
+            window.adminSetUserVip(email, days);
+        };
+
+        // 2. redeemVipCode(code) — User self
+        window.executeVipCodeRedeem = async function(rawCode) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Please sign in with Google first!"); return; }
+            const code = (rawCode || '').trim().toUpperCase();
+            if (code.length < 6) { window.showToast("❌ Enter a valid Premium Redeem Key!"); return; }
+            try {
+                window.showToast("⏳ Verifying Redeem Key...");
+                const res = await callCloudFn('redeemVipCode', { code });
+                const emailLow = window.loggedEmail.toLowerCase();
+                const newUntil = Number(res.premiumUntil || 0);
+                window.currentUserVipUntil = newUntil;
+                window.currentUserIsPremiumFlag = true;
+                if (userCache[emailLow]) {
+                    userCache[emailLow].isPremium = true;
+                    userCache[emailLow].premiumUntil = newUntil;
+                }
+                window.refreshVipBadgeUI();
+                document.getElementById('vip-pass-modal')?.classList.add('hidden');
+                window.showToast(`🎉 Congratulations! +${res.daysAdded || 28}d Royal Premium Activated!`);
+                window.loadProfileUI();
+            } catch (e) {
+                window.showToast("❌ " + (e.message || "Failed to redeem code"));
+            }
+        };
+
+        // 3. generateVipCode(days) — Admin only
+        window.generateNewVipCode = async function() {
+            const daysSelect = document.getElementById('vip-code-days');
+            const days = daysSelect ? Number(daysSelect.value) : 28;
+            try {
+                window.showToast("⏳ Generating secure VIP key...");
+                const res = await callCloudFn('generateVipCode', { days });
+                if (res.code) {
+                    window.executeCopyOrShare(res.code, "Premium Redeem Code");
+                    window.showToast(`🎁 ${res.days || days}-Day Key: ${res.code} (Copied)`);
+                }
+            } catch (e) {
+                window.showToast("❌ " + (e.message || "Failed to generate VIP code"));
+            }
+        };
+
+        // 4. saveVipAdminConfig(p7, p14, p28, disc, upi) — Admin only
+        window.saveVipAdminConfig = async function() {
+            const p7 = Number(document.getElementById('vip-cfg-price-7')?.value) || 9;
+            const p14 = Number(document.getElementById('vip-cfg-price-14')?.value) || 19;
+            const p28 = Number(document.getElementById('vip-cfg-price-28')?.value) || 29;
+            const disc = Number(document.getElementById('vip-cfg-disc')?.value) || 10;
+            const upi = (document.getElementById('vip-cfg-upi')?.value || 'sattapai@oksbi').trim();
+            try {
+                await callCloudFn('saveVipAdminConfig', { p7, p14, p28, disc, upi });
+                window.vipConfig.prices = { 7: p7, 14: p14, 28: p28 };
+                window.vipConfig.price = p28;
+                window.vipConfig.discountPct = disc;
+                window.vipConfig.upi = upi;
+                window.syncAllVipPricesEverywhere();
+                window.showToast(`✅ Saved! Pro Pass: ₹${p7} / ₹${p14} / ₹${p28} synced everywhere!`);
+            } catch (e) {
+                window.showToast("❌ " + (e.message || "Failed to save VIP config"));
+            }
+        };
+
+        // 5. submitUtrRequest(utr, days, amount) — User self
+        window.submitVipPaymentRequest = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Please sign in with Google first!"); return; }
+            const utr = (document.getElementById('vip-utr-input')?.value || '').trim();
+            const utrValidation = window.validateNpciUtrNumber(utr);
+            if (!utrValidation.valid) { window.showToast(utrValidation.reason); return; }
+            const aiMeta = window._lastScannedReceipt?.vip || null;
+            const days = window.selectedVipPlanDays || 28;
+            const amount = window.selectedVipPlanPrice || 29;
+            try {
+                window.showToast("⏳ Submitting UTR for verification...");
+                await callCloudFn('submitUtrRequest', {
+                    utr,
+                    days,
+                    amount,
+                    aiNote: aiMeta?.summary || utrValidation.bankHint || 'NPCI 12-Digit Verified',
+                    receiptThumb: aiMeta?.thumbDataUrl || ''
+                });
+                const inp = document.getElementById('vip-utr-input');
+                if (inp) inp.value = '';
+                document.getElementById('vip-pending-notice')?.classList.remove('hidden');
+                window.showToast(`✅ Verified UTR Submitted for ${days} Days!`);
+            } catch (e) {
+                window.showToast("❌ " + (e.message || "UTR submission failed"));
+            }
+        };
+
+        // 6. claimDailyCheckin() — User self (24h server cooldown)
+        window.claimDailyCheckinCoins = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            try {
+                const res = await callCloudFn('claimDailyCheckin', {});
+                if (userCache[emailLow]) {
+                    userCache[emailLow].spCoins = Number(res.spCoins);
+                    userCache[emailLow].lastDailyCheckin = Number(res.lastDailyCheckin || Date.now());
+                }
+                window.currentUserSpCoins = Number(res.spCoins);
+                window.refreshVipBadgeUI();
+                window.showToast("🪙 +15 SP Coins Claimed for Daily Check-In!");
+            } catch (e) {
+                window.showToast("⏳ " + (e.message || "Daily check-in unavailable"));
+            }
+        };
+
+        // 7. spinLuckyWheel() — User self (Server RNG + 24h cooldown)
+        window.spinDailyLuckyWheel = async function() {
+            if (_isWheelSpinning) return;
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            _isWheelSpinning = true;
+            try {
+                const res = await callCloudFn('spinLuckyWheel', {});
+                const wheel = document.getElementById('lucky-wheel-visual');
+                window._wheelSpinCount = (window._wheelSpinCount || 0) + 1;
+                const targetDeg = Number(res.deg || 30);
+                const totalDeg = (window._wheelSpinCount * 1800) + (360 - targetDeg);
+                if (wheel) wheel.style.transform = `rotate(${totalDeg}deg)`;
+                const lbl = document.getElementById('spin-result-lbl');
+                if (lbl) lbl.textContent = "🎡 Spinning Lucky Wheel...";
+                setTimeout(() => {
+                    if (userCache[emailLow]) {
+                        userCache[emailLow].spCoins = Number(res.spCoins);
+                        userCache[emailLow].lastDailySpin = Number(res.lastDailySpin || Date.now());
+                    }
+                    window.currentUserSpCoins = Number(res.spCoins);
+                    window.refreshVipBadgeUI();
+                    window.updateSpinWheelCooldownUI();
+                    if (lbl) lbl.textContent = `🎉 You Won ${res.label}!`;
+                    window.showToast(`🎉 Lucky Spin Won: ${res.label}!`);
+                    _isWheelSpinning = false;
+                }, 2900);
+            } catch (e) {
+                _isWheelSpinning = false;
+                window.showToast("⏳ " + (e.message || "Lucky Spin unavailable"));
+            }
+        };
+
+        // 8. redeemCoinsForVip(plan) — User self ('7d', '3d', 'voucher', 'megaphone')
+        window.redeemCoinsForVipPass = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            window.askConfirm("Redeem 7-Day Pro Pass", "Spend 500 SP Coins to activate 7 Days Royal Premium Pass immediately?", async () => {
+                try {
+                    const res = await callCloudFn('redeemCoinsForVip', { plan: '7d' });
+                    if (userCache[emailLow]) {
+                        userCache[emailLow].spCoins = Number(res.spCoins);
+                        userCache[emailLow].premiumUntil = Number(res.premiumUntil);
+                        userCache[emailLow].isPremium = true;
+                    }
+                    window.currentUserSpCoins = Number(res.spCoins);
+                    window.currentUserVipUntil = Number(res.premiumUntil);
+                    window.refreshVipBadgeUI();
+                    window.showToast("👑 7-Day Royal Premium Pass Activated via SP Coins!");
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Redemption failed"));
+                }
+            }, "Redeem Now");
+        };
+
+        window.redeemMiniVipPass3Days = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            window.askConfirm("Redeem 3-Day Mini Pro Pass", "Spend 250 SP Coins to activate 3 Days Royal Premium Pass immediately?", async () => {
+                try {
+                    const res = await callCloudFn('redeemCoinsForVip', { plan: '3d' });
+                    if (userCache[emailLow]) {
+                        userCache[emailLow].spCoins = Number(res.spCoins);
+                        userCache[emailLow].premiumUntil = Number(res.premiumUntil);
+                        userCache[emailLow].isPremium = true;
+                    }
+                    window.currentUserSpCoins = Number(res.spCoins);
+                    window.currentUserVipUntil = Number(res.premiumUntil);
+                    window.refreshVipBadgeUI();
+                    window.showToast("⚡ 3-Day Mini Royal Pro Pass Activated via SP Coins!");
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Redemption failed"));
+                }
+            }, "Activate 3d Pro");
+        };
+
+        window.redeemFreeMatchSlotVoucher = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in with Google first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            if (u.freeSlotVoucher) {
+                window.executeCopyOrShare(u.freeSlotVoucher, "Free Match Slot Voucher");
+                window.showToast(`🎟️ You already have an active Free Slot Voucher: ${u.freeSlotVoucher}`);
+                return;
+            }
+            window.askConfirm("Redeem Free Match Slot", "Spend 400 SP Coins to generate a 1-Time FREE Paid-Match Entry Voucher?", async () => {
+                try {
+                    const res = await callCloudFn('redeemCoinsForVip', { plan: 'voucher' });
+                    if (userCache[emailLow]) {
+                        userCache[emailLow].spCoins = Number(res.spCoins);
+                        userCache[emailLow].freeSlotVoucher = res.freeSlotVoucher;
+                    }
+                    window.currentUserSpCoins = Number(res.spCoins);
+                    window.refreshVipBadgeUI();
+                    window.executeCopyOrShare(res.freeSlotVoucher, "Free Match Voucher");
+                    window.showToast(`🎟️ Free Match Voucher Unlocked: ${res.freeSlotVoucher}!`);
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Voucher redemption failed"));
+                }
+            }, "Unlock Free Slot");
+        };
+
+        window.redeemGoldenChatMegaphone = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            const sqName = u.savedSquad?.teamName || u.ign || u.username || 'PRO SQUAD';
+            window.askConfirm("Golden Chat Megaphone", `Spend 80 SP Coins to broadcast a Golden Megaphone Shoutout for '${sqName}' in Global Chat?`, async () => {
+                try {
+                    const res = await callCloudFn('redeemCoinsForVip', { plan: 'megaphone', squadName: sqName });
+                    if (userCache[emailLow]) userCache[emailLow].spCoins = Number(res.spCoins);
+                    window.currentUserSpCoins = Number(res.spCoins);
+                    window.refreshVipBadgeUI();
+                    document.getElementById('spin-wheel-modal')?.classList.add('hidden');
+                    window.openFullScreenChat();
+                    window.showToast("📢 Golden Shoutout Broadcasted in Global Chat!");
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Shoutout failed"));
+                }
+            }, "Broadcast Now");
+        };
+
+        // 9. sendChatMessage(message) — User self (Server ban & cooldown check)
+        window.sendChatMessage = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Login required!"); return; }
+            if (myChatBannedUntil > Date.now()) { window.showToast("You are banned!"); return; }
+            if (currentChatMode === 'off') { window.showToast("Chat disabled."); return; }
+            const input = document.getElementById('chat-input');
+            const msg = (input?.value || '').trim();
+            if (!msg) return;
+            input.value = '';
+            try {
+                await callCloudFn('sendChatMessage', { message: msg });
+                window.lastUserMsgTime = Date.now();
+            } catch (e) {
+                input.value = msg;
+                window.showToast("⏳ " + (e.message || "Could not send message"));
+            }
+        };
+
+        // 10. castPredictionVote(matchId, teamName) — User self (Once per match, +10 coins)
+        window.castBooyahPrediction = async function(matchId, teamName) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign in with Google to vote & earn SP Coins!");
+                return;
+            }
+            const emailLow = window.loggedEmail.toLowerCase();
+            try {
+                const res = await callCloudFn('castPredictionVote', { matchId, teamName });
+                const votesKey = `satta_pai_pred_votes_${matchId}`;
+                const myVoteKey = `satta_pai_my_pred_${matchId}_${emailLow}`;
+                let votesMap = {};
+                try { votesMap = JSON.parse(localStorage.getItem(votesKey) || '{}'); } catch(e) {}
+                votesMap[teamName] = (Number(votesMap[teamName]) || 1) + 1;
+                try {
+                    localStorage.setItem(votesKey, JSON.stringify(votesMap));
+                    localStorage.setItem(myVoteKey, teamName);
+                } catch(e) {}
+                if (userCache[emailLow]) userCache[emailLow].spCoins = Number(res.spCoins);
+                window.currentUserSpCoins = Number(res.spCoins);
+                window.refreshVipBadgeUI();
+                window.showToast(`🔮 Predicted ${teamName} for Booyah! +10 SP Coins added!`);
+                window.openPredictionModal(matchId);
+            } catch (e) {
+                window.showToast("ℹ️ " + (e.message || "Prediction failed"));
+            }
+        };
+
+        // 11. voteForMvp(mvpId) — User self (Once per MVP, +5 coins)
+        window.voteForMvpPlayer = async function(mvpId) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign in with Google to vote & earn +5 SP Coins!");
+                return;
+            }
+            const emailLow = window.loggedEmail.toLowerCase();
+            try {
+                const res = await callCloudFn('voteForMvp', { mvpId });
+                try { localStorage.setItem(`satta_pai_mvp_vote_${mvpId}_${emailLow}`, '1'); } catch(e) {}
+                const target = (window.allMvpCandidates || []).find(x => x.id === mvpId);
+                if (target) target.fires = (target.fires || 1) + 1;
+                if (userCache[emailLow]) userCache[emailLow].spCoins = Number(res.spCoins);
+                window.currentUserSpCoins = Number(res.spCoins);
+                window.refreshVipBadgeUI();
+                window.renderMvpCandidatesList();
+                window.showToast(`🔥 Fire Reaction Sent! +5 SP Coins earned!`);
+            } catch (e) {
+                window.showToast("🔥 " + (e.message || "Already voted for this MVP"));
+            }
+        };
+
+        // 12. giftSpCoins(targetId, amount) — User self (Atomic transaction)
+        window.sendSpCoinsToFriend = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const senderEmail = window.loggedEmail.toLowerCase();
+            const rawTarget = (document.getElementById('gift-friend-id-input')?.value || '').trim();
+            const amount = parseInt(document.getElementById('gift-coins-amount-input')?.value || '0', 10);
+            if (!rawTarget) { window.showToast("⚠️ Enter your friend's Player ID (SP-XXXX) or Email!"); return; }
+            if (!amount || amount < 10) { window.showToast("⚠️ Minimum gift amount is 10 SP Coins!"); return; }
+            window.askConfirm("Gift SP Coins", `Send ${amount} SP Coins to ${rawTarget}?`, async () => {
+                try {
+                    const res = await callCloudFn('giftSpCoins', { targetId: rawTarget, amount });
+                    if (userCache[senderEmail]) userCache[senderEmail].spCoins = Number(res.senderSpCoins);
+                    if (res.recipientEmail && userCache[res.recipientEmail]) {
+                        userCache[res.recipientEmail].spCoins = Number(res.recipientSpCoins);
+                    }
+                    window.currentUserSpCoins = Number(res.senderSpCoins);
+                    window.refreshVipBadgeUI();
+                    document.getElementById('gift-friend-id-input').value = '';
+                    document.getElementById('gift-coins-amount-input').value = '';
+                    window.showToast(`🎁 Sent ${amount} SP Coins to ${res.recipientName || rawTarget}!`);
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Coin transfer failed"));
+                }
+            }, "Send Gift");
+        };
+
+        // 13. claimReferral(code) — User self (Once only, +50 coins)
+        window.claimReferralCodeBonus = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("Sign in first!"); return; }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const code = (document.getElementById('friend-referral-input')?.value || '').trim().toUpperCase();
+            if (!/^SP-[0-9]{4}$/.test(code)) { window.showToast("❌ Enter a valid Player ID like SP-4821"); return; }
+            try {
+                const res = await callCloudFn('claimReferral', { code });
+                if (userCache[emailLow]) {
+                    userCache[emailLow].spCoins = Number(res.spCoins);
+                    userCache[emailLow].referredBy = res.referredBy || code;
+                }
+                window.currentUserSpCoins = Number(res.spCoins);
+                window.refreshVipBadgeUI();
+                document.getElementById('friend-referral-input').value = '';
+                window.showToast("🎉 +50 SP Coins Referral Bonus Claimed!");
+            } catch (e) {
+                window.showToast("❌ " + (e.message || "Referral claim failed"));
+            }
+        };
+
+        // 14. claimBattlePassTier(tier) — User self (Server XP verification & tier claim)
+        window.claimDailyBattlePassXP = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign in with Google to claim Battle Pass XP!");
+                return;
+            }
+            const emailLow = window.loggedEmail.toLowerCase();
+            try {
+                const res = await callCloudFn('claimBattlePassTier', { tier: 'daily_xp' });
+                if (userCache[emailLow]) userCache[emailLow].bpBonusXp = Number(res.bpBonusXp || 120);
+                try {
+                    localStorage.setItem('satta_pai_bp_xp_' + emailLow, String(res.bpBonusXp || 120));
+                    localStorage.setItem('satta_pai_bp_daily_' + emailLow, String(Date.now()));
+                } catch(e) {}
+                window.renderBattlePassUI();
+                window.showToast("⚡ +120 Season Battle Pass XP Claimed!");
+            } catch (e) {
+                window.showToast("⏳ " + (e.message || "Daily Battle Pass XP already claimed!"));
+            }
+        };
+
+        window.claimBattlePassTierReward = async function(tierNum) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign in with Google to claim Battle Pass rewards!");
+                return;
+            }
+            const emailLow = window.loggedEmail.toLowerCase();
+            try {
+                const res = await callCloudFn('claimBattlePassTier', { tier: Number(tierNum) });
+                if (userCache[emailLow]) {
+                    userCache[emailLow].spCoins = Number(res.spCoins);
+                    userCache[emailLow].claimedBpTiers = res.claimedBpTiers || [];
+                    if (res.armoryTitle) userCache[emailLow].armoryTitle = res.armoryTitle;
+                }
+                try {
+                    localStorage.setItem('satta_pai_bp_claimed_' + emailLow, JSON.stringify(res.claimedBpTiers || []));
+                } catch(e) {}
+                window.currentUserSpCoins = Number(res.spCoins);
+                window.refreshVipBadgeUI();
+                window.renderBattlePassUI();
+                window.showToast(`🎉 Tier ${tierNum} Claimed: +${res.coinsAdded} SP Coins!`);
+            } catch (e) {
+                window.showToast("🔒 " + (e.message || "Cannot claim Battle Pass tier"));
+            }
+        };
+
+        // 15. buyArmoryTitle(title, cost) — User self
+        window.buyOrEquipArmoryTitle = async function(titleName, costCoins) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign in with Google first!");
+                return;
+            }
+            const emailLow = window.loggedEmail.toLowerCase();
+            const u = userCache[emailLow] || {};
+            const unlocked = Array.isArray(u.unlockedTitles) ? u.unlockedTitles : [];
+
+            const executeTitleCall = async () => {
+                try {
+                    const res = await callCloudFn('buyArmoryTitle', { title: titleName, cost: Number(costCoins) });
+                    if (userCache[emailLow]) {
+                        userCache[emailLow].spCoins = Number(res.spCoins);
+                        userCache[emailLow].armoryTitle = res.armoryTitle;
+                        userCache[emailLow].unlockedTitles = res.unlockedTitles || [];
+                    }
+                    window.currentUserSpCoins = Number(res.spCoins);
+                    const eqLbl = document.getElementById('equipped-armory-lbl');
+                    if (eqLbl) eqLbl.textContent = `Equipped: ${res.armoryTitle}`;
+                    window.refreshVipBadgeUI();
+                    window.loadProfileUI();
+                    window.renderChatMessages();
+                    window.showToast(res.mode === 'equipped' ? `🎖️ Equipped Armory Title: ${titleName}!` : `🎉 Unlocked & Equipped ${titleName}!`);
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Could not unlock title"));
+                }
+            };
+
+            if (unlocked.includes(titleName)) {
+                await executeTitleCall();
+            } else {
+                window.askConfirm("Unlock Armory Title", `Spend ${costCoins} SP Coins to unlock & equip '${titleName}' in Global Chat and Profile?`, executeTitleCall, "Unlock & Equip");
+            }
+        };
+
+        // 17. publishScoreboard(matchId, rankings) — Admin/Host only
+        window.generateAndPublishScoreboard = function(mode) {
+            const matchId = mode === 'sa' ? document.getElementById('sa-calc-match-select')?.value : document.getElementById('ah-calc-match-select')?.value;
+            if (!matchId) return;
+            window.askConfirm("Publish Scoreboard", "Are you sure you want to publish this scoreboard and mark the match as ENDED?", async () => {
+                const placePts = {};
+                for (let i = 1; i <= 10; i++) {
+                    const inputId = mode === 'sa' ? `pts-${i}` : `ah-pts-${i}`;
+                    placePts[i] = parseFloat(document.getElementById(inputId)?.value) || 0;
+                }
+                const ptsPerKill = parseFloat(document.getElementById(mode === 'sa' ? 'pts-kill' : 'ah-pts-kill')?.value) || 0;
+                const rankings = [];
+                const rowsSelector = mode === 'sa' ? '#sa-host-teams-rows .team-calc-row' : '#ah-host-teams-rows .team-calc-row';
+                document.querySelectorAll(rowsSelector).forEach(row => {
+                    const teamName = row.getAttribute('data-team');
+                    const isEliminated = row.querySelector('.calc-elim').checked;
+                    const place = parseInt(row.querySelector('.calc-place').value) || 12;
+                    const kills = parseFloat(row.querySelector('.calc-kills').value) || 0;
+                    const placementScore = isEliminated ? 0 : (placePts[place] || 0);
+                    const totalScore = placementScore + (kills * ptsPerKill);
+                    rankings.push({ teamName, place: isEliminated ? 'Eliminated' : place, kills, totalScore, isEliminated });
+                });
+                rankings.sort((a, b) => b.totalScore - a.totalScore);
+                const matchObj = allMatches.find(m => m.id === matchId);
+                const stageName = matchObj ? matchObj.stage : 'Finals';
+                try {
+                    await callCloudFn('publishScoreboard', { matchId, stageName, groupName: 'TEAM A', rankings });
+                    window.refreshVipBadgeUI();
+                    window.showToast('🏆 Scoreboard Published & Top 3 Winner Coins Credited!');
+                    window.switchTab('roadmap');
+                } catch (e) {
+                    window.showToast("❌ " + (e.message || "Failed to publish scoreboard"));
+                }
+            }, "Yes, Publish");
+        };
+
+        // 18. deleteChatMessage(chatId, action, targetEmail) — Admin/Owner moderation
+        window.handleChatAction = async function(action) {
+            if (!window.currentChatTargetId && action !== 'ban' && action !== 'unban') return;
+            const targetId = window.currentChatTargetId || '';
+            const targetEmail = (window.currentChatTargetEmail || '').toLowerCase();
+            document.getElementById('chat-profile-modal')?.classList.add('hidden');
+            if (action === 'unsend' || action === 'delete') {
+                window.askConfirm("Delete Message", "Are you sure you want to delete this message?", async () => {
+                    try {
+                        await callCloudFn('deleteChatMessage', { chatId: targetId, action });
+                        window.showToast("🗑️ Message deleted");
+                    } catch (e) {
+                        window.showToast("❌ " + (e.message || "Delete failed"));
+                    }
+                }, "Delete");
+            } else if (action === 'ban') {
+                window.askConfirm("Ban User", `Ban ${window.maskEmail(targetEmail)} from chatting for 24 hours?`, async () => {
+                    try {
+                        await callCloudFn('deleteChatMessage', { chatId: targetId, action: 'ban', targetEmail });
+                        window.showToast("🚫 User banned for 24h");
+                    } catch (e) {
+                        window.showToast("❌ " + (e.message || "Ban failed"));
+                    }
+                }, "Ban User");
+            } else if (action === 'unban') {
+                window.askConfirm("Unban User", `Remove chat ban for ${window.maskEmail(targetEmail)}?`, async () => {
+                    try {
+                        await callCloudFn('deleteChatMessage', { chatId: targetId, action: 'unban', targetEmail });
+                        window.showToast("✅ User unbanned");
+                    } catch (e) {
+                        window.showToast("❌ " + (e.message || "Unban failed"));
+                    }
+                }, "Unban");
+            }
         };
 
         // Initialize PWA Manifest, Chatbot Theme Skin, and Battle Pass Pill on load
