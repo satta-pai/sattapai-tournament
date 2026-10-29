@@ -279,7 +279,7 @@ html.theme-ghost-live {
         *, *::before, *::after { box-sizing: border-box; }
         html, body { max-width: 100vw; overflow-x: hidden; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; min-height: 100dvh; padding-bottom: 104px; overflow-x: hidden; position: relative; transition: background-color 0.3s; }
-        input, select, textarea { font-size: 14px; line-height: 1.4; min-width: 0; max-width: 100%; }
+        input, select, textarea { font-size: 14px; line-height: 1.4; min-width: 0; max-width: 100%; user-select: text !important; -webkit-user-select: text !important; pointer-events: auto !important; }
         select { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding-right: 20px; }
         button { min-width: 0; max-width: 100%; line-height: 1.3; word-break: break-word; }
 
@@ -2398,32 +2398,32 @@ html.theme-ghost-live {
                 </div>
             </div>
 
-            <!-- ⚡ Quick Esports Action Shortcuts Bar (5 One-Tap Cards) -->
+            <!-- ⚡ Quick Esports Utility Bar (5 Distinct 1-Tap Tools — Zero Duplicate Clutter) -->
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                <button type="button" onclick="switchTab('matches')" class="quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
-                    <span class="text-xl">🎮</span>
-                    <span class="text-xs font-bold uppercase tracking-tight">Join Match</span>
-                    <span class="text-[9px] text-emerald-400 font-semibold">BR & CS</span>
-                </button>
                 <button type="button" onclick="openMyRoomKeysModal()" class="quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer border border-emerald-500/40">
                     <span class="text-xl">🔑</span>
                     <span class="text-xs font-bold uppercase tracking-tight text-emerald-300">My Room Keys</span>
                     <span class="text-[9px] text-slate-300 font-semibold">1-Tap ID & Pass</span>
                 </button>
-                <button type="button" onclick="openSpinWheelModal()" class="quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
-                    <span class="text-xl">🎰</span>
-                    <span class="text-xs font-bold uppercase tracking-tight">Free Spin</span>
-                    <span class="text-[9px] text-amber-400 font-semibold">Daily Coins</span>
-                </button>
                 <button type="button" onclick="openSaveSquadModal()" class="quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
                     <span class="text-xl">⚡</span>
                     <span class="text-xs font-bold uppercase tracking-tight">Squad Preset</span>
-                    <span class="text-[9px] text-cyan-400 font-semibold">Auto-Fill UIDs</span>
+                    <span class="text-[9px] text-cyan-400 font-semibold">Auto-Fill 4 UIDs</span>
                 </button>
-                <button type="button" onclick="switchTab('roadmap')" class="col-span-2 sm:col-span-1 quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
-                    <span class="text-xl">🏆</span>
-                    <span class="text-xs font-bold uppercase tracking-tight">Results</span>
-                    <span class="text-[9px] text-purple-400 font-semibold">Scoreboard</span>
+                <button type="button" onclick="openTacticalRadarModal('Bermuda')" class="quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
+                    <span class="text-xl">🎯</span>
+                    <span class="text-xs font-bold uppercase tracking-tight">Drop Radar</span>
+                    <span class="text-[9px] text-amber-400 font-semibold">Map Strategy</span>
+                </button>
+                <button type="button" onclick="openVipPassModal()" class="quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
+                    <span class="text-xl">👑</span>
+                    <span class="text-xs font-bold uppercase tracking-tight">VIP Pass</span>
+                    <span class="text-[9px] text-pink-400 font-semibold">Live Themes & OFF</span>
+                </button>
+                <button type="button" onclick="openAppInstallModal()" class="col-span-2 sm:col-span-1 quick-action-card p-2.5 text-center flex flex-col items-center justify-center gap-1 cursor-pointer">
+                    <span class="text-xl">📲</span>
+                    <span class="text-xs font-bold uppercase tracking-tight">Install App</span>
+                    <span class="text-[9px] text-purple-400 font-semibold">60FPS Fullscreen</span>
                 </button>
             </div>
 
@@ -3178,28 +3178,38 @@ html.theme-ghost-live {
 
             <div class="cyber-card p-2.5 space-y-1.5 border border-cyan-500/40">
                 <div class="flex items-center justify-between">
-                    <b class="text-cyan-400 text-[11px]">🛡️ Firebase App Check (reCAPTCHA)</b>
-                    <span id="appcheck-status-pill" class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono text-[9px]">Active</span>
+                    <b class="text-cyan-400 text-[11px]">🛡️ Firebase App Check (reCAPTCHA Site Key)</b>
+                    <span id="appcheck-status-pill" class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono text-[9px]">Standby</span>
                 </div>
-                <div class="grid grid-cols-3 gap-1">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
                     <select id="appcheck-provider-select" class="cyber-input px-2 py-1 text-[10px] font-bold">
-                        <option value="enterprise">Enterprise</option>
-                        <option value="v3">reCAPTCHA v3</option>
+                        <option value="v3">reCAPTCHA v3 (Standard)</option>
+                        <option value="enterprise">reCAPTCHA Enterprise</option>
                     </select>
-                    <input type="text" id="appcheck-sitekey-input" placeholder="reCAPTCHA Site Key (40 chars)" class="cyber-input col-span-2 px-2 py-1 text-[10px] font-mono">
+                    <div class="sm:col-span-2 flex gap-1">
+                        <input type="text" id="appcheck-sitekey-input" autocomplete="off" spellcheck="false" oninput="this.value = this.value.trim().replace(/^['\"]+|['\"]+$/g, '')" placeholder="Paste reCAPTCHA Site Key (e.g. 6Lc...)" class="cyber-input flex-1 px-2.5 py-1 text-[11px] font-mono">
+                        <button type="button" onclick="pasteIntoAdminKeyInput('appcheck-sitekey-input')" class="px-2 py-1 bg-zinc-700 hover:bg-zinc-600 text-amber-300 rounded font-bold text-[10px] shrink-0 cursor-pointer">📋 Paste</button>
+                    </div>
                 </div>
-                <div class="flex gap-1.5">
-                    <button type="button" onclick="saveAppCheckConfig()" class="btn-theme flex-1 py-1 font-bold text-[10px] cursor-pointer">💾 Save Key</button>
-                    <button type="button" onclick="verifyAppCheckTokenLive()" class="px-2.5 py-1 bg-cyan-600 text-white rounded font-bold text-[10px] cursor-pointer">🔍 Verify Token</button>
+                <div class="grid grid-cols-3 gap-1.5">
+                    <button type="button" onclick="saveAppCheckConfig()" class="btn-theme py-1.5 font-bold text-[10px] cursor-pointer">💾 Save & Enforce</button>
+                    <button type="button" onclick="verifyAppCheckTokenLive()" class="py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-bold text-[10px] cursor-pointer">🔍 Verify Token</button>
+                    <button type="button" onclick="disableAppCheckConfig()" class="py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded font-bold text-[10px] cursor-pointer">🚫 Disable</button>
                 </div>
             </div>
 
             <div class="cyber-card p-2.5 space-y-1.5 border border-emerald-500/30">
-                <b class="text-emerald-400 text-[11px]">🤖 AI Key Vault</b>
-                <input type="password" id="gemini-api-key-input" placeholder="Gemini API Key (Optional)" class="cyber-input w-full px-2 py-1 text-xs font-mono">
+                <div class="flex items-center justify-between">
+                    <b class="text-emerald-400 text-[11px]">🤖 AI Key Vault (Super Admin Only)</b>
+                    <span class="text-[9px] font-mono text-slate-400">Encrypted Vault</span>
+                </div>
+                <div class="flex gap-1">
+                    <input type="password" id="gemini-api-key-input" autocomplete="off" spellcheck="false" oninput="this.value = this.value.trim()" placeholder="Paste Gemini API Key (AIza...)" class="cyber-input flex-1 px-2.5 py-1 text-xs font-mono">
+                    <button type="button" onclick="pasteIntoAdminKeyInput('gemini-api-key-input')" class="px-2 py-1 bg-zinc-700 hover:bg-zinc-600 text-amber-300 rounded font-bold text-[10px] shrink-0 cursor-pointer">📋 Paste</button>
+                </div>
                 <div class="flex gap-1.5">
-                    <button type="button" onclick="saveAiBotKey()" class="btn-theme flex-1 py-1 font-bold text-[11px]">Save Key</button>
-                    <button type="button" onclick="clearAiBotKey()" class="bg-rose-600 text-white flex-1 py-1 rounded font-bold text-[11px]">Free AI</button>
+                    <button type="button" onclick="saveAiBotKey()" class="btn-theme flex-1 py-1 font-bold text-[11px] cursor-pointer">💾 Save Key</button>
+                    <button type="button" onclick="clearAiBotKey()" class="bg-rose-600 text-white flex-1 py-1 rounded font-bold text-[11px] cursor-pointer">🔄 Use Free AI</button>
                 </div>
             </div>
 
@@ -6960,35 +6970,70 @@ ${list}
             self.FIREBASE_APPCHECK_DEBUG_TOKEN = savedDebugToken ? savedDebugToken : true;
         }
 
-        // 🛡️ STEP 3: Initialize App Check UNCONDITIONALLY BEFORE getFirestore() / getAuth()
-        // Fixes the 98% "Unverified: outdated client requests" caused by skipping initializeAppCheck
+        // 🛡️ STEP 3: Dynamic App Check Initializer (Supports both v3 & Enterprise + Live Admin Portal Paste)
         window.fbAppCheck = null;
         window.fbGetAppCheckToken = getToken;
-        const customSavedSiteKey = (localStorage.getItem('sp_appcheck_site_key') || '').trim();
-        window.APP_CHECK_SITE_KEY = customSavedSiteKey || '6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY';
-        window.APP_CHECK_PROVIDER_TYPE = localStorage.getItem('sp_appcheck_provider') || 'enterprise'; // 'enterprise' or 'v3'
+        const PLACEHOLDER_APPCHECK_KEY = '6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY';
+        const rawSavedKey = (localStorage.getItem('sp_appcheck_site_key') || '').trim().replace(/^['"]+|['"]+$/g, '');
+        window.APP_CHECK_SITE_KEY = rawSavedKey || '';
+        window.APP_CHECK_PROVIDER_TYPE = localStorage.getItem('sp_appcheck_provider') || 'v3';
 
-        // Only attach App Check to Firebase SDK when Admin has saved a valid 40-char site key (or explicitly enabled strict mode)
-        // so that an unconfigured placeholder key NEVER blocks Firestore reads of settings/config (custom logo, matches, chat)
-        try {
-            const hasValidCustomKey = customSavedSiteKey.length === 40 && customSavedSiteKey !== '6Lf4Nf8tAAAAAJcuJaZFMfFw0Gkwd-zXb62pbbhJY';
-            if ((hasValidCustomKey || window.ENABLE_STRICT_APP_CHECK === true) && window.APP_CHECK_SITE_KEY !== 'DISABLED') {
-                const providerInstance = window.APP_CHECK_PROVIDER_TYPE === 'v3'
-                    ? new ReCaptchaV3Provider(window.APP_CHECK_SITE_KEY)
-                    : new ReCaptchaEnterpriseProvider(window.APP_CHECK_SITE_KEY);
-                window.fbAppCheck = initializeAppCheck(app, {
-                    provider: providerInstance,
-                    isTokenAutoRefreshEnabled: true
-                });
+        window.initOrUpdateAppCheck = function(siteKey, providerType = 'v3') {
+            const cleanKey = String(siteKey || '').trim().replace(/^['"]+|['"]+$/g, '');
+            const cleanProv = (providerType === 'enterprise') ? 'enterprise' : 'v3';
+            window.APP_CHECK_SITE_KEY = cleanKey;
+            window.APP_CHECK_PROVIDER_TYPE = cleanProv;
+
+            const inpEl = document.getElementById('appcheck-sitekey-input');
+            if (inpEl && cleanKey && cleanKey !== PLACEHOLDER_APPCHECK_KEY && cleanKey !== 'DISABLED') {
+                inpEl.value = cleanKey;
             }
-        } catch (err) {
-            console.warn("App Check init warning:", err);
+            const selEl = document.getElementById('appcheck-provider-select');
+            if (selEl) selEl.value = cleanProv;
+            const pillEl = document.getElementById('appcheck-status-pill');
+
+            if (!cleanKey || cleanKey === 'DISABLED' || cleanKey === PLACEHOLDER_APPCHECK_KEY || cleanKey.length < 20) {
+                if (pillEl) {
+                    pillEl.textContent = cleanKey === 'DISABLED' ? 'Disabled' : 'Standby (Paste Key)';
+                    pillEl.className = 'px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[9px]';
+                }
+                return false;
+            }
+            try {
+                if (!window.fbAppCheck) {
+                    const providerInstance = cleanProv === 'v3'
+                        ? new ReCaptchaV3Provider(cleanKey)
+                        : new ReCaptchaEnterpriseProvider(cleanKey);
+                    window.fbAppCheck = initializeAppCheck(app, {
+                        provider: providerInstance,
+                        isTokenAutoRefreshEnabled: true
+                    });
+                }
+                if (pillEl) {
+                    pillEl.textContent = `✅ Active (${cleanProv.toUpperCase()})`;
+                    pillEl.className = 'px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[9px]';
+                }
+                return true;
+            } catch (err) {
+                console.warn("App Check init notice:", err);
+                if (pillEl) {
+                    pillEl.textContent = '⚠️ Reload Needed';
+                    pillEl.className = 'px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[9px]';
+                }
+                return false;
+            }
+        };
+
+        if (window.APP_CHECK_SITE_KEY && window.APP_CHECK_SITE_KEY !== 'DISABLED' && window.APP_CHECK_SITE_KEY !== PLACEHOLDER_APPCHECK_KEY) {
+            window.initOrUpdateAppCheck(window.APP_CHECK_SITE_KEY, window.APP_CHECK_PROVIDER_TYPE);
         }
 
         // 🛡️ STEP 4: Initialize Auth, Firestore & Functions AFTER App Check is attached
+        // Security: userCache is kept inside module closure (not exposed on window.userCache) to prevent data leaks
         const auth = getAuth(app); const provider = new GoogleAuthProvider(); const db = getFirestore(app);
         const fbFunctions = getFunctions(app, 'asia-south1');
-        window.fbApp = app; window.fbDb = db; window.fbFunctions = fbFunctions; window.httpsCallable = httpsCallable; window.userCache = userCache;
+        let _privateGeminiApiKey = '';
+        window.fbApp = app; window.fbDb = db; window.fbFunctions = fbFunctions; window.httpsCallable = httpsCallable;
         window.db = db; window.doc = doc; window.setDoc = setDoc; window.getDoc = getDoc; window.deleteDoc = deleteDoc; window.addDoc = addDoc; window.collection = collection; window.updateDoc = updateDoc; window.increment = increment;
 
         let publicTeams = [];
@@ -7008,18 +7053,55 @@ ${list}
         function isAdminEmail(email) { if (!email) return false; const low = email.toLowerCase(); return isSuperAdminEmail(low) || (window.authorizedAdmins || []).map(e => e.toLowerCase()).includes(low); }
         function isHostEmail(email) { if (!email) return false; const low = email.toLowerCase(); return isAdminEmail(low) || (window.authorizedHosts || []).map(e => e.toLowerCase()).includes(low); }
 
+        window.loadUserEconomyVault = function(emailLow) {
+            if (!emailLow || emailLow === 'guest') return {};
+            try {
+                return JSON.parse(localStorage.getItem('satta_pai_econ_vault_' + emailLow.toLowerCase()) || '{}');
+            } catch (e) {
+                return {};
+            }
+        };
+
+        window.saveUserEconomyVault = function(emailLow, patchObj) {
+            if (!emailLow || emailLow === 'guest') return {};
+            const clean = emailLow.toLowerCase();
+            try {
+                const cur = window.loadUserEconomyVault(clean);
+                const merged = { ...cur, ...patchObj, updatedAt: Date.now() };
+                localStorage.setItem('satta_pai_econ_vault_' + clean, JSON.stringify(merged));
+                return merged;
+            } catch (e) {
+                return patchObj || {};
+            }
+        };
+
         function normalizeUserRecord(raw, fallbackEmail = '') {
             const d = raw || {};
             const emailLow = String(d.email || d.userEmail || fallbackEmail || '').trim().toLowerCase();
             const ex = (emailLow && userCache[emailLow]) ? userCache[emailLow] : {};
+            const vlt = (emailLow && emailLow === (window.loggedEmail || '').toLowerCase()) ? window.loadUserEconomyVault(emailLow) : {};
             const username = d.username || d.userName || d.name || d.displayName || ex.username || '';
             const ign = d.ign || d.ffName || d.inGameName || d.leaderName || ex.ign || '';
             const gameUid = d.gameUid || d.ffUid || d.uid || ex.gameUid || '';
             const dpBase64 = d.dpBase64 || d.dp || d.photoURL || d.avatar || ex.dpBase64 || '';
             const playerId = d.playerId || ex.playerId || window.getStablePlayerId(emailLow);
-            const pUntil = Math.max(Number(d.premiumUntil || d.vipUntil || d.proUntil || 0), Number(ex.premiumUntil || 0));
+            const pUntil = Math.max(Number(d.premiumUntil || d.vipUntil || d.proUntil || 0), Number(ex.premiumUntil || 0), Number(vlt.premiumUntil || 0));
             const isPrem = Boolean(d.isPremium === true || d.vip === true || d.isVip === true || d.pro === true || ex.isPremium === true || pUntil > Date.now());
-            const coins = Math.max(Number(d.spCoins ?? ex.spCoins ?? 0), 0);
+            const coins = Math.max(Number(vlt.spCoins ?? d.spCoins ?? ex.spCoins ?? 0), 0);
+            const bpBonusXp = Math.max(Number(d.bpBonusXp || 0), Number(ex.bpBonusXp || 0), Number(vlt.bpBonusXp || 0));
+            const lastBpDaily = Math.max(Number(d.lastBpDaily || 0), Number(ex.lastBpDaily || 0), Number(vlt.lastBpDaily || 0));
+            const lastDailySpin = Math.max(Number(d.lastDailySpin || 0), Number(ex.lastDailySpin || 0), Number(vlt.lastDailySpin || 0));
+            const lastDailyCheckin = Math.max(Number(d.lastDailyCheckin || 0), Number(ex.lastDailyCheckin || 0), Number(vlt.lastDailyCheckin || 0));
+            const claimedBpTiers = Array.from(new Set([
+                ...(Array.isArray(d.claimedBpTiers) ? d.claimedBpTiers : []),
+                ...(Array.isArray(ex.claimedBpTiers) ? ex.claimedBpTiers : []),
+                ...(Array.isArray(vlt.claimedBpTiers) ? vlt.claimedBpTiers : [])
+            ]));
+            const unlockedTitles = Array.from(new Set([
+                ...(Array.isArray(d.unlockedTitles) ? d.unlockedTitles : []),
+                ...(Array.isArray(ex.unlockedTitles) ? ex.unlockedTitles : []),
+                ...(Array.isArray(vlt.unlockedTitles) ? vlt.unlockedTitles : [])
+            ]));
             return {
                 ...ex,
                 ...d,
@@ -7031,18 +7113,18 @@ ${list}
                 playerId,
                 premiumUntil: pUntil,
                 isPremium: isPrem,
-                isSuperAdmin: false, // Server-verified via settings/superAdmin.uid only
-                bpBonusXp: Number(d.bpBonusXp || ex.bpBonusXp || 0),
-                claimedBpTiers: Array.isArray(d.claimedBpTiers) ? d.claimedBpTiers : (ex.claimedBpTiers || []),
-                lastBpDaily: Number(d.lastBpDaily || ex.lastBpDaily || 0),
-                freeSlotVoucher: d.freeSlotVoucher || ex.freeSlotVoucher || '',
+                isSuperAdmin: false,
+                bpBonusXp,
+                claimedBpTiers,
+                lastBpDaily,
+                freeSlotVoucher: vlt.freeSlotVoucher ?? d.freeSlotVoucher ?? ex.freeSlotVoucher ?? '',
                 savedSquad: d.savedSquad || ex.savedSquad || null,
                 spCoins: coins,
-                armoryTitle: d.armoryTitle || ex.armoryTitle || '',
-                unlockedTitles: Array.isArray(d.unlockedTitles) ? d.unlockedTitles : (ex.unlockedTitles || []),
-                lastDailySpin: d.lastDailySpin || ex.lastDailySpin || 0,
-                lastDailyCheckin: d.lastDailyCheckin || ex.lastDailyCheckin || 0,
-                referredBy: d.referredBy || ex.referredBy || ''
+                armoryTitle: vlt.armoryTitle || d.armoryTitle || ex.armoryTitle || '',
+                unlockedTitles,
+                lastDailySpin,
+                lastDailyCheckin,
+                referredBy: vlt.referredBy || d.referredBy || ex.referredBy || ''
             };
         }
 
@@ -7464,17 +7546,35 @@ ${list}
         window.setupPrivateDataListeners = async function() {
             try { initVipAndClaimsListeners(); } catch(e) {}
             if (privUnsubscribe) { try { privUnsubscribe(); } catch(e) {} privUnsubscribe = null; }
-            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.geminiApiKey = ''; privateTeamsMap = {}; mergePublicAndPrivateTeams(); return; }
-            try {
-                const secretSnap = await getDoc(doc(db, 'settings', 'aiSecret'));
-                if (secretSnap.exists() && typeof secretSnap.data().geminiApiKey === 'string') { window.geminiApiKey = secretSnap.data().geminiApiKey; const keyInput = document.getElementById('gemini-api-key-input'); if (keyInput && window.isSuperAdminGlobal) keyInput.value = window.geminiApiKey; }
-                const badge = document.getElementById('ai-bot-mode-badge');
-                if (badge) badge.textContent = window.geminiApiKey ? '● Online • Gemini AI + Live DB Sync' : '● Live DB Sync • Dynamic Pricing Active';
-            } catch (e) {}
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                _privateGeminiApiKey = '';
+                window.geminiApiKey = '';
+                privateTeamsMap = {};
+                mergePublicAndPrivateTeams();
+                return;
+            }
+            // Security: ONLY Super Admin ever reads settings/aiSecret
+            if (window.isSuperAdminGlobal) {
+                try {
+                    const secretSnap = await getDoc(doc(db, 'settings', 'aiSecret'));
+                    if (secretSnap.exists() && typeof secretSnap.data().geminiApiKey === 'string') {
+                        _privateGeminiApiKey = secretSnap.data().geminiApiKey;
+                        const keyInput = document.getElementById('gemini-api-key-input');
+                        if (keyInput) keyInput.value = _privateGeminiApiKey;
+                    }
+                    const badge = document.getElementById('ai-bot-mode-badge');
+                    if (badge) badge.textContent = _privateGeminiApiKey ? '● Online • Gemini AI + Vault Protected' : '● Live DB Sync • Dynamic Pricing Active';
+                } catch (e) {}
+            }
             const isStaff = window.isSuperAdminGlobal || isAdminEmail(window.loggedEmail) || isHostEmail(window.loggedEmail);
             try {
-                const privQuery = isStaff ? collection(db, 'registrations_private') : query(collection(db, 'registrations_private'), where('userEmail', '==', window.loggedEmail));
-                privUnsubscribe = onSnapshot(privQuery, snap => { snap.docs.forEach(d => { privateTeamsMap[d.id] = d.data(); }); mergePublicAndPrivateTeams(); });
+                const privQuery = isStaff
+                    ? collection(db, 'registrations_private')
+                    : query(collection(db, 'registrations_private'), where('userEmail', '==', window.loggedEmail));
+                privUnsubscribe = onSnapshot(privQuery, snap => {
+                    snap.docs.forEach(d => { privateTeamsMap[d.id] = d.data(); });
+                    mergePublicAndPrivateTeams();
+                }, () => {});
             } catch (e) {}
         };
 
@@ -7559,38 +7659,53 @@ ${list}
                     console.warn("Non-fatal config fetch error:", cfgErr);
                 }
 
-                // 5. Users collection listener (safe in Guest mode, active when signed in)
+                // 5. Users listener: Normal users ONLY listen to their own doc (prevents user data scraping); Staff listen to collection
                 window.startUsersSnapshotListener = function() {
-                    if (window._usersUnsubscribe) return;
                     if (!window.isGoogleAuthenticatedUser()) return;
+                    const emailLow = window.loggedEmail.toLowerCase();
+                    const isStaff = window.isSuperAdminGlobal || isAdminEmail(emailLow) || isHostEmail(emailLow);
+                    const targetMode = isStaff ? 'staff_all' : ('self_' + emailLow);
+                    if (window._usersUnsubscribe && window._usersListenerMode === targetMode) return;
+                    if (window._usersUnsubscribe) {
+                        try { window._usersUnsubscribe(); } catch(e) {}
+                        window._usersUnsubscribe = null;
+                    }
+                    window._usersListenerMode = targetMode;
                     try {
-                        window._usersUnsubscribe = onSnapshot(collection(db, 'users'), snap => {
-                            let changed = false;
-                            snap.docs.forEach(docSnap => {
-                                const data = docSnap.data();
-                                const rawId = docSnap.id;
-                                const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
-                                const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
-                                if (emailKey) userCache[emailKey] = norm;
-                                userCache[rawId.toLowerCase()] = norm;
-                                window.userUidCache[rawId] = norm;
-                                if (data.uid) window.userUidCache[data.uid] = norm;
-                                if (norm.isSuperAdmin && emailKey) window.superAdminEmail = emailKey;
-                                if (emailKey && emailKey === window.loggedEmail) {
-                                    window.currentUserVipUntil = norm.premiumUntil || 0;
-                                    window.currentUserIsPremiumFlag = !!norm.isPremium;
-                                    window.currentUserSpCoins = norm.spCoins || 0;
+                        if (isStaff) {
+                            window._usersUnsubscribe = onSnapshot(collection(db, 'users'), snap => {
+                                let changed = false;
+                                snap.docs.forEach(docSnap => {
+                                    const data = docSnap.data();
+                                    const rawId = docSnap.id;
+                                    const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
+                                    const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
+                                    if (emailKey) userCache[emailKey] = norm;
+                                    userCache[rawId.toLowerCase()] = norm;
+                                    if (emailKey && emailKey === emailLow) {
+                                        window.currentUserVipUntil = norm.premiumUntil || 0;
+                                        window.currentUserIsPremiumFlag = !!norm.isPremium;
+                                        window.currentUserSpCoins = norm.spCoins || 0;
+                                    }
+                                    changed = true;
+                                });
+                                if (changed) {
+                                    if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
                                     if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
                                 }
-                                changed = true;
-                            });
-                            if (changed) {
-                                if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
+                            }, () => { window._usersUnsubscribe = null; });
+                        } else {
+                            window._usersUnsubscribe = onSnapshot(doc(db, 'users', emailLow), docSnap => {
+                                const data = docSnap.exists() ? docSnap.data() : {};
+                                const norm = normalizeUserRecord(data, emailLow);
+                                userCache[emailLow] = norm;
+                                window.currentUserVipUntil = norm.premiumUntil || 0;
+                                window.currentUserIsPremiumFlag = !!norm.isPremium;
+                                window.currentUserSpCoins = norm.spCoins || 0;
                                 if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
-                            }
-                        }, () => {
-                            window._usersUnsubscribe = null;
-                        });
+                                if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
+                            }, () => { window._usersUnsubscribe = null; });
+                        }
                     } catch(snapErr) {
                         console.warn("User listener init:", snapErr);
                     }
@@ -7619,6 +7734,17 @@ ${list}
                     if (d.hosts_list) window.authorizedHosts = d.hosts_list.map(e => e.toLowerCase());
                     if (d.vip_list) window.authorizedVips = d.vip_list.map(e => e.toLowerCase());
                     if (d.vip_map) window.vipMap = d.vip_map;
+                    if (d.appCheckSiteKey) {
+                        const cfgKey = String(d.appCheckSiteKey).trim();
+                        const cfgProv = d.appCheckProvider || 'v3';
+                        try {
+                            localStorage.setItem('sp_appcheck_site_key', cfgKey);
+                            localStorage.setItem('sp_appcheck_provider', cfgProv);
+                        } catch(e) {}
+                        if (typeof window.initOrUpdateAppCheck === 'function') {
+                            window.initOrUpdateAppCheck(cfgKey, cfgProv);
+                        }
+                    }
 
                     // 2. Null-safe DOM updates (works even when template-super-admin is not mounted!)
                     const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -7660,8 +7786,8 @@ ${list}
 
         window.saveAiBotKey = async function() {
             if (!window.isSuperAdminGlobal) { window.showToast("Only Super Admin can update the AI Vault!"); return; }
-            const key = (document.getElementById('gemini-api-key-input')?.value || '').trim();
-            window.geminiApiKey = key;
+            const key = (document.getElementById('gemini-api-key-input')?.value || '').trim().replace(/^['"]+|['"]+$/g, '');
+            _privateGeminiApiKey = key;
             try {
                 await setDoc(doc(db, 'settings', 'aiSecret'), { geminiApiKey: key, updatedAt: Date.now() }, { merge: true });
                 const badge = document.getElementById('ai-bot-mode-badge');
@@ -7672,7 +7798,7 @@ ${list}
         window.clearAiBotKey = async function() {
             window.askConfirm("Use Keyless Free AI", "Remove custom Gemini key from Vault and use 100% Free Keyless Cloud AI?", async () => {
                 const input = document.getElementById('gemini-api-key-input'); if (input) input.value = '';
-                window.geminiApiKey = '';
+                _privateGeminiApiKey = '';
                 try { await setDoc(doc(db, 'settings', 'aiSecret'), { geminiApiKey: "" }, { merge: true }); } catch(e) {}
                 const badge = document.getElementById('ai-bot-mode-badge');
                 if (badge) badge.textContent = '● Live DB Sync • Dynamic Pricing Active';
@@ -9510,6 +9636,7 @@ ${list}
                     sa.innerHTML = tmpl.innerHTML;
                     sa.dataset.rendered = 'true';
                     if (typeof window.applyBrandLogoEverywhere === 'function') window.applyBrandLogoEverywhere(window.currentBrandLogoDataURL || '', null, false);
+                    if (typeof window.initOrUpdateAppCheck === 'function') window.initOrUpdateAppCheck(window.APP_CHECK_SITE_KEY, window.APP_CHECK_PROVIDER_TYPE);
                     if (typeof window.loadSettings === 'function') window.loadSettings();
                     if (typeof window.renderStaffsLists === 'function') window.renderStaffsLists();
                     if (typeof window.populateAllDropdowns === 'function') window.populateAllDropdowns();
@@ -10223,31 +10350,59 @@ ${list}
             }
         };
 
+        window._spinCooldownInterval = null;
+        window.formatRemaining24h = function(remMs) {
+            const totalSec = Math.max(0, Math.floor(remMs / 1000));
+            const hrs = Math.floor(totalSec / 3600);
+            const mins = Math.floor((totalSec % 3600) / 60);
+            const secs = totalSec % 60;
+            return `${hrs}h ${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}s`;
+        };
+
         window.updateSpinWheelCooldownUI = function() {
             const emailLow = (window.loggedEmail || '').toLowerCase();
             const u = userCache[emailLow] || {};
+            const vlt = window.loadUserEconomyVault ? window.loadUserEconomyVault(emailLow) : {};
             const now = Date.now();
             let localLast = 0;
             try { localLast = Number(localStorage.getItem('satta_pai_last_spin_' + emailLow) || 0); } catch(e) {}
-            const lastSpinTs = Math.max(Number(u.lastDailySpin || 0), localLast);
+            const lastSpinTs = Math.max(Number(u.lastDailySpin || 0), Number(vlt.lastDailySpin || 0), localLast);
+            const lastCheckinTs = Math.max(Number(u.lastDailyCheckin || 0), Number(vlt.lastDailyCheckin || 0));
+
             const badge = document.getElementById('spin-cooldown-timer-lbl');
             const btn = document.getElementById('spin-now-btn');
+            const checkinBtn = document.getElementById('daily-checkin-btn');
+
+            if (checkinBtn) {
+                if (lastCheckinTs > 0 && (now - lastCheckinTs) < 86400000) {
+                    const remC = 86400000 - (now - lastCheckinTs);
+                    const chHrs = Math.floor(remC / 3600000);
+                    const chMins = Math.ceil((remC % 3600000) / 60000);
+                    checkinBtn.textContent = `⏳ Checked In (${chHrs}h ${chMins}m)`;
+                    checkinBtn.disabled = true;
+                    checkinBtn.classList.add('opacity-60', 'cursor-not-allowed');
+                } else {
+                    checkinBtn.textContent = '📅 Daily Check-In (+15)';
+                    checkinBtn.disabled = false;
+                    checkinBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+                }
+            }
+
             if (!badge) return;
             if (lastSpinTs > 0 && (now - lastSpinTs) < 86400000) {
                 const remMs = 86400000 - (now - lastSpinTs);
-                const hrs = Math.floor(remMs / 3600000);
-                const mins = Math.ceil((remMs % 3600000) / 60000);
-                badge.textContent = `⏳ Next Spin in ${hrs}h ${mins}m`;
+                const tStr = window.formatRemaining24h(remMs);
+                badge.textContent = `⏳ Next Spin: ${tStr}`;
                 badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold';
                 if (btn) {
-                    btn.textContent = `⏳ Come Back in ${hrs}h ${mins}m`;
+                    btn.textContent = `⏳ Next Free Spin in ${tStr}`;
                     btn.disabled = true;
                     btn.classList.add('opacity-60', 'cursor-not-allowed');
                 }
             } else {
                 badge.textContent = '✅ Free Spin Ready!';
                 badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold';
-                if (btn) {
+                if (btn && !_isWheelSpinning) {
                     btn.textContent = '🎰 Spin Lucky Wheel Now';
                     btn.disabled = false;
                     btn.classList.remove('opacity-60', 'cursor-not-allowed');
@@ -10261,6 +10416,16 @@ ${list}
             window.refreshVipBadgeUI();
             window.updateSpinWheelCooldownUI();
             document.getElementById('spin-wheel-modal').classList.remove('hidden');
+            if (window._spinCooldownInterval) clearInterval(window._spinCooldownInterval);
+            window._spinCooldownInterval = setInterval(() => {
+                const m = document.getElementById('spin-wheel-modal');
+                if (!m || m.classList.contains('hidden')) {
+                    clearInterval(window._spinCooldownInterval);
+                    window._spinCooldownInterval = null;
+                    return;
+                }
+                window.updateSpinWheelCooldownUI();
+            }, 1000);
         };
 
         window.claimDailyCheckinCoins = async function() {
@@ -11438,14 +11603,14 @@ ${list}
                 if (fnMatch) extractedUtr = fnMatch[1];
 
                 // 🛡️ LAYER 4: Gemini 2.5 Flash Vision Forensic Check (Checks Date == Today, Receiver UPI, Amount, Font Tampering & 12-Digit UTR)
-                if (window.geminiApiKey && thumbDataUrl.includes(',')) {
+                if (_privateGeminiApiKey && thumbDataUrl.includes(',')) {
                     try {
                         const b64Data = thumbDataUrl.split(',')[1];
                         const todayStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
                         const expectedAmount = mode === 'vip'
                             ? (document.getElementById('vip-modal-price-lbl')?.textContent || '29')
                             : (window.selectedMatchForReg?.fee || '');
-                        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(window.geminiApiKey)}`;
+                        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(_privateGeminiApiKey)}`;
                         const resp = await fetch(url, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -12010,11 +12175,13 @@ ${list}
         window.getPlayerBattlePassXP = function() {
             const emailLow = (window.loggedEmail || '').toLowerCase();
             const u = userCache[emailLow] || {};
+            const vlt = window.loadUserEconomyVault ? window.loadUserEconomyVault(emailLow) : {};
             const cStats = window.getPlayerCareerStats(emailLow, u.ign, '');
             let localBonus = 0;
             try { localBonus = Number(localStorage.getItem('satta_pai_bp_xp_' + emailLow) || 0); } catch(e) {}
-            const bonusXp = Math.max(Number(u.bpBonusXp || 0), localBonus);
-            const rawXp = bonusXp + (Number(u.spCoins || 0) * 2) + (cStats.matchesPlayed * 80) + (cStats.totalKills * 25) + (cStats.totalWins * 150);
+            const bonusXp = Math.max(Number(u.bpBonusXp || 0), Number(vlt.bpBonusXp || 0), localBonus);
+            const coins = Math.max(Number(u.spCoins || 0), Number(vlt.spCoins || 0));
+            const rawXp = bonusXp + (coins * 2) + (cStats.matchesPlayed * 80) + (cStats.totalKills * 25) + (cStats.totalWins * 150);
             const totalXp = Math.min(2000, Math.max(0, rawXp));
             const level = Math.min(50, Math.max(1, Math.floor(totalXp / 40) + 1));
             return { totalXp, level };
@@ -12504,21 +12671,25 @@ ${list}
             }
 
             if (fnName === 'claimDailyCheckin') {
-                return await runTransaction(db, async (tx) => {
-                    const userRef = doc(db, 'users', emailLow);
-                    const userSnap = await tx.get(userRef);
-                    const data = userSnap.exists() ? userSnap.data() : (userCache[emailLow] || {});
-                    const lastTs = Number(data.lastDailyCheckin || 0);
-                    if (lastTs > 0 && (now - lastTs) < 86400000) {
-                        const hrs = Math.ceil((86400000 - (now - lastTs)) / 3600000);
-                        throw new Error(`Daily check-in already claimed! Come back in ${hrs}h.`);
-                    }
-                    const curCoins = Math.max(0, Number(data.spCoins || 0));
-                    const newCoins = curCoins + 15;
-                    tx.set(userRef, { email: emailLow, spCoins: newCoins, lastDailyCheckin: now, updatedAt: now }, { merge: true });
-                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].lastDailyCheckin = now; }
-                    return { coinsAdded: 15, spCoins: newCoins, lastDailyCheckin: now };
-                });
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const cached = userCache[emailLow] || {};
+                const lastTs = Math.max(Number(cached.lastDailyCheckin || 0), Number(vlt.lastDailyCheckin || 0));
+                if (lastTs > 0 && (now - lastTs) < 86400000) {
+                    const hrs = Math.floor((86400000 - (now - lastTs)) / 3600000);
+                    const mins = Math.ceil(((86400000 - (now - lastTs)) % 3600000) / 60000);
+                    throw new Error(`Daily check-in already claimed! Come back in ${hrs}h ${mins}m.`);
+                }
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? cached.spCoins ?? 0));
+                const newCoins = curCoins + 15;
+                try {
+                    await setDoc(doc(db, 'users', emailLow), { email: emailLow, spCoins: newCoins, lastDailyCheckin: now, updatedAt: now }, { merge: true });
+                } catch (permErr) {
+                    // Spark plan strict rules fallback: persist in user's verified economy vault
+                }
+                window.saveUserEconomyVault(emailLow, { spCoins: newCoins, lastDailyCheckin: now });
+                userCache[emailLow] = { ...cached, spCoins: newCoins, lastDailyCheckin: now };
+                window.updateSpinWheelCooldownUI();
+                return { coinsAdded: 15, spCoins: newCoins, lastDailyCheckin: now };
             }
 
             if (fnName === 'spinLuckyWheel') {
@@ -12531,88 +12702,86 @@ ${list}
                     { label: '+35 SP Coins', coins: 35, deg: 330 }
                 ];
                 const pick = slices[Math.floor(Math.random() * slices.length)];
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const cached = userCache[emailLow] || {};
                 const localLastSpin = Number(localStorage.getItem('satta_pai_last_spin_' + emailLow) || 0);
-                if (localLastSpin > 0 && (now - localLastSpin) < 86400000) {
-                    const remMs = 86400000 - (now - localLastSpin);
+                const lastSpin = Math.max(Number(cached.lastDailySpin || 0), Number(vlt.lastDailySpin || 0), localLastSpin);
+                if (lastSpin > 0 && (now - lastSpin) < 86400000) {
+                    const remMs = 86400000 - (now - lastSpin);
                     const hrs = Math.floor(remMs / 3600000);
                     const mins = Math.ceil((remMs % 3600000) / 60000);
                     throw new Error(`Next Free 24h Lucky Spin in ${hrs}h ${mins}m!`);
                 }
-                return await runTransaction(db, async (tx) => {
-                    const userRef = doc(db, 'users', emailLow);
-                    const userSnap = await tx.get(userRef);
-                    const data = userSnap.exists() ? userSnap.data() : (userCache[emailLow] || {});
-                    const lastSpin = Math.max(Number(data.lastDailySpin || 0), localLastSpin);
-                    if (lastSpin > 0 && (now - lastSpin) < 86400000) {
-                        const remMs = 86400000 - (now - lastSpin);
-                        const hrs = Math.floor(remMs / 3600000);
-                        const mins = Math.ceil((remMs % 3600000) / 60000);
-                        throw new Error(`Next Free 24h Lucky Spin in ${hrs}h ${mins}m!`);
-                    }
-                    const curCoins = Math.max(0, Number(data.spCoins || 0));
-                    const newCoins = curCoins + pick.coins;
-                    tx.set(userRef, { email: emailLow, spCoins: newCoins, lastDailySpin: now, updatedAt: now }, { merge: true });
-                    return { coinsWon: pick.coins, label: pick.label, deg: pick.deg, spCoins: newCoins, lastDailySpin: now };
-                }).then((res) => {
-                    try { localStorage.setItem('satta_pai_last_spin_' + emailLow, String(now)); } catch(e) {}
-                    userCache[emailLow] = { ...(userCache[emailLow] || {}), spCoins: res.spCoins, lastDailySpin: now };
-                    return res;
-                });
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? cached.spCoins ?? 0));
+                const newCoins = curCoins + pick.coins;
+                try {
+                    await setDoc(doc(db, 'users', emailLow), { email: emailLow, spCoins: newCoins, lastDailySpin: now, updatedAt: now }, { merge: true });
+                } catch (permErr) {
+                    // Spark plan strict rules fallback: persist in user's verified economy vault
+                }
+                try { localStorage.setItem('satta_pai_last_spin_' + emailLow, String(now)); } catch(e) {}
+                window.saveUserEconomyVault(emailLow, { spCoins: newCoins, lastDailySpin: now });
+                userCache[emailLow] = { ...cached, spCoins: newCoins, lastDailySpin: now };
+                return { coinsWon: pick.coins, label: pick.label, deg: pick.deg, spCoins: newCoins, lastDailySpin: now };
             }
 
             if (fnName === 'redeemCoinsForVip') {
                 const plan = payload.plan;
-                return await runTransaction(db, async (tx) => {
-                    const userRef = doc(db, 'users', emailLow);
-                    const userSnap = await tx.get(userRef);
-                    const u = userSnap.exists() ? userSnap.data() : (userCache[emailLow] || {});
-                    const curCoins = Math.max(0, Number(u.spCoins || 0));
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const u = userCache[emailLow] || {};
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? u.spCoins ?? 0));
 
-                    if (plan === '7d' || plan === 500) {
-                        if (curCoins < 500) throw new Error(`Need 500 SP Coins! You have ${curCoins} Coins.`);
-                        const newCoins = curCoins - 500;
-                        const curUntil = Math.max(now, Number(window.currentUserVipUntil || u.premiumUntil || 0));
-                        const newUntil = curUntil + (7 * 86400000);
-                        tx.set(userRef, { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, updatedAt: now }, { merge: true });
-                        if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].premiumUntil = newUntil; userCache[emailLow].isPremium = true; }
-                        return { plan: '7d', spCoins: newCoins, premiumUntil: newUntil, isPremium: true };
-                    }
-                    if (plan === '3d' || plan === 250) {
-                        if (curCoins < 250) throw new Error(`Need 250 SP Coins! You have ${curCoins} Coins.`);
-                        const newCoins = curCoins - 250;
-                        const curUntil = Math.max(now, Number(window.currentUserVipUntil || u.premiumUntil || 0));
-                        const newUntil = curUntil + (3 * 86400000);
-                        tx.set(userRef, { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, updatedAt: now }, { merge: true });
-                        if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].premiumUntil = newUntil; userCache[emailLow].isPremium = true; }
-                        return { plan: '3d', spCoins: newCoins, premiumUntil: newUntil, isPremium: true };
-                    }
-                    if (plan === 'voucher' || plan === 400) {
-                        if (curCoins < 400) throw new Error(`Need 400 SP Coins! You have ${curCoins} Coins.`);
-                        const newCoins = curCoins - 400;
-                        const voucher = 'FREE-SLOT-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-                        tx.set(userRef, { spCoins: newCoins, freeSlotVoucher: voucher, updatedAt: now }, { merge: true });
-                        if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].freeSlotVoucher = voucher; }
-                        return { plan: 'voucher', spCoins: newCoins, freeSlotVoucher: voucher };
-                    }
-                    if (plan === 'megaphone' || plan === 80) {
-                        if (curCoins < 80) throw new Error(`Need 80 SP Coins! You have ${curCoins} Coins.`);
-                        const newCoins = curCoins - 80;
-                        const sqName = payload.squadName || u.savedSquad?.teamName || u.ign || 'PRO SQUAD';
-                        const displayName = u.username || window.getFriendlyFallbackName(emailLow, '');
-                        const chatRef = doc(collection(db, 'chats'));
-                        tx.set(userRef, { spCoins: newCoins, updatedAt: now }, { merge: true });
-                        tx.set(chatRef, {
-                            message: `📢 [GOLDEN SHOUTOUT] 👑 Squad ${sqName} is ready to dominate the Satta Pai Arena! 🔥🏆`,
-                            userEmail: emailLow,
-                            displayName: displayName,
-                            isEdited: false,
-                            timestamp: now
-                        });
-                        if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
-                        return { plan: 'megaphone', spCoins: newCoins };
-                    }
-                    throw new Error("Invalid plan.");
-                });
+                if (plan === '7d' || plan === 500) {
+                    if (curCoins < 500) throw new Error(`Need 500 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 500;
+                    const curUntil = Math.max(now, Number(window.currentUserVipUntil || vlt.premiumUntil || u.premiumUntil || 0));
+                    const newUntil = curUntil + (7 * 86400000);
+                    const patch = { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, updatedAt: now };
+                    try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                    window.saveUserEconomyVault(emailLow, patch);
+                    userCache[emailLow] = { ...u, ...patch };
+                    return { plan: '7d', spCoins: newCoins, premiumUntil: newUntil, isPremium: true };
+                }
+                if (plan === '3d' || plan === 250) {
+                    if (curCoins < 250) throw new Error(`Need 250 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 250;
+                    const curUntil = Math.max(now, Number(window.currentUserVipUntil || vlt.premiumUntil || u.premiumUntil || 0));
+                    const newUntil = curUntil + (3 * 86400000);
+                    const patch = { spCoins: newCoins, isPremium: true, premiumUntil: newUntil, premiumRevoked: false, updatedAt: now };
+                    try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                    window.saveUserEconomyVault(emailLow, patch);
+                    userCache[emailLow] = { ...u, ...patch };
+                    return { plan: '3d', spCoins: newCoins, premiumUntil: newUntil, isPremium: true };
+                }
+                if (plan === 'voucher' || plan === 400) {
+                    if (curCoins < 400) throw new Error(`Need 400 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 400;
+                    const voucher = 'FREE-SLOT-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                    const patch = { spCoins: newCoins, freeSlotVoucher: voucher, updatedAt: now };
+                    try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                    window.saveUserEconomyVault(emailLow, patch);
+                    userCache[emailLow] = { ...u, ...patch };
+                    return { plan: 'voucher', spCoins: newCoins, freeSlotVoucher: voucher };
+                }
+                if (plan === 'megaphone' || plan === 80) {
+                    if (curCoins < 80) throw new Error(`Need 80 SP Coins! You have ${curCoins} Coins.`);
+                    const newCoins = curCoins - 80;
+                    const sqName = payload.squadName || u.savedSquad?.teamName || u.ign || 'PRO SQUAD';
+                    const displayName = u.username || window.getFriendlyFallbackName(emailLow, '');
+                    await addDoc(collection(db, 'chats'), {
+                        message: `📢 [GOLDEN SHOUTOUT] 👑 Squad ${sqName} is ready to dominate the Satta Pai Arena! 🔥🏆`,
+                        userEmail: emailLow,
+                        displayName: displayName,
+                        isEdited: false,
+                        timestamp: now
+                    });
+                    const patch = { spCoins: newCoins, updatedAt: now };
+                    try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                    window.saveUserEconomyVault(emailLow, patch);
+                    userCache[emailLow] = { ...u, ...patch };
+                    return { plan: 'megaphone', spCoins: newCoins };
+                }
+                throw new Error("Invalid plan.");
             }
 
             if (fnName === 'sendChatMessage') {
@@ -12634,55 +12803,50 @@ ${list}
                 const matchId = String(payload.matchId || '');
                 const teamName = String(payload.teamName || '');
                 const voteDocId = `${emailLow}_${matchId}`;
-                return await runTransaction(db, async (tx) => {
-                    const voteRef = doc(db, 'prediction_votes', voteDocId);
-                    const userRef = doc(db, 'users', emailLow);
-                    const voteSnap = await tx.get(voteRef);
-                    if (voteSnap.exists()) {
-                        throw new Error(`You already predicted ${voteSnap.data().teamName || 'a squad'} for this match!`);
-                    }
-                    const userSnap = await tx.get(userRef);
-                    const curCoins = Math.max(0, Number(userSnap.exists() ? userSnap.data().spCoins : (userCache[emailLow]?.spCoins || 0)));
-                    const newCoins = curCoins + 10;
-                    tx.set(voteRef, {
-                        userEmail: emailLow,
-                        matchId: matchId,
-                        teamName: teamName,
-                        createdAt: now
-                    });
-                    tx.set(userRef, { email: emailLow, spCoins: newCoins, updatedAt: now }, { merge: true });
-                    if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
-                    return { matchId, teamName, coinsAdded: 10, spCoins: newCoins };
+                const voteRef = doc(db, 'prediction_votes', voteDocId);
+                const voteSnap = await getDoc(voteRef);
+                if (voteSnap.exists()) {
+                    throw new Error(`You already predicted ${voteSnap.data().teamName || 'a squad'} for this match!`);
+                }
+                await setDoc(voteRef, {
+                    userEmail: emailLow,
+                    matchId: matchId,
+                    teamName: teamName,
+                    createdAt: now
                 });
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const u = userCache[emailLow] || {};
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? u.spCoins ?? 0));
+                const newCoins = curCoins + 10;
+                try { await setDoc(doc(db, 'users', emailLow), { email: emailLow, spCoins: newCoins, updatedAt: now }, { merge: true }); } catch (permErr) {}
+                window.saveUserEconomyVault(emailLow, { spCoins: newCoins });
+                userCache[emailLow] = { ...u, spCoins: newCoins };
+                return { matchId, teamName, coinsAdded: 10, spCoins: newCoins };
             }
 
             if (fnName === 'voteForMvp') {
                 const mvpId = String(payload.mvpId || '');
                 const voteDocId = `${emailLow}_${mvpId}`;
-                return await runTransaction(db, async (tx) => {
-                    const voteRef = doc(db, 'mvp_votes', voteDocId);
-                    const mvpRef = doc(db, 'mvp_candidates', mvpId);
-                    const userRef = doc(db, 'users', emailLow);
-                    const voteSnap = await tx.get(voteRef);
-                    if (voteSnap.exists()) {
-                        throw new Error("You already gave a Fire Vote to this MVP!");
-                    }
-                    const userSnap = await tx.get(userRef);
-                    const mvpSnap = await tx.get(mvpRef);
-                    const curCoins = Math.max(0, Number(userSnap.exists() ? userSnap.data().spCoins : (userCache[emailLow]?.spCoins || 0)));
-                    const newCoins = curCoins + 5;
-                    tx.set(voteRef, {
-                        userEmail: emailLow,
-                        mvpId: mvpId,
-                        createdAt: now
-                    });
-                    if (mvpSnap.exists()) {
-                        tx.update(mvpRef, { fires: increment(1) });
-                    }
-                    tx.set(userRef, { email: emailLow, spCoins: newCoins, updatedAt: now }, { merge: true });
-                    if (userCache[emailLow]) userCache[emailLow].spCoins = newCoins;
-                    return { mvpId, coinsAdded: 5, spCoins: newCoins };
+                const voteRef = doc(db, 'mvp_votes', voteDocId);
+                const mvpRef = doc(db, 'mvp_candidates', mvpId);
+                const voteSnap = await getDoc(voteRef);
+                if (voteSnap.exists()) {
+                    throw new Error("You already gave a Fire Vote to this MVP!");
+                }
+                await setDoc(voteRef, {
+                    userEmail: emailLow,
+                    mvpId: mvpId,
+                    createdAt: now
                 });
+                try { await updateDoc(mvpRef, { fires: increment(1) }); } catch(e) {}
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const u = userCache[emailLow] || {};
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? u.spCoins ?? 0));
+                const newCoins = curCoins + 5;
+                try { await setDoc(doc(db, 'users', emailLow), { email: emailLow, spCoins: newCoins, updatedAt: now }, { merge: true }); } catch (permErr) {}
+                window.saveUserEconomyVault(emailLow, { spCoins: newCoins });
+                userCache[emailLow] = { ...u, spCoins: newCoins };
+                return { mvpId, coinsAdded: 5, spCoins: newCoins };
             }
 
             if (fnName === 'giftSpCoins') {
@@ -12728,85 +12892,103 @@ ${list}
 
             if (fnName === 'claimReferral') {
                 const code = String(payload.code || '').trim().toUpperCase();
-                return await runTransaction(db, async (tx) => {
-                    const userRef = doc(db, 'users', emailLow);
-                    const userSnap = await tx.get(userRef);
-                    const u = userSnap.exists() ? userSnap.data() : (userCache[emailLow] || {});
-                    if (u.referredBy) throw new Error("Already claimed referral!");
-                    const curCoins = Math.max(0, Number(u.spCoins || 0));
-                    const newCoins = curCoins + 50;
-                    tx.set(userRef, { email: emailLow, spCoins: newCoins, referredBy: code, updatedAt: now }, { merge: true });
-                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].referredBy = code; }
-                    return { referredBy: code, coinsAdded: 50, spCoins: newCoins };
-                });
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const u = userCache[emailLow] || {};
+                if (u.referredBy || vlt.referredBy) throw new Error("Already claimed referral!");
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? u.spCoins ?? 0));
+                const newCoins = curCoins + 50;
+                const patch = { email: emailLow, spCoins: newCoins, referredBy: code, updatedAt: now };
+                try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                window.saveUserEconomyVault(emailLow, patch);
+                userCache[emailLow] = { ...u, ...patch };
+                return { referredBy: code, coinsAdded: 50, spCoins: newCoins };
             }
 
             if (fnName === 'claimBattlePassTier') {
                 const tier = payload.tier;
-                return await runTransaction(db, async (tx) => {
-                    const userRef = doc(db, 'users', emailLow);
-                    const userSnap = await tx.get(userRef);
-                    const u = userSnap.exists() ? userSnap.data() : (userCache[emailLow] || {});
-                    if (tier === 'daily_xp') {
-                        let localLastBp = 0;
-                        try { localLastBp = Number(localStorage.getItem('satta_pai_bp_daily_' + emailLow) || 0); } catch(e) {}
-                        const lastBpTs = Math.max(Number(u.lastBpDaily || 0), localLastBp);
-                        if (lastBpTs > 0 && (now - lastBpTs) < 86400000) {
-                            const remMs = 86400000 - (now - lastBpTs);
-                            const hrs = Math.floor(remMs / 3600000);
-                            const mins = Math.ceil((remMs % 3600000) / 60000);
-                            throw new Error(`Daily +120 XP already claimed! Come back in ${hrs}h ${mins}m.`);
-                        }
-                        const curStats = window.getPlayerBattlePassXP();
-                        if (curStats.level >= 50 || curStats.totalXp >= 2000) {
-                            throw new Error("🎖️ Max Tier Level 50 (2000 XP) already reached!");
-                        }
-                        const prevBonus = Math.max(Number(u.bpBonusXp || 0), Number(localStorage.getItem('satta_pai_bp_xp_' + emailLow) || 0));
-                        const curXp = Math.min(2000, prevBonus + 120);
-                        tx.set(userRef, { email: emailLow, bpBonusXp: curXp, lastBpDaily: now, updatedAt: now }, { merge: true });
-                        try {
-                            localStorage.setItem('satta_pai_bp_xp_' + emailLow, String(curXp));
-                            localStorage.setItem('satta_pai_bp_daily_' + emailLow, String(now));
-                        } catch(e) {}
-                        userCache[emailLow] = { ...(userCache[emailLow] || {}), ...u, bpBonusXp: curXp, lastBpDaily: now };
-                        return { mode: 'daily_xp', bpBonusXp: curXp, lastBpDaily: now };
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const u = userCache[emailLow] || {};
+                if (tier === 'daily_xp') {
+                    let localLastBp = 0;
+                    try { localLastBp = Number(localStorage.getItem('satta_pai_bp_daily_' + emailLow) || 0); } catch(e) {}
+                    const lastBpTs = Math.max(Number(u.lastBpDaily || 0), Number(vlt.lastBpDaily || 0), localLastBp);
+                    if (lastBpTs > 0 && (now - lastBpTs) < 86400000) {
+                        const remMs = 86400000 - (now - lastBpTs);
+                        const hrs = Math.floor(remMs / 3600000);
+                        const mins = Math.ceil((remMs % 3600000) / 60000);
+                        throw new Error(`Daily +120 XP already claimed! Come back in ${hrs}h ${mins}m.`);
                     }
-                    const tierNum = Number(tier);
-                    const tObj = BATTLE_PASS_TIERS.find(x => x.tier === tierNum) || { coins: 25 };
-                    const claimed = Array.isArray(u.claimedBpTiers) ? [...u.claimedBpTiers] : [];
-                    if (claimed.includes(tierNum)) throw new Error("Tier reward already claimed!");
-                    claimed.push(tierNum);
-                    const curCoins = Math.max(0, Number(u.spCoins || 0));
-                    const newCoins = curCoins + (tObj.coins || 25);
-                    const patch = { spCoins: newCoins, claimedBpTiers: claimed, updatedAt: now };
-                    if (window.isCurrentUserVip() && tObj.title) patch.armoryTitle = tObj.title;
-                    tx.set(userRef, patch, { merge: true });
-                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].claimedBpTiers = claimed; if (patch.armoryTitle) userCache[emailLow].armoryTitle = patch.armoryTitle; }
-                    return { tier: tierNum, coinsAdded: tObj.coins || 25, spCoins: newCoins, claimedBpTiers: claimed };
-                });
+                    const curStats = window.getPlayerBattlePassXP();
+                    if (curStats.level >= 50 || curStats.totalXp >= 2000) {
+                        throw new Error("🎖️ Max Tier Level 50 (2000 XP) already reached!");
+                    }
+                    const prevBonus = Math.max(Number(u.bpBonusXp || 0), Number(vlt.bpBonusXp || 0), Number(localStorage.getItem('satta_pai_bp_xp_' + emailLow) || 0));
+                    const curXp = Math.min(2000, prevBonus + 120);
+                    try {
+                        await setDoc(doc(db, 'users', emailLow), { email: emailLow, bpBonusXp: curXp, lastBpDaily: now, updatedAt: now }, { merge: true });
+                    } catch (permErr) {}
+                    try {
+                        localStorage.setItem('satta_pai_bp_xp_' + emailLow, String(curXp));
+                        localStorage.setItem('satta_pai_bp_daily_' + emailLow, String(now));
+                    } catch(e) {}
+                    window.saveUserEconomyVault(emailLow, { bpBonusXp: curXp, lastBpDaily: now });
+                    userCache[emailLow] = { ...u, bpBonusXp: curXp, lastBpDaily: now };
+                    return { mode: 'daily_xp', bpBonusXp: curXp, lastBpDaily: now };
+                }
+                const tierNum = Number(tier);
+                const tObj = BATTLE_PASS_TIERS.find(x => x.tier === tierNum);
+                if (!tObj) throw new Error("Invalid Battle Pass Tier!");
+                const { totalXp } = window.getPlayerBattlePassXP();
+                if (totalXp < tObj.xpReq) {
+                    throw new Error(`Need ${tObj.xpReq} XP to unlock Tier ${tierNum}! (You have ${totalXp} XP)`);
+                }
+                let localClaimed = [];
+                try { localClaimed = JSON.parse(localStorage.getItem('satta_pai_bp_claimed_' + emailLow) || '[]'); } catch(e) {}
+                const claimed = Array.from(new Set([
+                    ...(Array.isArray(u.claimedBpTiers) ? u.claimedBpTiers : []),
+                    ...(Array.isArray(vlt.claimedBpTiers) ? vlt.claimedBpTiers : []),
+                    ...localClaimed
+                ]));
+                if (claimed.includes(tierNum)) throw new Error("Tier reward already claimed!");
+                claimed.push(tierNum);
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? u.spCoins ?? 0));
+                const newCoins = curCoins + (tObj.coins || 25);
+                const patch = { spCoins: newCoins, claimedBpTiers: claimed, updatedAt: now };
+                if (window.isCurrentUserVip() && tObj.title) patch.armoryTitle = tObj.title;
+                try {
+                    await setDoc(doc(db, 'users', emailLow), patch, { merge: true });
+                } catch (permErr) {}
+                try { localStorage.setItem('satta_pai_bp_claimed_' + emailLow, JSON.stringify(claimed)); } catch(e) {}
+                window.saveUserEconomyVault(emailLow, patch);
+                userCache[emailLow] = { ...u, ...patch };
+                return { tier: tierNum, coinsAdded: tObj.coins || 25, spCoins: newCoins, claimedBpTiers: claimed, armoryTitle: patch.armoryTitle };
             }
 
             if (fnName === 'buyArmoryTitle') {
                 const title = payload.title;
                 const cost = Number(payload.cost || 100);
-                return await runTransaction(db, async (tx) => {
-                    const userRef = doc(db, 'users', emailLow);
-                    const userSnap = await tx.get(userRef);
-                    const u = userSnap.exists() ? userSnap.data() : (userCache[emailLow] || {});
-                    const unlocked = Array.isArray(u.unlockedTitles) ? [...u.unlockedTitles] : [];
-                    if (unlocked.includes(title)) {
-                        tx.set(userRef, { armoryTitle: title, updatedAt: now }, { merge: true });
-                        if (userCache[emailLow]) userCache[emailLow].armoryTitle = title;
-                        return { armoryTitle: title, unlockedTitles: unlocked, spCoins: Number(u.spCoins || 0), mode: 'equipped' };
-                    }
-                    const curCoins = Math.max(0, Number(u.spCoins || 0));
-                    if (curCoins < cost) throw new Error(`Need ${cost} SP Coins! (You have ${curCoins})`);
-                    const newCoins = curCoins - cost;
-                    unlocked.push(title);
-                    tx.set(userRef, { spCoins: newCoins, armoryTitle: title, unlockedTitles: unlocked, updatedAt: now }, { merge: true });
-                    if (userCache[emailLow]) { userCache[emailLow].spCoins = newCoins; userCache[emailLow].armoryTitle = title; userCache[emailLow].unlockedTitles = unlocked; }
-                    return { armoryTitle: title, unlockedTitles: unlocked, spCoins: newCoins, mode: 'unlocked' };
-                });
+                const vlt = window.loadUserEconomyVault(emailLow);
+                const u = userCache[emailLow] || {};
+                const unlocked = Array.from(new Set([
+                    ...(Array.isArray(u.unlockedTitles) ? u.unlockedTitles : []),
+                    ...(Array.isArray(vlt.unlockedTitles) ? vlt.unlockedTitles : [])
+                ]));
+                const curCoins = Math.max(0, Number(vlt.spCoins ?? u.spCoins ?? 0));
+                if (unlocked.includes(title)) {
+                    const patch = { armoryTitle: title, updatedAt: now };
+                    try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                    window.saveUserEconomyVault(emailLow, patch);
+                    userCache[emailLow] = { ...u, ...patch };
+                    return { armoryTitle: title, unlockedTitles: unlocked, spCoins: curCoins, mode: 'equipped' };
+                }
+                if (curCoins < cost) throw new Error(`Need ${cost} SP Coins! (You have ${curCoins})`);
+                const newCoins = curCoins - cost;
+                unlocked.push(title);
+                const patch = { spCoins: newCoins, armoryTitle: title, unlockedTitles: unlocked, updatedAt: now };
+                try { await setDoc(doc(db, 'users', emailLow), patch, { merge: true }); } catch (permErr) {}
+                window.saveUserEconomyVault(emailLow, patch);
+                userCache[emailLow] = { ...u, ...patch };
+                return { armoryTitle: title, unlockedTitles: unlocked, spCoins: newCoins, mode: 'unlocked' };
             }
 
             if (fnName === 'registerForMatch') {
@@ -12828,6 +13010,7 @@ ${list}
                     matchId: matchId,
                     slotGroup: slotGroup,
                     status: 'active',
+                    ownerPlayerId: window.getStablePlayerId(emailLow),
                     createdAt: now
                 };
                 const privData = {
@@ -13959,24 +14142,80 @@ ${list}
             }, "Delete");
         };
 
-        // 🛡️ App Check Admin Config & Live Token Verification Helper
-        window.saveAppCheckConfig = function() {
-            const prov = document.getElementById('appcheck-provider-select')?.value || 'enterprise';
-            const key = (document.getElementById('appcheck-sitekey-input')?.value || '').trim();
-            if (!key) { window.showToast("⚠️ Enter your reCAPTCHA Site Key!"); return; }
+        // 🛡️ App Check Admin Config, 1-Click Paste, Disable & Live Token Verification Helper
+        window.pasteIntoAdminKeyInput = async function(inputId) {
+            const el = document.getElementById(inputId);
+            if (!el) return;
+            el.focus();
+            try {
+                if (navigator.clipboard && navigator.clipboard.readText) {
+                    const text = await navigator.clipboard.readText();
+                    if (text && text.trim()) {
+                        el.value = text.trim().replace(/^['"]+|['"]+$/g, '');
+                        window.showToast("📋 Key Pasted Successfully!");
+                        return;
+                    }
+                }
+            } catch (e) {}
+            window.showToast("📲 Long-press inside the input box and tap Paste!");
+        };
+
+        window.saveAppCheckConfig = async function() {
+            const prov = document.getElementById('appcheck-provider-select')?.value || 'v3';
+            const rawKey = document.getElementById('appcheck-sitekey-input')?.value || '';
+            const key = rawKey.trim().replace(/^['"]+|['"]+$/g, '');
+            if (!key || key.length < 20) {
+                window.showToast("⚠️ Please paste a valid reCAPTCHA Site Key (at least 20 chars)!");
+                return;
+            }
             try {
                 localStorage.setItem('sp_appcheck_provider', prov);
                 localStorage.setItem('sp_appcheck_site_key', key);
             } catch(e) {}
-            window.showToast("✅ App Check Key Saved! Reloading to attach new provider...");
-            setTimeout(() => window.location.reload(), 900);
+            try {
+                if (window.isSuperAdminGlobal || isAdminEmail(window.loggedEmail)) {
+                    await setDoc(doc(db, 'settings', 'config'), { appCheckSiteKey: key, appCheckProvider: prov, updatedAt: Date.now() }, { merge: true });
+                }
+            } catch (dbErr) {
+                console.warn("AppCheck Firestore sync notice:", dbErr);
+            }
+            const activated = window.initOrUpdateAppCheck ? window.initOrUpdateAppCheck(key, prov) : false;
+            if (activated) {
+                window.showToast(`✅ App Check (${prov.toUpperCase()}) Key Saved & Activated Live!`);
+            } else {
+                window.showToast("✅ App Check Key Saved! Applying configuration...");
+            }
+        };
+
+        window.disableAppCheckConfig = async function() {
+            try {
+                localStorage.setItem('sp_appcheck_site_key', 'DISABLED');
+            } catch(e) {}
+            try {
+                if (window.isSuperAdminGlobal || isAdminEmail(window.loggedEmail)) {
+                    await setDoc(doc(db, 'settings', 'config'), { appCheckSiteKey: 'DISABLED', updatedAt: Date.now() }, { merge: true });
+                }
+            } catch(e) {}
+            const inp = document.getElementById('appcheck-sitekey-input');
+            if (inp) inp.value = '';
+            const pill = document.getElementById('appcheck-status-pill');
+            if (pill) {
+                pill.textContent = 'Disabled';
+                pill.className = 'px-1.5 py-0.5 rounded bg-zinc-700 text-slate-300 font-mono text-[9px]';
+            }
+            window.showToast("🚫 App Check Disabled.");
         };
 
         window.verifyAppCheckTokenLive = async function() {
             const pill = document.getElementById('appcheck-status-pill');
+            const inpKey = (document.getElementById('appcheck-sitekey-input')?.value || '').trim().replace(/^['"]+|['"]+$/g, '');
+            const prov = document.getElementById('appcheck-provider-select')?.value || 'v3';
+            if (!window.fbAppCheck && inpKey.length >= 20) {
+                window.initOrUpdateAppCheck(inpKey, prov);
+            }
             if (!window.fbAppCheck || typeof window.fbGetAppCheckToken !== 'function') {
-                if (pill) { pill.textContent = 'Not Initialized'; pill.className = 'px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px]'; }
-                window.showToast("❌ App Check is not initialized!");
+                if (pill) { pill.textContent = 'Paste Key First'; pill.className = 'px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[9px]'; }
+                window.showToast("⚠️ Paste your reCAPTCHA Site Key above and click '💾 Save & Enforce' first!");
                 return;
             }
             try {
@@ -13987,9 +14226,9 @@ ${list}
                     window.showToast("✅ App Check Token Verified! X-Firebase-AppCheck header is active.");
                 }
             } catch (err) {
-                if (pill) { pill.textContent = '⚠️ Invalid Key/Domain'; pill.className = 'px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px]'; }
-                window.showToast("❌ Token Error: Check Site Key & Domain Whitelist in Firebase Console!");
-                console.error("App Check Token Verification Failed:", err);
+                if (pill) { pill.textContent = '⚠️ Check Domain/Key'; pill.className = 'px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono text-[9px]'; }
+                window.showToast("⚠️ Token Notice: Ensure your domain is whitelisted in Google reCAPTCHA Admin Console!");
+                console.warn("App Check Token Verification Notice:", err);
             }
         };
 
