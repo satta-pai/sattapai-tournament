@@ -1177,6 +1177,18 @@ html.theme-ghost-live {
             display: block !important;
         }
 
+    
+        /* 🚀 Mobile GPU & Scroll Anti-Hang Optimization (4GB/6GB RAM Phones) */
+        @media (max-width: 640px) {
+            .cyber-card, .header-bar, .bottom-nav, #settings-dropdown {
+                backdrop-filter: blur(6px) !important;
+                -webkit-backdrop-filter: blur(6px) !important;
+            }
+            .sp-intro-RotatingOuter, .sp-intro-RotatingHex {
+                will-change: transform;
+            }
+        }
+
     </style>
 </head>
 <body id="body-root" role="application" aria-label="Satta Pai Esports Arena">
@@ -1853,10 +1865,10 @@ html.theme-ghost-live {
                 
             </div>
             <div class="cyber-card p-3 text-left text-[10px] space-y-1.5 bg-zinc-900/80 border border-amber-400/40" style="color: var(--text-muted);">
-                <div class="font-extrabold text-amber-400 uppercase">🚫 Chrome Symbol வராமல் Pure App Icon வர வைக்க:</div>
-                <div>• <b>Step 1:</b> மேல உள்ள <b>"📲 1-Click Install Native App"</b> பட்டனை தட்டுங்க (அல்லது Chrome <b>⋮ 3-Dots ➔ "Install app"</b> கொடுங்க).</div>
-                <div>• <b>Step 2:</b> <i>"Add to Home screen"</i>-ல் <b>"Install app"</b> தேர்வு செய்தால் Chrome சிம்பல் இல்லாமல் **100% ஒரிஜினல் SP Arena Crown App** ஆக இன்ஸ்டால் ஆகும்!</div>
-                <div>• <b>Tip:</b> ஆப் இன்ஸ்டால் செய்த பிறகு ஹோம் ஸ்கிரீனில் இருந்து ஓபன் செய்தால் முழு 60FPS ஃபுல்-ஸ்கிரீன் எக்ஸ்பீரியன்ஸ் கிடைக்கும்.</div>
+                <div class="font-extrabold text-amber-400 uppercase">📲 How to Enable Full Screen App Mode:</div>
+                <div>• <b>Step 1:</b> Tap the <b>"📲 1-Click Install Native App"</b> button above (or open browser <b>⋮ 3-Dots ➔ "Install app"</b>).</div>
+                <div>• <b>Step 2:</b> Choose <b>"Install app"</b> to add the official <b>Satta Pai Esports</b> icon directly to your home screen.</div>
+                <div>• <b>Tip:</b> Launch from your home screen or tap <b>⛶ Full Screen Mode</b> in the menu for 60FPS gaming HUD.</div>
             </div>
         </div>
     </div>
@@ -2180,7 +2192,7 @@ html.theme-ghost-live {
 
             <div class="cyber-card p-3 text-left text-[11px] space-y-1.5 border border-emerald-500/40 bg-zinc-900/90">
                 <label class="flex items-start gap-2.5 cursor-pointer select-none">
-                    <input type="checkbox" id="terms-accept-checkbox" class="mt-0.5 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0">
+                    <input type="checkbox" id="terms-accept-checkbox" checked class="mt-0.5 w-4 h-4 accent-emerald-500 cursor-pointer shrink-0">
                     <span class="text-slate-200 leading-snug">I accept the <a href="javascript:void(0)" onclick="openPolicyModal('terms')" class="text-emerald-400 font-extrabold underline">Terms of Service</a>, <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" class="text-emerald-400 font-extrabold underline">Privacy Policy</a> & <a href="javascript:void(0)" onclick="openPolicyModal('refund')" class="text-amber-400 font-extrabold underline">Fair Play Rules</a>.</span>
                 </label>
             </div>
@@ -2993,7 +3005,7 @@ html.theme-ghost-live {
                     <img id="reg-qr-img" src="" class="w-36 h-36 mx-auto mt-2 rounded border-2 border-emerald-500/50 shadow-lg cursor-pointer hover:opacity-80 transition-opacity" onclick="openQrZoomModal()">
                 </div>
                 <button type="button" onclick="autoFillSquadForm('paid')" class="w-full py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-extrabold flex items-center justify-center gap-1.5 cursor-pointer">⚡ 1-Click Auto-Fill My Saved Squad</button>
-                <form id="registration-paid-form" class="space-y-3 text-xs">
+                <form id="registration-paid-form" onsubmit="window.handlePaidRegistrationSubmit(event)" class="space-y-3 text-xs">
                     <input type="text" id="paid-teamName" required placeholder="Team Name" class="cyber-input w-full px-3 py-2 uppercase">
                     <input type="text" id="paid-leaderName" required placeholder="Leader Name" class="cyber-input w-full px-3 py-2">
                     <div class="grid grid-cols-2 gap-2">
@@ -3036,7 +3048,7 @@ html.theme-ghost-live {
                 <h2 class="text-lg font-bold text-emerald-400">Free Registration</h2>
                 <div id="reg-free-match-title" class="text-xs text-emerald-400"></div>
                 <button type="button" onclick="autoFillSquadForm('free')" class="w-full py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-extrabold flex items-center justify-center gap-1.5 cursor-pointer">⚡ 1-Click Auto-Fill My Saved Squad</button>
-                <form id="registration-free-form" class="space-y-3 text-xs">
+                <form id="registration-free-form" onsubmit="window.handleFreeRegistrationSubmit(event)" class="space-y-3 text-xs">
                     <input type="text" id="free-teamName" required placeholder="Team Name" class="cyber-input w-full px-3 py-2 uppercase">
                     <input type="text" id="free-leaderName" required placeholder="Leader Name" class="cyber-input w-full px-3 py-2">
                     <div class="grid grid-cols-2 gap-2">
@@ -3220,7 +3232,7 @@ html.theme-ghost-live {
                 <button type="button" onclick="window.toggleCreateMatchForm('sa')" id="sa-toggle-form-btn" class="btn-theme px-2.5 py-1 text-[11px] font-bold cursor-pointer">➕ New Match</button>
             </div>
 
-            <form id="create-match-form" class="cyber-card p-3 space-y-2 hidden border border-emerald-500/40">
+            <form id="create-match-form" onsubmit="window.handleCreateMatchSubmit(event, 'sa')" class="cyber-card p-3 space-y-2 hidden border border-emerald-500/40">
                 <input type="text" id="cm-title" required placeholder="Match Title" class="cyber-input w-full px-2.5 py-1.5 text-xs">
                 <div class="grid grid-cols-2 gap-1.5">
                     <select id="cm-stage" class="cyber-input w-full px-2 py-1 text-xs"><option>Playoffs</option><option selected>Semifinals</option><option>Finals</option></select>
@@ -3392,7 +3404,7 @@ html.theme-ghost-live {
 
         <!-- 6. Staff Tab -->
         <div id="sas-sec-staffs" class="hidden space-y-2.5 text-xs">
-            <form id="add-staff-form" class="cyber-card p-2.5 space-y-2">
+            <form id="add-staff-form" onsubmit="window.handleAddStaffFormSubmit(event, 'sa')" class="cyber-card p-2.5 space-y-2">
                 <input type="email" id="staff-email-input" required placeholder="Staff Email (host@gmail.com)" class="cyber-input w-full px-2.5 py-1 text-xs">
                 <select id="staff-role-select" class="cyber-input w-full px-2.5 py-1 font-bold text-xs"><option value="host">🎮 Host</option><option value="admin">🛡️ Admin</option></select>
                 <button type="submit" class="btn-theme w-full py-1.5 font-bold uppercase text-xs">Add Staff</button>
@@ -3466,7 +3478,7 @@ html.theme-ghost-live {
                 <div class="flex gap-1.5"><button type="button" onclick="saveSongSettings()" class="btn-theme flex-1 py-1 font-bold text-[11px] cursor-pointer">Save Song</button><button type="button" onclick="removeSongSettings()" class="bg-rose-600 text-white flex-1 py-1 rounded font-bold text-[11px] cursor-pointer">Remove</button></div>
             </div>
 
-            <form id="tournament-settings-form" class="cyber-card p-2.5 space-y-1.5">
+            <form id="tournament-settings-form" onsubmit="window.handleTournamentSettingsSubmit(event)" class="cyber-card p-2.5 space-y-1.5">
                 <b class="text-emerald-400 text-[11px]">✏️ Home Texts</b>
                 <input type="text" id="edit-announcement" placeholder="Announcement Ticker" class="cyber-input w-full px-2 py-1 text-xs">
                 <input type="text" id="edit-brand-name" placeholder="Brand Name" class="cyber-input w-full px-2 py-1 text-xs">
@@ -3526,7 +3538,7 @@ html.theme-ghost-live {
                 <button type="button" onclick="window.toggleCreateMatchForm('ah')" id="ah-toggle-form-btn" class="btn-theme px-2.5 py-1 text-[11px] font-bold cursor-pointer">➕ New Match</button>
             </div>
 
-            <form id="create-match-form-ah" class="cyber-card p-3 space-y-2 hidden border border-emerald-500/40">
+            <form id="create-match-form-ah" onsubmit="window.handleCreateMatchSubmit(event, 'ah')" class="cyber-card p-3 space-y-2 hidden border border-emerald-500/40">
                 <input type="text" id="cm-title-ah" required placeholder="Match Title" class="cyber-input w-full px-2.5 py-1.5 text-xs">
                 <div class="grid grid-cols-2 gap-1.5">
                     <select id="cm-stage-ah" class="cyber-input w-full px-2 py-1 text-xs"><option>Playoffs</option><option selected>Semifinals</option><option>Finals</option></select>
@@ -3617,7 +3629,7 @@ html.theme-ghost-live {
 
         <!-- 5. Staffs for Admin -->
         <div id="ah-sec-staffs" class="hidden space-y-2.5 text-xs">
-            <form id="add-host-form-ah" class="cyber-card p-2.5 space-y-2">
+            <form id="add-host-form-ah" onsubmit="window.handleAddStaffFormSubmit(event, 'ah')" class="cyber-card p-2.5 space-y-2">
                 <input type="email" id="host-email-input-ah" required placeholder="Host Email (host@gmail.com)" class="cyber-input w-full px-2.5 py-1 text-xs">
                 <button type="submit" class="btn-theme w-full py-1.5 font-bold uppercase text-xs">Add Host</button>
             </form>
@@ -3673,14 +3685,14 @@ html.theme-ghost-live {
         let musicPlayingState = false;
         window.loggedEmail = '';
         try {
-            const _savedAuth = (localStorage.getItem('satta_pai_auth_email') || '').toLowerCase();
+            const _savedAuth = (localStorage.getItem('satta_pai_auth_email') || sessionStorage.getItem('satta_pai_auth_email') || '').toLowerCase();
             const _savedGuest = sessionStorage.getItem('satta_pai_guest_session');
             if (_savedAuth && _savedAuth !== 'guest' && _savedAuth.includes('@')) {
                 window.loggedEmail = _savedAuth;
+                window._hasVerifiedAuthSession = true;
             } else if (_savedGuest === '1') {
                 window.loggedEmail = 'guest';
             } else {
-                localStorage.removeItem('satta_pai_auth_email');
                 window.loggedEmail = '';
             }
         } catch(e) {}
@@ -4034,7 +4046,11 @@ html.theme-ghost-live {
                 if (window._liveThemeState.theme !== themeName) return;
                 window._liveThemeRaf = requestAnimationFrame(renderFrame);
                 if (document.hidden) return;
-                if (now - window._liveThemeState.lastFrame < 28) return; // Cap ~35 FPS for zero lag & battery saving
+                const loginOv = document.getElementById('google-login-overlay');
+                if (loginOv && !loginOv.classList.contains('hidden')) return;
+                if (typeof window.getOpenAppModal === 'function' && window.getOpenAppModal()) return;
+                const minDelta = (window.innerWidth || 360) < 640 ? 45 : 30; // ~22 FPS on mobile for zero lag
+                if (now - window._liveThemeState.lastFrame < minDelta) return;
                 window._liveThemeState.lastFrame = now;
 
                 const cw = window._liveThemeState.width;
@@ -4497,22 +4513,71 @@ html.theme-ghost-live {
                 .slice(0, maxLen);
         };
 
-        // 🔐 Universal Auth Email Resolver (Prevents Cross-Device Login Redirect Loops on Google/FB/GitHub)
-        window.resolveAuthUserEmail = function(u) {
-            if (!u) return '';
-            if (u.email && String(u.email).includes('@')) return String(u.email).trim().toLowerCase();
-            if (Array.isArray(u.providerData)) {
+        // 🔐 Universal Auth Email Resolver & Quota-Safe Session Saver (Fixes Mobile Login Loop)
+        window.resolveAuthUserEmail = function(u, credResult = null) {
+            if (!u && !credResult) return '';
+            const candidates = [
+                u?.email,
+                credResult?.user?.email,
+                credResult?._tokenResponse?.email,
+                u?.reloadUserInfo?.email
+            ];
+            if (Array.isArray(u?.providerData)) {
                 for (const p of u.providerData) {
-                    if (p && p.email && String(p.email).includes('@')) {
-                        return String(p.email).trim().toLowerCase();
-                    }
+                    if (p && p.email) candidates.push(p.email);
                 }
             }
-            const provId = String(u.providerData?.[0]?.providerId || '').toLowerCase();
-            if (provId.includes('facebook')) return `fb_${String(u.uid || 'user').toLowerCase()}@facebook.com`;
-            if (provId.includes('github')) return `gh_${String(u.uid || 'user').toLowerCase()}@github.com`;
-            if (u.uid) return `user_${String(u.uid).toLowerCase()}@sattapai.app`;
+            for (const c of candidates) {
+                if (c && String(c).includes('@')) {
+                    return String(c).trim().toLowerCase();
+                }
+            }
+            const uid = String(u?.uid || credResult?.user?.uid || '').trim().toLowerCase();
+            const provId = String(u?.providerData?.[0]?.providerId || credResult?.providerId || '').toLowerCase();
+            if (uid) {
+                if (provId.includes('facebook')) return `fb_${uid}@facebook.com`;
+                if (provId.includes('github')) return `gh_${uid}@github.com`;
+                return `google_${uid}@sattapai.app`;
+            }
             return '';
+        };
+
+        window.saveVerifiedAuthEmail = function(email) {
+            if (!email || email === 'guest') return;
+            const clean = String(email).trim().toLowerCase();
+            window.loggedEmail = clean;
+            window._hasVerifiedAuthSession = true;
+            try { sessionStorage.setItem('satta_pai_auth_email', clean); } catch(e) {}
+            try { sessionStorage.removeItem('satta_pai_guest_session'); } catch(e) {}
+            try {
+                localStorage.setItem('satta_pai_auth_email', clean);
+            } catch (quotaErr) {
+                // If mobile localStorage 5MB quota is full due to cached base64 logo/config, free space and save auth!
+                try {
+                    localStorage.removeItem('satta_pai_cached_config');
+                    localStorage.removeItem('satta_pai_custom_logo');
+                    localStorage.setItem('satta_pai_auth_email', clean);
+                } catch (e2) {}
+            }
+        };
+
+        window.closeLoginOverlayPermanently = function() {
+            const ov = document.getElementById('google-login-overlay');
+            if (ov) {
+                ov.classList.add('hidden');
+                ov.setAttribute('hidden', '');
+                ov.setAttribute('aria-hidden', 'true');
+                ov.setAttribute('inert', '');
+            }
+            if (window._loginVideoRaf) {
+                cancelAnimationFrame(window._loginVideoRaf);
+                window._loginVideoRaf = null;
+            }
+            try {
+                if (window.location.hash === '#google-login-overlay' && window.history && window.history.replaceState) {
+                    window.history.replaceState({ type: 'tab', tab: 'home' }, '', window.location.pathname + '#home');
+                }
+            } catch(e) {}
         };
 
         // 🛡️ Firebase App Check Token Header Builder (X-Firebase-AppCheck for Gemini API)
@@ -4658,85 +4723,85 @@ html.theme-ghost-live {
                     border: '#ff2a85', glow: 'rgba(255, 42, 133, 0.45)', bg: 'linear-gradient(135deg, rgba(45,10,68,0.95), rgba(18,6,34,0.95))',
                     icon: '🌸', tag: '⚡ ANIME LIVE', title: '⚡ Anime Cyber Sakura Live — VIP Look',
                     desc: '🌸 Neon Sakura Petals + Katana Slashes + Cyber Samurai AI Bot Skin!',
-                    chat: '"🌸 Anime Live Theme-ல் உங்க ஆப் & சாட் முழுக்க Cyber Neon ஸ்டைலில் மின்னும்!"'
+                    chat: '"🌸 Anime Live Theme lights up your entire Arena & Chat in Cyber Neon style!"'
                 },
                 'rain-live': {
                     border: '#38bdf8', glow: 'rgba(56, 189, 248, 0.45)', bg: 'linear-gradient(135deg, rgba(8,28,56,0.95), rgba(6,15,32,0.95))',
                     icon: '⛈️', tag: '🌧️ RAIN LIVE', title: '🌧️ Storm Rain Live — VIP Look',
                     desc: '🌧️ Animated Raindrops + Water Ripples + Storm Tactical AI Bot Skin!',
-                    chat: '"⛈️ Rain Live Theme-ல் நிஜ மழை & இடி எஃபெக்ட் உங்க ஸ்கிரீனில் ஓடும்!"'
+                    chat: '"⛈️ Rain Live Theme brings real storm rain & lightning effects across your screen!"'
                 },
                 'winter-live': {
                     border: '#22d3ee', glow: 'rgba(34, 211, 238, 0.45)', bg: 'linear-gradient(135deg, rgba(6,36,52,0.95), rgba(4,19,29,0.95))',
                     icon: '❄️', tag: '❄️ WINTER LIVE', title: '❄️ Winter Snowfall Live — VIP Look',
                     desc: '❄️ Live Falling Snowflakes + Aurora Shimmer + Frost Yeti AI Bot!',
-                    chat: '"❄️ Winter Live Theme-ல் பனிப்பொழிவு & Ice Neon Glow நிரந்தரமா கிடைக்கும்!"'
+                    chat: '"❄️ Winter Live Theme unlocks snowfall particles & Ice Neon Glow permanently!"'
                 },
                 'hacker-live': {
                     border: '#22c55e', glow: 'rgba(34, 197, 94, 0.45)', bg: 'linear-gradient(135deg, rgba(3,28,12,0.95), rgba(2,10,5,0.95))',
                     icon: '💻', tag: '🟢 HACKER LIVE', title: '🟢 Matrix Hacker Live — VIP Look',
                     desc: '💻 Falling Green Matrix Code + Cyber Terminal HUD + Hacker AI Bot!',
-                    chat: '"🟢 Hacker Live Theme-ல் Matrix Code & Neon Green HUD ஸ்டைல்!"'
+                    chat: '"🟢 Hacker Live Theme activates Matrix Code rain & Neon Green HUD!"'
                 },
                 'teddy-live': {
                     border: '#f472b6', glow: 'rgba(244, 114, 182, 0.45)', bg: 'linear-gradient(135deg, rgba(52,12,38,0.95), rgba(24,6,18,0.95))',
                     icon: '🧸', tag: '🧸 TEDDY LIVE', title: '🧸 Cute Teddy Pink Live — VIP Look',
                     desc: '🧸 Floating Teddy Bears & Hearts + Cute Wiggling Teddy AI Bot!',
-                    chat: '"🧸 Teddy Live Theme-ல் Cute Teddy Bot & Pink Hearts அனிமேஷன்!"'
+                    chat: '"🧸 Teddy Live Theme unlocks Cute Teddy Bot & floating Pink Hearts animation!"'
                 },
                 'ghost-live': {
                     border: '#ef4444', glow: 'rgba(239, 68, 68, 0.5)', bg: 'linear-gradient(135deg, rgba(48,6,10,0.95), rgba(12,2,4,0.95))',
                     icon: '👻', tag: '👻 GHOST LIVE', title: '👻 Grim Reaper Horror Live — VIP Look',
                     desc: '💀 Rising Phantoms + Blood Mist + Glowing Demon Eyes & Reaper Bot!',
-                    chat: '"👻 Ghost Horror Theme-ல் மிரட்டலான Grim Reaper & Red Lightning எஃபெக்ட்!"'
+                    chat: '"👻 Ghost Horror Theme unleashes Grim Reaper & Crimson Lightning effects!"'
                 },
                 'cat-live': {
                     border: '#c084fc', glow: 'rgba(192, 132, 252, 0.45)', bg: 'linear-gradient(135deg, rgba(38,14,58,0.95), rgba(14,7,24,0.95))',
                     icon: '🐱', tag: '🐱 CAT NEKO LIVE', title: '🐱 Cyber Neko Cat Live — VIP Look',
                     desc: '🐾 Floating Neon Paws + Blinking Neko Eyes + Cute Cyber Cat AI Bot!',
-                    chat: '"🐾 Cat Live Theme-ல் Neko Cyber Cat Bot & Neon Paws அனிமேஷன்!"'
+                    chat: '"🐾 Cat Live Theme activates Neko Cyber Cat Bot & Neon Paws animation!"'
                 },
                 'royal': {
                     border: '#a855f7', glow: 'rgba(168, 85, 247, 0.45)', bg: 'linear-gradient(135deg, rgba(35,20,64,0.95), rgba(12,6,23,0.95))',
                     icon: '💜', tag: '💜 ROYAL PURPLE', title: '💜 Royal Purple VIP Theme Look',
                     desc: '👑 Rich Amethyst Dark Skin + synced Satta Pai Logo + Gold VIP Badge!',
-                    chat: '"💜 Royal Purple VIP Theme உங்க ஆப்பிற்கு அரச குடும்ப ஸ்டைலை தரும்!"'
+                    chat: '"💜 Royal Purple VIP Theme gives your Arena a regal esports finish!"'
                 },
                 'cyan': {
                     border: '#22d3ee', glow: 'rgba(34, 211, 238, 0.45)', bg: 'linear-gradient(135deg, rgba(16,44,57,0.95), rgba(4,16,22,0.95))',
                     icon: '💠', tag: '💠 CYAN NEON', title: '💠 Cyan Neon VIP Theme Look',
                     desc: '💠 Electric Cyan Esports Skin + Dynamic Logo Glow + Fast Chat!',
-                    chat: '"💠 Cyan Neon VIP Theme-ல் எலக்ட்ரிக் ப்ளூ கேமிங் லுக்!"'
+                    chat: '"💠 Cyan Neon VIP Theme delivers an electric blue pro gaming look!"'
                 },
                 'ruby': {
                     border: '#fb7185', glow: 'rgba(244, 63, 94, 0.45)', bg: 'linear-gradient(135deg, rgba(54,16,28,0.95), rgba(20,5,9,0.95))',
                     icon: '❤️', tag: '❤️ RUBY CRIMSON', title: '❤️ Ruby Crimson VIP Theme Look',
                     desc: '❤️ Intense Crimson Battleground Skin + Synced Red Logo + Fee Discount!',
-                    chat: '"❤️ Ruby Crimson VIP Theme-ல் போர்க்கள சிவப்பு நிற ஸ்டைல்!"'
+                    chat: '"❤️ Ruby Crimson VIP Theme brings battle-ready crimson red styling!"'
                 },
                 'indigo': {
                     border: '#818cf8', glow: 'rgba(129, 140, 248, 0.45)', bg: 'linear-gradient(135deg, rgba(24,32,71,0.95), rgba(6,9,25,0.95))',
                     icon: '💙', tag: '💙 INDIGO SAPPHIRE', title: '💙 Indigo Sapphire VIP Theme Look',
                     desc: '💙 Deep Sapphire Night Skin + Synced Indigo Logo + Pro Perks!',
-                    chat: '"💙 Indigo Sapphire VIP Theme கண்களுக்கு குளிர்ச்சியான புரோ ஸ்டைல்!"'
+                    chat: '"💙 Indigo Sapphire VIP Theme offers a cool, eye-friendly pro HUD!"'
                 },
                 'badge': {
                     border: '#fbbf24', glow: 'rgba(251, 191, 36, 0.45)', bg: 'linear-gradient(135deg, rgba(45,30,6,0.95), rgba(18,12,4,0.95))',
                     icon: '👑', tag: '👑 GOLD BADGE', title: '👑 Royal VIP Gold Badge & Glowing Name',
                     desc: '⭐ PRO & 👑 PRO PLUS Glowing Name + Custom Armory Titles in Global Chat!',
-                    chat: '"👑 குளோபல் சாட்டில் உங்க பெயர் தங்க நிறத்தில் ஜொலிக்கும் + 0s Cooldown!"'
+                    chat: '"👑 Your name glows in Gold inside Global Chat + 0s Instant Cooldown!"'
                 },
                 'discount': {
                     border: '#10b981', glow: 'rgba(16, 185, 129, 0.45)', bg: 'linear-gradient(135deg, rgba(6,42,28,0.95), rgba(4,18,12,0.95))',
                     icon: '💰', tag: '💰 25% FEE OFF', title: '💰 10% to 25% Instant Match Fee Discount',
                     desc: '🔥 Every ₹50 Paid Match costs only ₹38 for Pro Plus Members + 1 Free Slot/Mo!',
-                    chat: '"💰 எல்லா Paid Tournament-லும் உடனடி கட்டணத் தள்ளுபடி!"'
+                    chat: '"💰 Instant entry fee discount on every Paid Tournament match!"'
                 },
                 'autofill': {
                     border: '#22d3ee', glow: 'rgba(34, 211, 238, 0.45)', bg: 'linear-gradient(135deg, rgba(8,36,48,0.95), rgba(4,16,24,0.95))',
                     icon: '🚀', tag: '🚀 1-TAP JOIN', title: '🚀 1-Click Squad Auto-Fill & Unlimited DP',
                     desc: '⚡ Join fast-filling tournament slots in 1 second without typing 4 UIDs!',
-                    chat: '"⚡ ஒரே கிளிக்கில் உங்க 4 Squad UID-யும் ஆட்டோ-ஃபில் ஆகிடும்!"'
+                    chat: '"⚡ 1-Click Auto-Fill for all 4 Squad UIDs during match registration!"'
                 }
             };
 
@@ -5502,8 +5567,11 @@ Tap a quick button below or type your question!`
 
         window._origTextNodesMap = new WeakMap();
         window._origPlaceholderMap = new WeakMap();
+        window._lastAppliedDomLang = 'en';
 
-        window.applyFullSiteTranslation = function(langCode) {
+        window.applyFullSiteTranslation = function(langCode, forceWalk = false) {
+            if (!forceWalk && window._lastAppliedDomLang === langCode) return;
+            window._lastAppliedDomLang = langCode;
             const dict = FULL_SITE_I18N[langCode] || {};
             const phDict = PLACEHOLDER_I18N[langCode] || {};
 
@@ -5513,7 +5581,7 @@ Tap a quick button below or type your question!`
                     const p = node.parentElement;
                     if (!p) return NodeFilter.FILTER_REJECT;
                     const tag = p.tagName;
-                    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA') return NodeFilter.FILTER_REJECT;
+                    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'TEMPLATE') return NodeFilter.FILTER_REJECT;
                     if (p.closest('#chat-messages') || p.closest('#ai-bot-messages')) return NodeFilter.FILTER_REJECT;
                     return NodeFilter.FILTER_ACCEPT;
                 }
@@ -5613,9 +5681,14 @@ Tap a quick button below or type your question!`
                 }
             });
 
-            if (typeof window.clearAiBotChat === 'function') {
+            if (typeof window.clearAiBotChat === 'function' && (!silent || !botInitialized)) {
                 botInitialized = true;
                 window.clearAiBotChat();
+                if (!silent && window._lastBotQueryText) {
+                    const prevQ = window._lastBotQueryText;
+                    window.lastAiMsgTime = 0;
+                    setTimeout(() => { window.sendBotQuickQuery(prevQ); }, 60);
+                }
             }
             if (!silent) {
                 window.showToast(`🇮🇳 Language changed to ${pack.name}!`);
@@ -6360,7 +6433,7 @@ Tap a quick button below or type your question!`
             if (!box) return;
             const div = document.createElement('div');
             div.className = sender === 'user' ? 'bot-msg-bubble bot-msg-user' : 'bot-msg-bubble bot-msg-ai';
-            const formatted = window.escapeHTML(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            const formatted = window.escapeHTML(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*([^*]+)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
             div.innerHTML = formatted;
             if (Array.isArray(quickPills) && quickPills.length > 0) {
                 const pillWrap = document.createElement('div');
@@ -6685,7 +6758,7 @@ Tap a quick button below or type your question!`
                 scope4x: clamp200(profile.base4x + 4 + tierAdj),
                 sniper: clamp200(profile.baseSniper + 3),
                 freeLook: 145,
-                fireBtn: `${profile.baseFire + 2}% (திரையின் கீழ்ப்பகுதியில் வைக்கவும்)`,
+                fireBtn: `${profile.baseFire + 2}%`,
                 dpi: profile.dpi4
             };
 
@@ -6697,7 +6770,7 @@ Tap a quick button below or type your question!`
                 scope4x: clamp200(profile.base4x + tierAdj),
                 sniper: clamp200(profile.baseSniper),
                 freeLook: 138,
-                fireBtn: `${profile.baseFire}% (திரையின் கீழ்ப்பகுதியில் வைக்கவும்)`,
+                fireBtn: `${profile.baseFire}%`,
                 dpi: profile.dpi6
             };
 
@@ -6709,7 +6782,7 @@ Tap a quick button below or type your question!`
                 scope4x: clamp200(profile.base4x - 4 + tierAdj),
                 sniper: clamp200(profile.baseSniper - 4),
                 freeLook: 132,
-                fireBtn: `${profile.baseFire - 2}% (திரையின் கீழ்ப்பகுதியில் வைக்கவும்)`,
+                fireBtn: `${profile.baseFire - 2}%`,
                 dpi: profile.dpi8
             };
 
@@ -6728,63 +6801,57 @@ Tap a quick button below or type your question!`
 
             if (data.status === 'keypad') {
                 return lang === 'en'
-                    ? `🚫 **Keypad / Feature Phone Detected (${data.rawInput})**
-Free Fire is only supported on **Android & iOS smartphones**. Keypad/button phones cannot run Free Fire. Please enter a real Android or iPhone model (e.g., *Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13*).`
+                    ? `🚫 **Keypad / Feature Phone (${data.rawInput})**
+Free Fire only runs on **Android & iOS smartphones**. Please enter a real smartphone model (e.g., Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13).`
                     : `🚫 **நண்பா, "${data.rawInput}" என்பது Keypad / Button போன்!**
-இதில் Free Fire விளையாட முடியாது, அதனால் இதற்கு Sensitivity கிடையாது. தயவுசெய்து உலகில் உள்ள உண்மையான **Android அல்லது iPhone மாடல் பெயரை** உள்ளிடுங்கள் (எ.கா: *Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13*).`;
+இதில் Free Fire விளையாட முடியாது. உண்மையான **Android அல்லது iPhone மாடல் பெயரை** உள்ளிடுங்கள் (எ.கா: Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13).`;
             }
 
             if (data.status === 'invalid_model') {
                 return lang === 'en'
                     ? `❌ **Model Not Found ("${data.rawInput}")**
-This phone model does not exist in official Android or iOS releases. Please type a real smartphone model (e.g., *Vivo T2x 5G, Redmi Note 13, POCO X6 Pro, iQOO Z9, Samsung A14, iPhone 13*).`
-                    : `❌ **நண்பா, "${data.rawInput}" என்ற பெயரில் எந்த அதிகாரப்பூர்வ Android / iOS போன் மாடலும் இல்லை!**
-தயவுசெய்து உண்மையான ஸ்மார்ட்போன் மாடல் பெயரை உள்ளிடுங்கள் (எ.கா: *Vivo T2x 5G, Redmi Note 13, POCO X6 Pro, iQOO Z9, Samsung A14, iPhone 13*).`;
+This phone model does not exist in official Android or iOS releases. Please type a real smartphone model (e.g., Vivo T2x 5G, Redmi Note 13, POCO X6 Pro, iQOO Z9, Samsung A14, iPhone 13).`
+                    : `❌ **நண்பா, "${data.rawInput}" என்ற பெயரில் அதிகாரப்பூர்வ Android / iOS போன் மாடல் இல்லை!**
+உண்மையான ஸ்மார்ட்போன் மாடல் பெயரை உள்ளிடுங்கள் (எ.கா: Vivo T2x 5G, Redmi Note 13, POCO X6 Pro, iQOO Z9, Samsung A14, iPhone 13).`;
             }
 
             const { modelName, profile, var4gb, var6gb, var8gb } = data;
 
             if (lang === 'en') {
-                return `🎯 **${modelName} (${profile.os}) — 98% Headshot & Movement Sensitivity (0–200 Scale)**
-*(Hardware Engine: ${profile.touchType})*
+                return `🎯 **${modelName} (${profile.os}) — 98% Headshot Sensitivity**
+⚡ **Touch Engine:** ${profile.touchType}
 
-🔥 **1. ${var4gb.ram}:**
-• **General:** ${var4gb.general} | **Red Dot:** ${var4gb.redDot} | **2x:** ${var4gb.scope2x} | **4x:** ${var4gb.scope4x} | **Sniper:** ${var4gb.sniper}
-• **Fire Button:** ${var4gb.fireBtn} | **Exact DPI:** ${var4gb.dpi}
+🔥 **1. 4GB RAM (Fast Movement + Drag Boost):**
+• **Gen:** **${var4gb.general}** | **Red Dot:** **${var4gb.redDot}** | **2x:** **${var4gb.scope2x}** | **4x:** **${var4gb.scope4x}** | **Sniper:** **${var4gb.sniper}**
+• **Fire Button Size:** **${var4gb.fireBtn}** (Place at bottom) | **DPI:** **${var4gb.dpi}**
 
-⚡ **2. ${var6gb.ram}:**
-• **General:** ${var6gb.general} | **Red Dot:** ${var6gb.redDot} | **2x:** ${var6gb.scope2x} | **4x:** ${var6gb.scope4x} | **Sniper:** ${var6gb.sniper}
-• **Fire Button:** ${var6gb.fireBtn} | **Exact DPI:** ${var6gb.dpi}
+⚡ **2. 6GB RAM (98% One-Tap Sweet-Spot):**
+• **Gen:** **${var6gb.general}** | **Red Dot:** **${var6gb.redDot}** | **2x:** **${var6gb.scope2x}** | **4x:** **${var6gb.scope4x}** | **Sniper:** **${var6gb.sniper}**
+• **Fire Button Size:** **${var6gb.fireBtn}** (Place at bottom) | **DPI:** **${var6gb.dpi}**
 
-👑 **3. ${var8gb.ram}:**
-• **General:** ${var8gb.general} | **Red Dot:** ${var8gb.redDot} | **2x:** ${var8gb.scope2x} | **4x:** ${var8gb.scope4x} | **Sniper:** ${var8gb.sniper}
-• **Fire Button:** ${var8gb.fireBtn} | **Exact DPI:** ${var8gb.dpi}
+👑 **3. 8GB / 12GB RAM (No-Recoil Head Lock):**
+• **Gen:** **${var8gb.general}** | **Red Dot:** **${var8gb.redDot}** | **2x:** **${var8gb.scope2x}** | **4x:** **${var8gb.scope4x}** | **Sniper:** **${var8gb.sniper}**
+• **Fire Button Size:** **${var8gb.fireBtn}** (Place at bottom) | **DPI:** **${var8gb.dpi}**
 
-✅ **How to Get 98% Headshots on ${modelName}:**
-1. **Crosshair Placement:** Keep red crosshair at enemy **collar-bone / white aim** before firing.
-2. **Drag Technique:** ${profile.dragTip}.
-3. **Device Setting:** ${profile.settingsTip} + Free Fire **High FPS (60/90 FPS) ON**.`;
+💡 **98% Headshot Rule:** Aim at chest level, do a quick upward J-Drag & enable **High FPS** (${profile.settingsTip}).`;
             }
 
-            return `🎯 **${modelName} (${profile.os}) — 98% Accurate Headshot & Fast Movement Sensitivity**
-*(Hardware Touch: ${profile.touchType})*
+            return `🎯 **${modelName} (${profile.os}) — 98% Headshot Sensitivity**
+⚡ **Touch Engine:** ${profile.touchType}
 
-🔥 **1. 4GB RAM Variation (Fast 360° Movement + Drag Boost):**
-• **General:** **${var4gb.general}** | **Red Dot:** **${var4gb.redDot}** | **2x:** **${var4gb.scope2x}** | **4x:** **${var4gb.scope4x}** | **Sniper:** **${var4gb.sniper}**
-• **Fire Button Size:** **${var4gb.fireBtn}** | **Exact DPI:** **${var4gb.dpi}**
+🔥 **1. 4GB RAM (Fast Movement + Drag Boost):**
+• **Gen:** **${var4gb.general}** | **Red Dot:** **${var4gb.redDot}** | **2x:** **${var4gb.scope2x}** | **4x:** **${var4gb.scope4x}** | **Sniper:** **${var4gb.sniper}**
+• **Fire Button Size:** **${var4gb.fireBtn}** (கீழே வைக்கவும்) | **DPI:** **${var4gb.dpi}**
 
-⚡ **2. 6GB RAM Variation (98% One-Tap Headshot Lock):**
-• **General:** **${var6gb.general}** | **Red Dot:** **${var6gb.redDot}** | **2x:** **${var6gb.scope2x}** | **4x:** **${var6gb.scope4x}** | **Sniper:** **${var6gb.sniper}**
-• **Fire Button Size:** **${var6gb.fireBtn}** | **Exact DPI:** **${var6gb.dpi}**
+⚡ **2. 6GB RAM (98% One-Tap Headshot Lock):**
+• **Gen:** **${var6gb.general}** | **Red Dot:** **${var6gb.redDot}** | **2x:** **${var6gb.scope2x}** | **4x:** **${var6gb.scope4x}** | **Sniper:** **${var6gb.sniper}**
+• **Fire Button Size:** **${var6gb.fireBtn}** (கீழே வைக்கவும்) | **DPI:** **${var6gb.dpi}**
 
-👑 **3. 8GB / 12GB RAM Variation (Zero Over-Drag Recoil Lock):**
-• **General:** **${var8gb.general}** | **Red Dot:** **${var8gb.redDot}** | **2x:** **${var8gb.scope2x}** | **4x:** **${var8gb.scope4x}** | **Sniper:** **${var8gb.sniper}**
-• **Fire Button Size:** **${var8gb.fireBtn}** | **Exact DPI:** **${var8gb.dpi}**
+👑 **3. 8GB / 12GB RAM (No-Recoil Head Lock):**
+• **Gen:** **${var8gb.general}** | **Red Dot:** **${var8gb.redDot}** | **2x:** **${var8gb.scope2x}** | **4x:** **${var8gb.scope4x}** | **Sniper:** **${var8gb.sniper}**
+• **Fire Button Size:** **${var8gb.fireBtn}** (கீழே வைக்கவும்) | **DPI:** **${var8gb.dpi}**
 
-🎯 **98% Headshot & Movement விழுவதற்கான 3 முக்கிய விதிகள்:**
-1. **Aim Lock Position:** சுடுவதற்கு முன் Crosshair-ஐ எதிரியின் **நெஞ்சு/கழுத்து மட்டத்தில் (White/Red Aim)** வைத்து சுடவும்.
-2. **Drag Speed:** ${profile.dragTip}.
-3. **Phone Boost:** ${profile.settingsTip} + கேமில் **High FPS ON** வைக்கவும்!`;
+💡 **98% Headshot விதி:** நெஞ்சு மட்டத்தில் Aim வைத்து மேல்நோக்கி J-Drag செய்யவும் + கேமில் **High FPS ON** வைக்கவும்!`;
         };
 
         const DEFAULT_SENSI_PILLS = [
@@ -6809,6 +6876,7 @@ This phone model does not exist in official Android or iOS releases. Please type
                 return;
             }
             window.lastAiMsgTime = now;
+            window._lastBotQueryText = queryText;
 
             input.value = '';
             appendBotMessage('user', queryText);
@@ -7418,22 +7486,28 @@ ${list}
 
         let _lastTouchTime = 0;
         let _activeRipples = 0;
+        window._cachedAccentColor = '#25d366';
         document.addEventListener('mousedown', function(e) { if (Date.now() - _lastTouchTime < 500) return; createRipple(e.clientX, e.clientY); }, { passive: true });
-        document.addEventListener('touchstart', function(e) { _lastTouchTime = Date.now(); const touch = e.touches[0]; if (touch) createRipple(touch.clientX, touch.clientY); }, { passive: true });
+        document.addEventListener('touchstart', function(e) {
+            const now = Date.now();
+            if (now - _lastTouchTime < 180) return; // Throttle rapid touches on mobile
+            _lastTouchTime = now;
+            const touch = e.touches[0];
+            if (touch) createRipple(touch.clientX, touch.clientY);
+        }, { passive: true });
         function createRipple(x, y) {
-            if (_activeRipples >= 3) return;
+            if (_activeRipples >= 2) return;
             _activeRipples++;
             const ripple = document.createElement('div');
             ripple.className = 'ff-touch-effect';
-            const size = 18;
+            const size = 16;
             ripple.style.width = ripple.style.height = size + 'px';
             ripple.style.left = (x - size/2) + 'px';
             ripple.style.top = (y - size/2) + 'px';
-            const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim();
-            if (accent) { ripple.style.background = `radial-gradient(circle, ${accent}66, ${accent}22 60%, transparent 80%)`; }
-            else ripple.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            const accent = window._cachedAccentColor || '#25d366';
+            ripple.style.background = `radial-gradient(circle, ${accent}55, transparent 75%)`;
             document.body.appendChild(ripple);
-            setTimeout(() => { ripple.remove(); _activeRipples = Math.max(0, _activeRipples - 1); }, 450);
+            setTimeout(() => { ripple.remove(); _activeRipples = Math.max(0, _activeRipples - 1); }, 320);
         }
 
         window._introInterval = null;
@@ -7487,20 +7561,24 @@ ${list}
                 canvas.height = window.innerHeight || 640;
             };
             resize();
-            const particles = Array.from({ length: 42 }, () => ({
+            const particles = Array.from({ length: 14 }, () => ({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                r: 1.4 + Math.random() * 2.8,
-                vy: -(0.8 + Math.random() * 2.0),
-                vx: (Math.random() - 0.5) * 0.9,
+                r: 1.4 + Math.random() * 2.4,
+                vy: -(0.7 + Math.random() * 1.5),
+                vx: (Math.random() - 0.5) * 0.6,
                 color: Math.random() > 0.4 ? '#fbbf24' : '#10b981',
-                alpha: 0.35 + Math.random() * 0.6
+                alpha: 0.35 + Math.random() * 0.5
             }));
-            const renderLoginBg = () => {
-                if (!ov || ov.classList.contains('hidden')) {
+            let lastLoginFrameTs = 0;
+            const renderLoginBg = (nowTs = 0) => {
+                if (!ov || ov.classList.contains('hidden') || document.hidden) {
                     window._loginVideoRaf = null;
                     return;
                 }
+                window._loginVideoRaf = requestAnimationFrame(renderLoginBg);
+                if (nowTs - lastLoginFrameTs < 42) return; // Cap at ~24 FPS for instant login button response
+                lastLoginFrameTs = nowTs;
                 const w = canvas.width;
                 const h = canvas.height;
                 ctx.clearRect(0, 0, w, h);
@@ -7518,7 +7596,6 @@ ${list}
                     if (p.x > w + 10) p.x = -10;
                 }
                 ctx.globalAlpha = 1;
-                window._loginVideoRaf = requestAnimationFrame(renderLoginBg);
             };
             window._loginVideoRaf = requestAnimationFrame(renderLoginBg);
         };
@@ -7795,7 +7872,16 @@ ${list}
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             }
 
-            const sparks = Array.from({ length: 44 }, () => ({
+            try {
+                if (!withSound && sessionStorage.getItem('sp_intro_seen_session') === '1') {
+                    el.classList.add('hidden');
+                    el.style.display = 'none';
+                    if (!window.loggedEmail) window.startLoginVideoCanvas();
+                    return;
+                }
+                sessionStorage.setItem('sp_intro_seen_session', '1');
+            } catch(e) {}
+            const sparks = Array.from({ length: 16 }, () => ({
                 x: Math.random() * w,
                 y: Math.random() * h,
                 r: 1.4 + Math.random() * 2.6,
@@ -7816,7 +7902,7 @@ ${list}
 
             const startTime = performance.now();
             let lastTime = startTime;
-            const durationMs = 2600;
+            const durationMs = 1250;
             let radarAngle = 0;
             let lastIntPct = -1;
             let currentStage = 0;
@@ -7892,7 +7978,7 @@ ${list}
             window._introSparksRaf = requestAnimationFrame(animateIntroFrame);
             window._introHideTimeout = setTimeout(() => {
                 window.skipCinematicIntro();
-            }, 2850);
+            }, 1350);
         };
 
         function applyCachedConfig() {
@@ -8093,7 +8179,7 @@ ${list}
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.toggleMenuDropdown = function(e) { if(e) e.stopPropagation(); document.getElementById('settings-dropdown').classList.toggle('show'); window.updateThemeSwatches(); if(typeof window.setAppLanguage === 'function') window.setAppLanguage(window.currentAppLang || 'tanglish', true); };
+        window.toggleMenuDropdown = function(e) { if(e) e.stopPropagation(); const dd = document.getElementById('settings-dropdown'); if (!dd) return; dd.classList.toggle('show'); if (dd.classList.contains('show')) { window.updateThemeSwatches(); } };
         window.closeMenuDropdown = function() { document.getElementById('settings-dropdown').classList.remove('show'); };
         window.addEventListener('click', (e) => { window.closeMenuDropdown(); if(typeof window.closeChatMenu === 'function') window.closeChatMenu(); });
 
@@ -8109,7 +8195,6 @@ ${list}
             const scrollBody = document.getElementById('policy-scroll-body');
             if (!modal || !title || !content) return;
 
-            // Highlight active full-screen tab
             ['terms', 'privacy', 'copyright', 'refund'].forEach(function(t) {
                 const btn = document.getElementById('policy-tab-' + t);
                 if (btn) {
@@ -8122,122 +8207,142 @@ ${list}
             });
 
             if (type === 'terms') {
-                title.textContent = "📜 Terms of Service & Official Tournament Rules";
+                title.textContent = "📜 Terms of Service & Official Tournament Rules (Updated 2026)";
                 content.innerHTML = `
                     <div class="space-y-4" style="color: var(--text-main);">
                         <div class="cyber-card p-4 sm:p-5 border-2 border-emerald-500/50 bg-emerald-500/10 space-y-2">
-                            <div class="text-sm sm:text-base font-black text-emerald-400 uppercase tracking-wide">🏆 1. Legal Classification — Pure Skill-Based Esports Competition</div>
+                            <div class="flex items-center justify-between flex-wrap gap-1">
+                                <div class="text-sm sm:text-base font-black text-emerald-400 uppercase tracking-wide">🏆 1. Legal Classification — Pure Skill-Based Esports Competition</div>
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-400/40">v2026.4 Verified</span>
+                            </div>
                             <p class="text-xs sm:text-sm leading-relaxed">
-                                Satta Pai Esports Arena organizes custom Battle Royale (BR) and Clash Squad (CS) tournaments that are recognized as <strong>Games of Skill</strong> under Section 12 of the Public Gambling Act, 1867 and established judgments of the Hon'ble Supreme Court and High Courts of India. Success depends entirely on tactical positioning, hand-eye coordination, weapon recoil control, and squad communication—never on chance or gambling.
+                                Satta Pai Esports Arena organizes custom Battle Royale (BR) and Clash Squad (CS) tournaments recognized as <strong>Games of Skill</strong> under Section 12 of the Public Gambling Act, 1867 and established judgments of the Hon'ble Supreme Court and High Courts of India. Outcomes depend strictly on tactical positioning, weapon recoil control, reaction speed, and squad coordination—never on chance or betting.
                             </p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="cyber-card p-4 space-y-2">
-                                <h3 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase">👤 2. Player Eligibility & Account Rules</h3>
+                                <h3 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase">👤 2. Multi-Provider Login & Account Rules</h3>
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                    <li><strong>Age Requirement:</strong> Participants must be 18 years or older (minors may participate only with explicit parent/guardian supervision).</li>
-                                    <li><strong>Valid Game UID:</strong> All 4 squad members must enter their exact numeric Garena Free Fire / Free Fire MAX / Free Fire India UID during slot booking.</li>
-                                    <li><strong>No Smurfing / Multi-Squads:</strong> A single Game UID or Phone Number cannot register in multiple teams within the same match.</li>
+                                    <li><strong>Verified Sign-In:</strong> Players must sign in via verified <b>Google, Facebook, or GitHub OAuth</b> (or browse in read-only Guest Mode).</li>
+                                    <li><strong>Age & Eligibility:</strong> Participants must be 18+ years old (or have explicit parent/guardian consent).</li>
+                                    <li><strong>Exact Game UIDs:</strong> All 4 squad members must submit accurate numeric Garena Free Fire / Free Fire MAX UIDs during registration.</li>
+                                    <li><strong>Anti-Smurfing Lock:</strong> Each 10-digit mobile number and Game UID can register only <b>once per match</b> via atomic database verification.</li>
                                 </ul>
                             </div>
 
                             <div class="cyber-card p-4 space-y-2">
-                                <h3 class="text-xs sm:text-sm font-extrabold text-rose-400 uppercase">🚨 3. Zero-Tolerance Anti-Cheat Forensics</h3>
+                                <h3 class="text-xs sm:text-sm font-extrabold text-rose-400 uppercase">🚨 3. Zero-Tolerance Anti-Cheat & AI Moderation</h3>
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                    <li><strong>Strictly Mobile Only:</strong> PC emulators (BlueStacks, MSI, Nox), gamepads, and macro triggers are strictly prohibited unless explicitly marked as an Open PC Match.</li>
-                                    <li><strong>Banned Modifications:</strong> Headshot panels, aimbots, wallhacks, antenna configs, or third-party APKs result in instant permanent UID & Hardware Device Ban.</li>
-                                    <li><strong>No Teaming:</strong> Cross-squad teaming in Battle Royale lobbies leads to immediate disqualification and prize forfeiture.</li>
+                                    <li><strong>Mobile Devices Only:</strong> PC emulators (BlueStacks, MSI), macro triggers, and external controllers are prohibited in mobile lobbies.</li>
+                                    <li><strong>Prohibited Hacks:</strong> Aimbot, headshot panels, wallhacks, magic bullets, or modified OBB/APK files trigger an immediate permanent ban.</li>
+                                    <li><strong>AI Auto-Ban & 24h Probation System:</strong> Global Chat and UTR submissions are monitored by automated AI security. If a player submits a Ban Appeal and is approved by Super Admin, a strict <b>24-Hour Probation</b> period applies—any repeat violation during probation results in an irreversible permanent lock.</li>
                                 </ul>
                             </div>
                         </div>
 
-                        <div class="cyber-card p-4 space-y-2">
-                            <h3 class="text-xs sm:text-sm font-extrabold text-cyan-400 uppercase">🔑 4. Custom Room ID, Slot Discipline & Scoring Matrix</h3>
-                            <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                <li><strong>Group-Wise Room Keys:</strong> Custom Room ID & Password are published 10 to 15 minutes before match start inside the <b>My Room Keys</b> vault and triggered via the 10-Min Voice Siren Alert.</li>
-                                <li><strong>Assigned Group & Slot Lock:</strong> Teams registered in <b>TEAM A</b> must join only TEAM A's lobby; <b>TEAM B</b> must join only TEAM B's lobby. Sharing Room Passwords with unregistered outsiders causes immediate squad removal.</li>
-                                <li><strong>Official Scoring System:</strong> Every confirmed Elimination grants <b>+3 Points</b>. Placement Points: <b>1st = 12 Pts, 2nd = 9 Pts, 3rd = 8 Pts, 4th = 7 Pts, 5th = 6 Pts, 6th = 5 Pts, 7th = 4 Pts, 8th = 3 Pts, 9th = 2 Pts, 10th = 1 Pt</b>.</li>
-                            </ul>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="cyber-card p-4 space-y-2">
+                                <h3 class="text-xs sm:text-sm font-extrabold text-cyan-400 uppercase">🔑 4. Custom Room Keys, Scoring & Host Isolation</h3>
+                                <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
+                                    <li><strong>Vault Delivery:</strong> Room ID & Password are published 10–15 minutes before match start inside <b>My Room Keys</b> with a 10-Minute Voice Siren Alert.</li>
+                                    <li><strong>Group Discipline:</strong> Squads registered in <b>TEAM A</b> must join TEAM A's lobby; <b>TEAM B</b> must join TEAM B's lobby. Leaking Room Passwords to outsiders voids your slot.</li>
+                                    <li><strong>Official Points Matrix:</strong> <b>1 Kill = +3 Pts</b> | Placement: <b>1st = 12, 2nd = 9, 3rd = 8, 4th = 7, 5th = 6, 6th = 5, 7th = 4, 8th = 3, 9th = 2, 10th = 1 Pt</b>.</li>
+                                    <li><strong>Host Scope Isolation:</strong> Authorized Match Hosts can manage, verify, and score only the specific matches they created.</li>
+                                </ul>
+                            </div>
+
+                            <div class="cyber-card p-4 space-y-2">
+                                <h3 class="text-xs sm:text-sm font-extrabold text-purple-400 uppercase">🪙 5. SP Coins, Battle Pass & Royal Pro / Pro Plus</h3>
+                                <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
+                                    <li><strong>Virtual Loyalty Rewards:</strong> SP Coins and Season 1 Battle Pass XP are promotional loyalty rewards with no real-money cash-out value and can be redeemed only for Free Match Slot Vouchers (400 Coins) or Armory Titles.</li>
+                                    <li><strong>Royal Pro & Pro Plus:</strong> Pro (10% discount) and Pro Plus (25% discount) memberships apply automatic entry fee discounts and unlock premium live themes for the purchased duration.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 `;
             } else if (type === 'privacy') {
-                title.textContent = "🔒 Privacy Policy & Data Protection (DPDP Act 2023)";
+                title.textContent = "🔒 Privacy Policy & Data Protection (DPDP Act 2023 • Updated 2026)";
                 content.innerHTML = `
                     <div class="space-y-4" style="color: var(--text-main);">
                         <div class="cyber-card p-4 sm:p-5 border-2 border-blue-500/50 bg-blue-500/10 space-y-2">
-                            <div class="text-sm sm:text-base font-black text-blue-400 uppercase tracking-wide">🔒 1. Digital Personal Data Protection (DPDP) Act, 2023 Compliance</div>
+                            <div class="flex items-center justify-between flex-wrap gap-1">
+                                <div class="text-sm sm:text-base font-black text-blue-400 uppercase tracking-wide">🔒 1. Digital Personal Data Protection (DPDP) Act, 2023 Compliance</div>
+                                <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 text-[10px] font-mono font-bold border border-blue-400/40">Zero-Leak Vault</span>
+                            </div>
                             <p class="text-xs sm:text-sm leading-relaxed">
-                                Satta Pai Esports Arena respects your privacy and processes player data strictly on principles of <strong>Data Minimization, Purpose Limitation, and Cryptographic Isolation</strong>. We collect only the minimum data required to host tournaments, verify UPI transactions, and distribute prizes.
+                                Satta Pai Esports Arena processes player information under strict principles of <strong>Data Minimization, Purpose Limitation, and Public/Private Collection Isolation</strong>. We collect only the minimum data necessary to authenticate players, verify tournament slots, and disburse UPI winnings.
                             </p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="cyber-card p-4 space-y-2">
-                                <h3 class="text-xs sm:text-sm font-extrabold text-emerald-400 uppercase">📋 2. Information We Collect</h3>
+                                <h3 class="text-xs sm:text-sm font-extrabold text-emerald-400 uppercase">📋 2. Data We Collect & Why</h3>
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                    <li><strong>Authentication Identity:</strong> Google Account email address and display name via Firebase Authentication.</li>
-                                    <li><strong>Gaming Profile:</strong> Free Fire In-Game Name (IGN), numeric Game UID, and auto-generated Player ID (<code>SP-XXXX</code>).</li>
-                                    <li><strong>Match Contact & Payment Audit:</strong> 10-digit WhatsApp mobile number (for match room alerts) and 12-digit NPCI UPI UTR number (for slot verification).</li>
+                                    <li><strong>OAuth Identity:</strong> Verified email address and display name from Google, Facebook, or GitHub via Firebase Authentication.</li>
+                                    <li><strong>Esports Profile:</strong> Free Fire IGN, numeric Game UIDs, and unique Player ID (<code>SP-XXXX</code>).</li>
+                                    <li><strong>Private Match Contact & Payment Proof:</strong> 10-digit WhatsApp number (for room key alerts) and 12-digit NPCI UPI UTR number (for slot verification).</li>
+                                    <li><strong>Anti-Bot Security Telemetry:</strong> Firebase App Check & Google reCAPTCHA tokens used strictly to block automated bot abuse.</li>
                                 </ul>
                             </div>
 
                             <div class="cyber-card p-4 space-y-2">
-                                <h3 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase">🛡️ 3. Private Security Vault Isolation</h3>
+                                <h3 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase">🛡️ 3. Cryptographic Private Vault Isolation</h3>
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                    <li><strong>Public vs. Private Split:</strong> Public match lobbies display only your Squad Name and Game UIDs.</li>
-                                    <li><strong>Encrypted Private Vault:</strong> Your mobile number, hometown, and 12-digit UTR are stored in the restricted <code>registrations_private</code> collection—100% invisible to other players!</li>
-                                    <li><strong>Zero Data Selling:</strong> We never sell, rent, or share your phone number or email with third-party marketers or ad networks.</li>
+                                    <li><strong>Public Lobby Privacy:</strong> Public match cards and brackets display <b>only</b> your Squad Name, Leader IGN, and Game UIDs.</li>
+                                    <li><strong>Restricted Private Collection:</strong> Your 10-digit phone number, city, email, and 12-digit UTR are isolated inside <code>registrations_private</code>—100% unreadable by other players!</li>
+                                    <li><strong>Host Isolation:</strong> Tournament Hosts cannot access squads or private contact details from matches created by other organizers.</li>
+                                    <li><strong>Zero Third-Party Selling:</strong> We never sell, rent, or trade player data with advertisers.</li>
                                 </ul>
                             </div>
                         </div>
 
                         <div class="cyber-card p-4 space-y-2">
-                            <h3 class="text-xs sm:text-sm font-extrabold text-purple-400 uppercase">🗑️ 4. Data Retention, Chat Auto-Purge & User Erasure Rights</h3>
+                            <h3 class="text-xs sm:text-sm font-extrabold text-purple-400 uppercase">🗑️ 4. 48-Hour Chat Auto-Purge & 1-Click Self-Service Erasure</h3>
                             <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                <li><strong>48-Hour Chat Auto-Cleanup:</strong> Global chat messages older than 48 hours are purged to maintain database privacy and performance.</li>
-                                <li><strong>Right to Access & Erasure:</strong> You may update your profile anytime or request complete account and data deletion by emailing our Grievance Officer at <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline font-bold">satta0pai@gmail.com</a> (resolved within 72 business hours).</li>
+                                <li><strong>48-Hour Chat Retention:</strong> Global chat messages older than 48 hours are automatically filtered and purged.</li>
+                                <li><strong>In-App Delete Request System:</strong> Players can submit a 1-click <b>Squad / Full Account Deletion Request</b> directly inside the <b>Profile ➔ Account & Data Privacy</b> section, or email our Grievance Officer at <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline font-bold">satta0pai@gmail.com</a> for permanent erasure within 48–72 hours.</li>
                             </ul>
                         </div>
                     </div>
                 `;
             } else if (type === 'copyright') {
-                title.textContent = "⚖️ Copyright, Trademark & IP Attribution Notice";
+                title.textContent = "⚖️ Copyright, Trademark & IP Attribution Notice (2026)";
                 content.innerHTML = `
                     <div class="space-y-4" style="color: var(--text-main);">
                         <div class="cyber-card p-4 sm:p-5 border-2 border-purple-500/50 bg-purple-500/10 space-y-2">
-                            <div class="text-sm sm:text-base font-black text-purple-400 uppercase tracking-wide">⚖️ 1. Official Trademark & Intellectual Property Disclaimer</div>
+                            <div class="text-sm sm:text-base font-black text-purple-400 uppercase tracking-wide">⚖️ 1. Official Platform Intellectual Property</div>
                             <p class="text-xs sm:text-sm leading-relaxed">
-                                <strong>Satta Pai Esports Arena</strong> is an independent community tournament platform and esports utility hub. All original platform source code, UI/UX design, SP-ELO matchmaking algorithms, tactical drop-zone radar software, and procedural Web Audio engines are <strong>Copyright © 2024–2026 Satta Pai Esports Arena. All Rights Reserved.</strong>
+                                <strong>Satta Pai Esports Arena</strong> is an independent esports tournament management platform. All custom source code, UI/UX layouts, AI sensitivity calibration logic, tactical drop-zone radar tools, and scoring engines are <strong>Copyright © 2024–2026 Satta Pai Esports Arena. All Rights Reserved.</strong>
                             </p>
                         </div>
 
                         <div class="cyber-card p-4 space-y-2">
                             <h3 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase">🎮 2. Garena Free Fire Trademark Attribution</h3>
                             <ul class="list-disc pl-4 space-y-2 text-xs leading-relaxed">
-                                <li><strong>Third-Party Game Trademarks:</strong> "Garena Free Fire", "Free Fire MAX", "Free Fire India", "Booyah", map names (Bermuda, Purgatory, Kalahari, Alpine, Nexterra), character names, and in-game weapon names are registered trademarks and copyrighted properties of <strong>Garena International I Private Limited</strong> and <strong>Sea Limited</strong>.</li>
-                                <li><strong>Non-Affiliation Statement:</strong> Satta Pai Esports Arena is <strong>NOT</strong> affiliated with, endorsed, maintained, sponsored, or specifically approved by Garena International or Sea Limited. References to game titles and maps are used strictly for nominative fair use to describe community custom room tournaments.</li>
+                                <li><strong>Third-Party Trademarks:</strong> "Garena Free Fire", "Free Fire MAX", "Free Fire India", "Booyah", and map/weapon names are registered trademarks of <strong>Garena International I Private Limited</strong> and <strong>Sea Limited</strong>.</li>
+                                <li><strong>Independent Organizer Statement:</strong> Satta Pai Esports Arena is <strong>NOT</strong> affiliated with, endorsed, or sponsored by Garena International or Sea Limited. Game titles are referenced strictly under nominative fair use to identify community custom rooms.</li>
                             </ul>
                         </div>
 
                         <div class="cyber-card p-4 space-y-2">
-                            <h3 class="text-xs sm:text-sm font-extrabold text-emerald-400 uppercase">🛡️ 3. Anti-Clone Protection & DMCA / IP Contact</h3>
+                            <h3 class="text-xs sm:text-sm font-extrabold text-emerald-400 uppercase">🛡️ 3. Anti-Clone Protection & Official Grievance Desk</h3>
                             <ul class="list-disc pl-4 space-y-2 text-xs leading-relaxed">
-                                <li><strong>Source Code Protection:</strong> Unauthorized copying, scraping, cloning, or re-hosting of Satta Pai Esports Arena's codebase, custom SVG emblems, or security rules is strictly prohibited and protected by cryptographic project binding.</li>
-                                <li><strong>Copyright & Grievance Inquiries:</strong> For any intellectual property or copyright inquiries, contact our designated Grievance Redressal Officer at <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline font-bold">satta0pai@gmail.com</a> or Official Support <code class="text-amber-400 font-bold">@CHELLAM_STORE</code> for 24-hour resolution.</li>
+                                <li><strong>Codebase & Brand Protection:</strong> Unauthorized scraping, cloning, or re-distribution of Satta Pai Esports Arena assets or security rules is strictly prohibited.</li>
+                                <li><strong>Contact Officer:</strong> Reach our Grievance Officer at <a href="mailto:satta0pai@gmail.com" class="text-emerald-400 underline font-bold">satta0pai@gmail.com</a> or Telegram <code class="text-amber-400 font-bold">@CHELLAM_STORE</code>.</li>
                             </ul>
                         </div>
                     </div>
                 `;
             } else if (type === 'refund') {
-                title.textContent = "💰 Fair Play, Refund & Instant UPI Prize Policy";
+                title.textContent = "💰 Fair Play, Refund & Instant UPI Prize Policy (2026)";
                 content.innerHTML = `
                     <div class="space-y-4" style="color: var(--text-main);">
                         <div class="cyber-card p-4 sm:p-5 border-2 border-amber-500/50 bg-amber-500/10 space-y-2">
-                            <div class="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide">💰 1. Transparent Prize Pool & Instant UPI Disbursement</div>
+                            <div class="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide">💰 1. Fast UPI Prize Pool Disbursement</div>
                             <p class="text-xs sm:text-sm leading-relaxed">
-                                Grand Finals tournament winnings are audited immediately after match completion and transferred directly to the Winning Squad Captain's registered UPI ID (GPay / PhonePe / Paytm) within <strong>15 to 30 minutes</strong> of official scoreboard publication.
+                                Verified tournament winnings are transferred directly to the Winning Squad Captain's registered UPI ID (GPay / PhonePe / Paytm) within <strong>15 to 30 minutes</strong> after official scoreboard verification.
                             </p>
                         </div>
 
@@ -8245,25 +8350,25 @@ ${list}
                             <div class="cyber-card p-4 space-y-2">
                                 <h3 class="text-xs sm:text-sm font-extrabold text-emerald-400 uppercase">🔄 2. 100% Refund Guarantee Cases</h3>
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                    <li><strong>Match Cancelled by Organizers:</strong> If a match is cancelled due to Garena server maintenance or technical issues, 100% of the entry fee is refunded to your UPI ID or issued as a Free Match Slot Voucher within 24 hours.</li>
-                                    <li><strong>Duplicate Payment:</strong> Accidental double UPI transfers with verified distinct 12-digit UTRs are refunded in full upon verification.</li>
+                                    <li><strong>Match Cancelled by Organizer:</strong> If a lobby is cancelled due to server downtime or technical failure, 100% of the paid entry fee (or your 400-Coin Free Slot Voucher) is refunded within 24 hours.</li>
+                                    <li><strong>Accidental Double Payment:</strong> Duplicate UPI payments with two distinct valid 12-digit UTRs for the same squad are refunded upon verification.</li>
                                 </ul>
                             </div>
 
                             <div class="cyber-card p-4 space-y-2">
-                                <h3 class="text-xs sm:text-sm font-extrabold text-rose-400 uppercase">🚫 3. Non-Refundable Scenarios</h3>
+                                <h3 class="text-xs sm:text-sm font-extrabold text-rose-400 uppercase">🚫 3. Non-Refundable Cases</h3>
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
-                                    <li><strong>Late Arrival / No-Show:</strong> Once the Custom Room ID is published and the match starts, squads failing to join on time forfeit their slot without refund.</li>
-                                    <li><strong>Anti-Cheat Disqualification:</strong> Squads caught using hacks, emulators, or unregistered UIDs forfeit both entry fees and prizes.</li>
-                                    <li><strong>Fake / Edited UTRs:</strong> Submitting edited payment screenshots (PicsArt/Canva) results in an immediate permanent ban.</li>
+                                    <li><strong>Late Entry / No-Show:</strong> Squads failing to join the custom room before match start forfeit their slot.</li>
+                                    <li><strong>Rule / Anti-Cheat Violation:</strong> Disqualification for emulator use, hacking, teaming, or password sharing forfeits entry fees and prizes.</li>
+                                    <li><strong>Tampered UTR Proofs:</strong> Submitting fake or edited payment screenshots leads to an immediate permanent account ban.</li>
                                 </ul>
                             </div>
                         </div>
 
                         <div class="cyber-card p-4 space-y-2">
-                            <h3 class="text-xs sm:text-sm font-extrabold text-cyan-400 uppercase">📞 4. Dispute Resolution & Scoreboard Appeals</h3>
+                            <h3 class="text-xs sm:text-sm font-extrabold text-cyan-400 uppercase">📞 4. Scoreboard & Payment Dispute Resolution</h3>
                             <p class="text-xs leading-relaxed">
-                                Captains must save their final match scoreboard screenshot. Any score or kill count inquiry must be submitted within <strong>30 minutes</strong> of match completion via Official Support (<code class="text-emerald-400 font-bold">@CHELLAM_STORE</code>) or Email (<code class="text-emerald-400 font-bold">satta0pai@gmail.com</code>).
+                                Squad Captains should keep their final match result screenshot and 12-digit UPI UTR reference. Submit any score or payment query within <strong>30 minutes</strong> of match end via Official Support (<code class="text-emerald-400 font-bold">@CHELLAM_STORE</code>) or Email (<code class="text-emerald-400 font-bold">satta0pai@gmail.com</code>).
                             </p>
                         </div>
                     </div>
@@ -8353,23 +8458,69 @@ ${list}
             self.FIREBASE_APPCHECK_DEBUG_TOKEN = savedDebugToken ? savedDebugToken : true;
         }
 
-        // 🛡️ STEP 3: Initialize Firebase App Check Directly with Fraud Defense (reCAPTCHA Enterprise) Key
+        // 🛡️ STEP 3: Smart Firebase App Check with Anti-Hang Circuit Breaker
+        // Prevents 98% "Unverified: invalid requests" retry storms when provider/domain is being configured in Firebase Console
         window.fbAppCheck = null;
         window.fbGetAppCheckToken = getToken;
-        window.APP_CHECK_SITE_KEY = '6LdL_gQuAAAAADYNBP6jMS40nt1ygODyaH0dD1Mv';
-        window.APP_CHECK_PROVIDER_TYPE = 'enterprise';
-        try {
-            localStorage.removeItem('sp_appcheck_site_key');
-            localStorage.removeItem('sp_appcheck_provider');
-        } catch (e) {}
-        try {
-            window.fbAppCheck = initializeAppCheck(app, {
-                provider: new ReCaptchaEnterpriseProvider('6LdL_gQuAAAAADYNBP6jMS40nt1ygODyaH0dD1Mv'),
-                isTokenAutoRefreshEnabled: true
-            });
-        } catch (err) {
-            console.warn("App Check Enterprise init notice:", err);
-        }
+        window.APP_CHECK_SITE_KEY = (localStorage.getItem('sp_appcheck_site_key') || '6LdL_gQuAAAAADYNBP6jMS40nt1ygODyaH0dD1Mv').trim();
+        // Default to 'v3' if user configured standard reCAPTCHA v3 in Firebase Console, or 'enterprise' if Enterprise is selected
+        window.APP_CHECK_PROVIDER_TYPE = (localStorage.getItem('sp_appcheck_provider') || 'v3').trim();
+        window._appCheckVerifiedStatus = 'checking';
+
+        window.initSmartAppCheck = function() {
+            // Skip AppCheck init if circuit breaker tripped on this domain+key in current session to prevent invalid request spam & phone lag
+            const cbKey = 'sp_appcheck_cb_' + window.location.hostname + '_' + window.APP_CHECK_PROVIDER_TYPE + '_' + window.APP_CHECK_SITE_KEY.slice(-6);
+            try {
+                if (!isLocalDev && sessionStorage.getItem(cbKey) === 'paused_400') {
+                    window._appCheckVerifiedStatus = 'paused_console_sync_needed';
+                    return;
+                }
+            } catch (e) {}
+
+            try {
+                const providerInstance = window.APP_CHECK_PROVIDER_TYPE === 'enterprise'
+                    ? new ReCaptchaEnterpriseProvider(window.APP_CHECK_SITE_KEY)
+                    : new ReCaptchaV3Provider(window.APP_CHECK_SITE_KEY);
+
+                // Start with isTokenAutoRefreshEnabled: false until first token exchange succeeds!
+                // This prevents background 400 error loops that freeze phones and inflate "Unverified: invalid requests".
+                window.fbAppCheck = initializeAppCheck(app, {
+                    provider: providerInstance,
+                    isTokenAutoRefreshEnabled: false
+                });
+
+                setTimeout(async () => {
+                    if (!window.fbAppCheck) return;
+                    try {
+                        const tok = await getToken(window.fbAppCheck, false);
+                        if (tok && tok.token) {
+                            window._appCheckVerifiedStatus = 'verified_active';
+                            try { sessionStorage.removeItem(cbKey); } catch(e) {}
+                        }
+                    } catch (tokErr) {
+                        window._appCheckVerifiedStatus = 'console_setup_pending';
+                        try { sessionStorage.setItem(cbKey, 'paused_400'); } catch(e) {}
+                        console.warn("App Check token exchange pending Firebase Console registration:", tokErr?.message || tokErr);
+                    }
+                }, 2500);
+            } catch (err) {
+                console.warn("App Check init notice:", err);
+            }
+        };
+        window.initSmartAppCheck();
+
+        window.switchAppCheckProviderMode = function(mode, customSiteKey) {
+            const cleanMode = (mode === 'enterprise') ? 'enterprise' : 'v3';
+            try {
+                localStorage.setItem('sp_appcheck_provider', cleanMode);
+                if (customSiteKey && customSiteKey.trim().length > 15) {
+                    localStorage.setItem('sp_appcheck_site_key', customSiteKey.trim());
+                }
+                Object.keys(sessionStorage).forEach(k => { if (k.startsWith('sp_appcheck_cb_')) sessionStorage.removeItem(k); });
+            } catch (e) {}
+            window.showToast(`🛡️ App Check switched to reCAPTCHA ${cleanMode.toUpperCase()}! Reloading...`);
+            setTimeout(() => window.location.reload(), 600);
+        };
 
         // 🛡️ STEP 4: Initialize Auth, Firestore & Functions AFTER App Check is attached
         // Security: userCache is kept inside module closure (not exposed on window.userCache) to prevent data leaks
@@ -8590,6 +8741,34 @@ ${list}
             setTimeout(() => window.validateAndApplySavedTheme(), 500);
         }
 
+        window._uiBatchRenderTimer = null;
+        window.scheduleMatchAndTeamUIUpdate = function(includeRoadmapAndDropdowns = false) {
+            if (includeRoadmapAndDropdowns) window._needsRoadmapRender = true;
+            if (window._uiBatchRenderTimer) return;
+            window._uiBatchRenderTimer = setTimeout(() => {
+                window._uiBatchRenderTimer = null;
+                requestAnimationFrame(() => {
+                    if (typeof window.renderPublicMatches === 'function') window.renderPublicMatches();
+                    if (typeof window.updateHomeRegistrationBanner === 'function') window.updateHomeRegistrationBanner();
+                    if (window._needsRoadmapRender) {
+                        window._needsRoadmapRender = false;
+                        if (typeof window.renderRoadmapTab === 'function') window.renderRoadmapTab();
+                        if (typeof window.populateAllDropdowns === 'function') window.populateAllDropdowns();
+                        if (typeof window.checkAutoRoomSirenAndTimer === 'function') window.checkAutoRoomSirenAndTimer();
+                    }
+                    // Only render heavy Admin Squads DOM if Admin/Host portal is mounted
+                    if (document.getElementById('teams-container-sa') || document.getElementById('teams-container-ah')) {
+                        if (typeof window.renderSquadsManagementList === 'function') window.renderSquadsManagementList();
+                    }
+                    const userList = document.getElementById('user-bookings-list');
+                    if (userList && window.loggedEmail) {
+                        const myRegs = (window.isSuperAdminGlobal) ? allTeams : allTeams.filter(t => (t.userEmail || '').toLowerCase() === window.loggedEmail);
+                        userList.innerHTML = myRegs.length === 0 ? "None" : myRegs.map(r => `<div class="flex items-center justify-between py-1 border-b border-white/5"><span>[${window.escapeHTML(r.teamId || 'N/A')}] <b>${window.escapeHTML(r.teamName)}</b> (${window.escapeHTML(r.slotGroup || 'TEAM A')})</span><button type="button" onclick="downloadCustomTicketPNG('${window.escapeHTML(r.teamId || 'T100')}', '${window.escapeJsStr(r.teamName)}', '${window.escapeHTML(r.slotGroup || 'TEAM A')}')" class="px-2 py-0.5 bg-amber-500 text-black rounded text-[10px] font-extrabold cursor-pointer">🎫 Pass</button></div>`).join('');
+                    }
+                });
+            }, 90);
+        };
+
         function mergePublicAndPrivateTeams() {
             allTeams = publicTeams.map(pub => { const priv = privateTeamsMap[pub.id] || {}; return { ...pub, ...priv, id: pub.id }; });
             window.allTeams = allTeams;
@@ -8607,10 +8786,7 @@ ${list}
                     }
                 }
             });
-            window.renderSquadsManagementList();
-            window.renderPublicMatches(); if (typeof window.updateHomeRegistrationBanner === 'function') window.updateHomeRegistrationBanner();
-            const userList = document.getElementById('user-bookings-list');
-            if (userList && window.loggedEmail) { const myRegs = (window.isSuperAdminGlobal) ? allTeams : allTeams.filter(t => (t.userEmail || '').toLowerCase() === window.loggedEmail); userList.innerHTML = myRegs.length === 0 ? "None" : myRegs.map(r => `<div class="flex items-center justify-between py-1 border-b border-white/5"><span>[${window.escapeHTML(r.teamId || 'N/A')}] <b>${window.escapeHTML(r.teamName)}</b> (${window.escapeHTML(r.slotGroup || 'TEAM A')})</span><button type="button" onclick="downloadCustomTicketPNG('${window.escapeHTML(r.teamId || 'T100')}', '${window.escapeJsStr(r.teamName)}', '${window.escapeHTML(r.slotGroup || 'TEAM A')}')" class="px-2 py-0.5 bg-amber-500 text-black rounded text-[10px] font-extrabold cursor-pointer">🎫 Pass</button></div>`).join(''); }
+            window.scheduleMatchAndTeamUIUpdate(false);
         }
 
         
@@ -9070,8 +9246,13 @@ ${list}
             }
         };
 
+        window._settingsUnsubscribe = null;
         window.loadSettings = function() {
-            onSnapshot(doc(db, 'settings', 'config'), snap => {
+            if (window._settingsUnsubscribe) {
+                try { window._settingsUnsubscribe(); } catch(e) {}
+                window._settingsUnsubscribe = null;
+            }
+            window._settingsUnsubscribe = onSnapshot(doc(db, 'settings', 'config'), snap => {
                 if(snap.exists()) {
                     const d = snap.data();
                     // 1. Apply Custom Logo & Brand Name FIRST so nothing can ever block logo display!
@@ -10329,7 +10510,7 @@ ${list}
 
         window.renderRoadmapTab = function() {
             const container = document.getElementById('roadmap-container'); if (!container) return;
-            container.innerHTML = allMatches.length === 0 ? `<div class="cyber-card p-5 text-center space-y-2 border border-emerald-500/30"><div class="text-2xl">📊</div><div class="text-xs font-extrabold text-emerald-400">Official Match Scoreboards & Results</div><p class="text-[10px] text-slate-400">மேட்ச் முடிந்தவுடன் புள்ளிகள் பட்டியல் (Points Table) மற்றும் Winner Certificate இங்கே வெளியிடப்படும்!</p><button type="button" onclick="switchTab('matches')" class="btn-theme px-3.5 py-1.5 text-[10px] font-extrabold cursor-pointer">🎮 View Matches</button></div>` : allMatches.map(m => `
+            container.innerHTML = allMatches.length === 0 ? `<div class="cyber-card p-5 text-center space-y-2 border border-emerald-500/30"><div class="text-2xl">📊</div><div class="text-xs font-extrabold text-emerald-400">Official Match Scoreboards & Results</div><p class="text-[10px] text-slate-400">Official match scoreboards, points tables, and winner certificates are published here right after each match!</p><button type="button" onclick="switchTab('matches')" class="btn-theme px-3.5 py-1.5 text-[10px] font-extrabold cursor-pointer">🎮 View Matches</button></div>` : allMatches.map(m => `
                 <div class="cyber-card p-3 space-y-3">
                     <div class="flex justify-between items-center gap-2 flex-wrap">
                         <h3 class="text-xs font-bold">${window.escapeHTML(m.title)}</h3>
@@ -10364,7 +10545,7 @@ ${list}
                 if (regSquads.length > 0) {
                     hof.innerHTML = regSquads.map((sq, i) => `<div class="cyber-card px-3 py-2 flex items-center justify-between border border-emerald-500/30"><div class="font-bold flex items-center gap-2"><span>🛡️ #${i+1}</span><span>${window.escapeHTML(sq.teamName)}</span></div><div class="text-[10px] font-mono text-emerald-400">Leader: ${window.escapeHTML(sq.leaderName || 'Pro')} • Active Contender</div></div>`).join('');
                 } else {
-                    hof.innerHTML = `<div class="cyber-card p-3.5 text-center space-y-2 border border-amber-500/30 bg-amber-500/5"><div class="text-xs font-extrabold text-amber-300">🏆 Season 1 Hall of Fame Standby</div><p class="text-[10px] text-slate-300">மேட்ச் முடிந்ததும் Top Booyah & Kill அடிக்கும் Squads இங்கே #1 இடத்தில் ஜொலிக்கும்!</p><button type="button" onclick="switchTab('matches')" class="btn-theme px-3 py-1 text-[10px] font-extrabold cursor-pointer">🎮 Join Active Match</button></div>`;
+                    hof.innerHTML = `<div class="cyber-card p-3.5 text-center space-y-2 border border-amber-500/30 bg-amber-500/5"><div class="text-xs font-extrabold text-amber-300">🏆 Season 1 Hall of Fame Standby</div><p class="text-[10px] text-slate-300">Top Booyah & high-kill squads are crowned here on the Season 1 Hall of Fame leaderboard!</p><button type="button" onclick="switchTab('matches')" class="btn-theme px-3 py-1 text-[10px] font-extrabold cursor-pointer">🎮 Join Active Match</button></div>`;
                 }
                 return;
             }
@@ -10637,8 +10818,188 @@ ${list}
             window.askConfirm("Add Staff", `Add ${email} as ${role.toUpperCase()}?`, async () => { if (role === 'admin') { if(!window.authorizedAdmins.includes(email)) window.authorizedAdmins.push(email); await setDoc(doc(db, 'settings', 'config'), { admins_list: window.authorizedAdmins }, { merge: true }); } else { if(!window.authorizedHosts.includes(email)) window.authorizedHosts.push(email); await setDoc(doc(db, 'settings', 'config'), { hosts_list: window.authorizedHosts }, { merge: true }); } window.showToast("Added"); window.renderStaffsLists(); }, "Yes, Add");
         }
 
-        document.getElementById('add-staff-form')?.addEventListener('submit', (e) => { e.preventDefault(); window.handleAddStaff(document.getElementById('staff-email-input').value, document.getElementById('staff-role-select').value); e.target.reset(); });
-        document.getElementById('add-host-form-ah')?.addEventListener('submit', (e) => { e.preventDefault(); window.handleAddStaff(document.getElementById('host-email-input-ah').value, 'host'); e.target.reset(); });
+        window.handleAddStaffFormSubmit = function(e, mode) {
+            if (e) e.preventDefault();
+            if (mode === 'ah') {
+                const em = document.getElementById('host-email-input-ah')?.value || '';
+                window.handleAddStaff(em, 'host');
+                document.getElementById('add-host-form-ah')?.reset();
+            } else {
+                const em = document.getElementById('staff-email-input')?.value || '';
+                const rl = document.getElementById('staff-role-select')?.value || 'host';
+                window.handleAddStaff(em, rl);
+                document.getElementById('add-staff-form')?.reset();
+            }
+        };
+
+        window.handleTournamentSettingsSubmit = async function(e) {
+            if (e) e.preventDefault();
+            if (!window.isSuperAdminGlobal) { window.showToast("⛔ Only Super Admin can update branding & rules!"); return; }
+            try {
+                const data = {
+                    announcement: document.getElementById('edit-announcement')?.value || '',
+                    brandName: document.getElementById('edit-brand-name')?.value || '',
+                    heroBadge: document.getElementById('edit-hero-badge')?.value || '',
+                    heroTitle: document.getElementById('edit-hero-title')?.value || '',
+                    heroSubtitle: document.getElementById('edit-hero-subtitle')?.value || '',
+                    f1: document.getElementById('edit-f1')?.value || '',
+                    f2: document.getElementById('edit-f2')?.value || '',
+                    f3: document.getElementById('edit-f3')?.value || '',
+                    f4: document.getElementById('edit-f4')?.value || '',
+                    rules: document.getElementById('edit-rules')?.value || ''
+                };
+                await setDoc(doc(db, 'settings', 'config'), data, { merge: true });
+                window.showToast("✅ Text & Announcement saved!");
+            } catch (err) {
+                window.showToast("❌ Failed to save settings: " + (err.message || err));
+            }
+        };
+
+        window.handleCreateMatchSubmit = async function(e, mode) {
+            if (e) e.preventDefault();
+            const isAH = (mode === 'ah');
+            const sfx = isAH ? '-ah' : '';
+            const title = window.sanitizeGodInput(document.getElementById('cm-title' + sfx)?.value || '', 80);
+            const stage = document.getElementById('cm-stage' + sfx)?.value || 'Semifinals';
+            const type = document.getElementById('cm-type' + sfx)?.value || 'paid';
+            const map = window.sanitizeGodInput(document.getElementById('cm-map' + sfx)?.value || 'Bermuda', 40);
+            const time = window.sanitizeGodInput(document.getElementById('cm-time' + sfx)?.value || 'Today 8 PM', 50);
+            const slots = Math.max(2, Math.min(100, parseInt(document.getElementById('cm-slots' + sfx)?.value) || 12));
+            const prize = window.sanitizeGodInput(document.getElementById('cm-prize-pool' + sfx)?.value || '500', 30);
+            const fee = type === 'free' ? '0' : window.sanitizeGodInput(document.getElementById('cm-fee' + sfx)?.value || '50', 20);
+            const upiId = window.sanitizeGodInput(document.getElementById('cm-upi' + sfx)?.value || 'sattapai@oksbi', 60);
+            const upiEnabled = document.getElementById('cm-upi-toggle' + sfx) ? document.getElementById('cm-upi-toggle' + sfx).checked : true;
+            const qrEnabled = document.getElementById('cm-qr-toggle' + sfx) ? document.getElementById('cm-qr-toggle' + sfx).checked : true;
+            const youtubeLink = (document.getElementById('cm-youtube' + sfx)?.value || '').trim();
+            const groupsRaw = document.getElementById('cm-groups' + sfx)?.value || 'TEAM A, TEAM B';
+            const nextStageTime = window.sanitizeGodInput(document.getElementById('cm-next-stage-time' + sfx)?.value || '', 60);
+
+            if (!title) { window.showToast("⚠️ Enter a Match Title!"); return; }
+
+            const groups = groupsRaw.split(',').map(g => g.trim().toUpperCase()).filter(Boolean);
+            const whatsappMap = {};
+            const groupTimesMap = {};
+            groups.forEach((g, idx) => {
+                const wInput = document.getElementById(isAH ? `wa-link-ah-${idx}` : `wa-link-${idx}`);
+                const tInput = document.getElementById(isAH ? `wa-time-ah-${idx}` : `wa-time-${idx}`);
+                if (wInput && wInput.value.trim()) whatsappMap[g] = wInput.value.trim();
+                if (tInput && tInput.value.trim()) groupTimesMap[g] = tInput.value.trim();
+            });
+
+            const saveMatchDoc = async (qrDataURL) => {
+                try {
+                    const matchPayload = {
+                        title, stage, type, map, time, slots, prize, fee, upiId,
+                        upiEnabled, qrEnabled, youtubeLink,
+                        groups: groups.join(', '),
+                        whatsappMap, groupTimesMap, nextStageTime,
+                        updatedAt: Date.now()
+                    };
+                    if (qrDataURL) matchPayload.qrDataURL = qrDataURL;
+
+                    if (window.editingMatchId) {
+                        await setDoc(doc(db, 'matches', window.editingMatchId), matchPayload, { merge: true });
+                        window.showToast("✅ Match Updated Successfully!");
+                        window.editingMatchId = null;
+                    } else {
+                        matchPayload.currentSlots = 0;
+                        matchPayload.status = 'open';
+                        matchPayload.createdAt = Date.now();
+                        matchPayload.createdBy = (window.loggedEmail || '').toLowerCase();
+                        await addDoc(collection(db, 'matches'), matchPayload);
+                        window.showToast("🎮 New Match Published!");
+                    }
+                    window.toggleCreateMatchForm(isAH ? 'ah' : 'sa');
+                } catch (err) {
+                    window.showToast("❌ Match save error: " + (err.message || err));
+                }
+            };
+
+            const qrFile = document.getElementById('cm-qr-file' + sfx)?.files?.[0];
+            if (qrFile) {
+                window.compressImageAndGetBase64(qrFile, (b64) => saveMatchDoc(b64));
+            } else {
+                await saveMatchDoc(null);
+            }
+        };
+
+        window.handlePaidRegistrationSubmit = async function(e) {
+            if (e) e.preventDefault();
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("🔐 Please sign in first!"); window.openLoginScreenModal(); return; }
+            if (!selectedMatchForReg || !selectedMatchForReg.id) { window.showToast("⚠️ Select a match slot first!"); window.switchTab('matches'); return; }
+            if (!window.godSecurityRateLimit('reg_submit', 4000)) return;
+
+            const teamName = window.sanitizeGodInput(document.getElementById('paid-teamName')?.value || '', 40).toUpperCase();
+            const leaderName = window.sanitizeGodInput(document.getElementById('paid-leaderName')?.value || '', 40);
+            const hometown = window.sanitizeGodInput(document.getElementById('paid-hometown')?.value || '', 40);
+            const phone = String(document.getElementById('paid-phoneNumber')?.value || '').replace(/\D/g, '');
+            const uid1 = String(document.getElementById('paid-gameUid')?.value || '').trim();
+            const uid2 = String(document.getElementById('paid-member2Uid')?.value || '').trim();
+            const uid3 = String(document.getElementById('paid-member3Uid')?.value || '').trim();
+            const uid4 = String(document.getElementById('paid-member4Uid')?.value || '').trim();
+            const sub1 = String(document.getElementById('paid-sub1Uid')?.value || '').trim();
+            const sub2 = String(document.getElementById('paid-sub2Uid')?.value || '').trim();
+            const utr = String(document.getElementById('paid-transitionId')?.value || '').trim().toUpperCase();
+
+            if (!/^[6-9][0-9]{9}$/.test(phone)) { window.showToast("⚠️ Enter a valid 10-digit WhatsApp mobile number!"); return; }
+            if (!/^[0-9]{12}$/.test(utr) && !utr.startsWith('FREE-SLOT-')) {
+                window.showToast("⚠️ Enter a valid 12-Digit UPI UTR number or FREE-SLOT voucher!");
+                return;
+            }
+            const uidCheck = window.validateUniqueGameUids([uid1, uid2, uid3, uid4]);
+            if (!uidCheck.valid) { window.showToast("⚠️ " + uidCheck.msg); return; }
+
+            const dupUtr = window.isUtrAlreadyUsed(utr);
+            if (dupUtr.used) { window.showToast("🚨 " + dupUtr.reason); return; }
+
+            try {
+                window.showToast("⏳ Verifying & Locking Match Slot...");
+                const res = await callCloudFn('registerForMatch', {
+                    matchId: selectedMatchForReg.id,
+                    slotGroup: selectedMatchForReg.group || 'TEAM A',
+                    teamData: { teamName, leaderName, hometown, phone, uid1, uid2, uid3, uid4, sub1, sub2, utr }
+                });
+                document.getElementById('registration-paid-form')?.reset();
+                window.openRegSuccessModal(res.teamId, res.teamName, res.slotGroup, res.waLink);
+            } catch (err) {
+                window.showToast("❌ " + (err.message || "Registration failed"));
+            }
+        };
+
+        window.handleFreeRegistrationSubmit = async function(e) {
+            if (e) e.preventDefault();
+            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("🔐 Please sign in first!"); window.openLoginScreenModal(); return; }
+            if (!selectedMatchForReg || !selectedMatchForReg.id) { window.showToast("⚠️ Select a match slot first!"); window.switchTab('matches'); return; }
+            if (!window.godSecurityRateLimit('reg_submit', 4000)) return;
+
+            const teamName = window.sanitizeGodInput(document.getElementById('free-teamName')?.value || '', 40).toUpperCase();
+            const leaderName = window.sanitizeGodInput(document.getElementById('free-leaderName')?.value || '', 40);
+            const hometown = window.sanitizeGodInput(document.getElementById('free-hometown')?.value || '', 40);
+            const phone = String(document.getElementById('free-phoneNumber')?.value || '').replace(/\D/g, '');
+            const uid1 = String(document.getElementById('free-gameUid')?.value || '').trim();
+            const uid2 = String(document.getElementById('free-member2Uid')?.value || '').trim();
+            const uid3 = String(document.getElementById('free-member3Uid')?.value || '').trim();
+            const uid4 = String(document.getElementById('free-member4Uid')?.value || '').trim();
+            const sub1 = String(document.getElementById('free-sub1Uid')?.value || '').trim();
+            const sub2 = String(document.getElementById('free-sub2Uid')?.value || '').trim();
+
+            if (!/^[6-9][0-9]{9}$/.test(phone)) { window.showToast("⚠️ Enter a valid 10-digit WhatsApp mobile number!"); return; }
+            const uidCheck = window.validateUniqueGameUids([uid1, uid2, uid3, uid4]);
+            if (!uidCheck.valid) { window.showToast("⚠️ " + uidCheck.msg); return; }
+
+            try {
+                window.showToast("⏳ Booking Free Match Slot...");
+                const res = await callCloudFn('registerForMatch', {
+                    matchId: selectedMatchForReg.id,
+                    slotGroup: selectedMatchForReg.group || 'TEAM A',
+                    teamData: { teamName, leaderName, hometown, phone, uid1, uid2, uid3, uid4, sub1, sub2, utr: 'FREE-ENTRY' }
+                });
+                document.getElementById('registration-free-form')?.reset();
+                window.openRegSuccessModal(res.teamId, res.teamName, res.slotGroup, res.waLink);
+            } catch (err) {
+                window.showToast("❌ " + (err.message || "Registration failed"));
+            }
+        };
 
         window.changeSquadPage = function(dir, mode) {
             const filteredList = window.getFilteredSquadsList();
@@ -10929,7 +11290,7 @@ ${list}
                 try {
                     // 1. Immediately apply to all 14 logo slots & cache in localStorage (0ms)
                     window.applyBrandLogoEverywhere(b64, null, false);
-                    window.showToast("✅ உங்க Logo Photo எல்லா இடத்திலும் Update ஆகிவிட்டது!");
+                    window.showToast("✅ Brand Logo updated and synced everywhere!");
                     // 2. Sync to Firebase Firestore settings/config if permitted
                     try {
                         await setDoc(doc(db, 'settings', 'config'), { logoDataURL: b64, updatedAt: Date.now() }, { merge: true });
@@ -10997,7 +11358,7 @@ ${list}
             }, "Remove");
         };
 
-        document.getElementById('tournament-settings-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const data = { announcement: document.getElementById('edit-announcement')?.value || '', brandName: document.getElementById('edit-brand-name').value, heroBadge: document.getElementById('edit-hero-badge').value, heroTitle: document.getElementById('edit-hero-title').value, heroSubtitle: document.getElementById('edit-hero-subtitle').value, f1: document.getElementById('edit-f1').value, f2: document.getElementById('edit-f2').value, f3: document.getElementById('edit-f3').value, f4: document.getElementById('edit-f4').value, rules: document.getElementById('edit-rules').value }; await setDoc(doc(db, 'settings', 'config'), data, { merge: true }); window.showToast("Text & Announcement saved!"); });
+// tournament-settings-form handled via window.handleTournamentSettingsSubmit
 
         window.compressImageAndGetBase64 = function(file, callback) {
             const reader = new FileReader();
@@ -11157,7 +11518,7 @@ ${list}
                     if (typeof window.renderAdminDeleteRequests === 'function') window.renderAdminDeleteRequests();
                     if (typeof window.renderAdminBansList === 'function') window.renderAdminBansList();
                     if (typeof window.initVipAndClaimsListeners === 'function') window.initVipAndClaimsListeners();
-                    if (typeof window.applyLanguageTranslations === 'function') window.applyLanguageTranslations(window.currentLang || 'tanglish');
+                    if (typeof window.applyFullSiteTranslation === 'function') window.applyFullSiteTranslation(window.currentAppLang || 'tanglish', true);
                 }
             } else if (role === 'host') {
                 const ah = document.getElementById('console-admin-host');
@@ -11172,7 +11533,7 @@ ${list}
                     if (typeof window.renderSquadsManagementList === 'function') window.renderSquadsManagementList();
                     if (typeof window.renderAdminDeleteRequests === 'function') window.renderAdminDeleteRequests();
                     if (typeof window.initVipAndClaimsListeners === 'function') window.initVipAndClaimsListeners();
-                    if (typeof window.applyLanguageTranslations === 'function') window.applyLanguageTranslations(window.currentLang || 'tanglish');
+                    if (typeof window.applyFullSiteTranslation === 'function') window.applyFullSiteTranslation(window.currentAppLang || 'tanglish', true);
                 }
             }
         };
@@ -11256,41 +11617,49 @@ ${list}
 
         
         
-        window.loginWithGithubAuth = async function() {
-            const t = document.getElementById('terms-accept-checkbox');
-            if (t && !t.checked) {
-                window.showToast("⚠️ Please accept Terms of Service & Privacy Policy to continue");
+        window.completeUserSignInSuccess = async function(userObj, credResult = null, providerLabel = 'Google') {
+            const email = window.resolveAuthUserEmail(userObj, credResult);
+            if (!email) {
+                window.showToast("⚠️ Could not read account email. Please try again.");
                 return;
             }
+            window.saveVerifiedAuthEmail(email);
+            window.closeLoginOverlayPermanently();
+            if (typeof window.checkLoginState === 'function') window.checkLoginState();
+
+            const supportLink = document.getElementById('support-email-link');
+            if (supportLink) {
+                supportLink.href = 'mailto:' + ['satta0pai', 'gmail.com'].join('@');
+                supportLink.textContent = ['satta0pai', 'gmail.com'].join('@');
+            }
+
+            if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
+            await ensureUserProfileOnLogin(userObj);
+            if (typeof window.trackVisitorStats === 'function') window.trackVisitorStats();
+            try { await updateDoc(doc(db, 'settings', 'analytics'), { logins: increment(1) }); } catch(e) {}
+            await checkSuperAdminStatus(userObj);
+            if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus();
+            if (typeof window.loadProfileUI === 'function') window.loadProfileUI();
+            if (typeof window.checkLoginState === 'function') window.checkLoginState();
+            window.showToast("✅ Welcome " + (userObj?.displayName || email));
+        };
+
+        window.loginWithGithubAuth = async function() {
+            const t = document.getElementById('terms-accept-checkbox');
+            if (t && !t.checked) t.checked = true;
             try {
-                window.showToast("Connecting with GitHub...");
                 const ghProvider = new GithubAuthProvider();
                 ghProvider.addScope('read:user');
                 ghProvider.addScope('user:email');
                 const r = await signInWithPopup(auth, ghProvider);
-                const ghEmail = (r.user.email || r.user.providerData?.[0]?.email || `gh_${r.user.uid}@github.com`).toLowerCase();
-                window.loggedEmail = ghEmail;
-                try { localStorage.setItem('satta_pai_auth_email', window.loggedEmail); } catch(e){}
-                const ov = document.getElementById('google-login-overlay');
-                if (ov) {
-                    ov.classList.add('hidden');
-                    ov.setAttribute('hidden', '');
-                    ov.setAttribute('aria-hidden', 'true');
-                    ov.setAttribute('inert', '');
-                }
-                await ensureUserProfileOnLogin(r.user);
-                if (typeof window.trackVisitorStats === 'function') window.trackVisitorStats();
-                try { await updateDoc(doc(db,'settings','analytics'), { logins: increment(1) }); } catch(e){}
-                await checkSuperAdminStatus(r.user);
-                if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus();
-                window.showToast("✅ Logged in successfully with GitHub!");
+                await window.completeUserSignInSuccess(r.user, r, 'GitHub');
             } catch(e) {
                 console.error("GitHub login error:", e);
                 if (e.code === 'auth/account-exists-with-different-credential') {
-                    window.showToast("⚠️ An account already exists with this email via Google or Facebook.");
-                } else if (e.code === 'auth/popup-closed-by-user') {
-                    window.showToast("Login cancelled.");
-                } else {
+                    window.showToast("⚠️ Account already exists with this email via Google. Please tap Continue with Google.");
+                } else if (e.code === 'auth/popup-blocked') {
+                    try { await signInWithRedirect(auth, new GithubAuthProvider()); } catch(reErr) {}
+                } else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
                     window.showToast("GitHub login: " + (e.message || "Please check credentials"));
                 }
             }
@@ -11312,39 +11681,20 @@ ${list}
 
         window.loginWithFacebookAuth = async function() {
             const t = document.getElementById('terms-accept-checkbox');
-            if (t && !t.checked) {
-                window.showToast("⚠️ Please accept Terms of Service & Privacy Policy to continue");
-                return;
-            }
+            if (t && !t.checked) t.checked = true;
             try {
-                window.showToast("Connecting with Facebook...");
                 const fbProvider = new FacebookAuthProvider();
                 fbProvider.addScope('email');
                 fbProvider.addScope('public_profile');
                 const r = await signInWithPopup(auth, fbProvider);
-                const fbEmail = (r.user.email || r.user.providerData?.[0]?.email || `fb_${r.user.uid}@facebook.com`).toLowerCase();
-                window.loggedEmail = fbEmail;
-                try { localStorage.setItem('satta_pai_auth_email', window.loggedEmail); } catch(e){}
-                const ov = document.getElementById('google-login-overlay');
-                if (ov) {
-                    ov.classList.add('hidden');
-                    ov.setAttribute('hidden', '');
-                    ov.setAttribute('aria-hidden', 'true');
-                    ov.setAttribute('inert', '');
-                }
-                await ensureUserProfileOnLogin(r.user);
-                if (typeof window.trackVisitorStats === 'function') window.trackVisitorStats();
-                try { await updateDoc(doc(db,'settings','analytics'), { logins: increment(1) }); } catch(e){}
-                await checkSuperAdminStatus(r.user);
-                if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus();
-                window.showToast("✅ Logged in successfully with Facebook!");
+                await window.completeUserSignInSuccess(r.user, r, 'Facebook');
             } catch(e) {
                 console.error("Facebook login error:", e);
                 if (e.code === 'auth/account-exists-with-different-credential') {
-                    window.showToast("⚠️ An account already exists with this email via Google. Please sign in with Google.");
-                } else if (e.code === 'auth/popup-closed-by-user') {
-                    window.showToast("Login cancelled.");
-                } else {
+                    window.showToast("⚠️ Account already exists with this email via Google. Please tap Continue with Google.");
+                } else if (e.code === 'auth/popup-blocked') {
+                    try { await signInWithRedirect(auth, new FacebookAuthProvider()); } catch(reErr) {}
+                } else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
                     window.showToast("Facebook login: " + (e.message || "Please check credentials"));
                 }
             }
@@ -11352,64 +11702,40 @@ ${list}
 
         window.loginWithGoogleAuth = async function() { 
             const t = document.getElementById('terms-accept-checkbox');
-            if (t && !t.checked) {
-                window.showToast("⚠️ Please accept Terms of Service & Privacy Policy to continue");
-                return;
-            }
+            if (t && !t.checked) t.checked = true;
             try {
+                provider.setCustomParameters({ prompt: 'select_account' });
                 const r = await signInWithPopup(auth, provider);
-                window.loggedEmail = (r.user.email || '').toLowerCase(); 
-                try { localStorage.setItem('satta_pai_auth_email', window.loggedEmail); } catch(e){} 
-                const ov = document.getElementById('google-login-overlay');
-                if (ov) {
-                    ov.classList.add('hidden');
-                    ov.setAttribute('hidden', '');
-                    ov.setAttribute('aria-hidden', 'true');
-                    ov.setAttribute('inert', '');
-                }
-                await ensureUserProfileOnLogin(r.user);
-                const supportLink = document.getElementById('support-email-link');
-                if (supportLink) {
-                    supportLink.href = 'mailto:' + ['satta0pai', 'gmail.com'].join('@');
-                    supportLink.textContent = ['satta0pai', 'gmail.com'].join('@');
-                }
-                if (typeof window.trackVisitorStats === 'function') window.trackVisitorStats(); 
-                try { await updateDoc(doc(db,'settings','analytics'), { logins: increment(1) }); } catch(e){}
-                await checkSuperAdminStatus(r.user);
-                if (typeof window.loadProfileUI === 'function') window.loadProfileUI();
-                if (typeof window.checkLoginState === 'function') window.checkLoginState();
-                window.showToast("Welcome " + (r.user.displayName || r.user.email));
+                await window.completeUserSignInSuccess(r.user, r, 'Google');
             } catch(e) {
                 console.warn("Google login catch:", e);
-                if (e.code === 'auth/popup-blocked') {
-                    window.showToast("🔄 Redirecting to Google Sign-In...");
+                // Check if auth.currentUser was already populated despite popup close/cancel warning on mobile
+                if (auth.currentUser) {
+                    await window.completeUserSignInSuccess(auth.currentUser, null, 'Google');
+                    return;
+                }
+                if (e.code === 'auth/unauthorized-domain') {
+                    window.showToast("⚠️ Domain not authorized in Firebase! Add '" + window.location.hostname + "' in Firebase Console -> Authentication -> Settings -> Authorized domains.");
+                } else if (e.code === 'auth/popup-blocked') {
+                    window.showToast("🔄 Opening Google Sign-In...");
                     try { await signInWithRedirect(auth, provider); } catch(reErr) {}
-                } else {
-                    window.showToast(e.message || "Login failed");
+                } else if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+                    window.showToast(e.message || "Login failed. Please try again.");
                 }
             }
         };
+
         window.loginAsGuest = function() {
             const t = document.getElementById('terms-accept-checkbox');
-            if (t && !t.checked) {
-                t.checked = true;
-            }
+            if (t && !t.checked) t.checked = true;
             window.loggedEmail = 'guest';
+            window._hasVerifiedAuthSession = false;
             try {
                 localStorage.removeItem('satta_pai_auth_email');
+                sessionStorage.removeItem('satta_pai_auth_email');
                 sessionStorage.setItem('satta_pai_guest_session', '1');
             } catch(e) {}
-            const ov = document.getElementById('google-login-overlay');
-            if (ov) {
-                ov.classList.add('hidden');
-                ov.setAttribute('hidden', '');
-                ov.setAttribute('aria-hidden', 'true');
-                ov.setAttribute('inert', '');
-            }
-            if (window._loginVideoRaf) {
-                cancelAnimationFrame(window._loginVideoRaf);
-                window._loginVideoRaf = null;
-            }
+            window.closeLoginOverlayPermanently();
             window.isSuperAdminGlobal = false;
             window.superAdminEmail = "";
             const supportLink = document.getElementById('support-email-link');
@@ -11424,14 +11750,17 @@ ${list}
             if (typeof window.updateHomeRegistrationBanner === 'function') window.updateHomeRegistrationBanner();
             setTimeout(() => { if (typeof window.validateAndApplySavedTheme === 'function') window.validateAndApplySavedTheme(); }, 200);
             if (typeof window.showToast === 'function') {
-                window.showToast("⚡ Entered Guest Mode! Browse matches & live scores (Sign in with Google to join matches)");
+                window.showToast("⚡ Entered Guest Mode! Browse matches & live scores.");
             }
         };
+
         window.confirmSecureLogout = function() {
             window.askConfirm("Confirm Logout", "Are you sure you want to log out of your account?", () => {
+                window._hasVerifiedAuthSession = false;
                 signOut(auth).then(() => {
                     try {
                         localStorage.removeItem('satta_pai_auth_email');
+                        sessionStorage.removeItem('satta_pai_auth_email');
                         sessionStorage.removeItem('satta_pai_guest_session');
                     } catch(e) {}
                     if (window._usersUnsubscribe) {
@@ -11450,47 +11779,23 @@ ${list}
                 });
             }, "Yes, Logout");
         };
-        // Handle Mobile Browser Redirect Result (Prevents returning to login screen on mobile browsers)
+
+        // Handle Mobile Browser Redirect Result
         getRedirectResult(auth).then(async (r) => {
             if (r && r.user) {
-                const em = window.resolveAuthUserEmail(r.user);
-                if (em) {
-                    window.loggedEmail = em;
-                    try {
-                        localStorage.setItem('satta_pai_auth_email', em);
-                        sessionStorage.setItem('satta_pai_auth_email', em);
-                        sessionStorage.removeItem('satta_pai_guest_session');
-                    } catch(e) {}
-                    const ov = document.getElementById('google-login-overlay');
-                    if (ov) { ov.classList.add('hidden'); ov.setAttribute('hidden', ''); ov.setAttribute('aria-hidden', 'true'); ov.setAttribute('inert', ''); }
-                    await ensureUserProfileOnLogin(r.user);
-                    await checkSuperAdminStatus(r.user);
-                    if (typeof window.checkLoginState === 'function') window.checkLoginState();
-                }
+                await window.completeUserSignInSuccess(r.user, r, 'Redirect');
             }
-        }).catch(() => {});
+        }).catch((err) => {
+            if (err && err.code === 'auth/unauthorized-domain') {
+                window.showToast("⚠️ Add '" + window.location.hostname + "' to Firebase Authorized Domains!");
+            }
+        });
 
         onAuthStateChanged(auth, async (u) => { 
             const resolvedEmail = window.resolveAuthUserEmail ? window.resolveAuthUserEmail(u) : (u?.email || '').toLowerCase();
             if (u && resolvedEmail) { 
-                window.loggedEmail = resolvedEmail; 
-                try {
-                    localStorage.setItem('satta_pai_auth_email', window.loggedEmail);
-                    sessionStorage.setItem('satta_pai_auth_email', window.loggedEmail);
-                    sessionStorage.removeItem('satta_pai_guest_session');
-                } catch(e) {}
-                // Immediately hide login overlay so user NEVER bounces back to sign-up screen on another phone
-                const ov = document.getElementById('google-login-overlay');
-                if (ov) {
-                    ov.classList.add('hidden');
-                    ov.setAttribute('hidden', '');
-                    ov.setAttribute('aria-hidden', 'true');
-                    ov.setAttribute('inert', '');
-                }
-                if (window._loginVideoRaf) {
-                    cancelAnimationFrame(window._loginVideoRaf);
-                    window._loginVideoRaf = null;
-                }
+                window.saveVerifiedAuthEmail(resolvedEmail);
+                window.closeLoginOverlayPermanently();
                 if (typeof window.checkLoginState === 'function') window.checkLoginState();
                 if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
                 await ensureUserProfileOnLogin(u); 
@@ -11500,24 +11805,27 @@ ${list}
                 setTimeout(() => { if (typeof window.validateAndApplySavedTheme === 'function') window.validateAndApplySavedTheme(); }, 500); 
             } else { 
                 try { 
-                    const cached = (localStorage.getItem('satta_pai_auth_email') || '').toLowerCase();
+                    const cached = (localStorage.getItem('satta_pai_auth_email') || sessionStorage.getItem('satta_pai_auth_email') || '').toLowerCase();
                     const isGuestSession = sessionStorage.getItem('satta_pai_guest_session') === '1';
                     if (cached && cached !== 'guest' && cached.includes('@')) {
                         window.loggedEmail = cached;
+                        window.closeLoginOverlayPermanently();
+                    } else if (window._hasVerifiedAuthSession && window.loggedEmail && window.loggedEmail !== 'guest' && window.loggedEmail.includes('@')) {
+                        // Preserve active in-memory login even if mobile localStorage/IndexedDB is restricted!
+                        window.closeLoginOverlayPermanently();
                     } else if (window.loggedEmail === 'guest' || isGuestSession) {
                         window.loggedEmail = 'guest';
+                        window.closeLoginOverlayPermanently();
                     } else {
                         window.loggedEmail = '';
                     }
-                    window.isSuperAdminGlobal = false; 
-                    window.superAdminEmail = ""; 
                 } catch(e) {} 
                 if (typeof window.checkLoginState === 'function') window.checkLoginState(); 
                 if (typeof window.setupPrivateDataListeners === 'function') window.setupPrivateDataListeners(); 
             }
         });
 
-        onSnapshot(collection(db, 'matches'), snap => { allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); window.allMatches = allMatches; window.renderPublicMatches(); window.renderRoadmapTab(); window.populateAllDropdowns(); if(typeof window.checkAutoRoomSirenAndTimer === 'function') window.checkAutoRoomSirenAndTimer(); });
+        onSnapshot(collection(db, 'matches'), snap => { allMatches = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); window.allMatches = allMatches; window.scheduleMatchAndTeamUIUpdate(true); if (document.getElementById('admin-matches-list') || document.getElementById('admin-matches-list-ah')) { if (typeof window.renderAdminMatches === 'function') window.renderAdminMatches(); } });
         onSnapshot(collection(db, 'registrations'), snap => { publicTeams = snap.docs.map(d => ({ id: d.id, ...d.data() })); mergePublicAndPrivateTeams(); });
 
         window.refreshVipBadgeUI = function() {
@@ -11538,10 +11846,10 @@ ${list}
             if (expiryBanner) {
                 if (isExpiringSoon) {
                     expiryBanner.classList.remove('hidden');
-                    if (expiryTitle) expiryTitle.textContent = `⚠️ உங்க Premium Pass இன்னும் ${days} நாளில் முடியப்போகுது! (Renew Now)`;
+                    if (expiryTitle) expiryTitle.textContent = `⚠️ Your Premium Pass expires in ${days} day(s)! (Renew Now)`;
                     if (!window._vipExpiryToastShown) {
                         window._vipExpiryToastShown = true;
-                        setTimeout(() => window.showToast(`⏰ Alert: உங்க Royal Premium Pass இன்னும் ${days} நாளில் முடியப்போகுது!`), 1200);
+                        setTimeout(() => window.showToast(`⏰ Alert: Your Royal Premium Pass expires in ${days} day(s)!`), 1200);
                     }
                 } else {
                     expiryBanner.classList.add('hidden');
@@ -11969,35 +12277,53 @@ ${list}
             } catch (e) { window.showToast("Error: " + e.message); }
         };
 
-        function initVipAndClaimsListeners() {
-            if (!window.loggedEmail || window.loggedEmail === 'guest') return;
+        window._vipAndClaimsUnsubs = [];
+        window._vipListenersStateKey = '';
+        function initVipAndClaimsListeners(forceRefreshUI = false) {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                if (window._vipAndClaimsUnsubs && window._vipAndClaimsUnsubs.length) {
+                    window._vipAndClaimsUnsubs.forEach(u => { try { u(); } catch(e) {} });
+                    window._vipAndClaimsUnsubs = [];
+                }
+                window._vipListenersStateKey = '';
+                return;
+            }
             const emailLow = window.loggedEmail.toLowerCase();
             const isStaff = window.isSuperAdminGlobal || isAdminEmail(emailLow);
-            try { onSnapshot(doc(db, 'vip_requests', emailLow), snap => { const notice = document.getElementById('vip-pending-notice'); if (snap.exists() && snap.data().status === 'pending') notice?.classList.remove('hidden'); else notice?.classList.add('hidden'); }); } catch(e) {}
+            const stateKey = emailLow + '|' + (isStaff ? 'staff' : 'user');
+            if (window._vipListenersStateKey === stateKey && window._vipAndClaimsUnsubs.length > 0) {
+                return;
+            }
+            window._vipAndClaimsUnsubs.forEach(u => { try { u(); } catch(e) {} });
+            window._vipAndClaimsUnsubs = [];
+            window._vipListenersStateKey = stateKey;
+
+            try { window._vipAndClaimsUnsubs.push(onSnapshot(doc(db, 'vip_requests', emailLow), snap => { const notice = document.getElementById('vip-pending-notice'); if (snap.exists() && snap.data().status === 'pending') notice?.classList.remove('hidden'); else notice?.classList.add('hidden'); })); } catch(e) {}
             try {
-                onSnapshot(doc(db, 'delete_requests', emailLow), snap => {
+                window._vipAndClaimsUnsubs.push(onSnapshot(doc(db, 'delete_requests', emailLow), snap => {
                     const badge = document.getElementById('my-delete-req-status-badge');
                     if (!badge) return;
                     if (snap.exists() && snap.data().status === 'pending') {
                         badge.classList.remove('hidden');
-                        badge.textContent = '⏳ உங்க Delete Request Admin-க்கு அனுப்பப்பட்டுள்ளது (Pending Admin Confirmation)';
+                        badge.textContent = '⏳ Your deletion request has been sent to Admin (Pending Confirmation)';
                     } else {
                         badge.classList.add('hidden');
                     }
-                });
+                }));
             } catch(e) {}
             if (!isStaff) return;
             try {
-                onSnapshot(collection(db, 'delete_requests'), snap => {
+                window._vipAndClaimsUnsubs.push(onSnapshot(collection(db, 'delete_requests'), snap => {
                     window._pendingDeleteReqs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== 'completed');
                     if (typeof window.renderAdminDeleteRequests === 'function') window.renderAdminDeleteRequests();
-                });
+                }));
             } catch(e) {}
-            try { onSnapshot(collection(db, 'vip_requests'), snap => { const box = document.getElementById('admin-vip-requests-list'); if (!box) return; const reqs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status === 'pending'); window._pendingVipReqs = reqs; if (reqs.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No pending Premium UTR requests.</div>`; return; } box.innerHTML = reqs.map(r => `<div class="cyber-card p-2.5 flex flex-wrap items-center justify-between gap-2"><div><div class="font-bold text-amber-400 flex items-center gap-1.5 flex-wrap"><span>${window.escapeHTML(r.userEmail)}</span><span class="text-[10px] text-slate-400">(${window.escapeHTML(r.playerId || '')})</span><span class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono">🤖 ${window.escapeHTML(r.aiNote || 'NPCI Verified')}</span></div><div class="font-mono text-[10px] text-emerald-400">UTR: ${window.escapeHTML(r.utr)} | ₹${r.amount || 29} • ${r.days || 28} Days</div></div><div class="flex items-center gap-1">${r.receiptThumb ? `<button type="button" onclick="previewReceiptImg('${window.escapeHTML(r.id)}')" class="px-2 py-1 bg-cyan-600 text-white rounded text-[10px] font-bold cursor-pointer">🖼️</button>` : ''}<button type="button" onclick="adminEditVipRequest('${window.escapeHTML(r.id)}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">✏️</button><button type="button" onclick="adminSetUserVip('${window.escapeHTML(r.userEmail)}', ${r.days || 28})" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold cursor-pointer">✅ ${r.days || 28}d</button><button type="button" onclick="rejectVipRequest('${window.escapeHTML(r.userEmail)}')" class="w-6 h-6 flex items-center justify-center bg-rose-600 hover:bg-rose-500 text-white rounded-md cursor-pointer transition-transform active:scale-95 shadow-sm shrink-0" aria-label="Delete"><svg class="w-3 h-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button></div></div>`).join(''); }); } catch(e) {}
-            try { onSnapshot(collection(db, 'vip_codes'), snap => { const box = document.getElementById('admin-vip-codes-list'); if (!box) return; const codes = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(c => !c.used); window._pendingVipCodes = codes; if (codes.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No active unused keys. Click "+ Key" above!</div>`; return; } box.innerHTML = codes.map(c => `<div class="cyber-card px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px]"><span class="text-purple-300 font-bold">${window.escapeHTML(c.code)} (${c.days || 28}d)</span><div class="flex gap-1"><button type="button" onclick="executeCopyOrShare('${window.escapeHTML(c.code)}', 'Premium Code')" class="px-2 py-0.5 bg-blue-600 text-white rounded text-[9px] font-sans font-bold cursor-pointer">📋 Copy</button><button type="button" onclick="adminEditVipCode('${window.escapeHTML(c.code)}', ${c.days || 28})" class="px-2 py-0.5 bg-amber-500 text-black rounded text-[9px] font-sans font-bold cursor-pointer">✏️</button><button type="button" onclick="deleteDoc(doc(db, 'vip_codes', '${window.escapeHTML(c.code)}'))" class="px-2 py-0.5 bg-rose-600 text-white rounded text-[9px] font-sans font-bold cursor-pointer">🗑️</button></div></div>`).join(''); }); } catch(e) {}
-            try { onSnapshot(collection(db, 'prize_claims'), snap => { const box = document.getElementById('admin-prize-claims-list'); if (!box) return; const claims = snap.docs.map(d => ({ id: d.id, ...d.data() })); window._pendingPrizeClaims = claims; if (claims.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No prize claims submitted yet.</div>`; return; } box.innerHTML = claims.map(c => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-amber-300">${window.escapeHTML(c.teamName)} <span class="text-[10px] text-slate-400">(${window.escapeHTML(c.matchTitle || 'Match')})</span></div><div class="font-mono text-[10px] text-emerald-400">UPI: ${window.escapeHTML(c.upiId)} | By: ${window.maskEmail(c.userEmail)}</div></div><div class="flex gap-1"><button type="button" onclick="executeCopyOrShare('${window.escapeHTML(c.upiId)}', 'Winner UPI')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">📋 UPI</button><button type="button" onclick="adminEditPrizeClaim('${c.id}')" class="px-2 py-1 bg-amber-500 text-black rounded text-[10px] font-bold cursor-pointer">✏️</button><button type="button" onclick="deleteDoc(doc(db, 'prize_claims', '${c.id}'))" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">🗑️</button></div></div>`).join(''); }); } catch(e) {}
-            try { onSnapshot(collection(db, 'cheat_reports'), snap => { const box = document.getElementById('admin-cheat-reports-list'); if (!box) return; const reps = snap.docs.map(d => ({ id: d.id, ...d.data() })); window._pendingCheatReports = reps; if (reps.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No hacker reports pending.</div>`; return; } box.innerHTML = reps.map(r => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-rose-400">${window.escapeHTML(r.suspectName)} <span class="font-mono text-[10px] text-amber-300">(UID: ${window.escapeHTML(r.suspectUid)})</span></div><div class="text-[10px] text-slate-300">${window.escapeHTML(r.reason)} ${r.proofLink ? `• <a href="${window.escapeHTML(r.proofLink)}" target="_blank" class="text-emerald-400 underline">Proof</a>` : ''}</div></div><div class="flex gap-1"><button type="button" onclick="adminEditCheatReport('${r.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">✏️</button><button type="button" onclick="deleteDoc(doc(db, 'cheat_reports', '${r.id}'))" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">🗑️</button></div></div>`).join(''); }); } catch(e) {}
+            try { window._vipAndClaimsUnsubs.push(onSnapshot(collection(db, 'vip_requests'), snap => { const box = document.getElementById('admin-vip-requests-list'); if (!box) return; const reqs = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status === 'pending'); window._pendingVipReqs = reqs; if (reqs.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No pending Premium UTR requests.</div>`; return; } box.innerHTML = reqs.map(r => `<div class="cyber-card p-2.5 flex flex-wrap items-center justify-between gap-2"><div><div class="font-bold text-amber-400 flex items-center gap-1.5 flex-wrap"><span>${window.escapeHTML(r.userEmail)}</span><span class="text-[10px] text-slate-400">(${window.escapeHTML(r.playerId || '')})</span><span class="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[9px] font-mono">🤖 ${window.escapeHTML(r.aiNote || 'NPCI Verified')}</span></div><div class="font-mono text-[10px] text-emerald-400">UTR: ${window.escapeHTML(r.utr)} | ₹${r.amount || 29} • ${r.days || 28} Days</div></div><div class="flex items-center gap-1">${r.receiptThumb ? `<button type="button" onclick="previewReceiptImg('${window.escapeHTML(r.id)}')" class="px-2 py-1 bg-cyan-600 text-white rounded text-[10px] font-bold cursor-pointer">🖼️</button>` : ''}<button type="button" onclick="adminEditVipRequest('${window.escapeHTML(r.id)}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">✏️</button><button type="button" onclick="adminSetUserVip('${window.escapeHTML(r.userEmail)}', ${r.days || 28})" class="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-bold cursor-pointer">✅ ${r.days || 28}d</button><button type="button" onclick="rejectVipRequest('${window.escapeHTML(r.userEmail)}')" class="w-6 h-6 flex items-center justify-center bg-rose-600 hover:bg-rose-500 text-white rounded-md cursor-pointer transition-transform active:scale-95 shadow-sm shrink-0" aria-label="Delete"><svg class="w-3 h-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button></div></div>`).join(''); })); } catch(e) {}
+            try { window._vipAndClaimsUnsubs.push(onSnapshot(collection(db, 'vip_codes'), snap => { const box = document.getElementById('admin-vip-codes-list'); if (!box) return; const codes = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(c => !c.used); window._pendingVipCodes = codes; if (codes.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No active unused keys. Click "+ Key" above!</div>`; return; } box.innerHTML = codes.map(c => `<div class="cyber-card px-2.5 py-1.5 flex items-center justify-between font-mono text-[11px]"><span class="text-purple-300 font-bold">${window.escapeHTML(c.code)} (${c.days || 28}d)</span><div class="flex gap-1"><button type="button" onclick="executeCopyOrShare('${window.escapeHTML(c.code)}', 'Premium Code')" class="px-2 py-0.5 bg-blue-600 text-white rounded text-[9px] font-sans font-bold cursor-pointer">📋 Copy</button><button type="button" onclick="adminEditVipCode('${window.escapeHTML(c.code)}', ${c.days || 28})" class="px-2 py-0.5 bg-amber-500 text-black rounded text-[9px] font-sans font-bold cursor-pointer">✏️</button><button type="button" onclick="deleteDoc(doc(db, 'vip_codes', '${window.escapeHTML(c.code)}'))" class="px-2 py-0.5 bg-rose-600 text-white rounded text-[9px] font-sans font-bold cursor-pointer">🗑️</button></div></div>`).join(''); })); } catch(e) {}
+            try { window._vipAndClaimsUnsubs.push(onSnapshot(collection(db, 'prize_claims'), snap => { const box = document.getElementById('admin-prize-claims-list'); if (!box) return; const claims = snap.docs.map(d => ({ id: d.id, ...d.data() })); window._pendingPrizeClaims = claims; if (claims.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No prize claims submitted yet.</div>`; return; } box.innerHTML = claims.map(c => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-amber-300">${window.escapeHTML(c.teamName)} <span class="text-[10px] text-slate-400">(${window.escapeHTML(c.matchTitle || 'Match')})</span></div><div class="font-mono text-[10px] text-emerald-400">UPI: ${window.escapeHTML(c.upiId)} | By: ${window.maskEmail(c.userEmail)}</div></div><div class="flex gap-1"><button type="button" onclick="executeCopyOrShare('${window.escapeHTML(c.upiId)}', 'Winner UPI')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">📋 UPI</button><button type="button" onclick="adminEditPrizeClaim('${c.id}')" class="px-2 py-1 bg-amber-500 text-black rounded text-[10px] font-bold cursor-pointer">✏️</button><button type="button" onclick="deleteDoc(doc(db, 'prize_claims', '${c.id}'))" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">🗑️</button></div></div>`).join(''); })); } catch(e) {}
+            try { window._vipAndClaimsUnsubs.push(onSnapshot(collection(db, 'cheat_reports'), snap => { const box = document.getElementById('admin-cheat-reports-list'); if (!box) return; const reps = snap.docs.map(d => ({ id: d.id, ...d.data() })); window._pendingCheatReports = reps; if (reps.length === 0) { box.innerHTML = `<div class="text-[11px] text-slate-500">No hacker reports pending.</div>`; return; } box.innerHTML = reps.map(r => `<div class="cyber-card p-2.5 flex items-center justify-between gap-2"><div><div class="font-bold text-rose-400">${window.escapeHTML(r.suspectName)} <span class="font-mono text-[10px] text-amber-300">(UID: ${window.escapeHTML(r.suspectUid)})</span></div><div class="text-[10px] text-slate-300">${window.escapeHTML(r.reason)} ${r.proofLink ? `• <a href="${window.escapeHTML(r.proofLink)}" target="_blank" class="text-emerald-400 underline">Proof</a>` : ''}</div></div><div class="flex gap-1"><button type="button" onclick="adminEditCheatReport('${r.id}')" class="px-2 py-1 bg-blue-600 text-white rounded text-[10px] font-bold cursor-pointer">✏️</button><button type="button" onclick="deleteDoc(doc(db, 'cheat_reports', '${r.id}'))" class="px-2 py-1 bg-rose-600 text-white rounded text-[10px] font-bold cursor-pointer">🗑️</button></div></div>`).join(''); })); } catch(e) {}
         }
+        window.initVipAndClaimsListeners = initVipAndClaimsListeners;
 
         // === 🎁 SP COINS, LUCKY SPIN WHEEL & REFER-A-FRIEND ===
         window.currentUserSpCoins = 0;
@@ -12343,11 +12669,11 @@ ${list}
             window.switchArenaHubTab(tab);
             const cList = document.getElementById('clash-challenges-list');
             if (cList && !cList.innerHTML.trim()) {
-                cList.innerHTML = `<div class="cyber-card p-4 text-center space-y-1.5 border border-amber-500/30 bg-amber-500/5"><div class="text-xs font-extrabold text-amber-400">⚔️ Open 1v1 / 4v4 Custom Room Board</div><p class="text-[10px] text-slate-300">மேலே உங்க Mode, Rules & Contact கொடுத்து முதல் 1v1 / 4v4 சவாலை போடுங்க!</p></div>`;
+                cList.innerHTML = `<div class="cyber-card p-4 text-center space-y-1.5 border border-amber-500/30 bg-amber-500/5"><div class="text-xs font-extrabold text-amber-400">⚔️ Open 1v1 / 4v4 Custom Room Board</div><p class="text-[10px] text-slate-300">Enter your Mode, Rules & Contact above to post an open 1v1 / 4v4 Clash challenge!</p></div>`;
             }
             const rList = document.getElementById('team-recruitments-list');
             if (rList && !rList.innerHTML.trim()) {
-                rList.innerHTML = `<div class="cyber-card p-4 text-center space-y-1.5 border border-emerald-500/30 bg-emerald-500/5"><div class="text-xs font-extrabold text-emerald-400">🤝 Squad Recruitment & LFT Board</div><p class="text-[10px] text-slate-300">உங்க Squad-க்கு Rusher / Sniper / IGL தேவையா? மேலே Post Recruitment தட்டுங்க!</p></div>`;
+                rList.innerHTML = `<div class="cyber-card p-4 text-center space-y-1.5 border border-emerald-500/30 bg-emerald-500/5"><div class="text-xs font-extrabold text-emerald-400">🤝 Squad Recruitment & LFT Board</div><p class="text-[10px] text-slate-300">Looking for a Rusher, Sniper, or IGL for your squad? Post a recruitment listing above!</p></div>`;
             }
             if (!_arenaListenersStarted) {
                 _arenaListenersStarted = true;
@@ -12814,7 +13140,7 @@ ${list}
             'anime-live': {
                 badge: '⚡ ANIME',
                 mood: 'CYBER SAMURAI 🌸',
-                bubble: '🌸 Senpai! இன்னைக்கு Booyah நம்ம Squad-க்கு தான்! ⚡',
+                bubble: '🌸 Senpai! Today Booyah belongs to our Squad! ⚡',
                 headerEmoji: '🌸',
                 fabSvg: `<svg class="mecha-visor-svg" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 18L18 4L28 14L32 6L36 14L46 4L56 18L52 44L32 52L12 44L8 18Z" fill="#1e0936" stroke="#ff2a85" stroke-width="2.2"/>
@@ -12829,7 +13155,7 @@ ${list}
             'cat-live': {
                 badge: '🐱 NEKO CYBER',
                 mood: 'CUTE & DEADLY 🐾',
-                bubble: 'Nyaa~! Booyah அடிக்க தயாரா நண்பா? 🐾 Meow!',
+                bubble: 'Nyaa~! Ready to hit Booyah today? 🐾 Meow!',
                 headerEmoji: '🐱',
                 fabSvg: `<svg class="mecha-visor-svg" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <polygon points="12,18 20,4 28,16" fill="#f472b6" stroke="#c084fc" stroke-width="1.8"/>
@@ -12854,7 +13180,7 @@ ${list}
             'ghost-live': {
                 badge: '👻 GHOST',
                 mood: 'GRIM REAPER 💀',
-                bubble: '👻 Bwahaha... தைரியம் இருந்தா கேளு நண்பா! 💀',
+                bubble: '👻 Bwahaha... Ask if you dare! 💀',
                 headerEmoji: '👻',
                 fabSvg: `<svg class="mecha-visor-svg" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- Dark Grim Reaper Jagged Hood -->
@@ -12877,7 +13203,7 @@ ${list}
             'teddy-live': {
                 badge: '🧸 TEDDY',
                 mood: 'TEDDY AI 🧸',
-                bubble: '🧸 Teddy AI Ready • கேளுங்க நண்பா!',
+                bubble: '🧸 Teddy AI Ready • Ask me anything!',
                 headerEmoji: '🧸',
                 fabSvg: `<svg class="mecha-visor-svg" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- Cute Teddy Ears -->
@@ -13637,7 +13963,7 @@ ${list}
                 box.innerHTML = `<div class="cyber-card p-4 text-center space-y-2 border border-cyan-500/30 bg-cyan-500/5">
                     <div class="text-xl">🛡️</div>
                     <div class="text-xs font-extrabold text-cyan-300">Create the #1 Official Esports Clan!</div>
-                    <p class="text-[10px] text-slate-300">இன்னும் எந்த Clan-உம் உருவாக்கப்படவில்லை. மேலே உங்க Clan Tag & Name கொடுத்து முதல் Official Clan-ஐ உருவாக்குங்க!</p>
+                    <p class="text-[10px] text-slate-300">No clans created yet. Enter your Clan Tag & Name above to create the first Official Clan!</p>
                     <button type="button" onclick="document.getElementById('clan-tag-input')?.focus()" class="btn-theme px-3 py-1.5 text-[10px] font-extrabold cursor-pointer">⚡ Create First Clan Above</button>
                 </div>`;
                 return;
@@ -14119,7 +14445,7 @@ ${list}
                 box.innerHTML = `<div class="cyber-card p-4 text-center space-y-2 border border-orange-500/30 bg-orange-500/5">
                     <div class="text-xl">🔥</div>
                     <div class="text-xs font-extrabold text-orange-300">Nominate Today's Top Fragger!</div>
-                    <p class="text-[10px] text-slate-300">மேலே உங்க சிறந்த பிளேயர் IGN கொடுத்து MVP பட்டியலில் சேருங்கள் & ஓட்டு போட்டு +5 SP Coins வெல்லுங்கள்!</p>
+                    <p class="text-[10px] text-slate-300">Submit your top player IGN above to join the MVP Leaderboard & vote to earn +5 SP Coins!</p>
                     <button type="button" onclick="document.getElementById('mvp-player-ign-input')?.focus()" class="btn-theme px-3 py-1.5 text-[10px] font-extrabold cursor-pointer">🔥 Nominate First MVP Above</button>
                 </div>`;
                 return;
@@ -15495,7 +15821,7 @@ ${list}
             const mySquads = (window.allTeams || []).filter(t => (t.userEmail || '').toLowerCase() === emailLow);
             const squadNames = mySquads.map(t => t.teamName).join(', ') || 'None';
 
-            window.askConfirm("Send Delete Request", "உங்க Account / Squad Delete Request-ஐ Admin-க்கு அனுப்பவா? Admin Confirm செய்ததும் Delete ஆகும்.", async () => {
+            window.askConfirm("Send Delete Request", "Submit your Account / Squad deletion request to Admin? It will be removed upon Admin confirmation.", async () => {
                 const payload = {
                     id: emailLow,
                     userEmail: emailLow,
@@ -15516,7 +15842,7 @@ ${list}
                 const badge = document.getElementById('my-delete-req-status-badge');
                 if (badge) {
                     badge.classList.remove('hidden');
-                    badge.textContent = '⏳ உங்க Delete Request Admin-க்கு அனுப்பப்பட்டுள்ளது! (Pending Admin Confirmation)';
+                    badge.textContent = '⏳ Your deletion request has been sent to Admin! (Pending Confirmation)';
                 }
                 const rInp = document.getElementById('user-delete-req-reason');
                 if (rInp) rInp.value = '';
