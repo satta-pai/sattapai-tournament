@@ -4690,8 +4690,7 @@ html.theme-ghost-live {
                 welcome: (p7, p14, p28, disc) => `👋 **வணக்கம் நண்பா! நான் Satta Pai AI உதவி பாட்!** 🎮
 • 🎮 **மேட்ச் & Room ID** விவரங்கள்
 • ⭐ **VIP Pro Pass:** ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) (${disc}% தள்ளுபடி)
-• 🎯 **Headshot Sensi & Free Coins**
-கீழே உள்ள பட்டனைத் தட்டுங்க அல்லது உங்க கேள்வியை டைப் பண்ணுங்க!`
+• 📱 **உங்க Phone Model பெயரை டைப் பண்ணுங்க** (4GB/6GB/8GB Headshot Sensi உடனே கிடைக்கும்!)`
             },
             tanglish: {
                 name: 'Tanglish (தமிழ் + English)',
@@ -6223,13 +6222,26 @@ Tap a quick button below or type your question!`
             appendBotMessage('ai', pack.welcome(p7, p14, p28, disc));
         };
 
-        function appendBotMessage(sender, text) {
+        function appendBotMessage(sender, text, quickPills = null) {
             const box = document.getElementById('ai-bot-messages');
             if (!box) return;
             const div = document.createElement('div');
             div.className = sender === 'user' ? 'bot-msg-bubble bot-msg-user' : 'bot-msg-bubble bot-msg-ai';
             const formatted = window.escapeHTML(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
             div.innerHTML = formatted;
+            if (Array.isArray(quickPills) && quickPills.length > 0) {
+                const pillWrap = document.createElement('div');
+                pillWrap.className = 'flex flex-wrap gap-1 mt-2 pt-1.5 border-t border-white/10';
+                quickPills.forEach(p => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'px-2 py-0.5 rounded-md bg-cyan-500/20 hover:bg-cyan-500/35 text-cyan-300 border border-cyan-500/40 text-[10px] font-extrabold cursor-pointer transition-all';
+                    btn.textContent = p.label;
+                    btn.onclick = () => window.sendBotQuickQuery(p.query);
+                    pillWrap.appendChild(btn);
+                });
+                div.appendChild(pillWrap);
+            }
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
             return div;
@@ -6250,21 +6262,272 @@ Tap a quick button below or type your question!`
             return 'happy';
         }
 
-        window.handleAiBotSend = async function() {
-            if (!window.isGoogleAuthenticatedUser()) {
-                window.showToast('🔐 Guest users cannot use AI! Please Sign in with Google.');
-                return;
+        // =====================================================================
+        // 🎯 PRO DEVICE-SPECIFIC FREE FIRE SENSITIVITY & RAM VARIATION ENGINE
+        // =====================================================================
+        const PHONE_BRAND_PROFILES = {
+            iphone: {
+                brand: 'Apple iPhone (iOS)',
+                touchType: 'Ultra-Fast iOS Metal Touch (120Hz/240Hz)',
+                baseGen: 176, baseRed: 168, base2x: 164, base4x: 158, baseSniper: 115, baseFire: 38,
+                dragTip: 'Light J-Drag (iOS touch is naturally super-fast; do NOT over-drag)',
+                dpi4: 'Default iOS (Gliding Cursor: Individual / Fast)',
+                dpi6: 'Default iOS (Touch Accommodations: OFF)',
+                dpi8: 'Default iOS (120Hz ProMotion Smooth Lock)',
+                examples: ['iPhone 11', 'iPhone 12', 'iPhone 13', 'iPhone 14', 'iPhone 15 Pro']
+            },
+            iqoo: {
+                brand: 'iQOO Gaming Series',
+                touchType: '300Hz–1200Hz Instant Touch Sampling',
+                baseGen: 184, baseRed: 176, base2x: 172, base4x: 165, baseSniper: 120, baseFire: 41,
+                dragTip: 'Quick Straight Up-Drag (Enable Ultra Game Mode -> Motion Control)',
+                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: 'Default / 480 DPI',
+                examples: ['iQOO Z9 5G', 'iQOO Z7 Pro', 'iQOO Neo 7', 'iQOO Neo 9 Pro', 'iQOO 12']
+            },
+            poco: {
+                brand: 'POCO Series',
+                touchType: '240Hz Game Turbo Touch Response',
+                baseGen: 188, baseRed: 182, base2x: 176, base4x: 170, baseSniper: 122, baseFire: 43,
+                dragTip: 'Sharp J-Drag from chest level + Game Turbo Touch Boost MAX',
+                dpi4: '450 DPI', dpi6: '470 DPI', dpi8: '490 DPI',
+                examples: ['POCO M6 Pro', 'POCO X5 Pro', 'POCO X6 / X6 Pro', 'POCO F5 / F6', 'POCO C65']
+            },
+            redmi: {
+                brand: 'Redmi / Xiaomi Series',
+                touchType: 'MIUI / HyperOS Balanced Touch',
+                baseGen: 192, baseRed: 186, base2x: 180, base4x: 174, baseSniper: 125, baseFire: 45,
+                dragTip: 'Firm Upward Drag + Set Pointer Speed to Full in Settings',
+                dpi4: '440 DPI (Pointer Speed Max)', dpi6: '465 DPI', dpi8: '485 DPI',
+                examples: ['Redmi 12 5G', 'Redmi 13C', 'Redmi Note 11', 'Redmi Note 12', 'Redmi Note 13 Pro']
+            },
+            vivo: {
+                brand: 'Vivo Series',
+                touchType: 'Funtouch OS Smooth Touch',
+                baseGen: 190, baseRed: 184, base2x: 178, base4x: 172, baseSniper: 124, baseFire: 44,
+                dragTip: 'Smooth J-Drag + Ultra Game Mode -> Esports Mode ON',
+                dpi4: '435 DPI', dpi6: '460 DPI', dpi8: '480 DPI',
+                examples: ['Vivo T2x 5G', 'Vivo T3 5G', 'Vivo Y20 / Y16', 'Vivo Y200', 'Vivo V29 / V30']
+            },
+            realme: {
+                brand: 'Realme / Narzo Series',
+                touchType: 'Realme UI HyperTouch Engine',
+                baseGen: 189, baseRed: 183, base2x: 177, base4x: 171, baseSniper: 122, baseFire: 43,
+                dragTip: 'Quick Rotation Drag + HyperBoost Touch Optimization ON',
+                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: '480 DPI',
+                examples: ['Realme 11x 5G', 'Realme 12 Pro', 'Realme Narzo 60x', 'Realme Narzo 70', 'Realme C55']
+            },
+            oppo: {
+                brand: 'OPPO Series',
+                touchType: 'ColorOS Precision Touch',
+                baseGen: 191, baseRed: 185, base2x: 179, base4x: 173, baseSniper: 124, baseFire: 44,
+                dragTip: 'Medium-Fast Upward Drag + Game Space Pro Mode ON',
+                dpi4: '435 DPI', dpi6: '455 DPI', dpi8: '475 DPI',
+                examples: ['OPPO A57 / A78', 'OPPO A59 5G', 'OPPO F23 / F25 Pro', 'OPPO K12x', 'OPPO Reno 11']
+            },
+            samsung: {
+                brand: 'Samsung Galaxy Series',
+                touchType: 'OneUI High-Friction Precision Touch',
+                baseGen: 194, baseRed: 188, base2x: 182, base4x: 176, baseSniper: 128, baseFire: 46,
+                dragTip: 'Turn ON "Touch Sensitivity" in Display Settings + Fast Upward Drag',
+                dpi4: '450 DPI (Touch Sensitivity ON)', dpi6: '475 DPI', dpi8: '500 DPI',
+                examples: ['Samsung A14 / A15', 'Samsung M14 / M34', 'Samsung F14 / F54', 'Samsung A34 / A54', 'Samsung S23 / S24']
+            },
+            oneplus: {
+                brand: 'OnePlus / Nord Series',
+                touchType: 'OxygenOS 240Hz HyperTouch',
+                baseGen: 183, baseRed: 175, base2x: 170, base4x: 164, baseSniper: 118, baseFire: 40,
+                dragTip: 'Short Controlled J-Drag (High touch response — avoid heavy pull)',
+                dpi4: '430 DPI', dpi6: '450 DPI', dpi8: 'Default / 470 DPI',
+                examples: ['OnePlus Nord CE 3 Lite', 'OnePlus Nord CE 4', 'OnePlus Nord 3', 'OnePlus 11R', 'OnePlus 12R']
+            },
+            infinix: {
+                brand: 'Infinix / Tecno Gaming Series',
+                touchType: 'XArena Dar-Link Touch Engine',
+                baseGen: 192, baseRed: 186, base2x: 180, base4x: 174, baseSniper: 125, baseFire: 45,
+                dragTip: 'Fast Straight Drag + XArena Graphic & Touch Boost ON',
+                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: '480 DPI',
+                examples: ['Infinix GT 10 / GT 20 Pro', 'Infinix Note 30 / 40', 'Infinix Hot 40i', 'Tecno Pova 5 / 6 Pro', 'Tecno Spark 20']
+            },
+            moto: {
+                brand: 'Motorola / Nothing / Other Android',
+                touchType: 'Stock Android Clean Touch',
+                baseGen: 188, baseRed: 182, base2x: 176, base4x: 170, baseSniper: 122, baseFire: 43,
+                dragTip: 'Smooth J-Drag + Pointer Speed 100% in System Settings',
+                dpi4: '435 DPI', dpi6: '455 DPI', dpi8: '475 DPI',
+                examples: ['Moto G54 / G84', 'Moto Edge 40 / 50', 'Nothing Phone 2a', 'Asus ROG', 'Lava Blaze']
             }
+        };
+
+        window.detectPhoneModelFromQuery = function(rawQuery) {
+            const q = String(rawQuery || '').trim();
+            const low = q.toLowerCase();
+
+            // Check if query mentions any phone brand or common model series
+            const brandMatchers = [
+                { key: 'iphone', rx: /\b(iphone|ios|ipad|apple)\b/i },
+                { key: 'iqoo', rx: /\b(iqoo|iq00|z6|z7|z9|neo 6|neo 7|neo 9)\b/i },
+                { key: 'poco', rx: /\b(poco|x3|x4|x5|x6|m3|m4|m5|m6|f4|f5|f6|c55|c65)\b/i },
+                { key: 'redmi', rx: /\b(redmi|xiaomi|mi |note 9|note 10|note 11|note 12|note 13|note 14|12 5g|13c|12c|10c|9a|k50|k20)\b/i },
+                { key: 'vivo', rx: /\b(vivo|t1|t2|t2x|t3|t3x|y16|y20|y21|y22|y36|y56|y100|y200|v23|v25|v27|v29|v30)\b/i },
+                { key: 'realme', rx: /\b(realme|narzo|c33|c35|c53|c55|c67|10 pro|11x|11 pro|12x|12 pro|gt neo)\b/i },
+                { key: 'oppo', rx: /\b(oppo|reno|a15|a16|a17|a38|a54|a57|a58|a59|a78|a79|f19|f21|f23|f25|k10|k12)\b/i },
+                { key: 'samsung', rx: /\b(samsung|galaxy|a12|a13|a14|a15|a23|a34|a54|m13|m14|m33|m34|f13|f14|f23|f54|s21|s22|s23|s24)\b/i },
+                { key: 'oneplus', rx: /\b(oneplus|one plus|nord|ce 2|ce 3|ce 4|10r|11r|12r)\b/i },
+                { key: 'infinix', rx: /\b(infinix|tecno|pova|spark|hot 12|hot 30|hot 40|gt 10|gt 20|zero 30)\b/i },
+                { key: 'moto', rx: /\b(moto|motorola|nothing|rog|asus|lava|iq|g34|g54|g64|g84|edge 40|edge 50)\b/i }
+            ];
+
+            let matchedKey = null;
+            for (const bm of brandMatchers) {
+                if (bm.rx.test(low)) {
+                    matchedKey = bm.key;
+                    break;
+                }
+            }
+            if (!matchedKey) return null;
+
+            const profile = PHONE_BRAND_PROFILES[matchedKey];
+            // Extract clean model name from user's message (strip words like sensi, headshot, ram, etc.)
+            let cleanModel = q.replace(/\b(sensi|sensitivity|headshot|setting|settings|for|oda|ku|la|bro|nanba|enakku|venum|sollu|what|is|the|best|ff|free fire|movement|speed)\b/gi, ' ')
+                              .replace(/\s+/g, ' ').trim();
+            if (!cleanModel || cleanModel.length < 2) {
+                cleanModel = profile.brand;
+            } else {
+                // Capitalize nicely
+                cleanModel = cleanModel.split(' ').map(w => w.length <= 3 ? w.toUpperCase() : (w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
+            }
+
+            // Deterministic slight model hash (-2 to +2) so specific model numbers (e.g. Vivo Y20 vs Vivo V29) get model-tuned precision
+            let modelShift = 0;
+            for (let i = 0; i < cleanModel.length; i++) modelShift += cleanModel.charCodeAt(i);
+            const offset = (modelShift % 5) - 2;
+            // Pro / Ultra / GT / Max models have faster touch panels -> slightly lower General (-2) for steadier headshot lock
+            const isProModel = /\b(pro|ultra|max|gt|neo|edge|plus|f5|f6|x6)\b/i.test(low);
+            const proAdj = isProModel ? -2 : 1;
+
+            const clamp200 = (v) => Math.min(200, Math.max(100, Math.round(v)));
+
+            // Build exact 3 RAM Variations (3GB/4GB, 6GB, 8GB/12GB+)
+            const var4gb = {
+                ram: '3GB / 4GB RAM Variant (Max Speed Boost)',
+                general: clamp200(profile.baseGen + 7 + offset + proAdj),
+                redDot: clamp200(profile.baseRed + 6 + offset),
+                scope2x: clamp200(profile.base2x + 5 + offset),
+                scope4x: clamp200(profile.base4x + 5 + offset),
+                sniper: clamp200(profile.baseSniper + 4),
+                freeLook: clamp200(145 + offset),
+                fireBtn: `${profile.baseFire + 3}%`,
+                dpi: profile.dpi4
+            };
+
+            const var6gb = {
+                ram: '6GB RAM Variant (Balanced Speed + Headshot Lock)',
+                general: clamp200(profile.baseGen + 1 + offset + proAdj),
+                redDot: clamp200(profile.baseRed + 1 + offset),
+                scope2x: clamp200(profile.base2x + offset),
+                scope4x: clamp200(profile.base4x + offset),
+                sniper: clamp200(profile.baseSniper),
+                freeLook: clamp200(138 + offset),
+                fireBtn: `${profile.baseFire}%`,
+                dpi: profile.dpi6
+            };
+
+            const var8gb = {
+                ram: '8GB / 12GB RAM Variant (High-FPS Recoil Lock)',
+                general: clamp200(profile.baseGen - 5 + offset + proAdj),
+                redDot: clamp200(profile.baseRed - 5 + offset),
+                scope2x: clamp200(profile.base2x - 4 + offset),
+                scope4x: clamp200(profile.base4x - 4 + offset),
+                sniper: clamp200(profile.baseSniper - 4),
+                freeLook: clamp200(132 + offset),
+                fireBtn: `${profile.baseFire - 3}%`,
+                dpi: profile.dpi8
+            };
+
+            // Detect if user specifically asked for 4gb, 6gb, 8gb, or 12gb
+            let requestedRam = null;
+            if (/\b(2gb|3gb|4gb|4 gb|3 gb)\b/i.test(low)) requestedRam = '4gb';
+            else if (/\b(6gb|6 gb)\b/i.test(low)) requestedRam = '6gb';
+            else if (/\b(8gb|12gb|16gb|8 gb|12 gb)\b/i.test(low)) requestedRam = '8gb';
+
+            return {
+                modelName: cleanModel,
+                profile,
+                var4gb,
+                var6gb,
+                var8gb,
+                requestedRam
+            };
+        };
+
+        window.formatDeviceSensitivityReply = function(data) {
+            const { modelName, profile, var4gb, var6gb, var8gb } = data;
+            const lang = window.currentAppLang || 'tanglish';
+
+            if (lang === 'en') {
+                return `🎯 **${modelName} — Pro Headshot & Movement Sensitivity (0–200 Scale)**
+*(Calibrated for ${profile.touchType})*
+
+🔹 **1. ${var4gb.ram}:**
+• **General (Movement):** ${var4gb.general} | **Red Dot (One-Tap):** ${var4gb.redDot}
+• **2x Scope:** ${var4gb.scope2x} | **4x Scope:** ${var4gb.scope4x} | **Sniper:** ${var4gb.sniper}
+• **Fire Button:** ${var4gb.fireBtn} | **Recommended DPI:** ${var4gb.dpi}
+
+🔹 **2. ${var6gb.ram}:**
+• **General (Movement):** ${var6gb.general} | **Red Dot (One-Tap):** ${var6gb.redDot}
+• **2x Scope:** ${var6gb.scope2x} | **4x Scope:** ${var6gb.scope4x} | **Sniper:** ${var6gb.sniper}
+• **Fire Button:** ${var6gb.fireBtn} | **Recommended DPI:** ${var6gb.dpi}
+
+🔹 **3. ${var8gb.ram}:**
+• **General (Movement):** ${var8gb.general} | **Red Dot (One-Tap):** ${var8gb.redDot}
+• **2x Scope:** ${var8gb.scope2x} | **4x Scope:** ${var8gb.scope4x} | **Sniper:** ${var8gb.sniper}
+• **Fire Button:** ${var8gb.fireBtn} | **Recommended DPI:** ${var8gb.dpi}
+
+⚡ **Pro Gameplay Tip:** ${profile.dragTip}. Set Graphics to **Smooth/Standard + High FPS (60/90 FPS)** for instant 360° gloo wall & crisp red-number headshots!`;
+            }
+
+            // Default Tanglish / Tamil clear & direct output
+            return `🎯 **${modelName} — Free Fire One-Tap Headshot & Fast Movement Sensitivity**
+*(Touch Engine: ${profile.touchType})*
+
+🔥 **1. 4GB RAM Variation (Fast Movement + Drag Boost):**
+• **General:** **${var4gb.general}** | **Red Dot:** **${var4gb.redDot}**
+• **2x Scope:** **${var4gb.scope2x}** | **4x Scope:** **${var4gb.scope4x}** | **Sniper:** **${var4gb.sniper}**
+• **Fire Button:** **${var4gb.fireBtn}** | **Safe DPI:** **${var4gb.dpi}**
+
+⚡ **2. 6GB RAM Variation (Perfect Balance + Sticky Aim):**
+• **General:** **${var6gb.general}** | **Red Dot:** **${var6gb.redDot}**
+• **2x Scope:** **${var6gb.scope2x}** | **4x Scope:** **${var6gb.scope4x}** | **Sniper:** **${var6gb.sniper}**
+• **Fire Button:** **${var6gb.fireBtn}** | **Safe DPI:** **${var6gb.dpi}**
+
+👑 **3. 8GB / 12GB RAM Variation (No Recoil + Laser Lock):**
+• **General:** **${var8gb.general}** | **Red Dot:** **${var8gb.redDot}**
+• **2x Scope:** **${var8gb.scope2x}** | **4x Scope:** **${var8gb.scope4x}** | **Sniper:** **${var8gb.sniper}**
+• **Fire Button:** **${var8gb.fireBtn}** | **Safe DPI:** **${var8gb.dpi}**
+
+💡 **Headshot & Movement Trick:** ${profile.dragTip}. Game-ல் **High FPS ON** வச்சுக்கோங்க — Movement ஸ்பீடும் M1887/Desert Eagle ஹெட்ஷாட்டும் துல்லியமா விழும்!`;
+        };
+
+        const DEFAULT_SENSI_PILLS = [
+            { label: '📱 Vivo T2x / Y20', query: 'Vivo T2x 5G' },
+            { label: '📱 Redmi Note 13', query: 'Redmi Note 13' },
+            { label: '📱 POCO X6 / M6', query: 'POCO X6 Pro' },
+            { label: '📱 iQOO Z9 / Neo 7', query: 'iQOO Z9 5G' },
+            { label: '📱 Realme 11x / Narzo', query: 'Realme 11x 5G' },
+            { label: '📱 Samsung A14 / M34', query: 'Samsung Galaxy A14' },
+            { label: '📱 OPPO A57 / Reno', query: 'OPPO A57' },
+            { label: '📱 OnePlus Nord', query: 'OnePlus Nord CE 3' },
+            { label: '📱 iPhone 13 / 14', query: 'iPhone 13' }
+        ];
+
+        window.handleAiBotSend = async function() {
             const input = document.getElementById('ai-bot-input');
             const queryText = (input?.value || '').trim();
             if (!queryText) return;
 
-            // Enforce 30-second cooldown per message in AI Chatbot (Super Admin exempt)
+            // Lightweight 2-second anti-spam guard so users can chat freely without waiting 30s
             const now = Date.now();
-            const aiCooldownMs = 30000;
-            if (!window.isSuperAdminGlobal && window.lastAiMsgTime && (now - window.lastAiMsgTime < aiCooldownMs)) {
-                const waitSec = Math.ceil((aiCooldownMs - (now - window.lastAiMsgTime)) / 1000);
-                window.showToast(`⏳ AI Chatbot Cooldown: Please wait ${waitSec}s before sending your next message!`);
+            if (!window.isSuperAdminGlobal && window.lastAiMsgTime && (now - window.lastAiMsgTime < 2000)) {
                 return;
             }
             window.lastAiMsgTime = now;
@@ -6273,18 +6536,46 @@ Tap a quick button below or type your question!`
             appendBotMessage('user', queryText);
             window.setBotEmotion('thinking');
 
-            const isNonTamilIndianLang = ['en', 'hi', 'te', 'ml', 'kn'].includes(window.currentAppLang);
-            const directSmart = !isNonTamilIndianLang ? checkDirectTournamentIntent(queryText) : null;
+            // 1. Check if the user typed a specific Phone Model or Brand first!
+            const deviceMatch = window.detectPhoneModelFromQuery(queryText);
+            if (deviceMatch) {
+                const sensiReply = window.formatDeviceSensitivityReply(deviceMatch);
+                window.setBotEmotion('talking');
+                setTimeout(() => {
+                    appendBotMessage('ai', sensiReply, DEFAULT_SENSI_PILLS);
+                    window.setBotEmotion('cool', 4500);
+                }, 180);
+                return;
+            }
+
+            // 2. Check if user asked for general sensitivity without naming a phone model yet
+            const low = queryText.toLowerCase();
+            if (low.includes('sensi') || low.includes('headshot') || low.includes('one tap') || low.includes('சென்சி') || low.includes('dpi')) {
+                const askModelMsg = window.currentAppLang === 'en'
+                    ? `🎯 **Tell me your Phone Model Name!**
+Type your phone name below (e.g., **Vivo T2x**, **Redmi Note 13**, **POCO X6**, **iPhone 13**) or tap a model below to get exact **4GB, 6GB & 8GB RAM** Headshot & Movement Sensitivity!`
+                    : `🎯 **உங்க போன் மாடல் பெயர் என்ன நண்பா?**
+உங்க போன் பெயரை டைப் பண்ணுங்க (எ.கா: **Vivo T2x**, **Redmi Note 13**, **POCO X6**, **iPhone 13**) அல்லது கீழே உள்ள பட்டனைத் தட்டுங்க — **4GB, 6GB, 8GB RAM** வாரியாக துல்லியமான Headshot & Movement Sensitivity தர்றேன்!`;
+                setTimeout(() => {
+                    appendBotMessage('ai', askModelMsg, DEFAULT_SENSI_PILLS);
+                    window.setBotEmotion('cool', 4500);
+                }, 180);
+                return;
+            }
+
+            // 3. Check simple direct tournament intents (Short, 2-3 line crisp replies)
+            const directSmart = checkDirectTournamentIntent(queryText);
             if (directSmart) {
                 window.setBotEmotion('talking');
                 setTimeout(() => {
                     appendBotMessage('ai', directSmart);
                     window.setBotEmotion(detectReplyEmotion(queryText, directSmart), 4500);
-                }, 220);
+                }, 180);
                 return;
             }
 
-            const loadingDiv = appendBotMessage('ai', '🔮 Scanning Live Arena Data...');
+            // 4. Live AI Query (Gemini / Free AI) with strict SHORT & SIMPLE instruction
+            const loadingDiv = appendBotMessage('ai', '⚡ Thinking...');
 
             const apiKey = (window.geminiApiKey || '').trim();
             if (apiKey) {
@@ -6307,27 +6598,20 @@ Tap a quick button below or type your question!`
                 console.warn("Free AI fallback:", e);
             }
             const smartReply = generateSmartTournamentReply(queryText);
-            appendBotMessage('ai', smartReply);
+            appendBotMessage('ai', smartReply, DEFAULT_SENSI_PILLS);
             window.setBotEmotion(detectReplyEmotion(queryText, smartReply), 4500);
         };
 
         function checkDirectTournamentIntent(q) {
             const low = q.toLowerCase().trim();
-            const exactChips = [
-                'active matches', 'my team status', 'how to register', 'rules & points',
-                'payment & utr help', 'customer support', 'vip & sp coins', 'ff headshot sensi'
-            ];
-            if (exactChips.includes(low)) return generateSmartTournamentReply(q);
-
+            // Only intercept clear tournament FAQ intents; keep answers short & simple!
             const directKeywords = [
+                'active matches', 'my team status', 'how to register', 'rules & points',
+                'payment & utr help', 'customer support', 'vip & sp coins',
                 'match', 'மேட்ச்', 'slot', 'my team', 'status', 'டீம்', 'register', 'join', 'சேர்வது',
                 'rule', 'point', 'kill', 'பாயிண்ட்', 'upi', 'utr', 'pay', 'room', 'password',
-                'vip', 'premium', 'pro', 'pass', 'price', 'amount', 'rate', 'evlo', 'எவ்வளவு', 'விலை', 'பிரீமியம்',
-                'coin', 'spin', 'refer', 'invite', 'armory', 'predict', 'bracket', 'tier', 'rank',
-                'sensi', 'headshot', 'character', 'gun', '1v1', 'clash', 'challenge', 'recruit', 'lft',
-                'hack', 'report', 'theme', 'poster', 'certificate', 'hall of fame', 'top', 'winner',
-                'support', 'help', 'admin', 'telegram', 'hi', 'hello', 'vanakkam', 'வணக்கம்', 'nanba', 'நண்பா',
-                'epdi iruka', 'who are you', 'யார் நீ', 'joke', 'ஜோக்'
+                'vip', 'premium', 'pass', 'price', 'evlo', 'எவ்வளவு', 'விலை',
+                'coin', 'spin', 'support', 'help', 'hi', 'hello', 'vanakkam', 'வணக்கம்', 'nanba', 'நண்பா'
             ];
             if (directKeywords.some(k => low.includes(k))) {
                 return generateSmartTournamentReply(q);
@@ -6336,20 +6620,20 @@ Tap a quick button below or type your question!`
         }
 
         function getTournamentContextPrompt() {
-            const matches = (window.allMatches || []).map(m => `${m.title} (${m.status}, Map:${m.map}, Time:${m.time}, Prize:₹${m.prize}, Fee:${m.type==='free'?'Free':'₹'+m.fee}, Slots:${m.currentSlots||0}/${m.slots||12})`).join('; ');
+            const matches = (window.allMatches || []).slice(0, 4).map(m => `${m.title} (${m.map}, ${m.time}, Prize:₹${m.prize}, Fee:${m.type==='free'?'Free':'₹'+m.fee})`).join('; ');
             const myCoins = window.currentUserSpCoins || 0;
-            const isVip = window.isCurrentUserVip ? window.isCurrentUserVip() : false;
             const { p7, p14, p28, disc, upi } = window.getLiveVipPrices();
             const pack = INDIAN_LANG_PACK[window.currentAppLang] || INDIAN_LANG_PACK.tanglish;
-            return `You are the official Pro Esports Tactical AI Assistant for "Satta Pai Esports - Free Fire Tournament Arena".
-LANGUAGE REQUIREMENT: ${pack.instruction} (Selected Language: ${pack.name}).
-IMPORTANT LIVE PRICING (Always use these exact current numbers):
-- Royal Premium Pass (⭐ PRO): 7 Days = ₹${p7}, 14 Days = ₹${p14}, 28 Days = ₹${p28} (UPI ID: ${upi}) OR redeem free with 500 SP Coins!
-- Premium Perks: ⭐ PRO Star Badge, ${disc}% OFF on Paid Match Entry Fees, 1-Click Squad Auto-Fill, 4 Premium & 4 Live Animated Canvas Themes, 2s Global Chat Cooldown (Free users have 10s cooldown), Unlimited DP Changes.
-- Scoring: +3 points per kill, Placement points (1st=12, 2nd=9, 3rd=8, 4th=7, 5th=6). No hacks, panels, or emulators.
-- SP Coins & Armory: Daily Check-In (+15 Coins), Daily Lucky Spin (+10 to +100 Coins), Booyah Prediction Poll (+10 Coins), Refer & Earn (+50 Coins), SP Coins Armory Store (Firestorm 100, One-Tap God 150, Booyah King 250, 7d Pro Pass 500). User current SP Coins: ${myCoins}, VIP Status: ${isVip ? '⭐ PRO ACTIVE' : 'Free Player'}.
-- Support: Email satta0pai@gmail.com, Telegram @CHELLAM_STORE.
-- Current Active Matches: ${matches || 'No active matches right now'}.`;
+            return `You are the helpful Esports Assistant for "Satta Pai Esports - Free Fire Tournament Arena".
+LANGUAGE: ${pack.instruction}
+CRITICAL RESPONSE RULE:
+- Answer the user's exact question in 2 to 3 SHORT, SIMPLE, EASY-TO-UNDERSTAND sentences maximum.
+- NEVER write long essays, walls of text, or unrequested bullet lists.
+- If the user asks about a phone model's Free Fire sensitivity, ALWAYS provide 3 exact RAM variations (4GB RAM, 6GB RAM, and 8GB/12GB RAM) with General, Red Dot, 2x, 4x, Sniper (on the 0-200 scale), Fire Button %, and safe DPI for fast movement speed and one-tap headshots.
+FACTS:
+- VIP Pass: 7d=₹${p7}, 14d=₹${p14}, 28d=₹${p28} (UPI: ${upi}) or 500 SP Coins free. Gives ${disc}% match discount.
+- Scoring: 1 Kill = 3 Pts, 1st Place = 12 Pts, 2nd = 9 Pts, 3rd = 8 Pts.
+- User Coins: ${myCoins}. Active Matches: ${matches || 'None right now'}. Support: satta0pai@gmail.com.`;
         }
 
         async function fetchKeylessFreeAiReply(userMessage) {
@@ -6367,224 +6651,117 @@ IMPORTANT LIVE PRICING (Always use these exact current numbers):
             const teams = window.allTeams || [];
             const myEmail = (window.loggedEmail || '').toLowerCase();
             const myCoins = window.currentUserSpCoins || 0;
-            const isVip = window.isCurrentUserVip ? window.isCurrentUserVip() : false;
             const { p7, p14, p28, disc, upi } = window.getLiveVipPrices();
             const lang = window.currentAppLang || 'tanglish';
 
+            // 1. Check phone model first just in case
+            const dev = window.detectPhoneModelFromQuery(q);
+            if (dev) return window.formatDeviceSensitivityReply(dev);
+
+            // 2. Crisp, 2-3 line English answers
             if (lang === 'en') {
-                if (low.includes('vip') || low.includes('premium') || low.includes('pro') || low.includes('price') || low.includes('coin') || low.includes('spin')) {
-                    return `⭐ **Royal Premium Pass (PRO) — Live Pricing:**
-• **7 Days:** ₹${p7} | **14 Days:** ₹${p14} | **28 Days:** ₹${p28} (UPI: ${upi})
-• **PRO Perks:** ⭐ PRO Star Badge, **${disc}% OFF** Match Entry Fees, **2s Global Chat Cooldown** (vs 10s for Free), 4 Premium + 4 Live Themes, 1-Click Squad Auto-Fill & Unlimited DP Change!
-• 🪙 **Free Pro Pass:** Collect **500 SP Coins** via Daily Check-In (+15), Lucky Spin (+10–100), Prediction (+10) & Referrals (+50) to claim 7-Day Pro Pass FREE! (Your Coins: ${myCoins})`;
+                if (low.includes('vip') || low.includes('price') || low.includes('pass')) {
+                    return `⭐ **VIP Pro Pass:** 7 Days = **₹${p7}** | 14 Days = **₹${p14}** | 28 Days = **₹${p28}** (or FREE with **500 SP Coins**).
+🎁 Gives **${disc}% OFF** all match entry fees, Gold Badge & Live Themes!`;
                 }
-                if (low.includes('sensi') || low.includes('headshot')) {
-                    return `🎯 **Free Fire One-Tap Headshot Sensitivity:**
-• **2GB–4GB RAM:** General 195–200 | Red Dot 190 | 2x 185 | 4x 180 | Fire Button 46%
-• **6GB–12GB RAM:** General 185–192 | Red Dot 178 | 2x 172 | 4x 165 | Fire Button 42%`;
+                if (low.includes('coin') || low.includes('spin')) {
+                    return `🪙 **Your Balance:** **${myCoins} SP Coins**.
+Earn free coins daily via **24h Lucky Spin (+10 to +100)** and **Daily Check-In (+15)** in the top header!`;
                 }
                 if (low.includes('match') || low.includes('slot')) {
-                    if (matches.length === 0) return `🎮 No active matches right now. Stay tuned for upcoming announcements!`;
-                    return `🔥 **Active Matches (${matches.length}):**
-` + matches.slice(0, 5).map((m, i) => `${i+1}. **${m.title}** (${m.map} | ${m.time} | Prize: ₹${m.prize} | Fee: ${m.type==='free'?'FREE':'₹'+m.fee})`).join('\n');
+                    if (matches.length === 0) return `🎮 No active matches right now. New custom rooms will be posted soon!`;
+                    return `🔥 **Live Matches (${matches.length}):**
+` + matches.slice(0, 3).map((m, i) => `${i+1}. **${m.title}** (${m.map} • ${m.time} • Prize: ₹${m.prize} • Fee: ${m.type==='free'?'FREE':'₹'+m.fee})`).join('\n');
                 }
-                return `⚡ **Satta Pai Pro Tactical AI (English):**
-• **Active Matches:** ${matches.length} Live/Upcoming
-• **Royal Pro Pass:** ₹${p7} (7d) | ₹${p14} (14d) | ₹${p28} (28d) • ${disc}% Match Discount
-• **Your SP Coins:** 🪙 ${myCoins} Coins
-• **Support:** satta0pai@gmail.com | Support: @CHELLAM_STORE`;
+                if (low.includes('register') || low.includes('join')) {
+                    return `📝 **How to Join (3 Easy Steps):**
+1. Go to **Join Match** tab & click **Join Slot**.
+2. Enter Team Name & 4 UIDs (auto-saved for next time).
+3. For paid matches, pay via UPI & paste your **12-digit UTR**!`;
+                }
+                if (low.includes('utr') || low.includes('upi') || low.includes('pay') || low.includes('room')) {
+                    return `🔑 **Payment & Room ID:**
+• **UTR:** The 12-digit reference number shown in GPay/PhonePe after payment.
+• **Room ID & Pass:** Shared inside **My Room Keys** 15 mins before match start!`;
+                }
+                if (low.includes('rule') || low.includes('point') || low.includes('kill')) {
+                    return `🏆 **Scoring Rules:** **1 Kill = 3 Pts** | **#1 Booyah = 12 Pts**, #2 = 9 Pts, #3 = 8 Pts.
+🚫 Hacks, scripts, or PC emulators result in an instant permanent ban.`;
+                }
+                return `👋 **Hi! How can I help you today?**
+• Type your **Phone Model** (e.g., *Vivo T2x, Redmi Note 13, iPhone 13*) for exact **4GB/6GB/8GB Headshot Sensitivity**!
+• Or ask about **Matches, Room ID, or VIP Pass**.`;
             }
 
-            if (lang === 'hi') {
-                return `⚡ **Satta Pai Pro Tactical AI (हिन्दी):**
-• ⭐ **Royal Pro Pass:** 7 दिन **₹${p7}** | 14 दिन **₹${p14}** | 28 दिन **₹${p28}** (UPI: ${upi})
-• 🔥 **Pro फायदे:** ⭐ PRO बैज, पेड मैच में **${disc}% छूट**, **2s Global Chat Cooldown**, 8 प्रीमियम/लाइव थीम्स!
-• 🪙 **आपके SP Coins:** ${myCoins} Coins (500 Coins = 7 दिन का Pro Pass बिल्कुल मुफ्त!)
-• 🎯 **FF Headshot Sensi:** General 190, Red Dot 182, Fire Button 44%
-• 📞 **सपोर्ट:** satta0pai@gmail.com | @CHELLAM_STORE`;
+            // 3. Crisp, Simple, Direct Tamil / Tanglish Answers (No confusing long walls of text!)
+            if (/^(hi|hello|hey|vanakkam|வணக்கம்|hii+|nanba|நண்பா|bro|machi|மச்சி|epdi iruka)/i.test(low)) {
+                return `👋 **வணக்கம் நண்பா! எப்படி உதவி செய்யட்டும்?**
+• உங்க **Phone Model** பெயரை (எ.கா: *Vivo T2x, Redmi 12, POCO X6, iPhone 13*) அனுப்புங்க — **4GB / 6GB / 8GB RAM** வாரியாக பக்கா Headshot Sensitivity தர்றேன்!
+• அல்லது **Match, Room ID, VIP Pass** பத்தி சிம்பிளா கேளுங்க.`;
             }
 
-            if (lang === 'te') {
-                return `⚡ **Satta Pai Pro Tactical AI (తెలుగు):**
-• ⭐ **Royal Pro Pass:** 7 రోజులు **₹${p7}** | 14 రోజులు **₹${p14}** | 28 రోజులు **₹${p28}** (UPI: ${upi})
-• 🔥 **Pro లాభాలు:** ⭐ PRO బ్యాడ్జ్, మ్యాచ్ ఫీజులో **${disc}% తగ్గింపు**, **2s Global Chat Cooldown**, 8 ప్రీమియం థీమ్స్!
-• 🪙 **మీ SP Coins:** ${myCoins} Coins (500 Coins = 7 రోజుల Pro Pass ఉచితం!)
-• 📞 **సపోర్ట్:** satta0pai@gmail.com | @CHELLAM_STORE`;
-            }
-
-            if (lang === 'ml') {
-                return `⚡ **Satta Pai Pro Tactical AI (മലയാളം):**
-• ⭐ **Royal Pro Pass:** 7 ദിവസം **₹${p7}** | 14 ദിവസം **₹${p14}** | 28 ദിവസം **₹${p28}** (UPI: ${upi})
-• 🔥 **Pro ആനുകൂല്യങ്ങൾ:** ⭐ PRO ബാഡ്ജ്, മാച്ച് ഫീസിൽ **${disc}% കിഴിവ്**, **2s Global Chat Cooldown**, 8 പ്രീമിയം തീമുകൾ!
-• 🪙 **നിങ്ങളുടെ SP Coins:** ${myCoins} Coins (500 Coins = 7 ദിവസത്തെ Pro Pass സൗജന്യം!)
-• 📞 **സപ്പോർട്ട്:** satta0pai@gmail.com | @CHELLAM_STORE`;
-            }
-
-            if (lang === 'kn') {
-                return `⚡ **Satta Pai Pro Tactical AI (ಕನ್ನಡ):**
-• ⭐ **Royal Pro Pass:** 7 ದಿನ **₹${p7}** | 14 ದಿನ **₹${p14}** | 28 ದಿನ **₹${p28}** (UPI: ${upi})
-• 🔥 **Pro ಲಾಭಗಳು:** ⭐ PRO ಬ್ಯಾಡ್ಜ್, ಪಂದ್ಯದ ಶುಲ್ಕದಲ್ಲಿ **${disc}% ರಿಯಾಯಿತಿ**, **2s Global Chat Cooldown**, 8 ಪ್ರೀಮಿಯಂ ಥೀಮ್‌ಗಳು!
-• 🪙 **ನಿಮ್ಮ SP Coins:** ${myCoins} Coins (500 Coins = 7 ದಿನಗಳ Pro Pass ಉಚಿತ!)
-• 📞 **ಸಪೋರ್ಟ್:** satta0pai@gmail.com | @CHELLAM_STORE`;
-            }
-
-            // Default Tamil / Tanglish detailed responses
-            if (/^(hi|hello|hey|vanakkam|வணக்கம்|hii+|nanba|நண்பா|bro|machi|மச்சி|epdi iruka|how are you|who are you|யார் நீ)/i.test(low)) {
-                return `⚡ **வணக்கம் நண்பா! நான் Satta Pai Pro Tactical AI!** 🎮
-
-• உங்க **Status:** ${isVip ? '⭐ **PRO MEMBER ACTIVE**' : '🎮 **Tournament Player**'}
-• உங்க **SP Coins:** 🪙 **${myCoins} Coins**
-• **Pro Pass Live Price:** 7 Days **₹${p7}** | 14 Days **₹${p14}** | 28 Days **₹${p28}**
-
-இன்னைக்கு **Active Matches**, **Royal Pro Pass (₹${p7})**, அல்லது **FF Headshot Sensi** பத்தி என்ன தெரிஞ்சுக்கணும் நண்பா?`;
-            }
-
-            if (low.includes('joke') || low.includes('ஜோக்') || low.includes('funny')) {
-                return `😂 **Free Fire Esports Joke:**
-
-Squad Leader: "மச்சி அங்க 4 பேரு இருக்காங்க, அவசரப்பட்டு Rush பண்ணாத!"
-Random Teammate (2 செகண்ட் கழிச்சு): *"Bro... என்னைய நாக் பண்ணிட்டாங்க, சீக்கிரம் க்ளூவால் போட்டு ரிவைவ் பண்ணு!"* 💀🔥
-
-இப்படி டீம்மேட் இல்லாம கெத்தா ஜெயிக்க நம்ம **Arena Hub -> Team Recruitment (LFT)** ல நல்ல Squad சேர்த்துக்கோ நண்பா!`;
-            }
-
-            if (low.includes('vip') || low.includes('premium') || low.includes('pro') || low.includes('price') || low.includes('amount') || low.includes('rate') || low.includes('evlo') || low.includes('எவ்வளவு') || low.includes('விலை') || low.includes('பிரீமியம்') || low.includes('coin') || low.includes('spin') || low.includes('refer') || low.includes('armory') || low.includes('theme') || low.includes('தீம்')) {
-                return `⭐ **Royal Premium Pass (PRO) — தற்போதைய Live விலைகள்:**
-
-💎 **Direct VIP Plans (UPI: ${upi}):**
-• **7 Days Plan:** **₹${p7}** மட்டுமே!
-• **14 Days Plan:** **₹${p14}** மட்டுமே!
-• **28 Days Plan (Best):** **₹${p28}** மட்டுமே!
-
-✨ **Premium (⭐ PRO) நன்மைகள்:**
-• ⭐ **PRO Star Badge:** உங்க Profile மற்றும் Global Chat-ல் கெத்தான Star PRO பேட்ஜ்!
-• 💰 **${disc}% Entry Fee Discount:** எல்லா Paid மேட்ச்களிலும் **${disc}% கட்டணத் தள்ளுபடி**!
-• 💬 **Fast Global Chat:** Free யூசர்களுக்கு 10 செகண்ட் Cooldown, ஆனால் PRO பிளேயர்களுக்கு **2 செகண்ட் மட்டுமே**!
-• ⚡ **1-Click Squad Auto-Fill** & **Unlimited DP Change**!
-• 🎨 **4 Premium + 4 LIVE Animated Themes** (Rain, Winter, Hacker, Teddy)!
-
-🪙 **Free-ஆக Pro Pass வாங்குவது எப்படி? (உங்க Coins: ${myCoins}):**
-• தினமும் **Daily Check-In (+15)**, **Lucky Spin (+10 to +100)**, **Match Prediction (+10)** மற்றும் **Refer Friend (+50)** மூலம் **500 SP Coins** சேர்த்தால் **7-Day Pro Pass இலவசமாக** கிளைம் செய்யலாம்!`;
-            }
-
-            if (low.includes('sensi') || low.includes('headshot') || low.includes('one tap') || low.includes('ஒன் டேப்') || low.includes('சென்சி') || low.includes('character') || low.includes('skill') || low.includes('gun')) {
-                return `🎯 **Free Fire Pro One-Tap Headshot Sensitivity & Meta Guide:**
-
-📱 **2GB – 4GB RAM Phones:**
-• General: **195 – 200** | Red Dot: **190**
-• 2x Scope: **185** | 4x Scope: **180** | Fire Button: **44% – 48%**
-
-📱 **6GB – 12GB+ RAM Phones:**
-• General: **182 – 192** | Red Dot: **178**
-• 2x Scope: **172** | 4x Scope: **165** | Fire Button: **40% – 45%**
-
-⚡ **Best Tournament Character Skill Combo:**
-• **BR Full Map:** Tatsuya / Alok + Kelly + Hayato + Moco
-• **4v4 Clash Squad:** Orion / Wukong + Jota + Luna + Rafael`;
-            }
-
-            if (low.includes('1v1') || low.includes('4v4') || low.includes('clash') || low.includes('challenge') || low.includes('recruit') || low.includes('lft') || low.includes('poster') || low.includes('hack') || low.includes('report') || low.includes('predict') || low.includes('bracket') || low.includes('tier') || low.includes('rank')) {
-                return `⚔️ **Satta Pai Esports Pro Arena Features:**
-
-• 🔮 **Booyah Prediction Poll:** மேட்ச் கார்டில் உள்ள **Predict** பட்டனை தட்டி எந்த டீம் ஜெயிக்கும்னு ஓட்டு போட்டு **SP Coins** வெல்லுங்கள்!
-• 🏆 **Live Auto-Bracket:** **Bracket** பட்டனை தட்டி Quarter-Final ➔ Semi-Final ➔ Final சார்ட்டை உடனே பார்க்கலாம்!
-• 📺 **In-App YouTube PiP:** மேட்ச் கார்டில் **Watch PiP** தட்டினால் வெப்சைட்டுக்குள்ளேயே குட்டி சாளரத்தில் லைவ் பார்க்கலாம்!
-• 🎖️ **Career Rank Tiers:** உங்க Matches & Kills பொறுத்து **Bronze ➔ Heroic ➔ Grandmaster** பேட்ஜ் உங்க Profile-ல் ஏறும்!
-• 🥊 **1v1 / 4v4 Clash & LFT:** **Arena Hub** மூலம் சவால் விடலாம் அல்லது Squad ஆட்களைச் சேர்க்கலாம்!`;
-            }
-
-            if (low.includes('match') || low.includes('active') || low.includes('upcoming') || low.includes('live') || low.includes('மேட்ச்') || low.includes('slot')) {
-                if (matches.length === 0) return `🎮 தற்போது புதிய மேட்ச்கள் எதுவும் அறிவிக்கப்படவில்லை நண்பா. விரைவில் அப்டேட் செய்யப்படும்!`;
-                const activeList = matches.slice(0, 5).map((m, i) => {
-                    const regCount = teams.filter(t => t.matchId === m.id && t.status !== 'banned').length;
-                    const maxSlots = m.slots || 12;
-                    const feeStr = m.type === 'free' ? 'FREE' : `₹${m.fee}`;
-                    return `${i + 1}. **${m.title}** (${(m.status || 'upcoming').toUpperCase()})
-   🗺️ ${m.map} | ⏰ ${m.time} | 💰 Prize: ₹${m.prize} | Entry: ${feeStr} | 👥 Slots: ${regCount}/${maxSlots}`;
-                }).join('\n\n');
-                return `🔥 **தற்போதைய மேட்ச் விவரங்கள் (${matches.length} Matches):**
-
-${activeList}
-
-👉 **Matches** டேப் சென்று உங்கள் Slot-ஐ உடனே Book செய்யலாம் (⭐ PRO பிளேயர்களுக்கு **${disc}% OFF**)!`;
-            }
-
-            if (low.includes('my team') || low.includes('status') || low.includes('booking') || low.includes('registered') || low.includes('டீம்')) {
-                if (!myEmail || myEmail === 'guest') return `🔐 உங்க டீம் விவரங்களைப் பார்க்க முதலில் Google மூலம் Login செய்யவும் நண்பா!`;
-                const myTeams = teams.filter(t => (t.userEmail || '').toLowerCase() === myEmail);
-                if (myTeams.length === 0) return `📋 நீங்கள் இன்னும் எந்த மேட்சிலும் உங்கள் டீமை Register செய்யவில்லை நண்பா. **Matches** பகுதிக்குச் சென்று Join செய்யுங்கள்!`;
-                const list = myTeams.map(t => {
-                    const m = matches.find(x => x.id === t.matchId);
-                    return `✅ **${t.teamName}** (ID: ${t.teamId || 'N/A'})
-   Match: ${m ? m.title : 'Match'} | Group: ${t.slotGroup || 'TEAM A'} | Status: ${(t.status || 'active').toUpperCase()}`;
-                }).join('\n\n');
-                return `🏆 **உங்கள் Registered Squads (${myTeams.length}):**
-
+            if (low.includes('match') || low.includes('active') || low.includes('மேட்ச்') || low.includes('slot')) {
+                if (matches.length === 0) return `🎮 இப்போதைக்கு புது மேட்ச் எதுவும் இல்லை நண்பா. அடுத்த மேட்ச் சீக்கிரம் அப்டேட் ஆகும்!`;
+                const list = matches.slice(0, 3).map((m, i) => `${i + 1}. **${m.title}** (${m.map} | ⏰ ${m.time} | 🏆 ₹${m.prize} | Fee: ${m.type === 'free' ? 'FREE' : '₹' + m.fee})`).join('\n');
+                return `🔥 **இப்போ நடக்கும் Matches (${matches.length}):**
 ${list}
-
-🎫 உங்க டீம் கார்டில் உள்ள **Slot Pass** பட்டனை அழுத்தி HD Pass டவுன்லோட் செய்து கொள்ளலாம்!`;
+👉 கீழே **Join Match** டேப்பில் உடனே ஸ்லாட் புக் பண்ணிக்கோங்க!`;
             }
 
-            if (low.includes('register') || low.includes('join') || low.includes('epdi') || low.includes('how to') || low.includes('சேர்வது')) {
-                return `📝 **மேட்சில் Join செய்வது எப்படி?**
-
-1. கீழே உள்ள **Matches** பட்டனை அழுத்தவும்.
-2. உங்களுக்குப் பிடித்த மேட்சில் **Slots** க்ளிக் செய்து Group-ல் **Join** கொடுக்கவும்.
-3. உங்க Team Name, Leader Name மற்றும் 4 Player UIDs கொடுக்கவும் (⭐ PRO இருந்தால் **1-Click Auto-Fill** & **${disc}% OFF** கிடைக்கும்!).
-4. Paid மேட்ச் என்றால் UPI/QR மூலம் பணம் செலுத்தி **12-digit UTR** நம்பரைப் பதிவு செய்து Submit செய்யவும்.
-5. உடனே **Digital Slot Pass** டவுன்லோட் செய்து WhatsApp Group-ல் இணைந்து கொள்ளுங்கள்!`;
+            if (low.includes('my team') || low.includes('status') || low.includes('டீம்')) {
+                if (!myEmail || myEmail === 'guest') return `🔐 உங்க டீம் ஸ்டேட்டஸ் பார்க்க முதலில் Login பண்ணுங்க நண்பா!`;
+                const myTeams = teams.filter(t => (t.userEmail || '').toLowerCase() === myEmail);
+                if (myTeams.length === 0) return `📋 நீங்க இன்னும் எந்த மேட்சிலும் சேரல நண்பா. **Join Match** டேப்பில் உங்க Squad-ஐ ரிஜிஸ்டர் பண்ணுங்க!`;
+                return `✅ **உங்க Registered Squads (${myTeams.length}):**
+` + myTeams.slice(0, 3).map(t => `• **${t.teamName}** (${t.slotGroup || 'TEAM A'}) — ${t.isVerified ? '✅ Verified' : '⏳ Pending'}`).join('\n');
             }
 
-            if (low.includes('rule') || low.includes('point') || low.includes('kill') || low.includes('score') || low.includes('பாயிண்ட்') || low.includes('hall of fame') || low.includes('top')) {
-                return `⚔️ **Tournament Rules & Points System:**
-
-• 💀 **Kill Points:** 1 Kill = **+3 Points**
-• 🏆 **Placement Points:** 1st = **12 Pts**, 2nd = **9 Pts**, 3rd = **8 Pts**, 4th = **7 Pts**, 5th = **6 Pts**.
-• 🚫 **Anti-Cheat Fair Play:** Hack, Panel, Script அல்லது Mobile மேட்சில் Emulator பயன்படுத்தினால் உடனடியாக Ban செய்யப்படுவீர்கள்.
-• ⏰ மேட்ச் தொடங்குவதற்கு 10 நிமிடத்திற்கு முன்பே Room-ல் இணைய வேண்டும்.`;
+            if (low.includes('register') || low.includes('join') || low.includes('சேர்வது') || low.includes('epdi')) {
+                return `📝 **மேட்சில் சேர்வது ரொம்ப ஈஸி (3 Steps):**
+1. **Join Match** டேப்பில் உங்களுக்குப் பிடித்த ஸ்லாட்டை கிளிக் பண்ணுங்க.
+2. Team Name & 4 Player UIDs போடுங்க.
+3. Paid மேட்ச்னா UPI-ல் பணம் அனுப்பிட்டு **📋 Paste UTR** பட்டனைத் தட்டி Submit கொடுங்க!`;
             }
 
-            if (low.includes('pay') || low.includes('upi') || low.includes('utr') || low.includes('qr') || low.includes('refund') || low.includes('room') || low.includes('id') || low.includes('password')) {
-                return `💳 **Payment, UTR & Room ID உதவி:**
-
-• **UTR என்றால் என்ன?** நீங்கள் GPay / PhonePe / Paytm மூலம் பணம் அனுப்பியதும் வரும் **12 இலக்க UPI Transaction ID** தான் UTR.
-• **Royal Pro Pass விலைகள்:** 7 Days = **₹${p7}** | 14 Days = **₹${p14}** | 28 Days = **₹${p28}** (UPI: **${upi}**).
-• **Room ID & Password:** மேட்ச் தொடங்குவதற்கு 10–15 நிமிடங்களுக்கு முன்பு மேட்ச் கார்டில் உள்ள **🔐 Room ID Vault** மற்றும் **WhatsApp Group**-ல் பகிரப்படும்.`;
+            if (low.includes('vip') || low.includes('premium') || low.includes('pass') || low.includes('price') || low.includes('evlo') || low.includes('எவ்வளவு') || low.includes('விலை')) {
+                return `⭐ **VIP Pro Pass விலைகள்:**
+• **7 Days:** ₹${p7} | **14 Days:** ₹${p14} | **28 Days:** ₹${p28} (அல்லது **500 SP Coins** வைத்து FREE-ஆக வாங்கலாம்!).
+• **நன்மைகள்:** எல்லா மேட்சிலும் **${disc}% கட்டணத் தள்ளுபடி**, Gold Name Badge & Live Themes!`;
             }
 
-            if (low.includes('support') || low.includes('help') || low.includes('admin') || low.includes('contact') || low.includes('telegram') || low.includes('mail')) {
-                return `📞 **Satta Pai Official Support:**
-
-• 📧 **Email:** satta0pai@gmail.com
-• 💬 **Support Desk:** @CHELLAM_STORE
-
-எந்தச் சந்தேகம் அல்லது VIP Key உதவி என்றாலும் மேலே உள்ள முகவரிக்கு மெசேஜ் செய்யுங்கள் நண்பா! ⚡`;
+            if (low.includes('coin') || low.includes('spin')) {
+                return `🪙 **உங்களிடம் உள்ள SP Coins: ${myCoins}**
+மேலே உள்ள **🪙 Coins** பட்டனைத் தட்டி தினமும் **24h Lucky Spin (+10 to +100 Coins)** மற்றும் **Daily Check-In (+15 Coins)** இலவசமாகப் பெறுங்கள்!`;
             }
 
-            const matchedTeam = teams.find(t => (t.teamName || '').toLowerCase() === low || (t.teamId || '').toLowerCase() === low);
-            if (matchedTeam) {
-                const m = matches.find(x => x.id === matchedTeam.matchId);
-                return `🎯 **Team Found: ${matchedTeam.teamName}**
-• Team ID: ${matchedTeam.teamId}
-• Leader: ${matchedTeam.leaderName}
-• Match: ${m ? m.title : 'Registered'}
-• Group: ${matchedTeam.slotGroup || 'TEAM A'}`;
+            if (low.includes('utr') || low.includes('upi') || low.includes('pay') || low.includes('room') || low.includes('password')) {
+                return `🔑 **UTR & Room ID தகவல்:**
+• **UTR நம்பர்:** GPay / PhonePe-ல் பணம் அனுப்பியதும் வரும் **12-இலக்க Transaction ID** தான் UTR.
+• **Room ID & Pass:** மேட்ச் தொடங்க 15 நிமிஷம் முன்னாடி ஹோம் பக்கத்தில் உள்ள **🔑 My Room Keys**-ல் வந்துவிடும்!`;
             }
 
-            return `⚡ **நண்பா! உங்க கேள்விக்கு உடனடித் தகவல் இதோ:**
+            if (low.includes('rule') || low.includes('point') || low.includes('kill') || low.includes('பாயிண்ட்')) {
+                return `⚔️ **Points & Rules:**
+• **1 Kill = 3 Points** | **1st Booyah = 12 Pts**, 2nd = 9 Pts, 3rd = 8 Pts.
+• Hack, Panel, அல்லது PC Emulator யூஸ் பண்ணினால் உடனடியாக Permanent Ban செய்யப்படும்.`;
+            }
 
-• 🔥 **Active Matches:** தற்போது நடக்கும் மேட்ச்கள், Brackets & Predictions
-• 📋 **My Team:** உங்க Registered Squad, Career Rank & Slot Pass
-• ⭐ **Royal Pro Pass:** 7d **₹${p7}** | 14d **₹${p14}** | 28d **₹${p28}** (${disc}% Match Discount)
-• 🪙 **SP Coins & Armory:** Daily Spin, 500 Coins Free VIP & Custom Titles
-• 🎯 **FF Sensi & Tips:** 2GB–12GB One-Tap Headshot Sensitivity
-• 📞 **Support:** satta0pai@gmail.com | Support: @CHELLAM_STORE`;
+            if (low.includes('support') || low.includes('help') || low.includes('admin')) {
+                return `📞 **உதவிக்கு (Official Support):**
+• **Email:** satta0pai@gmail.com | **Support Desk:** @CHELLAM_STORE`;
+            }
+
+            return `⚡ **நண்பா! சிம்பிளா கேளுங்க, உடனே பதில் சொல்றேன்:**
+• 📱 **Headshot Sensitivity வேணுமா?** உங்க போன் மாடல் பெயரை டைப் பண்ணுங்க (எ.கா: *Vivo T2x, Redmi Note 13, POCO X6, iPhone 13*).
+• 🎮 **Match / Room ID / VIP** டவுட்னா கீழே உள்ள பட்டனைத் தட்டுங்க!`;
         }
 
         async function fetchGeminiReply(userMessage, apiKey) {
             const sysPrompt = getTournamentContextPrompt();
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-            const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `${sysPrompt}\n\nUser Question: ${userMessage}` }] }] }) });
+            const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `${sysPrompt}
+
+User Question: ${userMessage}` }] }] }) });
             if (!resp.ok) throw new Error('API Error');
             const data = await resp.json();
             const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
