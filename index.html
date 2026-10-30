@@ -1573,19 +1573,19 @@ html.theme-ghost-live {
         </div>
     </div>
 
-    <div id="vip-pass-modal" class="fixed inset-0 z-[10009] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="cyber-card p-5 max-w-lg w-full max-h-[88vh] overflow-y-auto space-y-4 shadow-2xl border-2 border-amber-400/50" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center border-b pb-2.5" style="border-color: var(--border-color);">
-                <div class="flex items-center gap-2">
-                    <div class="w-9 h-9 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 via-orange-500 to-pink-500 text-white shadow-lg">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current"><path d="M12 2l2.9 6.9L22 9.2l-5.4 4.7 1.7 7.1L12 17.6 5.7 21l1.7-7.1L2 9.2l7.1-.3L12 2z"/></svg>
+    <div id="vip-pass-modal" class="fixed inset-0 z-[10009] hidden flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-3.5 sm:p-4 max-w-md w-full max-h-[90vh] overflow-y-auto overflow-x-hidden space-y-2.5 shadow-2xl border-2 border-amber-400/50 text-[11px]" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center border-b pb-2 gap-2" style="border-color: var(--border-color);">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                    <div class="w-8 h-8 rounded-full shrink-0 flex items-center justify-center bg-gradient-to-br from-amber-400 via-orange-500 to-pink-500 text-white shadow-lg">
+                        <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M12 2l2.9 6.9L22 9.2l-5.4 4.7 1.7 7.1L12 17.6 5.7 21l1.7-7.1L2 9.2l7.1-.3L12 2z"/></svg>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-extrabold text-amber-400 uppercase tracking-wide">Royal VIP Pass • Pro & Pro Plus</h3>
-                        <p id="vip-modal-status-text" class="text-[10px] font-semibold text-emerald-400">Unlock Pro & Pro Plus Esports Benefits</p>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wide truncate">Royal VIP Pass • Pro & Pro+</h3>
+                        <p id="vip-modal-status-text" class="text-[9.5px] font-semibold text-emerald-400 truncate">Unlock Pro & Pro Plus Esports Benefits</p>
                     </div>
                 </div>
-                <button type="button" onclick="document.getElementById('vip-pass-modal').classList.add('hidden')" class="modal-close-btn" aria-label="Close"><svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                <button type="button" onclick="document.getElementById('vip-pass-modal').classList.add('hidden')" class="modal-close-btn shrink-0" aria-label="Close"><svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
 
             <!-- ✨ Royal VIP Pro Interactive Live Showcase (Zero 5s Free Preview — Shows Live VIP Look Inside Modal!) -->
@@ -1643,20 +1643,20 @@ html.theme-ghost-live {
             <div class="cyber-card p-3 space-y-2 border border-amber-500/30 bg-zinc-900/50">
                 <div class="text-[11px] font-extrabold uppercase text-amber-400 text-center tracking-wider">⚡ Tier Comparison: Free vs Pro vs Pro Plus</div>
                 <div class="text-[10px]">
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 pb-1.5 border-b border-white/15 items-center">
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 pb-1 text-[9px] border-b border-white/15 items-center">
                         <div class="font-bold text-slate-400 uppercase text-[9px]">Feature</div>
                         <div class="text-center font-bold text-slate-400 uppercase text-[9px]">Free</div>
                         <div class="text-center font-bold text-amber-400 uppercase text-[9px]">⭐ Pro</div>
                         <div class="text-center font-bold text-yellow-300 uppercase text-[9px]">👑 Pro+</div>
                     </div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>Match Entry</div><div class="text-center text-emerald-400 font-bold">✓</div><div class="text-center text-emerald-400 font-bold">✓</div><div class="text-center text-emerald-400 font-bold">✓</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>Match Discount</div><div class="text-center text-rose-400">0%</div><div class="text-center text-emerald-400 font-bold"><span id="vip-perk-discount-lbl">10</span>% OFF</div><div class="text-center text-yellow-300 font-extrabold">25% OFF 🔥</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>Chat Cooldown</div><div class="text-center text-amber-400">10s</div><div class="text-center text-emerald-400 font-bold">2s</div><div class="text-center text-yellow-300 font-extrabold">0s Instant ⚡</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>Chat & Profile Badge</div><div class="text-center text-rose-400">✗</div><div class="text-center text-amber-400 font-bold">⭐ PRO</div><div class="text-center text-yellow-300 font-extrabold">👑 PRO+</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>Live Animated Themes</div><div class="text-center text-rose-400">🔒</div><div class="text-center text-emerald-400 font-bold">All 7 Live</div><div class="text-center text-yellow-300 font-extrabold">ALL 7 LIVE ✓</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>1-Click Squad Auto-Fill</div><div class="text-center text-rose-400">✗</div><div class="text-center text-emerald-400 font-bold">✓</div><div class="text-center text-emerald-400 font-bold">✓</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 border-b border-white/5 items-center"><div>DP Avatar Change</div><div class="text-center text-amber-400">14-Day</div><div class="text-center text-emerald-400 font-bold">Unlimited</div><div class="text-center text-emerald-400 font-bold">Unlimited</div></div>
-                    <div class="grid grid-cols-[1fr_45px_60px_70px] gap-1 py-1.5 items-center"><div>Monthly Free Slot Pass</div><div class="text-center text-rose-400">✗</div><div class="text-center text-rose-400">✗</div><div class="text-center text-yellow-300 font-extrabold">1x / Mo 🎟️</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Match Entry</div><div class="text-center text-emerald-400 font-bold">✓</div><div class="text-center text-emerald-400 font-bold">✓</div><div class="text-center text-emerald-400 font-bold">✓</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 border-b border-white/5 items-center text-[9.5px]"><div class="truncate">Match Discount</div><div class="text-center text-rose-400">0%</div><div class="text-center text-emerald-400 font-bold"><span id="vip-perk-discount-lbl">10</span>% OFF</div><div class="text-center text-yellow-300 font-extrabold"><span id="vip-perk-plus-discount-lbl">25</span>% OFF</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Chat Cooldown</div><div class="text-center text-amber-400">10s</div><div class="text-center text-emerald-400 font-bold">2s</div><div class="text-center text-yellow-300 font-extrabold">0s Instant ⚡</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Chat & Profile Badge</div><div class="text-center text-rose-400">✗</div><div class="text-center text-amber-400 font-bold">⭐ PRO</div><div class="text-center text-yellow-300 font-extrabold">👑 PRO+</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Live Animated Themes</div><div class="text-center text-rose-400">🔒</div><div class="text-center text-emerald-400 font-bold">All 7 Live</div><div class="text-center text-yellow-300 font-extrabold">ALL 7 LIVE ✓</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>1-Click Squad Auto-Fill</div><div class="text-center text-rose-400">✗</div><div class="text-center text-emerald-400 font-bold">✓</div><div class="text-center text-emerald-400 font-bold">✓</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>DP Avatar Change</div><div class="text-center text-amber-400">14-Day</div><div class="text-center text-emerald-400 font-bold">Unlimited</div><div class="text-center text-emerald-400 font-bold">Unlimited</div></div>
+                    <div class="grid grid-cols-[1fr_42px_54px_62px] gap-1 py-1 text-[9.5px] items-center"><div>Monthly Free Slot Pass</div><div class="text-center text-rose-400">✗</div><div class="text-center text-rose-400">✗</div><div class="text-center text-yellow-300 font-extrabold">1x / Mo 🎟️</div></div>
                 </div>
             </div>
 
@@ -1668,36 +1668,36 @@ html.theme-ghost-live {
                 </div>
 
                 <!-- Pro Plans Container -->
-                <div id="vip-plan-selector-pro" class="grid grid-cols-3 gap-2">
-                    <button type="button" data-tier="pro" data-plan="7" onclick="selectVipPlan(7, 'pro')" class="vip-plan-btn cyber-card p-2.5 text-center cursor-pointer transition-all">
-                        <div class="text-[9px] font-bold text-slate-400 uppercase">7 Days</div>
-                        <div class="text-sm font-extrabold text-amber-400">₹<span id="plan-price-7">9</span></div>
+                <div id="vip-plan-selector-pro" class="grid grid-cols-3 gap-1.5 pt-1">
+                    <button type="button" data-tier="pro" data-plan="7" onclick="selectVipPlan(7, 'pro')" class="vip-plan-btn cyber-card p-2 text-center cursor-pointer transition-all overflow-hidden">
+                        <div class="text-[8.5px] font-bold text-slate-400 uppercase truncate">7 Days</div>
+                        <div class="text-xs font-extrabold text-amber-400">₹<span id="plan-price-7">9</span></div>
                     </button>
-                    <button type="button" data-tier="pro" data-plan="14" onclick="selectVipPlan(14, 'pro')" class="vip-plan-btn cyber-card p-2.5 text-center cursor-pointer transition-all">
-                        <div class="text-[9px] font-bold text-slate-400 uppercase">14 Days</div>
-                        <div class="text-sm font-extrabold text-amber-400">₹<span id="plan-price-14">19</span></div>
+                    <button type="button" data-tier="pro" data-plan="14" onclick="selectVipPlan(14, 'pro')" class="vip-plan-btn cyber-card p-2 text-center cursor-pointer transition-all overflow-hidden">
+                        <div class="text-[8.5px] font-bold text-slate-400 uppercase truncate">14 Days</div>
+                        <div class="text-xs font-extrabold text-amber-400">₹<span id="plan-price-14">19</span></div>
                     </button>
-                    <button type="button" data-tier="pro" data-plan="28" onclick="selectVipPlan(28, 'pro')" class="vip-plan-btn btn-theme p-2.5 text-center cursor-pointer transition-all relative">
-                        <div class="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] px-1.5 py-0.5 rounded-full bg-rose-500 text-white font-extrabold">BEST</div>
-                        <div class="text-[9px] font-bold uppercase">28 Days</div>
-                        <div class="text-sm font-extrabold">₹<span id="plan-price-28">29</span></div>
+                    <button type="button" data-tier="pro" data-plan="28" onclick="selectVipPlan(28, 'pro')" class="vip-plan-btn btn-theme p-2 text-center cursor-pointer transition-all relative">
+                        <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[7.5px] px-1.5 py-0.2 rounded-full bg-rose-500 text-white font-extrabold whitespace-nowrap">BEST</div>
+                        <div class="text-[8.5px] font-bold uppercase truncate">28 Days</div>
+                        <div class="text-xs font-extrabold">₹<span id="plan-price-28">29</span></div>
                     </button>
                 </div>
 
-                <!-- Pro Plus Plans Container (Hidden by default, shown when Pro Plus tab is active) -->
-                <div id="vip-plan-selector-plus" class="hidden grid grid-cols-3 gap-2">
-                    <button type="button" data-tier="plus" data-plan="28" onclick="selectVipPlan(28, 'plus')" class="vip-plan-btn cyber-card p-2.5 text-center cursor-pointer transition-all border border-amber-400/40">
-                        <div class="text-[9px] font-bold text-amber-300 uppercase">28 Days</div>
-                        <div class="text-sm font-black text-yellow-300">₹<span id="plan-price-plus-28">49</span></div>
+                <!-- Pro Plus Plans Container -->
+                <div id="vip-plan-selector-plus" class="hidden grid grid-cols-3 gap-1.5 pt-1">
+                    <button type="button" data-tier="plus" data-plan="28" onclick="selectVipPlan(28, 'plus')" class="vip-plan-btn cyber-card p-2 text-center cursor-pointer transition-all border border-amber-400/40 overflow-hidden">
+                        <div class="text-[8.5px] font-bold text-amber-300 uppercase truncate">28 Days</div>
+                        <div class="text-xs font-black text-yellow-300">₹<span id="plan-price-plus-28">49</span></div>
                     </button>
-                    <button type="button" data-tier="plus" data-plan="60" onclick="selectVipPlan(60, 'plus')" class="vip-plan-btn cyber-card p-2.5 text-center cursor-pointer transition-all border border-amber-400/40">
-                        <div class="text-[9px] font-bold text-amber-300 uppercase">60 Days</div>
-                        <div class="text-sm font-black text-yellow-300">₹<span id="plan-price-plus-60">89</span></div>
+                    <button type="button" data-tier="plus" data-plan="60" onclick="selectVipPlan(60, 'plus')" class="vip-plan-btn cyber-card p-2 text-center cursor-pointer transition-all border border-amber-400/40 overflow-hidden">
+                        <div class="text-[8.5px] font-bold text-amber-300 uppercase truncate">60 Days</div>
+                        <div class="text-xs font-black text-yellow-300">₹<span id="plan-price-plus-60">89</span></div>
                     </button>
-                    <button type="button" data-tier="plus" data-plan="90" onclick="selectVipPlan(90, 'plus')" class="vip-plan-btn cyber-card p-2.5 text-center cursor-pointer transition-all border-2 border-yellow-300 bg-amber-500/15 relative">
-                        <div class="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-black">SEASON 👑</div>
-                        <div class="text-[9px] font-bold text-amber-300 uppercase">Season (90d)</div>
-                        <div class="text-sm font-black text-yellow-300">₹<span id="plan-price-plus-90">129</span></div>
+                    <button type="button" data-tier="plus" data-plan="90" onclick="selectVipPlan(90, 'plus')" class="vip-plan-btn cyber-card p-2 text-center cursor-pointer transition-all border-2 border-yellow-300 bg-amber-500/15 relative">
+                        <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 text-[7.5px] px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-black whitespace-nowrap">SEASON 👑</div>
+                        <div class="text-[8.5px] font-bold text-amber-300 uppercase truncate">90 Days</div>
+                        <div class="text-xs font-black text-yellow-300">₹<span id="plan-price-plus-90">129</span></div>
                     </button>
                 </div>
             </div>
@@ -2342,8 +2342,8 @@ html.theme-ghost-live {
                                 <span id="header-vip-btn-text" class="px-2 py-0.5 rounded bg-black/40 text-[10px]">PRO</span>
                             </button>
                             <div class="grid grid-cols-2 gap-1.5">
-                                <button type="button" onclick="openAppInstallModal(); closeMenuDropdown();" id="header-app-btn" class="py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1.5 cursor-pointer shadow border border-cyan-400/50 bg-cyan-500/15 text-cyan-300 hover:bg-cyan-500/25 transition-all">
-                                    <span>📲</span><span>Install App</span>
+                                <button type="button" onclick="window.toggleFullScreenMode(); closeMenuDropdown();" id="header-app-btn" class="py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1.5 cursor-pointer shadow border border-cyan-400/50 bg-cyan-500/15 text-cyan-300 hover:bg-cyan-500/25 transition-all">
+                                    <span>⛶</span><span id="header-fullscreen-lbl">Full Screen Mode</span>
                                 </button>
                                 <button type="button" onclick="openSpinWheelModal(); closeMenuDropdown();" id="header-coins-btn" class="py-2 px-2.5 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1 cursor-pointer shadow border border-emerald-400/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 transition-all">
                                     <span>🪙</span><span id="header-coins-count">0</span><span>Coins</span>
@@ -3289,18 +3289,34 @@ html.theme-ghost-live {
                 <div class="font-extrabold text-amber-400 text-[11px]">🏆 Winner Prize Claims</div>
                 <div id="admin-prize-claims-list" class="space-y-1.5"></div>
             </div>
-            <div class="cyber-card p-2.5 space-y-1.5 border border-amber-400/40">
-                <b class="text-amber-400 text-[11px]">⭐ VIP Prices</b>
-                <div class="grid grid-cols-3 gap-1.5">
-                    <div><label class="block text-[9px] text-slate-400">7d ₹</label><input type="number" id="vip-cfg-price-7" value="9" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-2 py-1 font-bold text-xs"></div>
-                    <div><label class="block text-[9px] text-slate-400">14d ₹</label><input type="number" id="vip-cfg-price-14" value="19" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-2 py-1 font-bold text-xs"></div>
-                    <div><label class="block text-[9px] text-slate-400">28d ₹</label><input type="number" id="vip-cfg-price-28" value="29" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-2 py-1 font-bold text-xs"></div>
+            <div class="cyber-card p-2.5 space-y-2 border border-amber-400/40">
+                <div class="flex items-center justify-between">
+                    <b class="text-amber-400 text-[11px]">⭐ PRO Pass Prices & Discount</b>
+                    <span class="text-[9px] text-slate-400 font-mono">Tier 1 (PRO)</span>
                 </div>
-                <div class="grid grid-cols-2 gap-1.5">
-                    <div><label class="block text-[9px] text-slate-400">Discount %</label><input type="number" id="vip-cfg-disc" value="10" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-2 py-1 font-bold text-xs"></div>
-                    <div><label class="block text-[9px] text-slate-400">UPI ID</label><input type="text" id="vip-cfg-upi" value="sattapai@oksbi" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-2 py-1 font-mono text-xs"></div>
+                <div class="grid grid-cols-4 gap-1.5">
+                    <div><label class="block text-[8.5px] text-slate-400">7d ₹</label><input type="number" id="vip-cfg-price-7" value="9" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px]"></div>
+                    <div><label class="block text-[8.5px] text-slate-400">14d ₹</label><input type="number" id="vip-cfg-price-14" value="19" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px]"></div>
+                    <div><label class="block text-[8.5px] text-slate-400">28d ₹</label><input type="number" id="vip-cfg-price-28" value="29" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px]"></div>
+                    <div><label class="block text-[8.5px] text-emerald-400">Pro OFF %</label><input type="number" id="vip-cfg-disc" value="10" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px]"></div>
                 </div>
-                <button type="button" onclick="saveVipAdminConfig()" class="btn-theme w-full py-1.5 font-bold cursor-pointer text-xs">💾 Save VIP</button>
+
+                <div class="flex items-center justify-between pt-1.5 border-t border-white/10">
+                    <b class="text-yellow-300 text-[11px]">👑 PRO PLUS Pass Prices & Discount</b>
+                    <span class="text-[9px] text-amber-300 font-mono">Tier 2 (PRO+)</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                    <div><label class="block text-[8.5px] text-amber-200">28d ₹</label><input type="number" id="vip-cfg-plus-28" value="49" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px] text-yellow-300"></div>
+                    <div><label class="block text-[8.5px] text-amber-200">60d ₹</label><input type="number" id="vip-cfg-plus-60" value="89" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px] text-yellow-300"></div>
+                    <div><label class="block text-[8.5px] text-amber-200">90d ₹</label><input type="number" id="vip-cfg-plus-90" value="129" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px] text-yellow-300"></div>
+                    <div><label class="block text-[8.5px] text-yellow-300">Pro+ OFF %</label><input type="number" id="vip-cfg-plus-disc" value="25" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-1.5 py-1 font-bold text-[11px] text-yellow-300"></div>
+                </div>
+
+                <div class="pt-1">
+                    <label class="block text-[8.5px] text-slate-400 mb-0.5">Merchant UPI ID (For Both Pro & Pro Plus)</label>
+                    <input type="text" id="vip-cfg-upi" value="sattapai@oksbi" oninput="syncAllVipPricesEverywhere(true)" class="cyber-input w-full px-2 py-1 font-mono text-[11px]">
+                </div>
+                <button type="button" onclick="saveVipAdminConfig()" class="btn-theme w-full py-1.5 font-extrabold cursor-pointer text-xs shadow">💾 Save Pro & Pro Plus Settings</button>
             </div>
             <div class="cyber-card p-2.5 space-y-1.5 border border-purple-500/40">
                 <div class="flex justify-between items-center gap-1.5">
@@ -3715,40 +3731,76 @@ html.theme-ghost-live {
         const PREMIUM_THEMES = ['royal', 'cyan', 'ruby', 'indigo', 'anime-live', 'rain-live', 'winter-live', 'hacker-live', 'teddy-live', 'ghost-live', 'cat-live'];
 
         window.getLiveVipPrices = function() {
-            const cfg = window.vipConfig || { prices: { 7: 9, 14: 19, 28: 29 }, discountPct: 10, upi: 'sattapai@oksbi' };
+            const cfg = window.vipConfig || {
+                prices: { 7: 9, 14: 19, 28: 29 },
+                pricesPlus: { 28: 49, 60: 89, 90: 129 },
+                discountPct: 10,
+                plusDiscountPct: 25,
+                upi: 'sattapai@oksbi'
+            };
             const p7 = Number(cfg.prices?.[7] || document.getElementById('plan-price-7')?.textContent || 9);
             const p14 = Number(cfg.prices?.[14] || document.getElementById('plan-price-14')?.textContent || 19);
             const p28 = Number(cfg.prices?.[28] || document.getElementById('plan-price-28')?.textContent || 29);
+            const plus28 = Number(cfg.pricesPlus?.[28] || document.getElementById('plan-price-plus-28')?.textContent || 49);
+            const plus60 = Number(cfg.pricesPlus?.[60] || document.getElementById('plan-price-plus-60')?.textContent || 89);
+            const plus90 = Number(cfg.pricesPlus?.[90] || document.getElementById('plan-price-plus-90')?.textContent || 129);
             const disc = Number(cfg.discountPct ?? document.getElementById('vip-perk-discount-lbl')?.textContent ?? 10);
+            const plusDisc = Number(cfg.plusDiscountPct ?? document.getElementById('vip-perk-plus-discount-lbl')?.textContent ?? 25);
             const upi = String(cfg.upi || document.getElementById('vip-modal-upi-lbl')?.textContent || 'sattapai@oksbi').trim();
-            return { p7, p14, p28, disc, upi };
+            return { p7, p14, p28, plus28, plus60, plus90, disc, plusDisc, upi };
         };
 
         window.syncAllVipPricesEverywhere = function(fromInputs = false) {
-            if (!window.vipConfig) window.vipConfig = { prices: { 7: 9, 14: 19, 28: 29 }, discountPct: 10, upi: 'sattapai@oksbi' };
+            if (!window.vipConfig) {
+                window.vipConfig = {
+                    prices: { 7: 9, 14: 19, 28: 29 },
+                    pricesPlus: { 28: 49, 60: 89, 90: 129 },
+                    discountPct: 10,
+                    plusDiscountPct: 25,
+                    upi: 'sattapai@oksbi'
+                };
+            }
+            if (!window.vipConfig.pricesPlus) window.vipConfig.pricesPlus = { 28: 49, 60: 89, 90: 129 };
             if (fromInputs) {
                 const i7 = Number(document.getElementById('vip-cfg-price-7')?.value);
                 const i14 = Number(document.getElementById('vip-cfg-price-14')?.value);
                 const i28 = Number(document.getElementById('vip-cfg-price-28')?.value);
                 const iDisc = Number(document.getElementById('vip-cfg-disc')?.value);
+                const ip28 = Number(document.getElementById('vip-cfg-plus-28')?.value);
+                const ip60 = Number(document.getElementById('vip-cfg-plus-60')?.value);
+                const ip90 = Number(document.getElementById('vip-cfg-plus-90')?.value);
+                const ipDisc = Number(document.getElementById('vip-cfg-plus-disc')?.value);
                 const iUpi = (document.getElementById('vip-cfg-upi')?.value || '').trim();
                 if (i7 > 0) window.vipConfig.prices[7] = i7;
                 if (i14 > 0) window.vipConfig.prices[14] = i14;
                 if (i28 > 0) { window.vipConfig.prices[28] = i28; window.vipConfig.price = i28; }
                 if (!isNaN(iDisc) && iDisc >= 0) window.vipConfig.discountPct = iDisc;
+                if (ip28 > 0) window.vipConfig.pricesPlus[28] = ip28;
+                if (ip60 > 0) window.vipConfig.pricesPlus[60] = ip60;
+                if (ip90 > 0) window.vipConfig.pricesPlus[90] = ip90;
+                if (!isNaN(ipDisc) && ipDisc >= 0) window.vipConfig.plusDiscountPct = ipDisc;
                 if (iUpi) window.vipConfig.upi = iUpi;
             }
-            const { p7, p14, p28, disc, upi } = window.getLiveVipPrices();
+            const { p7, p14, p28, plus28, plus60, plus90, disc, plusDisc, upi } = window.getLiveVipPrices();
             try { localStorage.setItem('satta_pai_vip_prices', JSON.stringify(window.vipConfig)); } catch(e) {}
 
             const el7 = document.getElementById('plan-price-7'); if (el7) el7.textContent = p7;
             const el14 = document.getElementById('plan-price-14'); if (el14) el14.textContent = p14;
             const el28 = document.getElementById('plan-price-28'); if (el28) el28.textContent = p28;
+            const elP28 = document.getElementById('plan-price-plus-28'); if (elP28) elP28.textContent = plus28;
+            const elP60 = document.getElementById('plan-price-plus-60'); if (elP60) elP60.textContent = plus60;
+            const elP90 = document.getElementById('plan-price-plus-90'); if (elP90) elP90.textContent = plus90;
             const discEl = document.getElementById('vip-perk-discount-lbl'); if (discEl) discEl.textContent = disc;
+            const plusDiscEl = document.getElementById('vip-perk-plus-discount-lbl'); if (plusDiscEl) plusDiscEl.textContent = plusDisc;
             const upiEl = document.getElementById('vip-modal-upi-lbl'); if (upiEl) upiEl.textContent = upi;
 
+            const activeTier = window.selectedVipTier || 'pro';
             const activeDays = window.selectedVipPlanDays || 28;
-            window.selectedVipPlanPrice = window.vipConfig.prices[activeDays] || p28;
+            if (activeTier === 'plus') {
+                window.selectedVipPlanPrice = window.vipConfig.pricesPlus[activeDays] || plus28;
+            } else {
+                window.selectedVipPlanPrice = window.vipConfig.prices[activeDays] || p28;
+            }
             const modalPriceEl = document.getElementById('vip-modal-price-lbl');
             if (modalPriceEl) modalPriceEl.textContent = window.selectedVipPlanPrice;
             const payBtn = document.getElementById('vip-upi-pay-btn');
@@ -4317,14 +4369,14 @@ html.theme-ghost-live {
                 if (plusBtn) { plusBtn.classList.remove('cyber-card'); plusBtn.classList.add('btn-theme'); }
                 if (proBox) proBox.classList.add('hidden');
                 if (plusBox) plusBox.classList.remove('hidden');
-                if (planNameLbl) { planNameLbl.textContent = '👑 PRO PLUS PASS (25% OFF)'; planNameLbl.className = 'text-yellow-300 font-black'; }
+                if (planNameLbl) { const pd = window.vipConfig?.plusDiscountPct ?? 25; planNameLbl.textContent = `👑 PRO PLUS PASS (${pd}% OFF)`; planNameLbl.className = 'text-yellow-300 font-black'; }
                 window.selectVipPlan(28, 'plus');
             } else {
                 if (plusBtn) { plusBtn.classList.remove('btn-theme'); plusBtn.classList.add('cyber-card'); }
                 if (proBtn) { proBtn.classList.remove('cyber-card'); proBtn.classList.add('btn-theme'); }
                 if (plusBox) plusBox.classList.add('hidden');
                 if (proBox) proBox.classList.remove('hidden');
-                if (planNameLbl) { planNameLbl.textContent = '⭐ PRO PASS (10% OFF)'; planNameLbl.className = 'text-amber-400 font-extrabold'; }
+                if (planNameLbl) { const d = window.vipConfig?.discountPct ?? 10; planNameLbl.textContent = `⭐ PRO PASS (${d}% OFF)`; planNameLbl.className = 'text-amber-400 font-extrabold'; }
                 window.selectVipPlan(28, 'pro');
             }
         };
@@ -4397,6 +4449,87 @@ html.theme-ghost-live {
         let currentSquadPageSA = 1;
         let currentSquadPageAH = 1;
         const SQUADS_PER_PAGE = 10;
+
+        
+        // ⛶ Full Screen Mode Toggle (Replaces Install App)
+        window.toggleFullScreenMode = function() {
+            const docEl = document.documentElement;
+            const lbl = document.getElementById('header-fullscreen-lbl');
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.msRequestFullscreen;
+                if (req) {
+                    req.call(docEl).then(() => {
+                        if (lbl) lbl.textContent = 'Exit Full Screen';
+                        window.showToast('⛶ Entered Full Screen Mode (60FPS HUD)!');
+                    }).catch(() => {
+                        window.showToast('⛶ Full Screen ready! Rotate or use browser full screen.');
+                    });
+                } else {
+                    window.showToast('⛶ Full Screen Mode activated!');
+                }
+            } else {
+                const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+                if (exit) {
+                    exit.call(document).then(() => {
+                        if (lbl) lbl.textContent = 'Full Screen Mode';
+                        window.showToast('⛶ Exited Full Screen Mode');
+                    }).catch(() => {});
+                }
+            }
+        };
+
+        // 🛡️ Strict Input Validators (Anti-XSS, Anti-Injection for UPI, FF UID, UTR, Chat)
+        window.validateSafeUpiId = function(upi) {
+            const clean = String(upi || '').trim();
+            return /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(clean);
+        };
+        window.validateSafeGameUid = function(uid) {
+            const clean = String(uid || '').trim();
+            return /^[0-9]{7,13}$/.test(clean);
+        };
+        window.sanitizeSafeTextInput = function(str, maxLen = 240) {
+            if (!str) return '';
+            return String(str)
+                .replace(/<\/?script[^>]*>/gi, '')
+                .replace(/javascript:/gi, '')
+                .replace(/on\w+\s*=/gi, '')
+                .trim()
+                .slice(0, maxLen);
+        };
+
+        // 🔐 Universal Auth Email Resolver (Prevents Cross-Device Login Redirect Loops on Google/FB/GitHub)
+        window.resolveAuthUserEmail = function(u) {
+            if (!u) return '';
+            if (u.email && String(u.email).includes('@')) return String(u.email).trim().toLowerCase();
+            if (Array.isArray(u.providerData)) {
+                for (const p of u.providerData) {
+                    if (p && p.email && String(p.email).includes('@')) {
+                        return String(p.email).trim().toLowerCase();
+                    }
+                }
+            }
+            const provId = String(u.providerData?.[0]?.providerId || '').toLowerCase();
+            if (provId.includes('facebook')) return `fb_${String(u.uid || 'user').toLowerCase()}@facebook.com`;
+            if (provId.includes('github')) return `gh_${String(u.uid || 'user').toLowerCase()}@github.com`;
+            if (u.uid) return `user_${String(u.uid).toLowerCase()}@sattapai.app`;
+            return '';
+        };
+
+        // 🛡️ Firebase App Check Token Header Builder (X-Firebase-AppCheck for Gemini API)
+        window.getAppCheckTokenHeaderObj = async function() {
+            const headers = { 'Content-Type': 'application/json' };
+            try {
+                if (window.fbAppCheck && typeof window.fbGetAppCheckToken === 'function') {
+                    const tokenResult = await window.fbGetAppCheckToken(window.fbAppCheck, false);
+                    if (tokenResult && tokenResult.token) {
+                        headers['X-Firebase-AppCheck'] = tokenResult.token;
+                    }
+                }
+            } catch (e) {
+                console.warn('AppCheck token header fetch notice:', e);
+            }
+            return headers;
+        };
 
         window.escapeHTML = function(str) { if(!str) return ''; return String(str).replace(/[&<>"']/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); };
         window.escapeJsStr = function(str) { if(!str) return ''; return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r?\n/g, ' ').replace(/[&<>"]/g, function(m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]; }); };
@@ -4900,7 +5033,7 @@ Tap a quick button below or type your question!`
                 "Report Cheaters to Admin": "ஹேக்கர்களை அட்மினிடம் புகார் செய்",
                 "⚡ Quick Access": "⚡ முக்கிய வசதிகள்",
                 "Buy / View VIP Pass": "VIP பாஸ் வாங்கு / பார்",
-                "Install App": "ஆப் இன்ஸ்டால்",
+                "Full Screen Mode": "முழுத்திரை (Full Screen)",
                 "View Matches": "மேட்ச்களை பார்",
                 "Roadmap": "புள்ளிப்பட்டியல்",
                 "⚔️ 1v1 / LFT Hub": "⚔️ 1v1 / அணி தேடல்",
@@ -6268,266 +6401,342 @@ Tap a quick button below or type your question!`
         const PHONE_BRAND_PROFILES = {
             iphone: {
                 brand: 'Apple iPhone (iOS)',
-                touchType: 'Ultra-Fast iOS Metal Touch (120Hz/240Hz)',
-                baseGen: 176, baseRed: 168, base2x: 164, base4x: 158, baseSniper: 115, baseFire: 38,
-                dragTip: 'Light J-Drag (iOS touch is naturally super-fast; do NOT over-drag)',
-                dpi4: 'Default iOS (Gliding Cursor: Individual / Fast)',
-                dpi6: 'Default iOS (Touch Accommodations: OFF)',
-                dpi8: 'Default iOS (120Hz ProMotion Smooth Lock)',
-                examples: ['iPhone 11', 'iPhone 12', 'iPhone 13', 'iPhone 14', 'iPhone 15 Pro']
+                os: 'iOS',
+                touchType: '240Hz ProMotion / iOS Metal Touch Engine',
+                validRx: /^\b(iphone\s*(6|6s|7|8|x|xr|xs|11|12|13|14|15|16|se)(\s*(mini|plus|pro|pro\s*max))?|ipad(\s*(mini|air|pro))?)\b$/i,
+                baseGen: 178, baseRed: 171, base2x: 165, base4x: 158, baseSniper: 116, baseFire: 38,
+                dragTip: 'Light J-Drag from upper-chest (iOS touch has zero latency — pull gently at 15° angle for 98% head lock)',
+                settingsTip: 'Settings ➔ Accessibility ➔ Touch ➔ Haptic Touch: Fast | Gliding Cursor: Individual (120)',
+                dpi4: 'Default iOS (Gliding Cursor: 115)',
+                dpi6: 'Default iOS (Gliding Cursor: 120)',
+                dpi8: 'Default iOS (120Hz ProMotion Native)',
+                examples: ['iPhone 11', 'iPhone 12', 'iPhone 13', 'iPhone 14 Pro', 'iPhone 15 Pro Max']
             },
             iqoo: {
-                brand: 'iQOO Gaming Series',
-                touchType: '300Hz–1200Hz Instant Touch Sampling',
-                baseGen: 184, baseRed: 176, base2x: 172, base4x: 165, baseSniper: 120, baseFire: 41,
-                dragTip: 'Quick Straight Up-Drag (Enable Ultra Game Mode -> Motion Control)',
-                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: 'Default / 480 DPI',
-                examples: ['iQOO Z9 5G', 'iQOO Z7 Pro', 'iQOO Neo 7', 'iQOO Neo 9 Pro', 'iQOO 12']
+                brand: 'iQOO Gaming Series (Android)',
+                os: 'Android',
+                touchType: '300Hz–1200Hz Monster Touch Sampling',
+                validRx: /^\b(iqoo(\s*(z3|z5|z6|z7|z7s|z9|z9x|z9s|neo\s*6|neo\s*7|neo\s*9|3|7|9|9t|11|12|13))?(\s*(pro|lite|5g|se|racing))?)\b$/i,
+                baseGen: 185, baseRed: 178, base2x: 172, base4x: 166, baseSniper: 120, baseFire: 40,
+                dragTip: 'Short Straight Up-Drag from collar-bone level (Monster Touch responds instantly for 98% red numbers)',
+                settingsTip: 'Ultra Game Mode ➔ Monster Mode ON ➔ Motion Control & Touch Sampling: MAX',
+                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: '480 DPI (or Default)',
+                examples: ['iQOO Z9 5G', 'iQOO Z7 Pro', 'iQOO Neo 7 Pro', 'iQOO Neo 9 Pro', 'iQOO 12']
             },
             poco: {
-                brand: 'POCO Series',
-                touchType: '240Hz Game Turbo Touch Response',
-                baseGen: 188, baseRed: 182, base2x: 176, base4x: 170, baseSniper: 122, baseFire: 43,
-                dragTip: 'Sharp J-Drag from chest level + Game Turbo Touch Boost MAX',
-                dpi4: '450 DPI', dpi6: '470 DPI', dpi8: '490 DPI',
-                examples: ['POCO M6 Pro', 'POCO X5 Pro', 'POCO X6 / X6 Pro', 'POCO F5 / F6', 'POCO C65']
+                brand: 'POCO Series (Android)',
+                os: 'Android',
+                touchType: '240Hz–480Hz Game Turbo HyperTouch',
+                validRx: /^\b(poco(\s*(c3|c31|c50|c51|c55|c61|c65|m2|m3|m4|m5|m6|x2|x3|x4|x5|x6|f1|f3|f4|f5|f6))?(\s*(pro|gt|neo|5g|plus|s))?)\b$/i,
+                baseGen: 189, baseRed: 183, base2x: 177, base4x: 171, baseSniper: 122, baseFire: 42,
+                dragTip: 'Crisp J-Drag (Pull slightly down-left then flick straight up to the head for 98% One-Tap lock)',
+                settingsTip: 'Security App ➔ Game Turbo ➔ Additional Settings ➔ Touch Response & Sensitivity: 100% MAX',
+                dpi4: '445 DPI', dpi6: '468 DPI', dpi8: '490 DPI',
+                examples: ['POCO M6 Pro 5G', 'POCO X5 Pro', 'POCO X6 Pro', 'POCO F5', 'POCO F6 5G']
             },
             redmi: {
-                brand: 'Redmi / Xiaomi Series',
-                touchType: 'MIUI / HyperOS Balanced Touch',
-                baseGen: 192, baseRed: 186, base2x: 180, base4x: 174, baseSniper: 125, baseFire: 45,
-                dragTip: 'Firm Upward Drag + Set Pointer Speed to Full in Settings',
-                dpi4: '440 DPI (Pointer Speed Max)', dpi6: '465 DPI', dpi8: '485 DPI',
+                brand: 'Redmi / Xiaomi Series (Android)',
+                os: 'Android',
+                touchType: 'MIUI / HyperOS Precision Touch',
+                validRx: /^\b((redmi|xiaomi|mi)(\s*(note\s*(7|8|9|10|11|12|13|14)|8|8a|9|9a|9i|9c|10|10a|10c|11|12|12c|13|13c|14c|a1|a2|a3|k20|k50i|11i|11x|11t|12|13|14))?(\s*(pro|pro\s*max|pro\+|plus|prime|5g|s|t|lite|ultra|turbo))?)\b$/i,
+                baseGen: 193, baseRed: 187, base2x: 181, base4x: 175, baseSniper: 125, baseFire: 44,
+                dragTip: 'Firm J-Drag starting just below enemy shoulder (Prevents chest-lock and connects 98% headshots)',
+                settingsTip: 'Settings ➔ Additional Settings ➔ Languages & Input ➔ Pointer Speed: 100% Full + Game Turbo Touch Max',
+                dpi4: '442 DPI', dpi6: '465 DPI', dpi8: '485 DPI',
                 examples: ['Redmi 12 5G', 'Redmi 13C', 'Redmi Note 11', 'Redmi Note 12', 'Redmi Note 13 Pro']
             },
             vivo: {
-                brand: 'Vivo Series',
-                touchType: 'Funtouch OS Smooth Touch',
-                baseGen: 190, baseRed: 184, base2x: 178, base4x: 172, baseSniper: 124, baseFire: 44,
-                dragTip: 'Smooth J-Drag + Ultra Game Mode -> Esports Mode ON',
-                dpi4: '435 DPI', dpi6: '460 DPI', dpi8: '480 DPI',
+                brand: 'Vivo Series (Android)',
+                os: 'Android',
+                touchType: 'Funtouch OS Esports Touch Engine',
+                validRx: /^\b(vivo(\s*(t1|t1x|t2|t2x|t3|t3x|y12|y15|y16|y17s|y18|y20|y21|y22|y27|y28|y33s|y35|y36|y56|y73|y75|y100|y200|v20|v21|v23|v25|v27|v29|v30|v40|x60|x70|x80|x90|x100|s1|z1|u10|u20))?(\s*(pro|5g|e|s|lite|plus))?)\b$/i,
+                baseGen: 191, baseRed: 185, base2x: 179, base4x: 173, baseSniper: 124, baseFire: 43,
+                dragTip: 'Smooth Rotation J-Drag (Keep crosshair at head-height while running for 98% M1887 & Desert Eagle lock)',
+                settingsTip: 'Ultra Game Mode ➔ Esports Mode ON + Settings ➔ Pointer Speed: Full',
+                dpi4: '438 DPI', dpi6: '460 DPI', dpi8: '482 DPI',
                 examples: ['Vivo T2x 5G', 'Vivo T3 5G', 'Vivo Y20 / Y16', 'Vivo Y200', 'Vivo V29 / V30']
             },
             realme: {
-                brand: 'Realme / Narzo Series',
-                touchType: 'Realme UI HyperTouch Engine',
-                baseGen: 189, baseRed: 183, base2x: 177, base4x: 171, baseSniper: 122, baseFire: 43,
-                dragTip: 'Quick Rotation Drag + HyperBoost Touch Optimization ON',
-                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: '480 DPI',
-                examples: ['Realme 11x 5G', 'Realme 12 Pro', 'Realme Narzo 60x', 'Realme Narzo 70', 'Realme C55']
+                brand: 'Realme / Narzo Series (Android)',
+                os: 'Android',
+                touchType: 'Realme UI 360Hz HyperTouch Engine',
+                validRx: /^\b((realme|narzo)(\s*(5|6|7|8|9|9i|10|11|11x|12|12x|13|20|30|50|50a|50i|60|60x|70|70x|n53|n55|n63|n65|c11|c12|c15|c20|c21|c25|c30|c31|c33|c35|c51|c53|c55|c63|c65|c67|gt|gt\s*neo\s*(2|3|5)|p1|p2))?(\s*(pro|pro\+|plus|5g|prime|master|speed))?)\b$/i,
+                baseGen: 190, baseRed: 184, base2x: 178, base4x: 172, baseSniper: 122, baseFire: 43,
+                dragTip: 'Quick Upward Flick from chest level (Realme HyperTouch locks onto the helmet with 98% accuracy)',
+                settingsTip: 'Game Space ➔ Pro Gamer Mode ON + Touch Optimization: Ultra-Sensitive',
+                dpi4: '440 DPI', dpi6: '462 DPI', dpi8: '484 DPI',
+                examples: ['Realme 11x 5G', 'Realme 12 Pro', 'Realme Narzo 60x', 'Realme Narzo 70 Pro', 'Realme C55']
             },
             oppo: {
-                brand: 'OPPO Series',
-                touchType: 'ColorOS Precision Touch',
-                baseGen: 191, baseRed: 185, base2x: 179, base4x: 173, baseSniper: 124, baseFire: 44,
-                dragTip: 'Medium-Fast Upward Drag + Game Space Pro Mode ON',
-                dpi4: '435 DPI', dpi6: '455 DPI', dpi8: '475 DPI',
-                examples: ['OPPO A57 / A78', 'OPPO A59 5G', 'OPPO F23 / F25 Pro', 'OPPO K12x', 'OPPO Reno 11']
+                brand: 'OPPO Series (Android)',
+                os: 'Android',
+                touchType: 'ColorOS HyperBoost Precision Touch',
+                validRx: /^\b(oppo(\s*(a15|a16|a17|a18|a31|a38|a53|a54|a55|a57|a58|a59|a74|a77|a78|a79|a3|f15|f17|f19|f21|f23|f25|f27|k10|k12x|reno\s*(5|6|7|8|9|10|11|12)))?(\s*(pro|pro\+|5g|s|lite))?)\b$/i,
+                baseGen: 192, baseRed: 186, base2x: 180, base4x: 174, baseSniper: 124, baseFire: 44,
+                dragTip: 'Medium-Fast Upward J-Drag + Place Fire Button slightly lower-right for maximum thumb travel',
+                settingsTip: 'Game Toolkit ➔ Championship Mode ON + Touch Response: High',
+                dpi4: '438 DPI', dpi6: '458 DPI', dpi8: '480 DPI',
+                examples: ['OPPO A57 / A78', 'OPPO A59 5G', 'OPPO F23 5G', 'OPPO K12x', 'OPPO Reno 11']
             },
             samsung: {
-                brand: 'Samsung Galaxy Series',
-                touchType: 'OneUI High-Friction Precision Touch',
-                baseGen: 194, baseRed: 188, base2x: 182, base4x: 176, baseSniper: 128, baseFire: 46,
-                dragTip: 'Turn ON "Touch Sensitivity" in Display Settings + Fast Upward Drag',
+                brand: 'Samsung Galaxy Series (Android)',
+                os: 'Android',
+                touchType: 'OneUI High-Precision AMOLED Touch',
+                validRx: /^\b((samsung|galaxy)(\s*(a03|a04|a05|a10|a12|a13|a14|a15|a20|a21s|a22|a23|a24|a25|a30|a31|a32|a33|a34|a35|a50|a51|a52|a53|a54|a55|a71|a72|a73|m11|m12|m13|m14|m15|m21|m31|m32|m33|m34|m35|m51|m52|m53|m54|m55|f12|f13|f14|f15|f22|f23|f34|f41|f54|s20|s21|s22|s23|s24))?(\s*(fe|ultra|plus|5g|s))?)\b$/i,
+                baseGen: 195, baseRed: 189, base2x: 183, base4x: 177, baseSniper: 128, baseFire: 45,
+                dragTip: 'Firm Fast Up-Drag (Samsung screens have high anti-shake damping — higher General gives instant 360° gloo wall & 98% head lock)',
+                settingsTip: 'Settings ➔ Display ➔ Turn ON "Touch Sensitivity" + Game Booster ➔ Game Plugins (Max FPS)',
                 dpi4: '450 DPI (Touch Sensitivity ON)', dpi6: '475 DPI', dpi8: '500 DPI',
-                examples: ['Samsung A14 / A15', 'Samsung M14 / M34', 'Samsung F14 / F54', 'Samsung A34 / A54', 'Samsung S23 / S24']
+                examples: ['Samsung A14 5G', 'Samsung M34 5G', 'Samsung F14 / F54', 'Samsung A34 / A54', 'Samsung S23 / S24']
             },
             oneplus: {
-                brand: 'OnePlus / Nord Series',
-                touchType: 'OxygenOS 240Hz HyperTouch',
-                baseGen: 183, baseRed: 175, base2x: 170, base4x: 164, baseSniper: 118, baseFire: 40,
-                dragTip: 'Short Controlled J-Drag (High touch response — avoid heavy pull)',
-                dpi4: '430 DPI', dpi6: '450 DPI', dpi8: 'Default / 470 DPI',
+                brand: 'OnePlus / Nord Series (Android)',
+                os: 'Android',
+                touchType: 'OxygenOS 240Hz–1000Hz HyperTouch',
+                validRx: /^\b((oneplus|one\s*plus|nord)(\s*(nord|ce|ce\s*2|ce\s*3|ce\s*4|2|2t|3|4|7|7t|8|8t|9|9r|9rt|10r|10t|10|11|11r|12|12r))?(\s*(lite|pro|5g))?)\b$/i,
+                baseGen: 184, baseRed: 176, base2x: 171, base4x: 165, baseSniper: 118, baseFire: 40,
+                dragTip: 'Short Controlled J-Drag (OnePlus has ultra-sensitive touch — light flick locks right onto the head)',
+                settingsTip: 'HyperBoost Game Engine ➔ Pro Gamer Mode ON + Ultra Touch Response ON',
+                dpi4: '430 DPI', dpi6: '450 DPI', dpi8: '470 DPI (or Default)',
                 examples: ['OnePlus Nord CE 3 Lite', 'OnePlus Nord CE 4', 'OnePlus Nord 3', 'OnePlus 11R', 'OnePlus 12R']
             },
             infinix: {
-                brand: 'Infinix / Tecno Gaming Series',
-                touchType: 'XArena Dar-Link Touch Engine',
-                baseGen: 192, baseRed: 186, base2x: 180, base4x: 174, baseSniper: 125, baseFire: 45,
-                dragTip: 'Fast Straight Drag + XArena Graphic & Touch Boost ON',
-                dpi4: '440 DPI', dpi6: '460 DPI', dpi8: '480 DPI',
-                examples: ['Infinix GT 10 / GT 20 Pro', 'Infinix Note 30 / 40', 'Infinix Hot 40i', 'Tecno Pova 5 / 6 Pro', 'Tecno Spark 20']
+                brand: 'Infinix / Tecno Gaming Series (Android)',
+                os: 'Android',
+                touchType: 'XArena Dar-Link 360Hz Touch Engine',
+                validRx: /^\b((infinix|tecno)(\s*(gt\s*10|gt\s*20|note\s*12|note\s*30|note\s*40|hot\s*12|hot\s*20|hot\s*30|hot\s*40|hot\s*40i|zero\s*30|smart\s*8|pova\s*4|pova\s*5|pova\s*6|spark\s*10|spark\s*20|camon\s*20|camon\s*30))?(\s*(pro|5g|play|neo|plus))?)\b$/i,
+                baseGen: 192, baseRed: 186, base2x: 180, base4x: 174, baseSniper: 125, baseFire: 44,
+                dragTip: 'Straight Rotation Drag from chest height + Enable XArena Touch Acceleration',
+                settingsTip: 'XArena Game Space ➔ Performance Mode + Touch Reject Prevention ON',
+                dpi4: '442 DPI', dpi6: '462 DPI', dpi8: '482 DPI',
+                examples: ['Infinix GT 20 Pro', 'Infinix Note 40 Pro', 'Infinix Hot 40i', 'Tecno Pova 6 Pro', 'Tecno Spark 20']
             },
             moto: {
-                brand: 'Motorola / Nothing / Other Android',
-                touchType: 'Stock Android Clean Touch',
-                baseGen: 188, baseRed: 182, base2x: 176, base4x: 170, baseSniper: 122, baseFire: 43,
-                dragTip: 'Smooth J-Drag + Pointer Speed 100% in System Settings',
-                dpi4: '435 DPI', dpi6: '455 DPI', dpi8: '475 DPI',
-                examples: ['Moto G54 / G84', 'Moto Edge 40 / 50', 'Nothing Phone 2a', 'Asus ROG', 'Lava Blaze']
+                brand: 'Motorola / Nothing / ROG (Android)',
+                os: 'Android',
+                touchType: 'Clean Android High-Refresh Touch',
+                validRx: /^\b((moto|motorola|nothing|asus\s*rog|rog\s*phone|lava)(\s*(g24|g34|g54|g64|g73|g84|edge\s*30|edge\s*40|edge\s*50|phone\s*1|phone\s*2|phone\s*2a|5|6|7|8|blaze|agni\s*2))?(\s*(pro|fusion|neo|ultra|5g))?)\b$/i,
+                baseGen: 189, baseRed: 183, base2x: 177, base4x: 171, baseSniper: 122, baseFire: 43,
+                dragTip: 'Smooth J-Drag + Keep Fire Button at 43% for zero recoil scatter',
+                settingsTip: 'Moto Gametime / Game Mode ➔ Touch Sensitivity: Fast + Pointer Speed 100%',
+                dpi4: '438 DPI', dpi6: '458 DPI', dpi8: '478 DPI',
+                examples: ['Moto G54 / G84', 'Moto Edge 40 / 50', 'Nothing Phone 2a', 'Asus ROG Phone 7', 'Lava Agni 2']
             }
         };
 
+        // 🚫 Strict Validator: Detects Keypad phones, Fake/Unreleased phones, and Real Android/iOS models
         window.detectPhoneModelFromQuery = function(rawQuery) {
             const q = String(rawQuery || '').trim();
             const low = q.toLowerCase();
 
-            // Check if query mentions any phone brand or common model series
-            const brandMatchers = [
-                { key: 'iphone', rx: /\b(iphone|ios|ipad|apple)\b/i },
-                { key: 'iqoo', rx: /\b(iqoo|iq00|z6|z7|z9|neo 6|neo 7|neo 9)\b/i },
-                { key: 'poco', rx: /\b(poco|x3|x4|x5|x6|m3|m4|m5|m6|f4|f5|f6|c55|c65)\b/i },
-                { key: 'redmi', rx: /\b(redmi|xiaomi|mi |note 9|note 10|note 11|note 12|note 13|note 14|12 5g|13c|12c|10c|9a|k50|k20)\b/i },
-                { key: 'vivo', rx: /\b(vivo|t1|t2|t2x|t3|t3x|y16|y20|y21|y22|y36|y56|y100|y200|v23|v25|v27|v29|v30)\b/i },
-                { key: 'realme', rx: /\b(realme|narzo|c33|c35|c53|c55|c67|10 pro|11x|11 pro|12x|12 pro|gt neo)\b/i },
-                { key: 'oppo', rx: /\b(oppo|reno|a15|a16|a17|a38|a54|a57|a58|a59|a78|a79|f19|f21|f23|f25|k10|k12)\b/i },
-                { key: 'samsung', rx: /\b(samsung|galaxy|a12|a13|a14|a15|a23|a34|a54|m13|m14|m33|m34|f13|f14|f23|f54|s21|s22|s23|s24)\b/i },
-                { key: 'oneplus', rx: /\b(oneplus|one plus|nord|ce 2|ce 3|ce 4|10r|11r|12r)\b/i },
-                { key: 'infinix', rx: /\b(infinix|tecno|pova|spark|hot 12|hot 30|hot 40|gt 10|gt 20|zero 30)\b/i },
-                { key: 'moto', rx: /\b(moto|motorola|nothing|rog|asus|lava|iq|g34|g54|g64|g84|edge 40|edge 50)\b/i }
-            ];
+            // 1. Check if user typed a KEYPAD / BUTTON / FEATURE phone!
+            const keypadRx = /\b(keypad|button\s*phone|feature\s*phone|dabba|landline|nokia\s*(105|106|110|150|215|225|235|1100|1200|1280|1600|2660|3310|5310|6310|8210)|jio\s*(phone|bharat|prima|f220|f320|f90)|jiophone|samsung\s*(guru|metro|keystone|b110|b310|b313|e1200)|itel\s*(it21|it50|it52|magic|muzic|power|ace)|lava\s*(a1|a3|a5|a7|hero|gem|flip|pulse)|karbonn\s*(k9|kx|jumbo)|micromax\s*(x1|x4|x7|x8)|blackberry)\b/i;
+            if (keypadRx.test(low)) {
+                return { status: 'keypad', rawInput: q };
+            }
 
+            // 2. Clean conversational filler words to isolate the candidate phone name
+            let candidate = q.replace(/\b(sensi|sensitivity|headshot|setting|settings|for|oda|ku|la|bro|nanba|machi|enakku|venum|sollu|kudu|what|is|the|best|ff|free\s*fire|movement|speed|2gb|3gb|4gb|6gb|8gb|12gb|16gb|ram)\b/gi, ' ')
+                             .replace(/[^a-zA-Z0-9\s+]/g, ' ')
+                             .replace(/\s+/g, ' ').trim();
+
+            // 3. Check if user is trying to ask about a phone model that has an impossible/fake model number
+            // e.g., iPhone 20, iPhone 99, Redmi Note 50, Samsung S99, Vivo T99, Poco X99, Nokia Lumia, etc.
+            const fakeModelRx = /\b(iphone\s*(1|2|3|4|5|9|17|18|19|[2-9][0-9]|[1-9][0-9]{2})|redmi\s*note\s*(1|2|3|4|5|6|1[5-9]|[2-9][0-9])|samsung\s*(s|a|m|f)\s*(10[1-9]|[6-9][0-9]|[1-9][0-9]{2})|poco\s*(x|m|f|c)\s*([7-9]|[1-9][0-9]{2})|vivo\s*(t|v|y)\s*([4-9][0-9]{2}|[1-9][0-9]{3})|iqoo\s*z\s*([1-8][0-9]|9[0-9])|nokia\s*lumia|windows\s*phone|symbian|pagani|tesla\s*phone|freedom\s*251)\b/i;
+            if (fakeModelRx.test(low)) {
+                return { status: 'invalid_model', rawInput: candidate || q };
+            }
+
+            // 4. Match against our verified Android & iOS Brands
+            const brandOrder = ['redmi', 'poco', 'iqoo', 'vivo', 'realme', 'oppo', 'samsung', 'oneplus', 'infinix', 'moto', 'iphone'];
             let matchedKey = null;
-            for (const bm of brandMatchers) {
-                if (bm.rx.test(low)) {
-                    matchedKey = bm.key;
+            for (const key of brandOrder) {
+                const prof = PHONE_BRAND_PROFILES[key];
+                if (prof.validRx.test(candidate)) {
+                    matchedKey = key;
                     break;
                 }
             }
-            if (!matchedKey) return null;
 
-            const profile = PHONE_BRAND_PROFILES[matchedKey];
-            // Extract clean model name from user's message (strip words like sensi, headshot, ram, etc.)
-            let cleanModel = q.replace(/\b(sensi|sensitivity|headshot|setting|settings|for|oda|ku|la|bro|nanba|enakku|venum|sollu|what|is|the|best|ff|free fire|movement|speed)\b/gi, ' ')
-                              .replace(/\s+/g, ' ').trim();
-            if (!cleanModel || cleanModel.length < 2) {
-                cleanModel = profile.brand;
-            } else {
-                // Capitalize nicely
-                cleanModel = cleanModel.split(' ').map(w => w.length <= 3 ? w.toUpperCase() : (w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
+            // Also check if candidate starts with a known brand name followed by a valid model token
+            if (!matchedKey) {
+                const brandKeywordMap = [
+                    { key: 'redmi', rx: /\b(redmi|xiaomi)\b/i, validNumRx: /^\b(redmi|xiaomi)(\s+(note\s*(7|8|9|10|11|12|13|14)|8|9|9a|9i|9c|10|10a|10c|11|12|12c|13|13c|14c|a1|a2|a3|k20|k50i))?(\s+(pro|max|plus|prime|5g|s|t|lite))?$/i },
+                    { key: 'poco', rx: /\b(poco)\b/i, validNumRx: /^\b(poco)(\s+(c3|c31|c50|c51|c55|c61|c65|m2|m3|m4|m5|m6|x2|x3|x4|x5|x6|f1|f3|f4|f5|f6))?(\s+(pro|gt|neo|5g|plus|s))?$/i },
+                    { key: 'iqoo', rx: /\b(iqoo)\b/i, validNumRx: /^\b(iqoo)(\s+(z3|z5|z6|z7|z7s|z9|z9x|z9s|neo\s*6|neo\s*7|neo\s*9|3|7|9|9t|11|12|13))?(\s+(pro|lite|5g|se))?$/i },
+                    { key: 'vivo', rx: /\b(vivo)\b/i, validNumRx: /^\b(vivo)(\s+(t1|t1x|t2|t2x|t3|t3x|y12|y15|y16|y17s|y18|y20|y21|y22|y27|y28|y33s|y35|y36|y56|y73|y75|y100|y200|v20|v21|v23|v25|v27|v29|v30|v40|x60|x70|x80|x90|x100|s1|z1|u10|u20))?(\s+(pro|5g|e|s|lite|plus))?$/i },
+                    { key: 'realme', rx: /\b(realme|narzo)\b/i, validNumRx: /^\b(realme|narzo)(\s+(5|6|7|8|9|9i|10|11|11x|12|12x|13|20|30|50|50a|50i|60|60x|70|70x|n53|n55|n63|n65|c11|c12|c15|c20|c21|c25|c30|c31|c33|c35|c51|c53|c55|c63|c65|c67|gt|p1|p2))?(\s+(pro|plus|5g|prime|master|speed|neo|2|3|5))?$/i },
+                    { key: 'oppo', rx: /\b(oppo)\b/i, validNumRx: /^\b(oppo)(\s+(a15|a16|a17|a18|a31|a38|a53|a54|a55|a57|a58|a59|a74|a77|a78|a79|a3|f15|f17|f19|f21|f23|f25|f27|k10|k12x|reno\s*(5|6|7|8|9|10|11|12)))?(\s+(pro|5g|s|lite))?$/i },
+                    { key: 'samsung', rx: /\b(samsung|galaxy)\b/i, validNumRx: /^\b(samsung|galaxy)(\s+galaxy)?(\s+(a03|a04|a05|a10|a12|a13|a14|a15|a20|a21s|a22|a23|a24|a25|a30|a31|a32|a33|a34|a35|a50|a51|a52|a53|a54|a55|a71|a72|a73|m11|m12|m13|m14|m15|m21|m31|m32|m33|m34|m35|m51|m52|m53|m54|m55|f12|f13|f14|f15|f22|f23|f34|f41|f54|s20|s21|s22|s23|s24))?(\s+(fe|ultra|plus|5g|s))?$/i },
+                    { key: 'oneplus', rx: /\b(oneplus|one\s*plus|nord)\b/i, validNumRx: /^\b(oneplus|one\s*plus|nord)(\s+nord)?(\s+(ce|ce\s*2|ce\s*3|ce\s*4|2|2t|3|4|7|7t|8|8t|9|9r|9rt|10r|10t|10|11|11r|12|12r))?(\s+(lite|pro|5g))?$/i },
+                    { key: 'infinix', rx: /\b(infinix|tecno)\b/i, validNumRx: /^\b(infinix|tecno)(\s+(gt\s*10|gt\s*20|note\s*12|note\s*30|note\s*40|hot\s*12|hot\s*20|hot\s*30|hot\s*40|hot\s*40i|zero\s*30|smart\s*8|pova\s*4|pova\s*5|pova\s*6|spark\s*10|spark\s*20|camon\s*20|camon\s*30))?(\s+(pro|5g|play|neo|plus))?$/i },
+                    { key: 'moto', rx: /\b(moto|motorola|nothing|rog|asus|lava)\b/i, validNumRx: /^\b(moto|motorola|nothing|asus|rog|lava)(\s+(g24|g34|g54|g64|g73|g84|edge\s*30|edge\s*40|edge\s*50|phone\s*1|phone\s*2|phone\s*2a|phone\s*5|phone\s*6|phone\s*7|phone\s*8|blaze|agni\s*2))?(\s+(pro|fusion|neo|ultra|5g))?$/i },
+                    { key: 'iphone', rx: /\b(iphone|ipad|ios)\b/i, validNumRx: /^\b(iphone|ipad|ios)(\s+(6|6s|7|8|x|xr|xs|11|12|13|14|15|16|se|mini|air|pro))?(\s+(mini|plus|pro|max|pro\s*max))?$/i }
+                ];
+                for (const b of brandKeywordMap) {
+                    if (b.rx.test(candidate)) {
+                        if (b.validNumRx.test(candidate)) {
+                            matchedKey = b.key;
+                        } else {
+                            // Brand mentioned, but model number does NOT exist in the real world!
+                            return { status: 'invalid_model', rawInput: candidate };
+                        }
+                        break;
+                    }
+                }
             }
 
-            // Deterministic slight model hash (-2 to +2) so specific model numbers (e.g. Vivo Y20 vs Vivo V29) get model-tuned precision
-            let modelShift = 0;
-            for (let i = 0; i < cleanModel.length; i++) modelShift += cleanModel.charCodeAt(i);
-            const offset = (modelShift % 5) - 2;
-            // Pro / Ultra / GT / Max models have faster touch panels -> slightly lower General (-2) for steadier headshot lock
-            const isProModel = /\b(pro|ultra|max|gt|neo|edge|plus|f5|f6|x6)\b/i.test(low);
-            const proAdj = isProModel ? -2 : 1;
+            // If user explicitly asked for sensitivity of an unknown phone/brand (e.g. "Pineapple X1 sensi" or "Sony Walkman phone")
+            if (!matchedKey) {
+                if (/\b(phone|mobile|model)\b/i.test(low) || (low.includes('sensi') && candidate.length > 2)) {
+                    return { status: 'invalid_model', rawInput: candidate || q };
+                }
+                return null;
+            }
+
+            const profile = PHONE_BRAND_PROFILES[matchedKey];
+            let displayModel = candidate ? candidate.split(' ').map(w => w.length <= 3 ? w.toUpperCase() : (w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())).join(' ') : profile.brand;
+            displayModel = displayModel.replace(/\bIphone\b/i, 'iPhone').replace(/\bIqoo\b/i, 'iQOO');
+
+            // 100% DETERMINISTIC Hardware-Tier Calibration (ZERO Randomness!)
+            // Budget entry series (Y-series, C-series, A1x, Hot, Spark) have 60Hz/120Hz touch panels -> +3 boost
+            // Flagship / Pro / GT / Neo / S-series have 240Hz-360Hz panels -> -2 precision lock
+            const isBudgetSeries = /\b(y1|y2|y3|c1|c2|c3|c5|c6|a0|a1|m1|f1|hot|spark|smart|9a|9c|10a|12c|13c)\b/i.test(candidate);
+            const isProFlagship = /\b(pro|ultra|max|gt|neo|edge|s21|s22|s23|s24|11r|12r|f5|f6|x6)\b/i.test(candidate);
+            const tierAdj = isBudgetSeries ? 3 : (isProFlagship ? -2 : 0);
 
             const clamp200 = (v) => Math.min(200, Math.max(100, Math.round(v)));
 
-            // Build exact 3 RAM Variations (3GB/4GB, 6GB, 8GB/12GB+)
+            // Exact 98% Headshot-Calibrated RAM Variations (Locked & Reproducible)
             const var4gb = {
-                ram: '3GB / 4GB RAM Variant (Max Speed Boost)',
-                general: clamp200(profile.baseGen + 7 + offset + proAdj),
-                redDot: clamp200(profile.baseRed + 6 + offset),
-                scope2x: clamp200(profile.base2x + 5 + offset),
-                scope4x: clamp200(profile.base4x + 5 + offset),
-                sniper: clamp200(profile.baseSniper + 4),
-                freeLook: clamp200(145 + offset),
-                fireBtn: `${profile.baseFire + 3}%`,
+                ram: '4GB RAM Variant (High-Speed Drag & 360° Gloo Wall)',
+                general: clamp200(profile.baseGen + 5 + tierAdj),
+                redDot: clamp200(profile.baseRed + 5 + tierAdj),
+                scope2x: clamp200(profile.base2x + 4 + tierAdj),
+                scope4x: clamp200(profile.base4x + 4 + tierAdj),
+                sniper: clamp200(profile.baseSniper + 3),
+                freeLook: 145,
+                fireBtn: `${profile.baseFire + 2}% (Y-Position: 22%)`,
                 dpi: profile.dpi4
             };
 
             const var6gb = {
-                ram: '6GB RAM Variant (Balanced Speed + Headshot Lock)',
-                general: clamp200(profile.baseGen + 1 + offset + proAdj),
-                redDot: clamp200(profile.baseRed + 1 + offset),
-                scope2x: clamp200(profile.base2x + offset),
-                scope4x: clamp200(profile.base4x + offset),
+                ram: '6GB RAM Variant (98% One-Tap Headshot Sweet-Spot)',
+                general: clamp200(profile.baseGen + tierAdj),
+                redDot: clamp200(profile.baseRed + tierAdj),
+                scope2x: clamp200(profile.base2x + tierAdj),
+                scope4x: clamp200(profile.base4x + tierAdj),
                 sniper: clamp200(profile.baseSniper),
-                freeLook: clamp200(138 + offset),
-                fireBtn: `${profile.baseFire}%`,
+                freeLook: 138,
+                fireBtn: `${profile.baseFire}% (Y-Position: 20%)`,
                 dpi: profile.dpi6
             };
 
             const var8gb = {
-                ram: '8GB / 12GB RAM Variant (High-FPS Recoil Lock)',
-                general: clamp200(profile.baseGen - 5 + offset + proAdj),
-                redDot: clamp200(profile.baseRed - 5 + offset),
-                scope2x: clamp200(profile.base2x - 4 + offset),
-                scope4x: clamp200(profile.base4x - 4 + offset),
+                ram: '8GB / 12GB RAM Variant (90Hz/120Hz Recoil-Free Head Lock)',
+                general: clamp200(profile.baseGen - 5 + tierAdj),
+                redDot: clamp200(profile.baseRed - 5 + tierAdj),
+                scope2x: clamp200(profile.base2x - 4 + tierAdj),
+                scope4x: clamp200(profile.base4x - 4 + tierAdj),
                 sniper: clamp200(profile.baseSniper - 4),
-                freeLook: clamp200(132 + offset),
-                fireBtn: `${profile.baseFire - 3}%`,
+                freeLook: 132,
+                fireBtn: `${profile.baseFire - 2}% (Y-Position: 18%)`,
                 dpi: profile.dpi8
             };
 
-            // Detect if user specifically asked for 4gb, 6gb, 8gb, or 12gb
-            let requestedRam = null;
-            if (/\b(2gb|3gb|4gb|4 gb|3 gb)\b/i.test(low)) requestedRam = '4gb';
-            else if (/\b(6gb|6 gb)\b/i.test(low)) requestedRam = '6gb';
-            else if (/\b(8gb|12gb|16gb|8 gb|12 gb)\b/i.test(low)) requestedRam = '8gb';
-
             return {
-                modelName: cleanModel,
+                status: 'valid',
+                modelName: displayModel,
                 profile,
                 var4gb,
                 var6gb,
-                var8gb,
-                requestedRam
+                var8gb
             };
         };
 
         window.formatDeviceSensitivityReply = function(data) {
-            const { modelName, profile, var4gb, var6gb, var8gb } = data;
             const lang = window.currentAppLang || 'tanglish';
 
-            if (lang === 'en') {
-                return `🎯 **${modelName} — Pro Headshot & Movement Sensitivity (0–200 Scale)**
-*(Calibrated for ${profile.touchType})*
-
-🔹 **1. ${var4gb.ram}:**
-• **General (Movement):** ${var4gb.general} | **Red Dot (One-Tap):** ${var4gb.redDot}
-• **2x Scope:** ${var4gb.scope2x} | **4x Scope:** ${var4gb.scope4x} | **Sniper:** ${var4gb.sniper}
-• **Fire Button:** ${var4gb.fireBtn} | **Recommended DPI:** ${var4gb.dpi}
-
-🔹 **2. ${var6gb.ram}:**
-• **General (Movement):** ${var6gb.general} | **Red Dot (One-Tap):** ${var6gb.redDot}
-• **2x Scope:** ${var6gb.scope2x} | **4x Scope:** ${var6gb.scope4x} | **Sniper:** ${var6gb.sniper}
-• **Fire Button:** ${var6gb.fireBtn} | **Recommended DPI:** ${var6gb.dpi}
-
-🔹 **3. ${var8gb.ram}:**
-• **General (Movement):** ${var8gb.general} | **Red Dot (One-Tap):** ${var8gb.redDot}
-• **2x Scope:** ${var8gb.scope2x} | **4x Scope:** ${var8gb.scope4x} | **Sniper:** ${var8gb.sniper}
-• **Fire Button:** ${var8gb.fireBtn} | **Recommended DPI:** ${var8gb.dpi}
-
-⚡ **Pro Gameplay Tip:** ${profile.dragTip}. Set Graphics to **Smooth/Standard + High FPS (60/90 FPS)** for instant 360° gloo wall & crisp red-number headshots!`;
+            if (data.status === 'keypad') {
+                return lang === 'en'
+                    ? `🚫 **Keypad / Feature Phone Detected (${data.rawInput})**
+Free Fire is only supported on **Android & iOS smartphones**. Keypad/button phones cannot run Free Fire. Please enter a real Android or iPhone model (e.g., *Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13*).`
+                    : `🚫 **நண்பா, "${data.rawInput}" என்பது Keypad / Button போன்!**
+இதில் Free Fire விளையாட முடியாது, அதனால் இதற்கு Sensitivity கிடையாது. தயவுசெய்து உலகில் உள்ள உண்மையான **Android அல்லது iPhone மாடல் பெயரை** உள்ளிடுங்கள் (எ.கா: *Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13*).`;
             }
 
-            // Default Tanglish / Tamil clear & direct output
-            return `🎯 **${modelName} — Free Fire One-Tap Headshot & Fast Movement Sensitivity**
-*(Touch Engine: ${profile.touchType})*
+            if (data.status === 'invalid_model') {
+                return lang === 'en'
+                    ? `❌ **Model Not Found ("${data.rawInput}")**
+This phone model does not exist in official Android or iOS releases. Please type a real smartphone model (e.g., *Vivo T2x 5G, Redmi Note 13, POCO X6 Pro, iQOO Z9, Samsung A14, iPhone 13*).`
+                    : `❌ **நண்பா, "${data.rawInput}" என்ற பெயரில் எந்த அதிகாரப்பூர்வ Android / iOS போன் மாடலும் இல்லை!**
+தயவுசெய்து உண்மையான ஸ்மார்ட்போன் மாடல் பெயரை உள்ளிடுங்கள் (எ.கா: *Vivo T2x 5G, Redmi Note 13, POCO X6 Pro, iQOO Z9, Samsung A14, iPhone 13*).`;
+            }
 
-🔥 **1. 4GB RAM Variation (Fast Movement + Drag Boost):**
-• **General:** **${var4gb.general}** | **Red Dot:** **${var4gb.redDot}**
-• **2x Scope:** **${var4gb.scope2x}** | **4x Scope:** **${var4gb.scope4x}** | **Sniper:** **${var4gb.sniper}**
-• **Fire Button:** **${var4gb.fireBtn}** | **Safe DPI:** **${var4gb.dpi}**
+            const { modelName, profile, var4gb, var6gb, var8gb } = data;
 
-⚡ **2. 6GB RAM Variation (Perfect Balance + Sticky Aim):**
-• **General:** **${var6gb.general}** | **Red Dot:** **${var6gb.redDot}**
-• **2x Scope:** **${var6gb.scope2x}** | **4x Scope:** **${var6gb.scope4x}** | **Sniper:** **${var6gb.sniper}**
-• **Fire Button:** **${var6gb.fireBtn}** | **Safe DPI:** **${var6gb.dpi}**
+            if (lang === 'en') {
+                return `🎯 **${modelName} (${profile.os}) — 98% Headshot & Movement Sensitivity (0–200 Scale)**
+*(Hardware Engine: ${profile.touchType})*
 
-👑 **3. 8GB / 12GB RAM Variation (No Recoil + Laser Lock):**
-• **General:** **${var8gb.general}** | **Red Dot:** **${var8gb.redDot}**
-• **2x Scope:** **${var8gb.scope2x}** | **4x Scope:** **${var8gb.scope4x}** | **Sniper:** **${var8gb.sniper}**
-• **Fire Button:** **${var8gb.fireBtn}** | **Safe DPI:** **${var8gb.dpi}**
+🔥 **1. ${var4gb.ram}:**
+• **General:** ${var4gb.general} | **Red Dot:** ${var4gb.redDot} | **2x:** ${var4gb.scope2x} | **4x:** ${var4gb.scope4x} | **Sniper:** ${var4gb.sniper}
+• **Fire Button:** ${var4gb.fireBtn} | **Exact DPI:** ${var4gb.dpi}
 
-💡 **Headshot & Movement Trick:** ${profile.dragTip}. Game-ல் **High FPS ON** வச்சுக்கோங்க — Movement ஸ்பீடும் M1887/Desert Eagle ஹெட்ஷாட்டும் துல்லியமா விழும்!`;
+⚡ **2. ${var6gb.ram}:**
+• **General:** ${var6gb.general} | **Red Dot:** ${var6gb.redDot} | **2x:** ${var6gb.scope2x} | **4x:** ${var6gb.scope4x} | **Sniper:** ${var6gb.sniper}
+• **Fire Button:** ${var6gb.fireBtn} | **Exact DPI:** ${var6gb.dpi}
+
+👑 **3. ${var8gb.ram}:**
+• **General:** ${var8gb.general} | **Red Dot:** ${var8gb.redDot} | **2x:** ${var8gb.scope2x} | **4x:** ${var8gb.scope4x} | **Sniper:** ${var8gb.sniper}
+• **Fire Button:** ${var8gb.fireBtn} | **Exact DPI:** ${var8gb.dpi}
+
+✅ **How to Get 98% Headshots on ${modelName}:**
+1. **Crosshair Placement:** Keep red crosshair at enemy **collar-bone / white aim** before firing.
+2. **Drag Technique:** ${profile.dragTip}.
+3. **Device Setting:** ${profile.settingsTip} + Free Fire **High FPS (60/90 FPS) ON**.`;
+            }
+
+            return `🎯 **${modelName} (${profile.os}) — 98% Accurate Headshot & Fast Movement Sensitivity**
+*(Hardware Touch: ${profile.touchType})*
+
+🔥 **1. 4GB RAM Variation (Fast 360° Movement + Drag Boost):**
+• **General:** **${var4gb.general}** | **Red Dot:** **${var4gb.redDot}** | **2x:** **${var4gb.scope2x}** | **4x:** **${var4gb.scope4x}** | **Sniper:** **${var4gb.sniper}**
+• **Fire Button:** **${var4gb.fireBtn}** | **Exact DPI:** **${var4gb.dpi}**
+
+⚡ **2. 6GB RAM Variation (98% One-Tap Headshot Lock):**
+• **General:** **${var6gb.general}** | **Red Dot:** **${var6gb.redDot}** | **2x:** **${var6gb.scope2x}** | **4x:** **${var6gb.scope4x}** | **Sniper:** **${var6gb.sniper}**
+• **Fire Button:** **${var6gb.fireBtn}** | **Exact DPI:** **${var6gb.dpi}**
+
+👑 **3. 8GB / 12GB RAM Variation (Zero Over-Drag Recoil Lock):**
+• **General:** **${var8gb.general}** | **Red Dot:** **${var8gb.redDot}** | **2x:** **${var8gb.scope2x}** | **4x:** **${var8gb.scope4x}** | **Sniper:** **${var8gb.sniper}**
+• **Fire Button:** **${var8gb.fireBtn}** | **Exact DPI:** **${var8gb.dpi}**
+
+🎯 **98% Headshot & Movement விழுவதற்கான 3 முக்கிய விதிகள்:**
+1. **Aim Lock Position:** சுடுவதற்கு முன் Crosshair-ஐ எதிரியின் **நெஞ்சு/கழுத்து மட்டத்தில் (White/Red Aim)** வைத்து சுடவும்.
+2. **Drag Speed:** ${profile.dragTip}.
+3. **Phone Boost:** ${profile.settingsTip} + கேமில் **High FPS ON** வைக்கவும்!`;
         };
 
         const DEFAULT_SENSI_PILLS = [
-            { label: '📱 Vivo T2x / Y20', query: 'Vivo T2x 5G' },
+            { label: '📱 Vivo T2x 5G', query: 'Vivo T2x 5G' },
             { label: '📱 Redmi Note 13', query: 'Redmi Note 13' },
-            { label: '📱 POCO X6 / M6', query: 'POCO X6 Pro' },
-            { label: '📱 iQOO Z9 / Neo 7', query: 'iQOO Z9 5G' },
-            { label: '📱 Realme 11x / Narzo', query: 'Realme 11x 5G' },
-            { label: '📱 Samsung A14 / M34', query: 'Samsung Galaxy A14' },
-            { label: '📱 OPPO A57 / Reno', query: 'OPPO A57' },
-            { label: '📱 OnePlus Nord', query: 'OnePlus Nord CE 3' },
-            { label: '📱 iPhone 13 / 14', query: 'iPhone 13' }
+            { label: '📱 POCO X6 Pro', query: 'POCO X6 Pro' },
+            { label: '📱 iQOO Z9 5G', query: 'iQOO Z9 5G' },
+            { label: '📱 Realme 11x 5G', query: 'Realme 11x 5G' },
+            { label: '📱 Samsung A14', query: 'Samsung A14' },
+            { label: '📱 OPPO A57', query: 'OPPO A57' },
+            { label: '📱 OnePlus Nord CE 3', query: 'OnePlus Nord CE 3' },
+            { label: '📱 iPhone 13', query: 'iPhone 13' }
         ];
 
         window.handleAiBotSend = async function() {
             const input = document.getElementById('ai-bot-input');
-            const queryText = (input?.value || '').trim();
+            const queryText = window.sanitizeSafeTextInput(input?.value || '', 200);
             if (!queryText) return;
 
-            // Lightweight 2-second anti-spam guard so users can chat freely without waiting 30s
             const now = Date.now();
-            if (!window.isSuperAdminGlobal && window.lastAiMsgTime && (now - window.lastAiMsgTime < 2000)) {
+            if (!window.isSuperAdminGlobal && window.lastAiMsgTime && (now - window.lastAiMsgTime < 1500)) {
                 return;
             }
             window.lastAiMsgTime = now;
@@ -6536,45 +6745,45 @@ Tap a quick button below or type your question!`
             appendBotMessage('user', queryText);
             window.setBotEmotion('thinking');
 
-            // 1. Check if the user typed a specific Phone Model or Brand first!
+            // 1. Check Phone Model / Keypad / Fake Model Detector FIRST
             const deviceMatch = window.detectPhoneModelFromQuery(queryText);
             if (deviceMatch) {
                 const sensiReply = window.formatDeviceSensitivityReply(deviceMatch);
                 window.setBotEmotion('talking');
                 setTimeout(() => {
                     appendBotMessage('ai', sensiReply, DEFAULT_SENSI_PILLS);
-                    window.setBotEmotion('cool', 4500);
-                }, 180);
+                    window.setBotEmotion(deviceMatch.status === 'valid' ? 'cool' : 'surprised', 4500);
+                }, 150);
                 return;
             }
 
-            // 2. Check if user asked for general sensitivity without naming a phone model yet
+            // 2. Check if user asked for sensitivity without naming a model yet
             const low = queryText.toLowerCase();
             if (low.includes('sensi') || low.includes('headshot') || low.includes('one tap') || low.includes('சென்சி') || low.includes('dpi')) {
                 const askModelMsg = window.currentAppLang === 'en'
-                    ? `🎯 **Tell me your Phone Model Name!**
-Type your phone name below (e.g., **Vivo T2x**, **Redmi Note 13**, **POCO X6**, **iPhone 13**) or tap a model below to get exact **4GB, 6GB & 8GB RAM** Headshot & Movement Sensitivity!`
-                    : `🎯 **உங்க போன் மாடல் பெயர் என்ன நண்பா?**
-உங்க போன் பெயரை டைப் பண்ணுங்க (எ.கா: **Vivo T2x**, **Redmi Note 13**, **POCO X6**, **iPhone 13**) அல்லது கீழே உள்ள பட்டனைத் தட்டுங்க — **4GB, 6GB, 8GB RAM** வாரியாக துல்லியமான Headshot & Movement Sensitivity தர்றேன்!`;
+                    ? `🎯 **Type your Android or iPhone Model Name!**
+Example: **Vivo T2x**, **Redmi Note 13**, **POCO X6 Pro**, **iPhone 13** (Keypad & fake models are automatically filtered out).`
+                    : `🎯 **உங்க Android அல்லது iPhone மாடல் பெயர் என்ன நண்பா?**
+உங்க போன் மாடல் பெயரை டைப் பண்ணுங்க (எ.கா: **Vivo T2x**, **Redmi Note 13**, **POCO X6 Pro**, **iPhone 13**) — **4GB, 6GB, 8GB RAM** வாரியாக **98% Headshot & Movement Sensitivity** தர்றேன்!`;
                 setTimeout(() => {
                     appendBotMessage('ai', askModelMsg, DEFAULT_SENSI_PILLS);
                     window.setBotEmotion('cool', 4500);
-                }, 180);
+                }, 150);
                 return;
             }
 
-            // 3. Check simple direct tournament intents (Short, 2-3 line crisp replies)
+            // 3. Check simple direct tournament intents
             const directSmart = checkDirectTournamentIntent(queryText);
             if (directSmart) {
                 window.setBotEmotion('talking');
                 setTimeout(() => {
                     appendBotMessage('ai', directSmart);
                     window.setBotEmotion(detectReplyEmotion(queryText, directSmart), 4500);
-                }, 180);
+                }, 150);
                 return;
             }
 
-            // 4. Live AI Query (Gemini / Free AI) with strict SHORT & SIMPLE instruction
+            // 4. Live AI Query (with X-Firebase-AppCheck Token Header!)
             const loadingDiv = appendBotMessage('ai', '⚡ Thinking...');
 
             const apiKey = (window.geminiApiKey || '').trim();
@@ -6604,7 +6813,6 @@ Type your phone name below (e.g., **Vivo T2x**, **Redmi Note 13**, **POCO X6**, 
 
         function checkDirectTournamentIntent(q) {
             const low = q.toLowerCase().trim();
-            // Only intercept clear tournament FAQ intents; keep answers short & simple!
             const directKeywords = [
                 'active matches', 'my team status', 'how to register', 'rules & points',
                 'payment & utr help', 'customer support', 'vip & sp coins',
@@ -6622,23 +6830,36 @@ Type your phone name below (e.g., **Vivo T2x**, **Redmi Note 13**, **POCO X6**, 
         function getTournamentContextPrompt() {
             const matches = (window.allMatches || []).slice(0, 4).map(m => `${m.title} (${m.map}, ${m.time}, Prize:₹${m.prize}, Fee:${m.type==='free'?'Free':'₹'+m.fee})`).join('; ');
             const myCoins = window.currentUserSpCoins || 0;
-            const { p7, p14, p28, disc, upi } = window.getLiveVipPrices();
+            const { p7, p14, p28, plus28, disc, plusDisc, upi } = window.getLiveVipPrices();
             const pack = INDIAN_LANG_PACK[window.currentAppLang] || INDIAN_LANG_PACK.tanglish;
-            return `You are the helpful Esports Assistant for "Satta Pai Esports - Free Fire Tournament Arena".
+            return `You are the official Esports Assistant for "Satta Pai Esports - Free Fire Tournament Arena".
 LANGUAGE: ${pack.instruction}
-CRITICAL RESPONSE RULE:
-- Answer the user's exact question in 2 to 3 SHORT, SIMPLE, EASY-TO-UNDERSTAND sentences maximum.
-- NEVER write long essays, walls of text, or unrequested bullet lists.
-- If the user asks about a phone model's Free Fire sensitivity, ALWAYS provide 3 exact RAM variations (4GB RAM, 6GB RAM, and 8GB/12GB RAM) with General, Red Dot, 2x, 4x, Sniper (on the 0-200 scale), Fire Button %, and safe DPI for fast movement speed and one-tap headshots.
+CRITICAL RULES:
+1. Reply in 2 to 3 SHORT, SIMPLE, EASY-TO-UNDERSTAND sentences ONLY.
+2. If the user asks for sensitivity of a keypad phone (e.g., Nokia 1100, JioPhone, Samsung Guru) or a fake/non-existent phone model (e.g., iPhone 99, Redmi Note 50), state clearly that Free Fire only runs on real Android & iOS smartphones and that model is invalid.
+3. For real Android/iOS models, give exact, non-random 4GB, 6GB, and 8GB RAM variations on the 0-200 scale with Fire Button % and DPI for 98% headshot accuracy.
 FACTS:
-- VIP Pass: 7d=₹${p7}, 14d=₹${p14}, 28d=₹${p28} (UPI: ${upi}) or 500 SP Coins free. Gives ${disc}% match discount.
-- Scoring: 1 Kill = 3 Pts, 1st Place = 12 Pts, 2nd = 9 Pts, 3rd = 8 Pts.
-- User Coins: ${myCoins}. Active Matches: ${matches || 'None right now'}. Support: satta0pai@gmail.com.`;
+- Pro Pass: 7d=₹${p7}, 14d=₹${p14}, 28d=₹${p28} (${disc}% match discount) | Pro Plus Pass: from ₹${plus28} (${plusDisc}% match discount). UPI: ${upi}.
+- Scoring: 1 Kill = 3 Pts, 1st Place = 12 Pts. User Coins: ${myCoins}. Active Matches: ${matches || 'None right now'}.`;
         }
 
         async function fetchKeylessFreeAiReply(userMessage) {
             const sysPrompt = getTournamentContextPrompt();
-            const resp = await fetch('https://text.pollinations.ai/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: [ { role: 'system', content: sysPrompt }, { role: 'user', content: userMessage } ], model: 'openai', private: true }) });
+            const headers = await window.getAppCheckTokenHeaderObj();
+            let resp;
+            try {
+                resp = await fetch('https://text.pollinations.ai/', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ messages: [ { role: 'system', content: sysPrompt }, { role: 'user', content: userMessage } ], model: 'openai', private: true })
+                });
+            } catch (corsErr) {
+                resp = await fetch('https://text.pollinations.ai/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: [ { role: 'system', content: sysPrompt }, { role: 'user', content: userMessage } ], model: 'openai', private: true })
+                });
+            }
             if (!resp.ok) throw new Error('Free AI HTTP Error');
             const text = await resp.text();
             if (!text || text.trim().length < 2) throw new Error('Empty Free AI reply');
@@ -6651,22 +6872,20 @@ FACTS:
             const teams = window.allTeams || [];
             const myEmail = (window.loggedEmail || '').toLowerCase();
             const myCoins = window.currentUserSpCoins || 0;
-            const { p7, p14, p28, disc, upi } = window.getLiveVipPrices();
+            const { p7, p14, p28, plus28, plus60, plus90, disc, plusDisc, upi } = window.getLiveVipPrices();
             const lang = window.currentAppLang || 'tanglish';
 
-            // 1. Check phone model first just in case
             const dev = window.detectPhoneModelFromQuery(q);
             if (dev) return window.formatDeviceSensitivityReply(dev);
 
-            // 2. Crisp, 2-3 line English answers
             if (lang === 'en') {
                 if (low.includes('vip') || low.includes('price') || low.includes('pass')) {
-                    return `⭐ **VIP Pro Pass:** 7 Days = **₹${p7}** | 14 Days = **₹${p14}** | 28 Days = **₹${p28}** (or FREE with **500 SP Coins**).
-🎁 Gives **${disc}% OFF** all match entry fees, Gold Badge & Live Themes!`;
+                    return `⭐ **PRO Pass:** 7d ₹${p7} | 14d ₹${p14} | 28d ₹${p28} (${disc}% Match OFF).
+👑 **PRO PLUS Pass:** 28d ₹${plus28} | 60d ₹${plus60} | 90d ₹${plus90} (${plusDisc}% Match OFF + 0s Chat Cooldown)!`;
                 }
                 if (low.includes('coin') || low.includes('spin')) {
                     return `🪙 **Your Balance:** **${myCoins} SP Coins**.
-Earn free coins daily via **24h Lucky Spin (+10 to +100)** and **Daily Check-In (+15)** in the top header!`;
+Tap the top **🪙 Coins** button daily for **24h Lucky Spin (+10 to +100)** & **Daily Check-In (+15)**!`;
                 }
                 if (low.includes('match') || low.includes('slot')) {
                     if (matches.length === 0) return `🎮 No active matches right now. New custom rooms will be posted soon!`;
@@ -6675,28 +6894,27 @@ Earn free coins daily via **24h Lucky Spin (+10 to +100)** and **Daily Check-In 
                 }
                 if (low.includes('register') || low.includes('join')) {
                     return `📝 **How to Join (3 Easy Steps):**
-1. Go to **Join Match** tab & click **Join Slot**.
-2. Enter Team Name & 4 UIDs (auto-saved for next time).
-3. For paid matches, pay via UPI & paste your **12-digit UTR**!`;
+1. Open **Join Match** tab & click **Join Slot**.
+2. Enter Team Name & 4 UIDs (auto-saved).
+3. For paid matches, pay via UPI & tap **📋 Paste UTR**!`;
                 }
                 if (low.includes('utr') || low.includes('upi') || low.includes('pay') || low.includes('room')) {
                     return `🔑 **Payment & Room ID:**
-• **UTR:** The 12-digit reference number shown in GPay/PhonePe after payment.
-• **Room ID & Pass:** Shared inside **My Room Keys** 15 mins before match start!`;
+• **UTR:** 12-digit UPI reference number from GPay/PhonePe.
+• **Room ID & Pass:** Shared inside **🔑 My Room Keys** 15 mins before match start!`;
                 }
                 if (low.includes('rule') || low.includes('point') || low.includes('kill')) {
                     return `🏆 **Scoring Rules:** **1 Kill = 3 Pts** | **#1 Booyah = 12 Pts**, #2 = 9 Pts, #3 = 8 Pts.
 🚫 Hacks, scripts, or PC emulators result in an instant permanent ban.`;
                 }
                 return `👋 **Hi! How can I help you today?**
-• Type your **Phone Model** (e.g., *Vivo T2x, Redmi Note 13, iPhone 13*) for exact **4GB/6GB/8GB Headshot Sensitivity**!
+• Type your **Android / iPhone Model** (e.g., *Vivo T2x, Redmi Note 13, iPhone 13*) for **98% Headshot Sensitivity**!
 • Or ask about **Matches, Room ID, or VIP Pass**.`;
             }
 
-            // 3. Crisp, Simple, Direct Tamil / Tanglish Answers (No confusing long walls of text!)
             if (/^(hi|hello|hey|vanakkam|வணக்கம்|hii+|nanba|நண்பா|bro|machi|மச்சி|epdi iruka)/i.test(low)) {
                 return `👋 **வணக்கம் நண்பா! எப்படி உதவி செய்யட்டும்?**
-• உங்க **Phone Model** பெயரை (எ.கா: *Vivo T2x, Redmi 12, POCO X6, iPhone 13*) அனுப்புங்க — **4GB / 6GB / 8GB RAM** வாரியாக பக்கா Headshot Sensitivity தர்றேன்!
+• உங்க **Android / iPhone Model** பெயரை (எ.கா: *Vivo T2x, Redmi Note 13, POCO X6, iPhone 13*) அனுப்புங்க — **98% Headshot & Movement Sensitivity** தர்றேன்!
 • அல்லது **Match, Room ID, VIP Pass** பத்தி சிம்பிளா கேளுங்க.`;
             }
 
@@ -6720,13 +6938,12 @@ ${list}
                 return `📝 **மேட்சில் சேர்வது ரொம்ப ஈஸி (3 Steps):**
 1. **Join Match** டேப்பில் உங்களுக்குப் பிடித்த ஸ்லாட்டை கிளிக் பண்ணுங்க.
 2. Team Name & 4 Player UIDs போடுங்க.
-3. Paid மேட்ச்னா UPI-ல் பணம் அனுப்பிட்டு **📋 Paste UTR** பட்டனைத் தட்டி Submit கொடுங்க!`;
+3. Paid மேட்ச்னா UPI-ல் பணம் அனுப்பிட்டு **📋 Paste UTR** தட்டி Submit கொடுங்க!`;
             }
 
             if (low.includes('vip') || low.includes('premium') || low.includes('pass') || low.includes('price') || low.includes('evlo') || low.includes('எவ்வளவு') || low.includes('விலை')) {
-                return `⭐ **VIP Pro Pass விலைகள்:**
-• **7 Days:** ₹${p7} | **14 Days:** ₹${p14} | **28 Days:** ₹${p28} (அல்லது **500 SP Coins** வைத்து FREE-ஆக வாங்கலாம்!).
-• **நன்மைகள்:** எல்லா மேட்சிலும் **${disc}% கட்டணத் தள்ளுபடி**, Gold Name Badge & Live Themes!`;
+                return `⭐ **PRO Pass:** 7d ₹${p7} | 14d ₹${p14} | 28d ₹${p28} (${disc}% Match OFF).
+👑 **PRO PLUS Pass:** 28d ₹${plus28} | 60d ₹${plus60} | 90d ₹${plus90} (${plusDisc}% Match OFF + 0s Chat Cooldown)!`;
             }
 
             if (low.includes('coin') || low.includes('spin')) {
@@ -6752,17 +6969,36 @@ ${list}
             }
 
             return `⚡ **நண்பா! சிம்பிளா கேளுங்க, உடனே பதில் சொல்றேன்:**
-• 📱 **Headshot Sensitivity வேணுமா?** உங்க போன் மாடல் பெயரை டைப் பண்ணுங்க (எ.கா: *Vivo T2x, Redmi Note 13, POCO X6, iPhone 13*).
+• 📱 **98% Headshot Sensitivity வேணுமா?** உங்க Android / iPhone மாடல் பெயரை டைப் பண்ணுங்க (எ.கா: *Vivo T2x, Redmi Note 13, POCO X6 Pro, iPhone 13*).
 • 🎮 **Match / Room ID / VIP** டவுட்னா கீழே உள்ள பட்டனைத் தட்டுங்க!`;
         }
 
+        // 🛡️ Gemini API Fetch with X-Firebase-AppCheck Token Header + Automatic CORS Fallback
         async function fetchGeminiReply(userMessage, apiKey) {
             const sysPrompt = getTournamentContextPrompt();
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-            const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `${sysPrompt}
+            const bodyPayload = JSON.stringify({
+                contents: [{ role: 'user', parts: [{ text: `${sysPrompt}\n\nUser Question: ${userMessage}` }] }]
+            });
 
-User Question: ${userMessage}` }] }] }) });
-            if (!resp.ok) throw new Error('API Error');
+            // 1. Primary Request: Send X-Firebase-AppCheck token header as required for App Check verification
+            const headersWithAppCheck = await window.getAppCheckTokenHeaderObj();
+            let resp;
+            try {
+                resp = await fetch(url, {
+                    method: 'POST',
+                    headers: headersWithAppCheck,
+                    body: bodyPayload
+                });
+            } catch (preflightErr) {
+                // If direct Google AI Studio endpoint blocks custom header on browser CORS preflight, retry smoothly
+                resp = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: bodyPayload
+                });
+            }
+            if (!resp.ok) throw new Error('API Error: ' + resp.status);
             const data = await resp.json();
             const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
             if (!reply) throw new Error('Empty reply');
@@ -8030,7 +8266,7 @@ User Question: ${userMessage}` }] }] }) });
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, getDoc, onSnapshot, getDocs, query, where, orderBy, updateDoc, increment, runTransaction } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
         import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
         import { initializeAppCheck, ReCaptchaEnterpriseProvider, ReCaptchaV3Provider, getToken } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
@@ -8203,8 +8439,8 @@ User Question: ${userMessage}` }] }] }) });
         };
 
         async function ensureUserProfileOnLogin(user) {
-            if (!user || !user.email) return;
-            const email = user.email.toLowerCase();
+            const email = window.resolveAuthUserEmail ? window.resolveAuthUserEmail(user) : (user?.email || '').toLowerCase();
+            if (!user || !email) return;
             try {
                 const userRef = doc(db, 'users', email);
                 let snap = await getDoc(userRef);
@@ -8225,9 +8461,20 @@ User Question: ${userMessage}` }] }] }) });
                         gameUid: legacyData.gameUid || legacyData.ffUid || '',
                         playerId: legacyData.playerId || stableId,
                         dpBase64: legacyData.dpBase64 || legacyData.dp || '',
+                        spCoins: 0,
+                        isPremium: false,
+                        premiumUntil: 0,
+                        armoryTitle: '',
+                        unlockedTitles: [],
+                        freeSlotVoucher: '',
+                        bpBonusXp: 0,
+                        claimedBpTiers: [],
+                        isSuperAdmin: false,
+                        isBanned: false,
+                        chatBannedUntil: 0,
                         updatedAt: Date.now()
                     };
-                    await setDoc(userRef, safeCreateDoc, { merge: true });
+                    try { await setDoc(userRef, safeCreateDoc, { merge: true }); } catch (createErr) { console.warn("Profile create rule note:", createErr); }
                     const mergedNew = normalizeUserRecord(safeCreateDoc, email);
                     currentUserProfile = mergedNew;
                     userCache[email] = mergedNew;
@@ -8253,8 +8500,8 @@ User Question: ${userMessage}` }] }] }) });
         }
 
         async function checkSuperAdminStatus(user) {
-            if (!user || !user.email) { window.isSuperAdminGlobal = false; window.superAdminEmail = ""; window.checkLoginState(); return; }
-            const emailLow = user.email.toLowerCase();
+            const emailLow = window.resolveAuthUserEmail ? window.resolveAuthUserEmail(user) : (user?.email || '').toLowerCase();
+            if (!user || !emailLow) { window.isSuperAdminGlobal = false; window.superAdminEmail = ""; window.checkLoginState(); return; }
             try {
                 const superDoc = await getDoc(doc(db, 'settings', 'superAdmin'));
                 if (superDoc.exists() && superDoc.data().uid === user.uid) {
@@ -8798,6 +9045,8 @@ User Question: ${userMessage}` }] }] }) });
                     const btn = document.getElementById('maintenance-toggle-btn');
                     if(btn) { btn.textContent = d.maintenance ? "ON" : "OFF"; btn.className = d.maintenance ? "px-3 py-1 bg-emerald-600 text-white rounded" : "px-3 py-1 bg-rose-600 text-white rounded"; }
                     if (d.vipPrices) { window.vipConfig.prices = { 7: Number(d.vipPrices['7']) || 9, 14: Number(d.vipPrices['14']) || 19, 28: Number(d.vipPrices['28']) || 29 }; ['7','14','28'].forEach(k => { const el = document.getElementById('vip-cfg-price-' + k); if (el) el.value = window.vipConfig.prices[k]; }); }
+                    if (d.vipPlusPrices) { window.vipConfig.pricesPlus = { 28: Number(d.vipPlusPrices['28']) || 49, 60: Number(d.vipPlusPrices['60']) || 89, 90: Number(d.vipPlusPrices['90']) || 129 }; ['28','60','90'].forEach(k => { const el = document.getElementById('vip-cfg-plus-' + k); if (el) el.value = window.vipConfig.pricesPlus[k]; }); }
+                    if (d.vipPlusDiscountPct !== undefined) { window.vipConfig.plusDiscountPct = Number(d.vipPlusDiscountPct) || 25; const el = document.getElementById('vip-cfg-plus-disc'); if (el) el.value = window.vipConfig.plusDiscountPct; }
                     if (d.vipPrice) { window.vipConfig.price = Number(d.vipPrice) || 29; if (!d.vipPrices) window.vipConfig.prices[28] = window.vipConfig.price; }
                     if (d.vipUpi) { window.vipConfig.upi = d.vipUpi; const el = document.getElementById('vip-cfg-upi'); if(el) el.value = window.vipConfig.upi; }
                     if (d.vipDiscountPct !== undefined) { window.vipConfig.discountPct = Number(d.vipDiscountPct) || 10; const el = document.getElementById('vip-cfg-disc'); if(el) el.value = window.vipConfig.discountPct; }
@@ -8947,7 +9196,11 @@ User Question: ${userMessage}` }] }] }) });
         window.initializeChat = function() {
             const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
             onSnapshot(doc(db, 'settings', 'chatConfig'), snap => { if(snap.exists()) { currentChatMode = snap.data().mode || 'all'; const sel = document.getElementById('chat-mode-select'); if(sel) sel.value = currentChatMode; if(document.getElementById('chat-fullscreen').classList.contains('active')) checkChatBanStatus(); } });
-            onSnapshot(query(collection(db, 'chats'), orderBy('timestamp', 'desc')), snap => { allChatMessages = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(msg => msg.timestamp > cutoffTime).reverse(); window.renderChatMessages(); });
+            onSnapshot(query(collection(db, 'chats'), orderBy('timestamp', 'desc')), snap => {
+                allChatMessages = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(msg => msg.timestamp > cutoffTime).reverse();
+                if (window._chatRenderRaf) cancelAnimationFrame(window._chatRenderRaf);
+                window._chatRenderRaf = requestAnimationFrame(() => { window.renderChatMessages(); });
+            });
         };
 
         window.cleanupOldChats = function() {
@@ -11059,8 +11312,9 @@ User Question: ${userMessage}` }] }] }) });
                 window.showToast("Welcome " + (r.user.displayName || r.user.email));
             } catch(e) {
                 console.warn("Google login catch:", e);
-                if (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request') {
-                    window.showToast("⚠️ Popup blocked! Please allow popups in your browser.");
+                if (e.code === 'auth/popup-blocked') {
+                    window.showToast("🔄 Redirecting to Google Sign-In...");
+                    try { await signInWithRedirect(auth, provider); } catch(reErr) {}
                 } else {
                     window.showToast(e.message || "Login failed");
                 }
@@ -11127,13 +11381,48 @@ User Question: ${userMessage}` }] }] }) });
                 });
             }, "Yes, Logout");
         };
+        // Handle Mobile Browser Redirect Result (Prevents returning to login screen on mobile browsers)
+        getRedirectResult(auth).then(async (r) => {
+            if (r && r.user) {
+                const em = window.resolveAuthUserEmail(r.user);
+                if (em) {
+                    window.loggedEmail = em;
+                    try {
+                        localStorage.setItem('satta_pai_auth_email', em);
+                        sessionStorage.setItem('satta_pai_auth_email', em);
+                        sessionStorage.removeItem('satta_pai_guest_session');
+                    } catch(e) {}
+                    const ov = document.getElementById('google-login-overlay');
+                    if (ov) { ov.classList.add('hidden'); ov.setAttribute('hidden', ''); ov.setAttribute('aria-hidden', 'true'); ov.setAttribute('inert', ''); }
+                    await ensureUserProfileOnLogin(r.user);
+                    await checkSuperAdminStatus(r.user);
+                    if (typeof window.checkLoginState === 'function') window.checkLoginState();
+                }
+            }
+        }).catch(() => {});
+
         onAuthStateChanged(auth, async (u) => { 
-            if (u && u.email) { 
-                window.loggedEmail = (u.email || '').toLowerCase(); 
+            const resolvedEmail = window.resolveAuthUserEmail ? window.resolveAuthUserEmail(u) : (u?.email || '').toLowerCase();
+            if (u && resolvedEmail) { 
+                window.loggedEmail = resolvedEmail; 
                 try {
                     localStorage.setItem('satta_pai_auth_email', window.loggedEmail);
+                    sessionStorage.setItem('satta_pai_auth_email', window.loggedEmail);
                     sessionStorage.removeItem('satta_pai_guest_session');
-                } catch(e) {} 
+                } catch(e) {}
+                // Immediately hide login overlay so user NEVER bounces back to sign-up screen on another phone
+                const ov = document.getElementById('google-login-overlay');
+                if (ov) {
+                    ov.classList.add('hidden');
+                    ov.setAttribute('hidden', '');
+                    ov.setAttribute('aria-hidden', 'true');
+                    ov.setAttribute('inert', '');
+                }
+                if (window._loginVideoRaf) {
+                    cancelAnimationFrame(window._loginVideoRaf);
+                    window._loginVideoRaf = null;
+                }
+                if (typeof window.checkLoginState === 'function') window.checkLoginState();
                 if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
                 await ensureUserProfileOnLogin(u); 
                 await checkSuperAdminStatus(u); 
@@ -13936,14 +14225,23 @@ User Question: ${userMessage}` }] }] }) });
                 const p14 = Number(payload.p14) || 19;
                 const p28 = Number(payload.p28) || 29;
                 const disc = Number(payload.disc) || 10;
+                const plus28 = Number(payload.plus28) || 49;
+                const plus60 = Number(payload.plus60) || 89;
+                const plus90 = Number(payload.plus90) || 129;
+                const plusDisc = Number(payload.plusDisc) || 25;
                 const upi = String(payload.upi || 'sattapai@oksbi').trim();
+                if (!/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(upi)) {
+                    throw new Error("Invalid UPI ID format (example: merchant@oksbi)");
+                }
                 await setDoc(doc(db, 'settings', 'config'), {
                     vipPrice: p28,
                     vipPrices: { '7': p7, '14': p14, '28': p28 },
                     vipDiscountPct: disc,
+                    vipPlusPrices: { '28': plus28, '60': plus60, '90': plus90 },
+                    vipPlusDiscountPct: plusDisc,
                     vipUpi: upi
                 }, { merge: true });
-                return { p7, p14, p28, disc, upi };
+                return { p7, p14, p28, disc, plus28, plus60, plus90, plusDisc, upi };
             }
 
             if (fnName === 'submitUtrRequest') {
@@ -14493,15 +14791,21 @@ User Question: ${userMessage}` }] }] }) });
             const p14 = Number(document.getElementById('vip-cfg-price-14')?.value) || 19;
             const p28 = Number(document.getElementById('vip-cfg-price-28')?.value) || 29;
             const disc = Number(document.getElementById('vip-cfg-disc')?.value) || 10;
+            const plus28 = Number(document.getElementById('vip-cfg-plus-28')?.value) || 49;
+            const plus60 = Number(document.getElementById('vip-cfg-plus-60')?.value) || 89;
+            const plus90 = Number(document.getElementById('vip-cfg-plus-90')?.value) || 129;
+            const plusDisc = Number(document.getElementById('vip-cfg-plus-disc')?.value) || 25;
             const upi = (document.getElementById('vip-cfg-upi')?.value || 'sattapai@oksbi').trim();
             try {
-                await callCloudFn('saveVipAdminConfig', { p7, p14, p28, disc, upi });
+                await callCloudFn('saveVipAdminConfig', { p7, p14, p28, disc, plus28, plus60, plus90, plusDisc, upi });
                 window.vipConfig.prices = { 7: p7, 14: p14, 28: p28 };
+                window.vipConfig.pricesPlus = { 28: plus28, 60: plus60, 90: plus90 };
                 window.vipConfig.price = p28;
                 window.vipConfig.discountPct = disc;
+                window.vipConfig.plusDiscountPct = plusDisc;
                 window.vipConfig.upi = upi;
                 window.syncAllVipPricesEverywhere();
-                window.showToast(`✅ Saved! Pro Pass: ₹${p7} / ₹${p14} / ₹${p28} synced everywhere!`);
+                window.showToast(`✅ Saved! Pro (₹${p7}/${p14}/${p28}) & Pro+ (₹${plus28}/${plus60}/${plus90}) synced!`);
             } catch (e) {
                 window.showToast("❌ " + (e.message || "Failed to save VIP config"));
             }
