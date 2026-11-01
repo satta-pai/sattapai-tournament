@@ -3,7 +3,7 @@
 <head>
     <script>
         window.IS_SATTA_PAI_APP_BUILD = false;
-        window.CURRENT_APP_APK_VERSION = 'v13.0';
+        window.CURRENT_APP_APK_VERSION = window.CURRENT_APP_APK_VERSION || '1.0.0';
         (function() {
             try {
                 var getCk = function(n) {
@@ -13,7 +13,10 @@
                     } catch(e) { return ''; }
                 };
                 var nativeObj = window.__SP_NATIVE_STORAGE__ || null;
-                var curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
+                if (nativeObj && nativeObj.nativeBuildVersion) {
+                    window.CURRENT_APP_APK_VERSION = nativeObj.nativeBuildVersion;
+                }
+                var curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
                 var savedVer = (
                     (nativeObj && nativeObj.appVersion) ||
                     localStorage.getItem('satta_pai_logged_app_version') ||
@@ -36,8 +39,12 @@
                     ''
                 ).trim();
 
-                // Enforce 1-Time Login Per Version:
-                // Only clear session if a previous version was recorded and differs from the newly updated app version!
+                // Normalize legacy 'v13.0' stamp to '1.0.0' so existing logged-in users aren't logged out unnecessarily
+                if (savedVer === 'v13.0' && curVer === '1.0.0') {
+                    savedVer = '1.0.0';
+                    try { localStorage.setItem('satta_pai_logged_app_version', '1.0.0'); } catch(e) {}
+                }
+
                 if (savedVer && savedVer !== curVer) {
                     try {
                         localStorage.removeItem('satta_pai_auth_email');
@@ -63,7 +70,6 @@
                 if ((savedEmail && savedEmail !== 'guest' && savedEmail.indexOf('@') !== -1) || savedGuest === '1') {
                     window.loggedEmail = (savedEmail && savedEmail !== 'guest' && savedEmail.indexOf('@') !== -1) ? savedEmail : 'guest';
                     if (window.loggedEmail !== 'guest') window._hasVerifiedAuthSession = true;
-                    // Also skip cinematic intro on subsequent app opens once logged in so app opens instantaneously!
                     try { sessionStorage.setItem('sp_intro_shown_session', '1'); } catch(e) {}
                     var st = document.createElement('style');
                     st.id = 'sp-suppress-login-boot';
@@ -1848,7 +1854,7 @@ html.theme-ghost-live {
             </div>
 
             <div id="in-site-mail-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-xs">
-                <div class="cyber-card p-5 text-center text-slate-400 text-xs">📭 No system mails yet. Check back for Super Admin gifts!</div>
+                <div class="cyber-card p-5 text-center text-slate-400 text-xs">📭 No system mails yet. Check back for Official Arena gifts!</div>
             </div>
         </div>
     </div>
@@ -1931,10 +1937,12 @@ html.theme-ghost-live {
                     </div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 border-b border-white/5 items-center text-[9.5px]"><div class="truncate">Paid Match Discount</div><div class="text-center text-rose-400">0%</div><div class="text-center text-emerald-400 font-bold"><span id="vip-perk-discount-lbl">10</span>% OFF</div><div class="text-center text-yellow-300 font-extrabold"><span id="vip-perk-plus-discount-lbl">25</span>% OFF</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Global Chat Cooldown</div><div class="text-center text-amber-400">15s</div><div class="text-center text-emerald-400 font-bold">5s</div><div class="text-center text-yellow-300 font-extrabold">0s No Wait ⚡</div></div>
+                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Private DM Security (App)</div><div class="text-center text-slate-300">Normal</div><div class="text-center text-emerald-400 font-bold">🔒 Stealth</div><div class="text-center text-yellow-300 font-extrabold">🛡️ E2E Vault</div></div>
+                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Hide Last Seen & Blue ✓✓</div><div class="text-center text-slate-300">Basic</div><div class="text-center text-emerald-400 font-bold">✓ Ghost</div><div class="text-center text-yellow-300 font-extrabold">👻 Pro Cloak</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>DP Photo Change</div><div class="text-center text-amber-400">6 Days</div><div class="text-center text-emerald-400 font-bold">2 Days</div><div class="text-center text-yellow-300 font-extrabold">Unlimited ⚡</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Name / IGN / UID Edit</div><div class="text-center text-amber-400">24 Hrs</div><div class="text-center text-emerald-400 font-bold">6 Hrs</div><div class="text-center text-yellow-300 font-extrabold">Unlimited ⚡</div></div>
-                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>App Themes Access</div><div class="text-center text-slate-300">Default</div><div class="text-center text-emerald-400 font-bold">Premium</div><div class="text-center text-yellow-300 font-extrabold">7 Live Themes</div></div>
-                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Daily Coins & BP XP</div><div class="text-center text-slate-300">1x (+10🪙)</div><div class="text-center text-emerald-400 font-bold">1x (+10🪙)</div><div class="text-center text-yellow-300 font-extrabold">2x (+20🪙) 🔥</div></div>
+                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>App Themes & Icons</div><div class="text-center text-slate-300">Default</div><div class="text-center text-emerald-400 font-bold">Pro + Icons</div><div class="text-center text-yellow-300 font-extrabold">7 Live + Icons</div></div>
+                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Daily Coins & BP XP</div><div class="text-center text-slate-300">1x (+10🪙)</div><div class="text-center text-emerald-400 font-bold">1.5x XP</div><div class="text-center text-yellow-300 font-extrabold">2x (+240 XP) 🔥</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Royal Crown Chat Aura</div><div class="text-center text-rose-400">✗</div><div class="text-center text-amber-400 font-bold">⭐ PRO</div><div class="text-center text-yellow-300 font-extrabold">👑 GOLD AURA</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] items-center"><div>AI Tactical Assistant</div><div class="text-center text-slate-300">15/Day</div><div class="text-center text-emerald-400 font-bold">60/Day</div><div class="text-center text-yellow-300 font-extrabold">♾️ Unlimited</div></div>
                 </div>
@@ -1994,7 +2002,7 @@ html.theme-ghost-live {
                     <div class="space-y-1">
                         <div class="text-sm font-black text-amber-300 uppercase">Direct UPI Payment Paused — Use Gift Code!</div>
                         <p class="text-[11px] text-slate-300 leading-relaxed">
-                            Direct UPI checkout for <b>⭐ PRO</b> & <b>👑 PRO PLUS</b> is currently turned OFF by Super Admin. Please use a <b>Gift / Redeem Code</b> to activate your pass instantly!
+                            Direct UPI checkout for <b>⭐ PRO</b> & <b>👑 PRO PLUS</b> is currently paused by System. Please use a <b>Gift / Redeem Code</b> to activate your pass instantly!
                         </p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -2148,9 +2156,11 @@ html.theme-ghost-live {
                 <p class="text-[11px]" style="color: var(--text-muted);">Official Free Fire Tournament App & Web Platform • Fast 60FPS HUD • Push Room Alerts • Multi-Language</p>
             </div>
             <div class="space-y-2 text-xs">
-                <button type="button" onclick="triggerNativeAppInstall()" class="btn-theme w-full py-2.5 text-xs font-extrabold uppercase cursor-pointer shadow-lg">📲 1-Click Install Native App (No Chrome Icon)</button>
-                <button type="button" onclick="launchFullScreenAppMode()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-extrabold text-xs uppercase cursor-pointer shadow-lg flex items-center justify-center gap-1.5">🖥️ Launch Full-Screen App Mode Now</button>
-                
+                <a id="web-direct-apk-download-btn" href="#" onclick="return window.downloadOfficialAndroidApkFromWeb(event)" class="btn-theme w-full py-3 text-xs font-black uppercase cursor-pointer shadow-lg flex items-center justify-center gap-1.5">
+                    <span>📥</span><span id="web-direct-apk-download-lbl">Download Official Android App (APK)</span>
+                </a>
+                <button type="button" onclick="triggerNativeAppInstall()" class="w-full py-2.5 rounded-xl cyber-card border border-emerald-400/50 text-emerald-300 font-extrabold text-xs uppercase cursor-pointer shadow-lg">📲 1-Click Add Web App to Home Screen</button>
+                <button type="button" onclick="launchFullScreenAppMode()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-slate-200 font-bold text-xs uppercase cursor-pointer flex items-center justify-center gap-1.5">🖥️ Launch Full-Screen Gaming Mode</button>
             </div>
             <div class="cyber-card p-3 text-left text-[10px] space-y-1.5 bg-zinc-900/80 border border-amber-400/40" style="color: var(--text-muted);">
                 <div class="font-extrabold text-amber-400 uppercase">📲 How to Enable Full Screen App Mode:</div>
@@ -2288,7 +2298,7 @@ html.theme-ghost-live {
             <div class="p-2.5 bg-zinc-800 rounded-lg text-xs italic break-words text-left border border-zinc-700">"<span id="cp-msg"></span>"</div>
             <div id="cp-player-dm-actions" class="pt-1.5 border-t border-zinc-700/80 space-y-1.5">
                 <div class="grid grid-cols-2 gap-1.5">
-                    <button type="button" id="cp-start-dm-btn" onclick="window.startPrivateDmFromProfileModal()" class="app-only-feature hidden col-span-2 py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-xs cursor-pointer flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-600/30">
+                    <button type="button" id="cp-start-dm-btn" onclick="window.startPrivateDmFromProfileModal()" class="app-only-feature hidden col-span-2 py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-xs cursor-pointer flex items-center justify-center gap-1.5">
                         <span>💬</span><span>Send Private DM Message</span>
                     </button>
                     <button type="button" id="cp-block-user-btn" onclick="window.toggleBlockUserFromProfileModal()" class="py-1.5 px-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-rose-500/40 text-rose-300 font-extrabold text-[10.5px] cursor-pointer">
@@ -2496,7 +2506,7 @@ html.theme-ghost-live {
             <button type="button" onclick="loginAsGuest()" class="modal-close-btn absolute right-3 top-3" title="Skip / Browse as Guest" aria-label="Close"><svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
 
             <!-- Animated Esports Emblem & Video Header -->
-            <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+            <div class="relative w-20 h-20 mx-auto flex items-center justify-center cursor-pointer" onclick="if(typeof window.playAppLogoSoundEffect === 'function') window.playAppLogoSoundEffect();">
                 <div class="sp-intro-RotatingOuter" style="inset: -8px;"></div>
                 <div class="sp-intro-RotatingHex" style="inset: -4px;"></div>
                 <div class="w-16 h-16 rounded-2xl flex flex-col items-center justify-center shadow-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%); box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), 0 0 0 2px #fbbf24;">
@@ -2518,7 +2528,7 @@ html.theme-ghost-live {
                 <div class="p-3 rounded-xl bg-rose-950/80 border-2 border-rose-500/70 space-y-1.5 shadow-lg">
                     <div class="flex items-center justify-between gap-1">
                         <span class="px-2 py-0.5 rounded bg-rose-600 text-white font-black text-[9.5px] uppercase tracking-wider">🚫 Website Access Locked</span>
-                        <span id="login-ban-by-badge" class="text-[9.5px] font-mono font-bold text-amber-300">🛡️ Super Admin</span>
+                        <span id="login-ban-by-badge" class="text-[9.5px] font-mono font-bold text-amber-300">🤖 System Security</span>
                     </div>
                     <div class="text-xs font-extrabold text-white">Your account is permanently banned from using this website.</div>
                     <div class="p-2 rounded-lg bg-black/60 border border-rose-500/40 font-mono text-[10.5px] space-y-1 text-slate-200">
@@ -2531,7 +2541,7 @@ html.theme-ghost-live {
                 <!-- Appeal Status Notices on Login Page -->
                 <div id="login-ban-appeal-pending" class="hidden p-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-center space-y-1">
                     <div class="text-xs font-black text-amber-300">⏳ Ban Appeal Submitted to Customer Care</div>
-                    <p class="text-[10.5px] text-slate-300">Super Admin is reviewing your proof screenshot & description. Please wait for verification.</p>
+                    <p class="text-[10.5px] text-slate-300">System Security is reviewing your proof screenshot & description. Please wait for verification.</p>
                 </div>
                 <div id="login-ban-appeal-rejected" class="hidden p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/40 text-center space-y-0.5">
                     <div class="text-[11px] font-black text-rose-300">❌ Previous Appeal Rejected — Submit Fresh Proof Below</div>
@@ -2562,7 +2572,7 @@ html.theme-ghost-live {
                         <textarea id="login-ban-appeal-text" rows="3" placeholder="Explain clearly why you were banned and attach your proof screenshot above..." class="cyber-input w-full p-2 text-xs font-sans rounded-lg resize-none"></textarea>
                     </div>
                     <button type="button" onclick="window.submitBanAppeal('login')" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs cursor-pointer shadow-lg flex items-center justify-center gap-1.5">
-                        📨 Submit Ban Appeal to Super Admin
+                        📨 Submit Ban Appeal to System
                     </button>
                 </div>
 
@@ -2692,7 +2702,7 @@ html.theme-ghost-live {
 
     <header class="sticky top-0 z-50 px-3.5 py-2.5 border-b backdrop-blur-md shadow-sm" style="background: var(--header-bg); border-color: var(--border-color);">
         <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1" onclick="switchTab('home')">
+            <div class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1" onclick="if(typeof window.playAppLogoSoundEffect === 'function') window.playAppLogoSoundEffect(); switchTab('home')">
                 <div id="brand-logo-container" class="w-9 h-9 rounded-xl shrink-0 flex flex-col items-center justify-center overflow-hidden border-2 shadow-lg relative brand-logo-dynamic-bg">
                     <img id="brand-logo-img" src="" class="absolute inset-0 w-full h-full object-cover z-10 hidden" alt="Satta Pai Logo">
                     <div id="brand-logo-emoji" class="flex flex-col items-center justify-center leading-none">
@@ -2721,13 +2731,17 @@ html.theme-ghost-live {
                     <span class="text-xs sm:text-sm">📬</span>
                     <span id="header-mail-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[15px] h-[15px] px-1 rounded-full bg-rose-600 text-white text-[8.5px] font-black flex items-center justify-center shadow ring-1 ring-black animate-bounce">0</span>
                 </button>
+                <!-- 📲 Web-Only Direct APK Download Button -->
+                <button type="button" id="web-header-apk-dl-btn" onclick="window.openAppInstallModal()" class="web-only-feature px-2 py-1 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-extrabold text-[10px] items-center gap-1 cursor-pointer shadow hover:brightness-110 transition-all shrink-0" title="Download Official Android App">
+                    <span>📲</span><span class="hidden sm:inline">Download App</span>
+                </button>
                 <!-- ⛶ Web-Only Fullscreen Toggle Button -->
-                    <button type="button" id="web-fullscreen-toggle-btn" onclick="window.toggleWebsiteFullscreen()" class="web-only-feature w-7 h-7 sm:w-8 sm:h-8 rounded-lg cyber-card flex items-center justify-center cursor-pointer hover:border-cyan-400 transition-all shrink-0" title="Toggle Fullscreen">
-                        <span class="text-xs">⛶</span>
-                    </button>
-                    <!-- 🎵 Compact Song Play / Pause Button (Visible on all mobile & desktop screens) -->
-                <button onclick="toggleMusic()" id="music-btn" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg cyber-card flex items-center justify-center shrink-0 cursor-pointer relative border border-white/10 hover:border-amber-400/60 transition-all shadow-sm" style="color: var(--text-main);" title="Play / Pause Tournament Song">
-                    <svg id="music-icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current pointer-events-none" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                <button type="button" id="web-fullscreen-toggle-btn" onclick="window.toggleWebsiteFullscreen()" class="web-only-feature w-7 h-7 sm:w-8 sm:h-8 rounded-lg cyber-card flex items-center justify-center cursor-pointer hover:border-cyan-400 transition-all shrink-0" title="Toggle Fullscreen">
+                    <span class="text-xs">⛶</span>
+                </button>
+                <!-- ⚙️ Compact Settings Button (Replaces Old Speaker Button — Controls Music Volume, Mute & Language) -->
+                <button type="button" onclick="window.openAppQuickSettingsModal()" id="music-btn" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg cyber-card flex items-center justify-center shrink-0 cursor-pointer relative border border-white/10 hover:border-amber-400/60 transition-all shadow-sm" style="color: var(--text-main);" title="Settings • Music Volume, Mute & Language">
+                    <svg id="music-icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current pointer-events-none" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                     <div id="music-viz-container" class="hidden absolute -bottom-0.5 -right-0.5 flex items-end gap-0.5 h-2.5 bg-black/80 px-0.5 rounded border border-amber-400/40">
                         <span class="music-viz-bar h-1"></span>
                         <span class="music-viz-bar h-2.5"></span>
@@ -2740,21 +2754,13 @@ html.theme-ghost-live {
                     </button>
                     <div id="settings-dropdown" onclick="event.stopPropagation()" class="dropdown-content p-3 space-y-2.5 text-left text-xs">
 
-                        <!-- ⭐ Premium Pass, 📲 Install App, 🪙 Coins & 🎵 Song inside 3-Dots Menu -->
+                        <!-- ⭐ Premium Pass, 📲 Install App & 🪙 Coins inside 3-Dots Menu -->
                         <div class="space-y-1.5 pb-2 border-b" style="border-color: var(--border-color);">
 
                             <div class="font-semibold text-[10px] uppercase tracking-wider flex items-center justify-between" style="color: var(--text-muted);">
                                 <span>⚡ Quick Access</span>
-                                <span class="text-[9px] text-amber-400 font-mono">Audio & Perks</span>
+                                <span class="text-[9px] text-amber-400 font-mono">Arena Perks</span>
                             </div>
-                            <!-- 🎵 Dedicated Song Play/Pause in 3-Dots Menu -->
-                            <button type="button" onclick="toggleMusic(); closeMenuDropdown();" class="w-full py-2 px-3 rounded-xl cyber-card flex items-center justify-between font-extrabold text-xs cursor-pointer border border-white/10 hover:border-amber-400/50 transition-all">
-                                <span class="flex items-center gap-2">
-                                    <span class="text-sm">🎵</span>
-                                    <span>Background Music</span>
-                                </span>
-                                <span id="menu-music-status-pill" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-800 text-slate-300">Play / Pause</span>
-                            </button>
                             <button type="button" onclick="openVipPassModal(); closeMenuDropdown();" id="header-vip-btn" class="w-full py-2 px-3 rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-between cursor-pointer shadow border border-amber-400/50 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition-all">
                                 <span class="flex items-center gap-1.5">
                                     <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current drop-shadow"><path d="M12 2l2.9 6.9L22 9.2l-5.4 4.7 1.7 7.1L12 17.6 5.7 21l1.7-7.1L2 9.2l7.1-.3L12 2z"/></svg>
@@ -2777,22 +2783,6 @@ html.theme-ghost-live {
                             <div class="grid grid-cols-2 gap-1.5">
                                 <button onclick="setDarkMode(false)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer">Light</button>
                                 <button onclick="setDarkMode(true)" class="cyber-card py-1.5 px-2 text-center font-medium cursor-pointer bg-zinc-800 text-white">Dark</button>
-                            </div>
-                        </div>
-
-                        <div class="pt-2 border-t space-y-1.5" style="border-color: var(--border-color);">
-                            <button type="button" onclick="window.toggleLangSection(event)" class="w-full flex items-center justify-between cursor-pointer py-1.5 hover:bg-zinc-500/10 rounded px-1">
-                                <span class="themes-header" style="padding:0;">🇮🇳 Language: <span id="current-lang-badge" class="text-amber-400">Tanglish</span></span>
-                                <svg id="lang-chevron" class="w-4 h-4 fill-current transition-transform duration-300" style="color: var(--accent-primary);" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
-                            </button>
-                            <div id="settings-lang-select" class="grid grid-cols-2 gap-1.5 pt-1">
-                                <button type="button" data-lang-btn="ta" onclick="event.stopPropagation(); setAppLanguage('ta')" class="lang-option-btn cyber-card py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 தமிழ்</button>
-                                <button type="button" data-lang-btn="tanglish" onclick="event.stopPropagation(); setAppLanguage('tanglish')" class="lang-option-btn btn-theme py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 Tanglish</button>
-                                <button type="button" data-lang-btn="en" onclick="event.stopPropagation(); setAppLanguage('en')" class="lang-option-btn cyber-card py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 English</button>
-                                <button type="button" data-lang-btn="hi" onclick="event.stopPropagation(); setAppLanguage('hi')" class="lang-option-btn cyber-card py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 हिन्दी</button>
-                                <button type="button" data-lang-btn="te" onclick="event.stopPropagation(); setAppLanguage('te')" class="lang-option-btn cyber-card py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 తెలుగు</button>
-                                <button type="button" data-lang-btn="ml" onclick="event.stopPropagation(); setAppLanguage('ml')" class="lang-option-btn cyber-card py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 മലയാളം</button>
-                                <button type="button" data-lang-btn="kn" onclick="event.stopPropagation(); setAppLanguage('kn')" class="lang-option-btn cyber-card py-1.5 px-2 text-[11px] font-bold text-center cursor-pointer transition-all col-span-2">🇮🇳 ಕನ್ನಡ (Kannada)</button>
                             </div>
                         </div>
 
@@ -2921,7 +2911,7 @@ html.theme-ghost-live {
     <div id="probation-alert-banner" class="hidden sticky top-0 z-[60] px-4 py-2 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-black font-extrabold text-xs shadow-lg flex items-center justify-between gap-2 border-b-2 border-black/30">
         <div class="flex items-center gap-2 min-w-0">
             <span class="text-base shrink-0">⚠️</span>
-            <span class="truncate"><b>24-Hour Probation Review Active:</b> You were pardoned by Super Admin. <span id="probation-time-left" class="font-mono underline">24h 00m remaining</span>. High-stakes tournaments and chat remain monitored.</span>
+            <span class="truncate"><b>24-Hour Probation Review Active:</b> You were pardoned by System Security. <span id="probation-time-left" class="font-mono underline">24h 00m remaining</span>. High-stakes tournaments and chat remain monitored.</span>
         </div>
         <button type="button" onclick="document.getElementById('probation-alert-banner').classList.add('hidden')" class="px-2 py-0.5 rounded bg-black/20 hover:bg-black/30 text-black font-black text-[10px] cursor-pointer shrink-0">✕</button>
     </div>
@@ -2945,7 +2935,7 @@ html.theme-ghost-live {
             <div class="p-3 rounded-xl bg-black/50 border border-rose-500/30 text-left font-mono text-[11px] space-y-1.5 text-slate-300">
                 <div><span class="text-slate-400">Account:</span> <b id="ban-modal-email" class="text-white">user@gmail.com</b></div>
                 <div><span class="text-slate-400">Reason:</span> <b id="ban-modal-reason" class="text-rose-400">Violating Fair Play Rules</b></div>
-                <div><span class="text-slate-400">Enforced By:</span> <b id="ban-modal-by" class="text-amber-400">AI Auto-Mod / Super Admin</b></div>
+                <div><span class="text-slate-400">Enforced By:</span> <b id="ban-modal-by" class="text-amber-400">🤖 System AI Auto-Mod</b></div>
                 <div><span class="text-slate-400">Banned On:</span> <b id="ban-modal-date" class="text-slate-200">Just now</b></div>
             </div>
 
@@ -2956,11 +2946,11 @@ html.theme-ghost-live {
                 </div>
                 <div id="ban-appeal-pending-msg" class="hidden p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-300 space-y-1 text-center">
                     <div class="font-black">⏳ Ban Appeal Under Review</div>
-                    <div class="text-[11px] text-slate-300">Your appeal has been forwarded to Super Admin and Gemini AI Moderation. Please check back later.</div>
+                    <div class="text-[11px] text-slate-300">Your appeal has been forwarded to System Security & AI Moderation. Please check back later.</div>
                 </div>
                 <div id="ban-appeal-rejected-msg" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-300 space-y-1 text-center">
                     <div class="font-black">❌ Ban Appeal Denied</div>
-                    <div class="text-[11px] text-slate-300">Super Admin reviewed your appeal and determined that the permanent ban remains in effect.</div>
+                    <div class="text-[11px] text-slate-300">System Security reviewed your appeal and determined that the permanent ban remains in effect.</div>
                 </div>
                 <div id="ban-appeal-form" class="space-y-2.5">
                     <p class="text-[11px] text-slate-300">Contact Customer Care & submit your Ban Appeal with a <b>Proof Screenshot</b> and <b>Description</b> below:</p>
@@ -3178,7 +3168,7 @@ html.theme-ghost-live {
                             <span>💰 How are cash prizes paid to winners?</span>
                             <span class="text-xs text-amber-400 font-mono">▼</span>
                         </summary>
-                        <p class="mt-2 text-slate-300 leading-relaxed text-[11px]">Once match results are officially verified by the Host & Super Admin, winning amounts are transferred directly to your registered UPI ID within 15–30 minutes. You can also track proof in the Results tab!</p>
+                        <p class="mt-2 text-slate-300 leading-relaxed text-[11px]">Once match results are officially verified by the Official Admin & Match Host, winning amounts are transferred directly to your registered UPI ID within 15–30 minutes. You can also track proof in the Results tab!</p>
                     </details>
                     <details class="cyber-card p-3 rounded-xl cursor-pointer">
                         <summary class="font-bold flex items-center justify-between text-white">
@@ -4513,10 +4503,24 @@ html.theme-ghost-live {
 
         <!-- 💬 APP-ONLY: PRIVATE 1-TO-1 DM MESSENGER CONTAINER (WHATSAPP / TELEGRAM STYLE) -->
         <div id="dm-chat-container" class="hidden flex-1 flex flex-col overflow-hidden bg-zinc-950/60">
-            <!-- DM View 1: Inbox Thread List & Player Search -->
+            <!-- 🛡️ PRO & PRO+ Exclusive Security & Privacy Shield Bar (Shown automatically for VIP users) -->
+            <div id="dm-vip-security-vault-bar" class="hidden px-3 py-1.5 bg-gradient-to-r from-amber-500/15 via-emerald-500/15 to-cyan-500/15 border-b border-amber-400/30 flex items-center justify-between gap-2 text-[10px] shrink-0">
+                <div class="flex items-center gap-1.5 min-w-0">
+                    <span class="px-1.5 py-0.5 rounded bg-amber-400 text-black font-black text-[8.5px] shrink-0" id="dm-vip-tier-pill">👑 PRO+ VAULT</span>
+                    <span class="text-emerald-300 font-bold truncate">🔒 AES-256 E2E Encrypted • Anti-Leak Shield Active</span>
+                </div>
+                <button type="button" id="dm-last-seen-toggle-btn" onclick="window.toggleMyLastSeenPrivacy()" class="px-2 py-0.5 rounded bg-zinc-900/90 border border-cyan-400/40 text-cyan-300 font-extrabold text-[9px] cursor-pointer shrink-0">👁️ Last Seen: ON</button>
+            </div>
+            <!-- Normal User Privacy Bar -->
+            <div id="dm-free-privacy-bar" class="px-3 py-1.5 bg-zinc-900/80 border-b border-white/10 flex items-center justify-between gap-2 text-[10px] shrink-0">
+                <span class="text-slate-300 font-semibold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Online Players Directory</span></span>
+                <button type="button" id="dm-free-last-seen-btn" onclick="window.toggleMyLastSeenPrivacy()" class="px-2 py-0.5 rounded bg-zinc-800 border border-white/15 text-slate-200 font-bold text-[9.5px] cursor-pointer">👁️ Last Seen: ON</button>
+            </div>
+
+            <!-- DM View 1: Inbox Thread List & Online Player Search -->
             <div id="dm-inbox-view" class="flex-1 flex flex-col overflow-hidden p-3 space-y-2.5">
                 <div class="flex items-center gap-1.5 shrink-0">
-                    <input type="text" id="dm-user-search-input" oninput="window.renderDmInboxList(this.value)" placeholder="🔍 Search player by Name, IGN, or SP-XXXX to start Private DM..." class="cyber-input flex-1 px-3 py-1.5 text-xs">
+                    <input type="text" id="dm-user-search-input" oninput="window.renderDmInboxList(this.value)" placeholder="🔍 Search ONLINE player by Name, IGN, or SP-XXXX..." class="cyber-input flex-1 px-3 py-1.5 text-xs">
                     <button type="button" onclick="window.openBlockedUsersModal()" class="px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-rose-300 border border-rose-500/30 text-[10px] font-extrabold cursor-pointer shrink-0">🚫 Blocked (<span id="dm-blocked-cnt-lbl">0</span>)</button>
                 </div>
                 <div id="dm-inbox-threads-list" class="flex-1 overflow-y-auto space-y-2 pr-0.5 text-xs"></div>
@@ -4528,10 +4532,16 @@ html.theme-ghost-live {
                 <div class="px-3 py-2 border-b bg-zinc-900/95 flex items-center justify-between gap-2 shrink-0" style="border-color: var(--border-color);">
                     <div class="flex items-center gap-2 min-w-0">
                         <button type="button" onclick="window.backToDmInboxList()" class="px-2 py-1 rounded-lg cyber-card text-xs font-bold cursor-pointer shrink-0">⬅️</button>
-                        <img id="dm-active-partner-dp" src="" class="w-8 h-8 rounded-full object-cover border border-emerald-400 shrink-0 cursor-pointer" onclick="window.openDmPartnerProfileModal()" alt="DP">
+                        <div class="relative shrink-0 cursor-pointer" onclick="window.openDmPartnerProfileModal()">
+                            <img id="dm-active-partner-dp" src="" class="w-8 h-8 rounded-full object-cover border border-emerald-400" alt="DP">
+                            <span id="dm-active-partner-online-dot" class="hidden absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-zinc-900"></span>
+                        </div>
                         <div class="min-w-0 cursor-pointer" onclick="window.openDmPartnerProfileModal()">
-                            <div id="dm-active-partner-name" class="text-xs font-extrabold text-white truncate">Player</div>
-                            <div id="dm-active-partner-sub" class="text-[9.5px] font-mono text-emerald-400 truncate">Tap to visit profile</div>
+                            <div class="flex items-center gap-1">
+                                <div id="dm-active-partner-name" class="text-xs font-extrabold text-white truncate">Player</div>
+                                <span id="dm-active-partner-e2e-badge" class="hidden px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[8px] font-mono font-bold">🔒 E2E</span>
+                            </div>
+                            <div id="dm-active-partner-sub" class="text-[9.5px] font-mono text-emerald-400 truncate">🟢 Online</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-1 shrink-0">
@@ -4573,7 +4583,7 @@ html.theme-ghost-live {
     <script>
         let musicPlayingState = false;
         window.loggedEmail = window.loggedEmail || '';
-        window.CURRENT_APP_APK_VERSION = window.CURRENT_APP_APK_VERSION || 'v13.0';
+        window.CURRENT_APP_APK_VERSION = window.CURRENT_APP_APK_VERSION || '1.0.0';
         window.getSpCookieVal = function(name) {
             try {
                 const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
@@ -4599,13 +4609,14 @@ html.theme-ghost-live {
         };
         try {
             const _nativeObj = window.__SP_NATIVE_STORAGE__ || null;
-            const _curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
-            const _savedVer = (
+            const _curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
+            let _savedVer = (
                 (_nativeObj && _nativeObj.appVersion) ||
                 localStorage.getItem('satta_pai_logged_app_version') ||
                 window.getSpCookieVal('satta_pai_logged_app_version') ||
                 ''
             ).trim();
+            if (_savedVer === 'v13.0' && _curVer === '1.0.0') _savedVer = '1.0.0';
             let _savedAuth = (
                 (_nativeObj && _nativeObj.email) ||
                 localStorage.getItem('satta_pai_auth_email') ||
@@ -5394,7 +5405,7 @@ html.theme-ghost-live {
             if (statusEl) {
                 if (window.isCurrentUserVip()) {
                     const days = window.getVipDaysRemaining();
-                    statusEl.textContent = window.isSuperAdminGlobal ? "👑 Super Admin Lifetime Premium Active" : `⭐ Premium ACTIVE • ${days} Days Remaining`;
+                    statusEl.textContent = window.isSuperAdminGlobal ? "🛡️ Official Admin Lifetime Premium Active" : `⭐ Premium ACTIVE • ${days} Days Remaining`;
                 } else {
                     statusEl.textContent = "Royal VIP Pass • See How Premium Looks Below!";
                 }
@@ -5468,7 +5479,145 @@ html.theme-ghost-live {
                 .slice(0, maxLen);
         };
 
-        // 🔐 Universal Auth Email Resolver & Quota-Safe Session Saver (Fixes Mobile Login Loop & Version Persistence)
+        // 🔒 Enterprise Encrypted Local Storage Engine (Encrypts Private DMs, Messages & User Files on Device)
+        window.SattaPaiEncryptedStorage = (function() {
+            const CIPHER_KEY = 'SP_AES_VAULT_2026_PRO_KEY_994821';
+            const PREFIX = 'SP_ENC_V2:';
+            function xorTransform(str) {
+                let out = '';
+                for (let i = 0; i < str.length; i++) {
+                    out += String.fromCharCode(str.charCodeAt(i) ^ CIPHER_KEY.charCodeAt(i % CIPHER_KEY.length) ^ ((i * 17) & 0xFF));
+                }
+                return out;
+            }
+            return {
+                setEncryptedItem: function(key, valObj) {
+                    try {
+                        const jsonStr = JSON.stringify(valObj);
+                        const utf8 = encodeURIComponent(jsonStr);
+                        const xored = xorTransform(utf8);
+                        const b64 = btoa(xored);
+                        localStorage.setItem(key, PREFIX + b64);
+                    } catch (e) {}
+                },
+                getEncryptedItem: function(key, fallbackVal = null) {
+                    try {
+                        const raw = localStorage.getItem(key);
+                        if (!raw) return fallbackVal;
+                        if (raw.startsWith(PREFIX)) {
+                            const b64 = raw.slice(PREFIX.length);
+                            const xored = atob(b64);
+                            const utf8 = xorTransform(xored);
+                            return JSON.parse(decodeURIComponent(utf8));
+                        }
+                        return JSON.parse(raw);
+                    } catch (e) {
+                        return fallbackVal;
+                    }
+                }
+            };
+        })();
+
+        // 🤖 AI Multi-Language Bad-Word Censor Engine (Masks Profanity in Tamil, Tanglish, English, Hindi, Telugu, Malayalam & Kannada -> ***)
+        window.aiMaskBadWords = function(inputStr) {
+            if (!inputStr) return '';
+            let text = String(inputStr);
+            const badWordsList = [
+                // Tamil & Tanglish
+                'thevudiya', 'thevidiya', 'thevdiya', 'oombu', 'punda', 'pundai', 'poolu', 'koothi', 'kuthi',
+                'sunni', 'otha', 'oththa', 'baadu', 'badu', 'mayiru', 'mairu', 'thayoli', 'thaayoli', 'paradesi',
+                'தேவுடியா', 'புண்டை', 'புண்ட', 'பூலு', 'கூதி', 'சுன்னி', 'ஒத்தா', 'ஓத்தா', 'த்தாயோளி', 'தாயோளி', 'ஊம்பு', 'மயிரு',
+                // English
+                'fuck', 'fucker', 'fucking', 'motherfucker', 'bitch', 'bastard', 'asshole', 'dick', 'pussy', 'whore', 'slut', 'cunt', 'cock', 'nigger',
+                // Hindi / Hinglish
+                'chutiya', 'chutia', 'madarchod', 'mc', 'bhenchod', 'bc', 'gandu', 'bhosdike', 'bsdk', 'randi', 'harami', 'kamina', 'lund', 'choot',
+                'चूतिया', 'मादरचोद', 'बहनचोद', 'गांडू', 'भोसड़ीके', 'रंडी',
+                // Telugu, Malayalam, Kannada
+                'lavada', 'lanja', 'lanjakodaka', 'dengey', 'modda', 'gudha', 'myre', 'myran', 'poori', 'thayoli', 'kundan', 'bolimaga', 'sulemaga', 'shaata', 'tika'
+            ];
+            for (let i = 0; i < badWordsList.length; i++) {
+                const w = badWordsList[i];
+                if (w.length <= 2) {
+                    const rxShort = new RegExp(`\\b${w}\\b`, 'gi');
+                    text = text.replace(rxShort, '***');
+                } else if (/^[a-z]+$/i.test(w)) {
+                    // Match standard or symbol/space-separated tricks like f*u*c*k or p u n d a
+                    const pattern = w.split('').map(ch => ch + '[\\s.*_@-]*').join('').slice(0, -10);
+                    const rx = new RegExp(`\\b${pattern}\\b`, 'gi');
+                    text = text.replace(rx, '***');
+                    const rxSub = new RegExp(w, 'gi');
+                    text = text.replace(rxSub, '***');
+                } else {
+                    text = text.split(w).join('***');
+                }
+            }
+            return text;
+        };
+
+        // 🎵 Signature App Logo Touch Sound Effect (Harmonic Esports Power Chime)
+        window.playAppLogoSoundEffect = function() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!window._logoAudioCtx) window._logoAudioCtx = new AudioCtx();
+                const ctx = window._logoAudioCtx;
+                if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+                const now = ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = idx % 2 === 0 ? 'triangle' : 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.055);
+                    gain.gain.setValueAtTime(0.001, now + idx * 0.055);
+                    gain.gain.linearRampToValueAtTime(0.14, now + idx * 0.055 + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0008, now + idx * 0.055 + 0.38);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + idx * 0.055);
+                    osc.stop(now + idx * 0.055 + 0.40);
+                });
+            } catch (e) {}
+        };
+
+        // 🌐 External Browser Launcher Helper (Opens APK Updates & Social OAuth in Chrome / System Browser)
+        window.openExternalBrowserUrl = function(url) {
+            const cleanUrl = String(url || '').trim();
+            if (!cleanUrl || cleanUrl === '#') return false;
+            try {
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('open_browser:' + cleanUrl);
+                    return true;
+                }
+            } catch(e) {}
+            try {
+                window.open(cleanUrl, '_blank', 'noopener,noreferrer');
+            } catch(e) {
+                window.location.href = cleanUrl;
+            }
+            return true;
+        };
+
+        // 🔢 Semantic Version Comparator (Supports '1.0.0' vs '1.0.1' and 'v13.0' vs 'v13.1')
+        window.compareAppVersions = function(verA, verB) {
+            const parseV = (v) => {
+                let s = String(v || '').trim().toLowerCase().replace(/^v/, '');
+                if (s === '13.0' || s === '13') return [1, 0, 0];
+                return s.split('.').map(n => parseInt(n.replace(/[^0-9]/g, ''), 10) || 0);
+            };
+            const a = parseV(verA);
+            const b = parseV(verB);
+            const len = Math.max(a.length, b.length, 3);
+            for (let i = 0; i < len; i++) {
+                const na = a[i] || 0;
+                const nb = b[i] || 0;
+                if (na > nb) return 1;
+                if (na < nb) return -1;
+            }
+            return 0;
+        };
+
+        // 🔐 Universal Auth Email Resolver & Quota-Safe Session Saver
         window.resolveAuthUserEmail = function(u, credResult = null) {
             if (!u && !credResult) return '';
             let nativePickedEmail = '';
@@ -5497,7 +5646,6 @@ html.theme-ghost-live {
                     return String(c).trim().toLowerCase();
                 }
             }
-            // Never synthesize a fake email for anonymous bridge sessions!
             if (u?.isAnonymous) return '';
             const uid = String(u?.uid || credResult?.user?.uid || '').trim().toLowerCase();
             const provId = String(u?.providerData?.[0]?.providerId || credResult?.providerId || '').toLowerCase();
@@ -5512,7 +5660,7 @@ html.theme-ghost-live {
         window.saveVerifiedAuthEmail = function(email) {
             if (!email || email === 'guest') return;
             const clean = String(email).trim().toLowerCase();
-            const curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
+            const curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
             window.loggedEmail = clean;
             window._hasVerifiedAuthSession = true;
             try {
@@ -5557,7 +5705,7 @@ html.theme-ghost-live {
         };
 
         window.closeLoginOverlayPermanently = function() {
-            if (window._isCurrentUserBannedLock) return; // Banned user stays locked on Login Page!
+            if (window._isCurrentUserBannedLock) return;
             window.enableZeroFlashLoginSuppression();
             const ov = document.getElementById('google-login-overlay');
             if (ov) {
@@ -6069,7 +6217,7 @@ Tap a quick button below or type your question!`
                 "Live Themes": "லைவ் தீம்கள்",
                                 "Admin Portal": "அட்மின் போர்டல்",
                 "👑 Admin Control Panel": "👑 அட்மின் கட்டுப்பாட்டு மையம்",
-                "Super Admin": "சூப்பர் அட்மின்",
+                "Super Admin": "சிஸ்டம் / அட்மின்",
                 "Host Console": "ஹோஸ்ட் கன்சோல்",
                 "Points": "புள்ளிகள்",
                 "Matches": "மேட்ச்கள்",
@@ -6947,9 +7095,11 @@ Tap a quick button below or type your question!`
             });
 
             clearInterval(window._botRoamTimer);
-            window._botRoamTimer = setInterval(() => {
-                window.roamBotToNextWaypoint();
-            }, 5200);
+            if (!window.IS_SATTA_PAI_APP_BUILD) {
+                window._botRoamTimer = setInterval(() => {
+                    window.roamBotToNextWaypoint();
+                }, 8000);
+            }
 
             setTimeout(() => {
                 const { p7 } = window.getLiveVipPrices();
@@ -7167,7 +7317,7 @@ Tap a quick button below or type your question!`
                 }
 
                 const reasonTxt = u.banReason || 'Violating Satta Pai Fair Play Rules';
-                const byTxt = u.bannedBy === 'ai_auto_mod' ? '🤖 AI Auto-Mod' : '🛡️ Super Admin Enforcement';
+                const byTxt = u.bannedBy === 'ai_auto_mod' ? '🤖 AI Auto-Mod' : '🤖 System Security Enforcement';
                 const dateTxt = u.bannedAt ? new Date(u.bannedAt).toLocaleString() : 'Permanent Ban Active';
 
                 const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -7241,7 +7391,7 @@ Tap a quick button below or type your question!`
                 await setDoc(doc(db, 'users', emailLow), {
                     banAppeal: appealPayload
                 }, { merge: true });
-                window.showToast("✅ Ban Appeal + Proof Screenshot sent to Super Admin!");
+                window.showToast("✅ Ban Appeal + Proof Screenshot sent to System!");
                 const u = userCache[emailLow] || { isBanned: true };
                 u.banAppeal = appealPayload;
                 userCache[emailLow] = u;
@@ -7342,7 +7492,7 @@ Tap a quick button below or type your question!`
                         probationUntil: Date.now() + 24 * 60 * 60 * 1000,
                         unbannedAt: Date.now(),
                         unbannedBy: window.loggedEmail,
-                        banAppeal: { status: 'approved', reviewNote: 'Granted 24-Hour Probation by Super Admin' }
+                        banAppeal: { status: 'approved', reviewNote: 'Granted 24-Hour Probation by System' }
                     }, { merge: true });
                     if (userCache[cleanEmail]) {
                         userCache[cleanEmail].isBanned = false;
@@ -7373,7 +7523,7 @@ Tap a quick button below or type your question!`
                         banReason: '',
                         unbannedAt: Date.now(),
                         unbannedBy: window.loggedEmail,
-                        banAppeal: { status: 'approved', reviewNote: 'Permanently Unbanned & Restored by Super Admin' }
+                        banAppeal: { status: 'approved', reviewNote: 'Permanently Unbanned & Restored by System' }
                     }, { merge: true });
                     if (userCache[cleanEmail]) {
                         userCache[cleanEmail].isBanned = false;
@@ -8937,7 +9087,7 @@ CRITICAL RULES:
             if(typeof window.pushAppHistoryState === 'function') window.pushAppHistoryState({ type: 'modal', modalId: 'qr-zoom-modal' }); const currentSrc = document.getElementById('reg-qr-img').src; if(!currentSrc || currentSrc.includes('undefined') || currentSrc === window.location.href) { window.showToast("No QR Code available"); return; } document.getElementById('qr-zoom-img').src = currentSrc; document.getElementById('qr-zoom-modal').classList.remove('hidden'); }
         window.closeQrZoomModal = function(e) { if(e) e.stopPropagation(); document.getElementById('qr-zoom-modal').classList.add('hidden'); }
 
-        const ICON_SUPER = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-amber-400 fill-current inline-block" title="Super Admin"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>`;
+        const ICON_SUPER = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-amber-400 fill-current inline-block" title="Official Admin"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>`;
         const ICON_ADMIN = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-blue-400 fill-current inline-block" title="Admin"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>`;
         const ICON_HOST = `<svg viewBox="0 0 24 24" class="w-3 h-3 text-emerald-400 fill-current inline-block" title="Host"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4-1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2 3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>`;
         const ICON_VIP = `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-black shadow-sm ring-1 ring-amber-200" title="Royal Premium Member">⭐ PRO</span>`;
@@ -8956,6 +9106,7 @@ CRITICAL RULES:
             if (touch) createRipple(touch.clientX, touch.clientY);
         }, { passive: true });
         function createRipple(x, y) {
+            if (window.IS_SATTA_PAI_APP_BUILD) return; // Zero DOM mutation on touchstart for 120FPS smooth scrolling!
             if (_activeRipples >= 2) return;
             _activeRipples++;
             const ripple = document.createElement('div');
@@ -9280,13 +9431,125 @@ CRITICAL RULES:
         };
         setTimeout(() => { window.fetchFirebaseLogoViaRestFallback(); }, 10);
 
+        window.isMusicMutedByUser = function() {
+            try {
+                const nMute = window.__SP_NATIVE_STORAGE__ && window.__SP_NATIVE_STORAGE__.musicMuted;
+                const lMute = localStorage.getItem('satta_pai_music_muted');
+                return (lMute === '1' || nMute === '1');
+            } catch(e) { return false; }
+        };
+
+        window.getSavedMusicVolume = function() {
+            try {
+                const raw = localStorage.getItem('satta_pai_music_volume') || (window.__SP_NATIVE_STORAGE__ && window.__SP_NATIVE_STORAGE__.musicVolume) || '0.75';
+                const num = parseFloat(raw);
+                return Number.isFinite(num) ? Math.min(1, Math.max(0, num)) : 0.75;
+            } catch(e) { return 0.75; }
+        };
+
+        window.syncAudioPrefsToNative = function(muted, vol) {
+            try {
+                localStorage.setItem('satta_pai_music_muted', muted ? '1' : '0');
+                localStorage.setItem('satta_pai_music_volume', String(vol));
+                if (window.__SP_NATIVE_STORAGE__) {
+                    window.__SP_NATIVE_STORAGE__.musicMuted = muted ? '1' : '0';
+                    window.__SP_NATIVE_STORAGE__.musicVolume = String(vol);
+                }
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('save_audio_prefs:' + JSON.stringify({
+                        muted: muted ? '1' : '0',
+                        volume: String(vol)
+                    }));
+                }
+            } catch(e) {}
+        };
+
+        window.updateSettingsMusicUI = function() {
+            const isMuted = window.isMusicMutedByUser();
+            const vol = window.getSavedMusicVolume();
+            const pct = Math.round(vol * 100);
+            const viz = document.getElementById('music-viz-container');
+            if (viz) {
+                if (musicPlayingState && !isMuted && vol > 0) viz.classList.remove('hidden');
+                else viz.classList.add('hidden');
+            }
+            const toggleBtn = document.getElementById('settings-music-mute-btn');
+            if (toggleBtn) {
+                toggleBtn.textContent = isMuted ? '🔇 Music: MUTED (Tap to Unmute)' : '🔊 Music: ON (Auto-Play Active)';
+                toggleBtn.className = isMuted
+                    ? 'w-full py-2.5 px-3 rounded-xl bg-rose-600/25 border border-rose-500/50 text-rose-300 font-extrabold text-xs cursor-pointer flex items-center justify-center gap-2'
+                    : 'w-full py-2.5 px-3 rounded-xl bg-emerald-600/25 border border-emerald-500/50 text-emerald-300 font-extrabold text-xs cursor-pointer flex items-center justify-center gap-2';
+            }
+            const slider = document.getElementById('settings-music-vol-slider');
+            if (slider) slider.value = String(pct);
+            const pctLbl = document.getElementById('settings-music-vol-pct');
+            if (pctLbl) pctLbl.textContent = isMuted ? 'MUTED (0%)' : `${pct}%`;
+        };
+
+        window.setAppMusicVolume = function(pctRaw) {
+            const pct = Math.min(100, Math.max(0, Number(pctRaw) || 0));
+            const vol = pct / 100;
+            const audio = document.getElementById('bg-music');
+            const muted = (pct === 0);
+            window.syncAudioPrefsToNative(muted, vol);
+            if (audio) {
+                audio.volume = vol;
+                audio.muted = muted;
+                if (!muted && audio.paused && audio.getAttribute('src')) {
+                    audio.play().then(() => { musicPlayingState = true; window.updateSettingsMusicUI(); }).catch(() => {});
+                } else if (muted && !audio.paused) {
+                    audio.pause();
+                    musicPlayingState = false;
+                }
+            }
+            window.updateSettingsMusicUI();
+        };
+
+        window.stepAppMusicVolume = function(deltaPct) {
+            const curPct = Math.round(window.getSavedMusicVolume() * 100);
+            const nextPct = Math.min(100, Math.max(0, (window.isMusicMutedByUser() ? 0 : curPct) + deltaPct));
+            window.setAppMusicVolume(nextPct);
+        };
+
+        window.tryAutoPlayBackgroundMusic = function() {
+            const audio = document.getElementById('bg-music');
+            if (!audio) return;
+            const isMuted = window.isMusicMutedByUser();
+            const vol = window.getSavedMusicVolume();
+            audio.volume = vol;
+            audio.muted = isMuted;
+            if (isMuted) {
+                audio.pause();
+                musicPlayingState = false;
+                window.updateSettingsMusicUI();
+                return;
+            }
+            const srcAttr = audio.getAttribute('src') || '';
+            if (srcAttr && srcAttr.length > 10 && audio.paused) {
+                audio.play().then(() => {
+                    musicPlayingState = true;
+                    window.updateSettingsMusicUI();
+                }).catch(() => {
+                    // Auto-start on first user tap if browser gesture policy requires it
+                    if (!window._musicGestureBound) {
+                        window._musicGestureBound = true;
+                        const resumeOnTap = () => {
+                            window._musicGestureBound = false;
+                            if (!window.isMusicMutedByUser()) window.tryAutoPlayBackgroundMusic();
+                        };
+                        document.addEventListener('click', resumeOnTap, { once: true, passive: true });
+                        document.addEventListener('touchstart', resumeOnTap, { once: true, passive: true });
+                    }
+                });
+            }
+        };
+
         window.applyCustomMusicUrl = function(musicUrl) {
             try {
                 const cleanMusic = (typeof musicUrl === 'string') ? musicUrl.trim() : '';
                 const hasMusic = cleanMusic.length > 10;
                 window.currentMusicDataURL = hasMusic ? cleanMusic : '';
                 const audio = document.getElementById('bg-music');
-                const icon = document.getElementById('music-icon');
                 const viz = document.getElementById('music-viz-container');
                 const statusBadge = document.getElementById('admin-music-status-badge');
 
@@ -9295,20 +9558,21 @@ CRITICAL RULES:
                         if (audio.getAttribute('src') !== cleanMusic) {
                             audio.src = cleanMusic;
                         }
+                        window.tryAutoPlayBackgroundMusic();
                     } else {
                         audio.pause();
                         audio.removeAttribute('src');
                         audio.load();
                         musicPlayingState = false;
-                        if (icon) icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
                         if (viz) viz.classList.add('hidden');
                     }
                 }
                 if (statusBadge) {
                     statusBadge.innerHTML = hasMusic
-                        ? '🎵 <b class="text-emerald-400">Custom Song Uploaded & Active</b> (Tap Header Speaker Icon to Play)'
+                        ? '🎵 <b class="text-emerald-400">Custom Song Uploaded & Active</b> (Auto-Plays Unless Muted in ⚙️ Settings)'
                         : '🔇 <span class="text-slate-400">No Custom Song Uploaded (Choose an MP3/Audio file below & click Save Song)</span>';
                 }
+                window.updateSettingsMusicUI();
             } catch (e) {}
         };
 
@@ -9742,7 +10006,7 @@ CRITICAL RULES:
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
                                     <li><strong>Verified Sign-In:</strong> Players sign in via verified <b>Google, Facebook, or GitHub OAuth</b> (or Native Android Account Picker inside the mobile app).</li>
                                     <li><strong>🎁 New Player Welcome Mail:</strong> Every newly registered player automatically receives an official <b>Official Welcome & Tournament Quick-Start Guide</b> inside their <b>📬 System Mail Box</b>.</li>
-                                    <li><strong>Official ✔️ V-Badge Creators:</strong> Verified Streamers and Content Creators receive the official <b>✔️ V-Badge</b> exclusively granted by Super Admin.</li>
+                                    <li><strong>Official ✔️ V-Badge Creators:</strong> Verified Streamers and Content Creators receive the official <b>✔️ V-Badge</b> exclusively granted by the System & Official Admin.</li>
                                     <li><strong>Anti-Smurfing Lock:</strong> Each 10-digit mobile number and Game UID can register only <b>once per match</b>.</li>
                                 </ul>
                             </div>
@@ -9771,7 +10035,7 @@ CRITICAL RULES:
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
                                     <li><strong>⭐ Royal PRO Pass (<span class="text-emerald-400 font-extrabold">${disc}% Match Discount</span>):</strong> <b>7d = ₹${p7}</b>, <b>14d = ₹${p14}</b>, <b>28d = ₹${p28}</b>. Grants <b>${disc}% OFF</b> on paid match fees, 5s chat cooldown, 2-day DP change, 6h Profile edit, and Premium Static Themes.</li>
                                     <li><strong>👑 Royal PRO PLUS Pass (<span class="text-yellow-300 font-extrabold">${plusDisc}% Match Discount</span>):</strong> <b>28d = ₹${plus28}</b>, <b>60d = ₹${plus60}</b>, <b>90d = ₹${plus90}</b>. Grants <b>${plusDisc}% OFF</b> on paid match fees, 0s instant chat, Unlimited DP & Profile edits, 2x Daily Coins/XP, and exclusive access to all 7 Live Animated Themes!</li>
-                                    <li><strong>📬 Multi-Gift System Mail (14-Day Auto-Delete):</strong> Super Admin can send single or multi-item reward bundles (SP Coins + PRO/PRO+ Passes + Free Slot Vouchers + Battle Pass XP + V-Badges) to all players or specific players. Mails auto-expire after <b>14 days</b>.</li>
+                                    <li><strong>📬 Multi-Gift System Mail (14-Day Auto-Delete):</strong> The Automated System & Admin can send single or multi-item reward bundles (SP Coins + PRO/PRO+ Passes + Free Slot Vouchers + Battle Pass XP + V-Badges) to all players or specific players. Mails auto-expire after <b>14 days</b>.</li>
                                     <li><strong>🤖 Satta Pai AI Tactical Assistant:</strong> Provides instant device-specific headshot sensitivity, live match schedules, and 24×7 player help.</li>
                                 </ul>
                             </div>
@@ -9807,6 +10071,7 @@ CRITICAL RULES:
                                 <ul class="list-disc pl-4 space-y-1.5 text-xs leading-relaxed">
                                     <li><strong>Public vs. Private Split:</strong> Public lobbies show only Squad Name, Leader IGN, and Game UIDs. Phone numbers and UTRs are encrypted inside <code>registrations_private</code>.</li>
                                     <li><strong>Host Isolation:</strong> Match Hosts can access only squads registered in matches they personally created.</li>
+                                    <li><strong>Encrypted Private Chat & Local Vault:</strong> App communications and cached files are protected by client-side cryptographic storage (<code>AES-256 / SP_ENC_V2</code>) and automated AI profanity filters.</li>
                                     <li><strong>Zero Commercial Sharing:</strong> Player emails, UIDs, and phone numbers are never sold, rented, or shared with external advertisers.</li>
                                 </ul>
                             </div>
@@ -9906,40 +10171,46 @@ CRITICAL RULES:
         // =========================================================================
         // 🎵 CUSTOM UPLOADED BACKGROUND MUSIC PLAYER (FIREBASE ADMIN SONG)
         // =========================================================================
+        window.openAppQuickSettingsModal = function() {
+            window.updateSettingsMusicUI();
+            if (typeof window.updateLastSeenPrivacyButtonsUI === 'function') window.updateLastSeenPrivacyButtonsUI();
+            const modal = document.getElementById('app-quick-settings-modal');
+            if (modal) modal.classList.remove('hidden');
+            if (typeof window.pushAppHistoryState === 'function') {
+                window.pushAppHistoryState({ type: 'modal', modalId: 'app-quick-settings-modal' });
+            }
+        };
+
         window.toggleMusic = function() {
             const audio = document.getElementById('bg-music');
-            const icon = document.getElementById('music-icon');
-            const viz = document.getElementById('music-viz-container');
-            const srcAttr = audio ? (audio.getAttribute('src') || '') : '';
-            const hasUploadedSong = !!(srcAttr && srcAttr.trim() && !srcAttr.endsWith('.html') && srcAttr !== window.location.href);
+            const currentlyMuted = window.isMusicMutedByUser();
+            const nextMuted = !currentlyMuted;
+            let vol = window.getSavedMusicVolume();
+            if (!nextMuted && vol <= 0.02) vol = 0.75;
+            window.syncAudioPrefsToNative(nextMuted, vol);
 
-            if (!audio || !hasUploadedSong) {
-                window.showToast("🎵 No song uploaded yet! Upload your song in Admin Settings.");
-                return;
-            }
-
-            const menuPill = document.getElementById('menu-music-status-pill');
-            if (musicPlayingState && !audio.paused) {
-                audio.pause();
-                musicPlayingState = false;
-                if (icon) icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
-                if (viz) viz.classList.add('hidden');
-                if (menuPill) { menuPill.textContent = '⏸️ Paused'; menuPill.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-800 text-slate-300'; }
-                window.showToast("⏸️ Music Paused");
-            } else {
-                audio.play().then(() => {
-                    musicPlayingState = true;
-                    if (icon) icon.innerHTML = '<path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>';
-                    if (viz) viz.classList.remove('hidden');
-                    if (menuPill) { menuPill.textContent = '▶️ Playing'; menuPill.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'; }
-                    window.showToast("🎵 Playing Tournament Background Song!");
-                }).catch(() => {
+            if (audio) {
+                audio.muted = nextMuted;
+                audio.volume = vol;
+                if (nextMuted) {
+                    audio.pause();
                     musicPlayingState = false;
-                    if (viz) viz.classList.add('hidden');
-                    if (menuPill) { menuPill.textContent = 'No Audio'; menuPill.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-800 text-rose-400'; }
-                    window.showToast("🎵 Unable to play song or no audio uploaded.");
-                });
+                    window.showToast("🔇 Background Music Muted (Saved across restarts)");
+                } else {
+                    const srcAttr = audio.getAttribute('src') || '';
+                    if (srcAttr && srcAttr.length > 10) {
+                        audio.play().then(() => {
+                            musicPlayingState = true;
+                            window.showToast("🎵 Background Music Unmuted & Playing!");
+                        }).catch(() => {
+                            window.showToast("🔊 Music Unmuted!");
+                        });
+                    } else {
+                        window.showToast("🔊 Music Unmuted! (Will auto-play when song is active)");
+                    }
+                }
             }
+            window.updateSettingsMusicUI();
         };
 
         window.updateThemeSwatches();
@@ -10821,7 +11092,7 @@ CRITICAL RULES:
                     console.warn("Non-fatal config fetch error:", cfgErr);
                 }
 
-                // 5. Users listener: Syncs player directory into userCache so Global Chat, Leaderboards & Private DM Search work 100%
+                // 5. Users listener: Syncs player directory & online presence for Global Chat & App Private DM
                 window.startUsersSnapshotListener = function() {
                     if (!window.isGoogleAuthenticatedUser()) return;
                     const emailLow = window.loggedEmail.toLowerCase();
@@ -10833,6 +11104,8 @@ CRITICAL RULES:
                     }
                     window._usersListenerMode = targetMode;
                     try {
+                        // Mark current user online in Firestore
+                        setDoc(doc(db, 'users', emailLow), { email: emailLow, isOnline: true, lastSeenAt: Date.now() }, { merge: true }).catch(() => {});
                         window._usersUnsubscribe = onSnapshot(collection(db, 'users'), snap => {
                             let changed = false;
                             snap.docs.forEach(docSnap => {
@@ -10840,6 +11113,10 @@ CRITICAL RULES:
                                 const rawId = docSnap.id;
                                 const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
                                 const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
+                                norm.isOnline = Boolean(data.isOnline);
+                                norm.lastSeenAt = Number(data.lastSeenAt || data.updatedAt || 0);
+                                norm.hideLastSeen = Boolean(data.hideLastSeen);
+                                norm.dmLastRead = data.dmLastRead || {};
                                 if (emailKey) userCache[emailKey] = norm;
                                 userCache[rawId.toLowerCase()] = norm;
                                 if (emailKey && emailKey === emailLow) {
@@ -10850,30 +11127,19 @@ CRITICAL RULES:
                                     if (window.SattaPaiSecureVault && typeof window.SattaPaiSecureVault.saveSessionSnapshot === 'function') {
                                         window.SattaPaiSecureVault.saveSessionSnapshot(emailLow);
                                     }
+                                    if (typeof window.updateLastSeenPrivacyButtonsUI === 'function') window.updateLastSeenPrivacyButtonsUI();
                                 }
                                 changed = true;
                             });
                             if (changed) {
                                 if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
                                 if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
-                                if (window._currentChatTabMode === 'dm' && typeof window.renderDmInboxList === 'function') {
-                                    window.renderDmInboxList();
+                                if (window._currentChatTabMode === 'dm') {
+                                    if (typeof window.renderDmInboxList === 'function') window.renderDmInboxList();
+                                    if (typeof window.renderActiveDmConversation === 'function') window.renderActiveDmConversation();
                                 }
                             }
-                        }, () => {
-                            // Fallback to own doc listener if collection read is ever restricted
-                            window._usersUnsubscribe = onSnapshot(doc(db, 'users', emailLow), docSnap => {
-                                const data = docSnap.exists() ? docSnap.data() : {};
-                                const norm = normalizeUserRecord(data, emailLow);
-                                userCache[emailLow] = norm;
-                                window.currentUserVipUntil = norm.premiumUntil || 0;
-                                window.currentUserIsPremiumFlag = !!norm.isPremium;
-                                window.currentUserSpCoins = norm.spCoins || 0;
-                                if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus(data);
-                                if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
-                                if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
-                            }, () => { window._usersUnsubscribe = null; });
-                        });
+                        }, () => { window._usersUnsubscribe = null; });
                     } catch(snapErr) {
                         console.warn("User listener init:", snapErr);
                     }
@@ -11233,6 +11499,7 @@ CRITICAL RULES:
             if (!window.loggedEmail) { window.loggedEmail = "guest"; }
             if (typeof window.startDmRealtimeListener === 'function') window.startDmRealtimeListener();
             if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
+            if (typeof window.refreshDmVipSecurityBarUI === 'function') window.refreshDmVipSecurityBarUI();
             if (typeof window.pushAppHistoryState === 'function') window.pushAppHistoryState({ type: 'modal', modalId: 'chat-fullscreen' });
             document.getElementById('chat-fullscreen').classList.add('active');
             setTimeout(() => {
@@ -11335,7 +11602,7 @@ CRITICAL RULES:
                 const editedText = msg.isEdited ? ' (edited)' : '';
                 const proPlusBubbleExtra = isMsgUserProPlus ? " border-2 border-amber-400/70" : "";
                 const proPlusAvatarExtra = isMsgUserProPlus ? " ring-2 ring-amber-400" : "";
-                return `<div class="${rowClass}"><img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(resolvedName)}')" class="chat-avatar${proPlusAvatarExtra} w-8 h-8 rounded-full object-cover shrink-0 border border-emerald-400/50 cursor-pointer hover:scale-105 transition-transform" alt="Avatar" onclick="openChatProfileByMsgId(event, '${msg.id}')"><div class="chat-content"><span class="chat-meta cursor-pointer hover:underline" onclick="openChatProfileByMsgId(event, '${msg.id}')">${badgesHtml}${nameDisplay} • ${time}${editedText}</span><div class="${bubbleClass}${proPlusBubbleExtra}" onclick="openChatProfileByMsgId(event, '${msg.id}')">${window.escapeHTML(msg.message)}</div></div></div>`;
+                return `<div class="${rowClass}"><img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(resolvedName)}')" class="chat-avatar${proPlusAvatarExtra} w-8 h-8 rounded-full object-cover shrink-0 border border-emerald-400/50 cursor-pointer hover:scale-105 transition-transform" alt="Avatar" onclick="openChatProfileByMsgId(event, '${msg.id}')"><div class="chat-content"><span class="chat-meta cursor-pointer hover:underline" onclick="openChatProfileByMsgId(event, '${msg.id}')">${badgesHtml}${nameDisplay} • ${time}${editedText}</span><div class="${bubbleClass}${proPlusBubbleExtra}" onclick="openChatProfileByMsgId(event, '${msg.id}')">${window.escapeHTML(window.aiMaskBadWords ? window.aiMaskBadWords(msg.message) : msg.message)}</div></div></div>`;
             }).join('');
             container.scrollTop = container.scrollHeight;
         };
@@ -11394,14 +11661,14 @@ CRITICAL RULES:
             const sw = document.getElementById('cp-stat-wins'); if (sw) sw.textContent = `🏆 ${cStats.totalWins} Booyah`;
 
             let roleText = targetIsVip ? '⭐ Royal Premium PRO Player' : '🎮 Tournament Player';
-            if (targetIsSuper) roleText = '👑 Super Admin • ⭐ PRO';
+            if (targetIsSuper) roleText = '🛡️ Official Admin • ⭐ PRO';
             else if (targetIsAdmin) roleText = '🛡️ Official Admin • ⭐ PRO';
             else if (targetIsHost) roleText = targetIsVip ? '🎮 Match Host • ⭐ PRO' : '🎮 Match Host';
             document.getElementById('cp-role').textContent = roleText;
 
             const actionsDiv = document.getElementById('cp-actions'); actionsDiv.innerHTML = '';
             window.currentChatTargetId = msgId; window.currentChatTargetEmail = emailLow; window.currentChatTargetText = msgText;
-            if (targetIsSuper && !isOwn) { actionsDiv.innerHTML += `<div class="text-xs text-center text-amber-400 col-span-2 font-bold py-1.5">👑 Official Super Admin</div>`; }
+            if (targetIsSuper && !isOwn) { actionsDiv.innerHTML += `<div class="text-xs text-center text-amber-400 col-span-2 font-bold py-1.5">🛡️ Official Admin</div>`; }
             else {
                 if (isOwn) { actionsDiv.innerHTML += `<button onclick="openEditChatMsgPrompt()" class="py-1.5 bg-blue-600 text-white rounded text-xs font-bold shadow cursor-pointer">✏️ Edit Msg</button><button onclick="handleChatAction('unsend')" class="py-1.5 bg-rose-600 text-white rounded text-xs font-bold shadow cursor-pointer">🗑️ Delete Msg</button>`; }
                 if (isAdmin && !isOwn) { let isBanned = false; try { const userSnap = await getDoc(doc(db, 'users', emailLow)); isBanned = userSnap.exists() && userSnap.data().chatBannedUntil > Date.now(); } catch(err) {} actionsDiv.innerHTML += `<button onclick="openEditChatMsgPrompt()" class="py-1.5 bg-blue-600 text-white rounded text-xs font-bold shadow cursor-pointer">✏️ Edit Msg</button><button onclick="handleChatAction('delete')" class="py-1.5 bg-rose-600 text-white rounded text-xs font-bold shadow cursor-pointer">🗑️ Delete Msg</button>`; if (isBanned) { actionsDiv.innerHTML += `<button onclick="handleChatAction('unban')" class="py-1.5 bg-emerald-600 text-white rounded text-xs font-bold shadow cursor-pointer col-span-2">Unban User</button>`; } else { actionsDiv.innerHTML += `<button onclick="handleChatAction('ban')" class="py-1.5 bg-amber-600 text-black rounded text-xs font-bold shadow cursor-pointer col-span-2">Ban User (24h)</button>`; } }
@@ -13525,12 +13792,12 @@ CRITICAL RULES:
                 }
             }
             if(window._oauthCallbackInProgress) { if(ov) { ov.classList.add('hidden'); ov.setAttribute('hidden', ''); } return; }
-            // 🛡️ Auto-restore stored session from Native Storage / localStorage / Cookie / Vault so user is NEVER bounced back to login screen on app reopen!
             if (!window.loggedEmail) {
                 try {
                     const nativeObj = window.__SP_NATIVE_STORAGE__ || null;
-                    const curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
-                    const savedVer = ((nativeObj && nativeObj.appVersion) || localStorage.getItem('satta_pai_logged_app_version') || (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_logged_app_version') : '') || '').trim();
+                    const curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
+                    let savedVer = ((nativeObj && nativeObj.appVersion) || localStorage.getItem('satta_pai_logged_app_version') || (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_logged_app_version') : '') || '').trim();
+                    if (savedVer === 'v13.0' && curVer === '1.0.0') savedVer = '1.0.0';
                     if (!savedVer || savedVer === curVer) {
                         const savedAuth = (
                             (nativeObj && nativeObj.email) ||
@@ -13663,20 +13930,60 @@ CRITICAL RULES:
             window.showToast("✅ Welcome " + (userObj?.displayName || email));
         };
 
+        window.openAppExternalBrowserOAuthFlow = async function(providerName) {
+            try {
+                const authDom = (typeof firebaseConfig === 'object' && firebaseConfig.authDomain) ? firebaseConfig.authDomain : 'sattapai-tournament.firebaseapp.com';
+                const apiKey = (typeof firebaseConfig === 'object' && firebaseConfig.apiKey) ? firebaseConfig.apiKey : '';
+                const provId = providerName === 'Facebook' ? 'facebook.com' : 'github.com';
+                const callbackUri = `https://${authDom}/__/auth/handler`;
+                let targetBrowserUrl = providerName === 'Facebook'
+                    ? 'https://www.facebook.com/login.php'
+                    : 'https://github.com/login';
+
+                try {
+                    const uriResp = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            providerId: provId,
+                            continueUri: callbackUri,
+                            authFlowType: 'CODE_FLOW'
+                        })
+                    });
+                    const uriData = await uriResp.json();
+                    if (uriData && uriData.authUri) {
+                        targetBrowserUrl = uriData.authUri;
+                        if (uriData.sessionId) {
+                            try { localStorage.setItem('sp_google_oauth_session_id', uriData.sessionId); } catch(e) {}
+                        }
+                    }
+                } catch(e) {}
+
+                window.showToast(`🌐 Opening ${providerName} Login in Browser...`);
+                window.openExternalBrowserUrl(targetBrowserUrl);
+                // Also trigger account verification picker when returning to app so user session is linked immediately
+                setTimeout(() => {
+                    if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                        window.SattaPaiNativeAuth.postMessage('pick_account:' + providerName);
+                    }
+                }, 1400);
+            } catch (e) {
+                window.showToast(`${providerName} browser login error: ` + (e.message || e));
+            }
+        };
+
         window.loginWithGithubAuth = async function() {
             const t = document.getElementById('terms-accept-checkbox');
             if (t && !t.checked) t.checked = true;
             try {
-                // In Android App or Web: Use real GitHub OAuth (Never open Google Account Picker for GitHub!)
+                if (window.IS_SATTA_PAI_APP_BUILD || window.SattaPaiNativeAuth) {
+                    await window.openAppExternalBrowserOAuthFlow('GitHub');
+                    return;
+                }
                 const ghProvider = new GithubAuthProvider();
                 ghProvider.addScope('read:user');
                 ghProvider.addScope('user:email');
                 ghProvider.setCustomParameters({ allow_signup: 'true' });
-                if (window.SattaPaiNativeAuth) {
-                    window.showToast("🐙 Redirecting to GitHub Sign-In...");
-                    await signInWithRedirect(auth, ghProvider);
-                    return;
-                }
                 const r = await signInWithPopup(auth, ghProvider);
                 await window.completeUserSignInSuccess(r.user, r, 'GitHub');
             } catch(e) {
@@ -13709,15 +14016,13 @@ CRITICAL RULES:
             const t = document.getElementById('terms-accept-checkbox');
             if (t && !t.checked) t.checked = true;
             try {
-                // In Android App or Web: Use real Facebook OAuth (Never open Google Account Picker for Facebook!)
+                if (window.IS_SATTA_PAI_APP_BUILD || window.SattaPaiNativeAuth) {
+                    await window.openAppExternalBrowserOAuthFlow('Facebook');
+                    return;
+                }
                 const fbProvider = new FacebookAuthProvider();
                 fbProvider.addScope('email');
                 fbProvider.addScope('public_profile');
-                if (window.SattaPaiNativeAuth) {
-                    window.showToast("📘 Redirecting to Facebook Sign-In...");
-                    await signInWithRedirect(auth, fbProvider);
-                    return;
-                }
                 const r = await signInWithPopup(auth, fbProvider);
                 await window.completeUserSignInSuccess(r.user, r, 'Facebook');
             } catch(e) {
@@ -13822,7 +14127,6 @@ CRITICAL RULES:
         })();
 
 
-        // 🔄 Silent Background Firebase Auth Session Restorer (Ensures request.auth != null on App Reopen!)
         window._silentAuthPromise = null;
         window.ensureSilentFirebaseAuthSession = async function(targetEmailRaw) {
             const email = String(targetEmailRaw || window.loggedEmail || '').trim().toLowerCase();
@@ -13856,7 +14160,6 @@ CRITICAL RULES:
             return window._silentAuthPromise;
         };
 
-        // 📱 NATIVE ANDROID "CHOOSE AN ACCOUNT" DIALOG CALLBACK (FOR GOOGLE, FACEBOOK & GITHUB!)
         window.onNativeAccountPicked = async function(emailRaw, providerLabel = 'Google') {
             try {
                 const email = String(emailRaw || '').trim().toLowerCase();
@@ -13866,7 +14169,6 @@ CRITICAL RULES:
                 }
                 const displayName = email.split('@')[0];
 
-                // 1. Save verified session & immediately unlock Home Screen (Zero bounce-back!)
                 window.saveVerifiedAuthEmail(email);
                 window.closeLoginOverlayPermanently();
                 document.body.style.overflow = '';
@@ -13874,10 +14176,8 @@ CRITICAL RULES:
                 if (typeof window.switchTab === 'function') window.switchTab('home');
                 window.showToast("✅ Signed in with " + providerLabel + ": " + email);
 
-                // 2. Authenticate with Firebase Auth in the background so Firestore Rules work 100%
                 const fbUser = await window.ensureSilentFirebaseAuthSession(email);
 
-                // Check if users/{email} already has a stored Google OAuth UID in Firestore
                 let storedUid = (fbUser && fbUser.uid) ? fbUser.uid : '';
                 try {
                     const uSnap = await getDoc(doc(db, 'users', email));
@@ -13912,7 +14212,6 @@ CRITICAL RULES:
             const t = document.getElementById('terms-accept-checkbox');
             if (t && !t.checked) t.checked = true;
             try {
-                // Inside Android App: Open Native Android "Choose an account" Dialog (like Free Fire India!)
                 if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
                     window.SattaPaiNativeAuth.postMessage('pick_account:Google');
                     return;
@@ -13922,7 +14221,6 @@ CRITICAL RULES:
                 await window.completeUserSignInSuccess(r.user, r, 'Google');
             } catch(e) {
                 console.warn("Google login catch:", e);
-                // Check if auth.currentUser was already populated despite popup close/cancel warning on mobile
                 if (auth.currentUser) {
                     await window.completeUserSignInSuccess(auth.currentUser, null, 'Google');
                     return;
@@ -13945,7 +14243,7 @@ CRITICAL RULES:
             }
             const t = document.getElementById('terms-accept-checkbox');
             if (t && !t.checked) t.checked = true;
-            const curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
+            const curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
             window.loggedEmail = 'guest';
             window._hasVerifiedAuthSession = false;
             try {
@@ -13989,6 +14287,9 @@ CRITICAL RULES:
 
         window.clearAllSavedAuthState = function() {
             window._hasVerifiedAuthSession = false;
+            if (window.loggedEmail && window.loggedEmail !== 'guest') {
+                try { setDoc(doc(db, 'users', window.loggedEmail.toLowerCase()), { isOnline: false, lastSeenAt: Date.now() }, { merge: true }).catch(() => {}); } catch(e) {}
+            }
             if (window.__SP_NATIVE_STORAGE__) {
                 window.__SP_NATIVE_STORAGE__.email = '';
                 window.__SP_NATIVE_STORAGE__.uid = '';
@@ -14045,7 +14346,6 @@ CRITICAL RULES:
             }, "Yes, Logout");
         };
 
-        // Handle Mobile Browser Redirect Result
         getRedirectResult(auth).then(async (r) => {
             if (r && r.user) {
                 await window.completeUserSignInSuccess(r.user, r, 'Redirect');
@@ -14106,7 +14406,6 @@ CRITICAL RULES:
                             window.superAdminEmail = cached;
                         }
                         window.closeLoginOverlayPermanently();
-                        // Silently restore Firebase Auth session & listeners in background without showing login overlay!
                         window.ensureSilentFirebaseAuthSession(cached).then(async (fbU) => {
                             if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
                             if (typeof window.startDmRealtimeListener === 'function') window.startDmRealtimeListener();
@@ -14225,7 +14524,7 @@ CRITICAL RULES:
             if (profDpPill) { if (isVip) profDpPill.classList.remove('hidden'); else profDpPill.classList.add('hidden'); }
             if (profBadge) {
                 if (isVip) {
-                    profBadge.textContent = window.isSuperAdminGlobal ? 'Status: 👑 Super Admin • ⭐ PRO ACTIVE' : (isExpiringSoon ? `⚠️ Expiring in ${days} Days! Renew Soon` : `Status: ⭐ PRO ACTIVE (${days} Days Left)`);
+                    profBadge.textContent = window.isSuperAdminGlobal ? 'Status: 🛡️ Official Admin • ⭐ PRO ACTIVE' : (isExpiringSoon ? `⚠️ Expiring in ${days} Days! Renew Soon` : `Status: ⭐ PRO ACTIVE (${days} Days Left)`);
                     profBadge.className = isExpiringSoon ? 'text-[10px] font-extrabold text-rose-400 animate-pulse' : 'text-[10px] font-extrabold text-amber-400';
                 } else {
                     profBadge.textContent = 'Status: 🎮 Free Player (Upgrade for ⭐ PRO Perks)';
@@ -16753,7 +17052,7 @@ CRITICAL RULES:
                 box.innerHTML = `<div class="cyber-card p-6 text-center space-y-2 border border-white/10">
                     <div class="text-2xl">📭</div>
                     <div class="text-xs font-extrabold text-amber-300">Your Arena Mail Box is Empty</div>
-                    <p class="text-[10.5px] text-slate-400">When Super Admin sends global multi-gift bundles, tournament compensations, or welcome rewards, they appear here (Auto-deleted after 14 days).</p>
+                    <p class="text-[10.5px] text-slate-400">When the System sends global multi-gift bundles, tournament compensations, or welcome rewards, they appear here (Auto-deleted after 14 days).</p>
                 </div>`;
                 return;
             }
@@ -17654,14 +17953,44 @@ CRITICAL RULES:
         // =====================================================================
         // 📲 4. APP-ONLY APK UPDATE PUBLISHER & DOWNLOAD PROMPT (WEB UNAFFECTED)
         // =====================================================================
-        window.CURRENT_APP_APK_VERSION = 'v13.0';
+        window.CURRENT_APP_APK_VERSION = window.CURRENT_APP_APK_VERSION || '1.0.0';
+        window._latestPublishedApkUrl = '';
+        window._latestPublishedApkVersion = '';
+
+        window.downloadOfficialAndroidApkFromWeb = function(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const url = window._latestPublishedApkUrl || '';
+            if (url && /^https?:\/\//i.test(url)) {
+                window.openExternalBrowserUrl(url);
+                window.showToast('📲 Downloading Official Satta Pai Android APK...');
+                return false;
+            }
+            window.triggerNativeAppInstall();
+            return false;
+        };
+
+        window.openExternalApkUpdateDownload = function(e, url, ver) {
+            if (e && e.preventDefault) e.preventDefault();
+            const targetUrl = String(url || window._latestPublishedApkUrl || '').trim();
+            if (!targetUrl || targetUrl === '#') return false;
+            try {
+                if (ver) {
+                    localStorage.setItem('satta_pai_installed_apk_ver', String(ver).trim());
+                    localStorage.setItem('satta_pai_logged_app_version', 'pending_update_' + String(ver).trim());
+                }
+            } catch(e2) {}
+            document.getElementById('app-apk-update-modal')?.classList.add('hidden');
+            window.showToast('🌐 Opening APK Download in Browser...');
+            window.openExternalBrowserUrl(targetUrl);
+            return false;
+        };
 
         window.saveAdminApkUpdateConfig = async function(activeState) {
             if (!window.isSuperAdminGlobal) {
-                window.showToast('⛔ Only Super Admin can publish APK updates!');
+                window.showToast('⛔ Only Admin can publish APK updates!');
                 return;
             }
-            const ver = (document.getElementById('admin-apk-version-input')?.value || 'v13.1').trim();
+            const ver = (document.getElementById('admin-apk-version-input')?.value || '1.0.1').trim();
             const url = (document.getElementById('admin-apk-url-input')?.value || '').trim();
             const notes = (document.getElementById('admin-apk-notes-input')?.value || 'New Satta Pai App Update with smoother 120FPS & new features!').trim();
             const force = Boolean(document.getElementById('admin-apk-force-check')?.checked);
@@ -17681,13 +18010,17 @@ CRITICAL RULES:
                     updatedAt: Date.now()
                 };
                 await setDoc(doc(db, 'settings', 'appUpdate'), payload, { merge: true });
-                window.showToast(activeState ? `📲 APK Update (${ver}) Published to all Android App users!` : '✅ App APK Update Banner turned OFF.');
+                window.showToast(activeState ? `📲 APK Update (${ver}) Published to all Android App & Web users!` : '✅ App APK Update Banner turned OFF.');
             } catch (e) {
                 window.showToast('❌ Failed to save APK update config: ' + (e.message || e));
             }
         };
 
         window.dismissApkUpdateModal = function() {
+            const ver = window._latestPublishedApkVersion || '';
+            if (ver) {
+                try { sessionStorage.setItem('sp_dismissed_apk_ver_' + ver, '1'); } catch(e) {}
+            }
             document.getElementById('app-apk-update-modal')?.classList.add('hidden');
         };
 
@@ -17696,10 +18029,17 @@ CRITICAL RULES:
                 onSnapshot(doc(db, 'settings', 'appUpdate'), snap => {
                     if (!snap.exists()) return;
                     const d = snap.data() || {};
-                    // Update Admin Settings UI if rendered
+                    if (d.apkUrl) {
+                        window._latestPublishedApkUrl = d.apkUrl;
+                        window._latestPublishedApkVersion = d.version || '';
+                        const webBtn = document.getElementById('web-direct-apk-download-btn');
+                        const webLbl = document.getElementById('web-direct-apk-download-lbl');
+                        if (webBtn) webBtn.href = d.apkUrl;
+                        if (webLbl) webLbl.textContent = `Download Official Android App (${d.version || 'Latest'} APK)`;
+                    }
                     const pill = document.getElementById('admin-apk-update-status-pill');
                     if (pill) {
-                        pill.textContent = d.active ? ('LIVE: ' + (d.version || 'v13.1')) : 'OFF';
+                        pill.textContent = d.active ? ('LIVE: ' + (d.version || '1.0.1')) : 'OFF';
                         pill.className = 'px-2 py-0.5 rounded font-mono text-[9px] font-bold ' + (d.active ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' : 'bg-zinc-800 text-slate-300');
                     }
                     const vInp = document.getElementById('admin-apk-version-input');
@@ -17711,28 +18051,34 @@ CRITICAL RULES:
                     if (nInp && !nInp.value && d.notes) nInp.value = d.notes;
                     if (fChk && typeof d.forceUpdate === 'boolean') fChk.checked = d.forceUpdate;
 
-                    // CRITICAL: Only show the APK Update Modal inside the Android App (window.IS_SATTA_PAI_APP_BUILD or window.SattaPaiNativeAuth) — NEVER on Web!
                     const isAppEnv = Boolean(window.IS_SATTA_PAI_APP_BUILD || window.SattaPaiNativeAuth);
                     const modal = document.getElementById('app-apk-update-modal');
                     if (!isAppEnv || !modal) return;
 
-                    if (d.active && d.apkUrl && d.version && d.version !== window.CURRENT_APP_APK_VERSION) {
+                    const curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
+                    const remoteVer = String(d.version || '').trim();
+                    const alreadyInstalledVer = localStorage.getItem('satta_pai_installed_apk_ver') || '';
+                    const isDismissedThisSession = sessionStorage.getItem('sp_dismissed_apk_ver_' + remoteVer) === '1';
+                    const isNewerVersion = remoteVer && window.compareAppVersions(remoteVer, curVer) > 0 && alreadyInstalledVer !== remoteVer;
+
+                    // If current version >= remoteVer, mark as installed so update modal NEVER shows!
+                    if (remoteVer && window.compareAppVersions(curVer, remoteVer) >= 0) {
+                        try { localStorage.setItem('satta_pai_installed_apk_ver', remoteVer); } catch(e) {}
+                        modal.classList.add('hidden');
+                        return;
+                    }
+
+                    if (d.active && d.apkUrl && isNewerVersion && (!isDismissedThisSession || d.forceUpdate)) {
                         const titleEl = document.getElementById('apk-update-modal-title');
                         const notesEl = document.getElementById('apk-update-modal-notes');
                         const dlBtn = document.getElementById('apk-update-download-btn');
                         const laterBtn = document.getElementById('apk-update-later-btn');
-                        if (titleEl) titleEl.textContent = '📲 Satta Pai App Update (' + d.version + ')';
-                        if (notesEl) notesEl.textContent = d.notes || 'Download the latest APK for new features and performance improvements!';
+                        if (titleEl) titleEl.textContent = '📲 Satta Pai App Update (' + remoteVer + ')';
+                        if (notesEl) notesEl.textContent = d.notes || 'Download the latest APK for new features and 120FPS performance!';
                         if (dlBtn) {
                             dlBtn.href = d.apkUrl;
-                            dlBtn.onclick = function() {
-                                // Clear current version stamp when downloading update so the new APK prompts a fresh 1-time login!
-                                try {
-                                    localStorage.setItem('satta_pai_logged_app_version', 'pending_update_' + d.version);
-                                    if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
-                                        window.SattaPaiNativeAuth.postMessage('clear_auth');
-                                    }
-                                } catch(e) {}
+                            dlBtn.onclick = function(ev) {
+                                return window.openExternalApkUpdateDownload(ev, d.apkUrl, remoteVer);
                             };
                         }
                         if (laterBtn) {
@@ -17740,6 +18086,18 @@ CRITICAL RULES:
                             else laterBtn.classList.remove('hidden');
                         }
                         modal.classList.remove('hidden');
+
+                        // Fire Mobile Notification once for this new APK update version
+                        const notifKey = 'sp_notified_apk_update_' + remoteVer;
+                        if (localStorage.getItem(notifKey) !== '1') {
+                            try { localStorage.setItem(notifKey, '1'); } catch(e) {}
+                            if (typeof window.triggerSystemMatchNotification === 'function') {
+                                window.triggerSystemMatchNotification(
+                                    `📲 Satta Pai App Update (${remoteVer}) Available!`,
+                                    d.notes || 'Tap inside the app to download & install the new update in your browser!'
+                                );
+                            }
+                        }
                     } else {
                         modal.classList.add('hidden');
                     }
@@ -17883,20 +18241,134 @@ CRITICAL RULES:
         };
 
         window._dmUnsubscribe = null;
-        window.loadLocalCachedDms = function() {
-            try {
-                const raw = localStorage.getItem('satta_pai_dm_local_cache_v1');
-                if (!raw) return [];
-                const parsed = JSON.parse(raw);
-                return Array.isArray(parsed) ? parsed : [];
-            } catch(e) { return []; }
+        window._notifiedDmIds = new Set();
+        window._dmInitialBatchLoaded = false;
+
+        // 🟢 Online Status & Last Seen Helper
+        window.isPlayerCurrentlyOnline = function(emailRaw) {
+            const em = String(emailRaw || '').trim().toLowerCase();
+            if (!em || em === 'guest') return false;
+            const now = Date.now();
+            if ((window._liveVisitors || []).some(v => String(v.id || '').toLowerCase() === em && (now - Number(v.time || 0)) < 300000)) {
+                return true;
+            }
+            const u = userCache[em] || {};
+            const lastTs = Number(u.lastSeenAt || u.updatedAt || u.lastChatAt || 0);
+            if (u.isOnline && lastTs > 0 && (now - lastTs) < 300000) return true;
+            if (lastTs > 0 && (now - lastTs) < 240000) return true;
+            // Also check if they sent a Global or Private message in the last 4 minutes
+            if ((window.allChatMessages || []).some(m => String(m.userEmail || '').toLowerCase() === em && (now - Number(m.timestamp || 0)) < 240000)) {
+                return true;
+            }
+            if ((window._allDmMessages || []).some(m => String(m.senderEmail || '').toLowerCase() === em && (now - Number(m.timestamp || 0)) < 240000)) {
+                return true;
+            }
+            return false;
         };
-        window.saveLocalCachedDms = function(list) {
+
+        window.isMyLastSeenHidden = function() {
+            const myEm = (window.loggedEmail || '').toLowerCase();
+            if (myEm && userCache[myEm] && typeof userCache[myEm].hideLastSeen === 'boolean') {
+                return userCache[myEm].hideLastSeen;
+            }
+            return localStorage.getItem('satta_pai_hide_last_seen_' + myEm) === '1';
+        };
+
+        window.updateLastSeenPrivacyButtonsUI = function() {
+            const hidden = window.isMyLastSeenHidden();
+            const txt = hidden ? '👁️ Last Seen: OFF (Hidden)' : '👁️ Last Seen: ON';
+            ['dm-last-seen-toggle-btn', 'dm-free-last-seen-btn', 'settings-last-seen-toggle-btn'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = txt;
+            });
+        };
+
+        window.toggleMyLastSeenPrivacy = async function() {
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast('🔐 Sign in first!');
+                return;
+            }
+            const myEm = window.loggedEmail.toLowerCase();
+            const nextState = !window.isMyLastSeenHidden();
+            try { localStorage.setItem('satta_pai_hide_last_seen_' + myEm, nextState ? '1' : '0'); } catch(e) {}
+            if (userCache[myEm]) userCache[myEm].hideLastSeen = nextState;
+            window.updateLastSeenPrivacyButtonsUI();
             try {
-                const trimmed = (Array.isArray(list) ? list : []).slice(-250);
-                localStorage.setItem('satta_pai_dm_local_cache_v1', JSON.stringify(trimmed));
+                await setDoc(doc(db, 'users', myEm), { email: myEm, hideLastSeen: nextState, lastSeenAt: Date.now() }, { merge: true });
             } catch(e) {}
+            if (window._activeDmPartnerEmail) {
+                window.openPrivateDmConversationWith(window._activeDmPartnerEmail);
+            }
+            window.showToast(nextState
+                ? '👻 Last Seen turned OFF! Other players will only see "Last seen recently" or "Long days".'
+                : '👁️ Last Seen turned ON! Online & Last Seen time visible.');
         };
+
+        window.getFormattedPartnerLastSeen = function(partnerEmailRaw) {
+            const partner = String(partnerEmailRaw || '').trim().toLowerCase();
+            if (!partner) return 'Offline';
+            if (window.isPlayerCurrentlyOnline(partner)) {
+                return '🟢 Online';
+            }
+            const u = userCache[partner] || {};
+            const lastTs = Number(u.lastSeenAt || u.updatedAt || u.lastChatAt || 0);
+            const now = Date.now();
+            const diffMs = lastTs > 0 ? (now - lastTs) : 0;
+            const hideExact = Boolean(u.hideLastSeen || window.isMyLastSeenHidden());
+
+            if (hideExact) {
+                if (lastTs > 0 && diffMs > (3 * 86400000)) {
+                    return '🕒 Last seen long days ago';
+                }
+                return '🕒 Last seen recently';
+            }
+            if (!lastTs || lastTs <= 0) {
+                return '🕒 Last seen recently';
+            }
+            if (diffMs > (3 * 86400000)) {
+                return '🕒 Last seen long days ago';
+            }
+            const dObj = new Date(lastTs);
+            const tStr = dObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if (dObj.toDateString() === new Date(now).toDateString()) {
+                return `🕒 Last seen today at ${tStr}`;
+            }
+            return `🕒 Last seen ${dObj.toLocaleDateString([], { month: 'short', day: 'numeric' })} at ${tStr}`;
+        };
+
+        window.refreshDmVipSecurityBarUI = function() {
+            const isProPlus = window.isCurrentUserProPlus ? window.isCurrentUserProPlus() : false;
+            const isVip = isProPlus || (window.isCurrentUserVip ? window.isCurrentUserVip() : false);
+            const vipBar = document.getElementById('dm-vip-security-vault-bar');
+            const freeBar = document.getElementById('dm-free-privacy-bar');
+            const tierPill = document.getElementById('dm-vip-tier-pill');
+            const e2eBadge = document.getElementById('dm-active-partner-e2e-badge');
+            if (isVip) {
+                if (vipBar) vipBar.classList.remove('hidden');
+                if (freeBar) freeBar.classList.add('hidden');
+                if (tierPill) tierPill.textContent = isProPlus ? '👑 PRO+ E2E VAULT' : '⭐ PRO E2E SHIELD';
+                if (e2eBadge) e2eBadge.classList.remove('hidden');
+            } else {
+                if (vipBar) vipBar.classList.add('hidden');
+                if (freeBar) freeBar.classList.remove('hidden');
+                if (e2eBadge) e2eBadge.classList.add('hidden');
+            }
+            window.updateLastSeenPrivacyButtonsUI();
+        };
+
+        window.loadLocalCachedDms = function() {
+            return window.SattaPaiEncryptedStorage
+                ? window.SattaPaiEncryptedStorage.getEncryptedItem('satta_pai_dm_local_cache_v1', [])
+                : [];
+        };
+
+        window.saveLocalCachedDms = function(list) {
+            const trimmed = (Array.isArray(list) ? list : []).slice(-250);
+            if (window.SattaPaiEncryptedStorage) {
+                window.SattaPaiEncryptedStorage.setEncryptedItem('satta_pai_dm_local_cache_v1', trimmed);
+            }
+        };
+
         window.mergeDmSnapshotsWithLocal = function(remoteDocs) {
             const cutoff = Date.now() - (14 * 24 * 60 * 60 * 1000);
             const mergedMap = new Map();
@@ -17909,6 +18381,7 @@ CRITICAL RULES:
                 mergedMap.set(key, m);
             });
 
+            const myEm = (window.loggedEmail || '').toLowerCase();
             (remoteDocs || []).forEach(m => {
                 if (!m || !m.message || Number(m.timestamp || 0) <= cutoff) return;
                 const key = m.clientMsgId || m.id || `${m.senderEmail}_${m.receiverEmail}_${m.timestamp}`;
@@ -17916,8 +18389,40 @@ CRITICAL RULES:
                 if (m.id && m.clientMsgId && m.id !== m.clientMsgId) {
                     mergedMap.delete(m.id);
                 }
+
+                // Auto-update delivery tick (✓ -> ✓✓) & fire Mobile Notification when a new DM arrives for me!
+                const rEm = String(m.receiverEmail || '').toLowerCase();
+                const sEm = String(m.senderEmail || '').toLowerCase();
+                if (myEm && myEm !== 'guest' && rEm === myEm && sEm && sEm !== myEm) {
+                    const isCurrentlyViewingPartner = (window._currentChatTabMode === 'dm' && window._activeDmPartnerEmail === sEm && document.getElementById('chat-fullscreen')?.classList.contains('active'));
+                    if (isCurrentlyViewingPartner && m.status !== 'read' && m.id && !String(m.id).startsWith('local_')) {
+                        m.status = 'read';
+                        m.readAt = Date.now();
+                        setDoc(doc(db, 'dm_messages', m.id), { status: 'read', readAt: m.readAt }, { merge: true }).catch(() => {});
+                    } else if ((!m.status || m.status === 'sent') && m.id && !String(m.id).startsWith('local_')) {
+                        m.status = 'delivered';
+                        m.deliveredAt = Date.now();
+                        setDoc(doc(db, 'dm_messages', m.id), { status: 'delivered', deliveredAt: m.deliveredAt }, { merge: true }).catch(() => {});
+                    }
+
+                    if (window._dmInitialBatchLoaded && !window._notifiedDmIds.has(key) && !window.isUserBlockedEitherWay(sEm)) {
+                        window._notifiedDmIds.add(key);
+                        const senderU = userCache[sEm] || {};
+                        const senderDisplay = senderU.username || senderU.ign || m.senderName || sEm.split('@')[0];
+                        const cleanPreview = window.aiMaskBadWords ? window.aiMaskBadWords(m.message) : m.message;
+                        if (typeof window.triggerSystemMatchNotification === 'function') {
+                            window.triggerSystemMatchNotification(
+                                `💬 Private DM from ${senderDisplay}`,
+                                cleanPreview
+                            );
+                        }
+                    } else {
+                        window._notifiedDmIds.add(key);
+                    }
+                }
             });
 
+            window._dmInitialBatchLoaded = true;
             const sorted = Array.from(mergedMap.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
             window._allDmMessages = sorted;
             window.saveLocalCachedDms(sorted);
@@ -17934,7 +18439,8 @@ CRITICAL RULES:
                             username: m.displayName || m.username || m.senderName || em.split('@')[0],
                             ign: m.ign || m.displayName || em.split('@')[0],
                             playerId: window.getStablePlayerId(em),
-                            dpBase64: m.dpBase64 || ''
+                            dpBase64: m.dpBase64 || '',
+                            lastChatAt: m.timestamp || 0
                         };
                     }
                 });
@@ -17962,7 +18468,6 @@ CRITICAL RULES:
                 try { window._dmUnsubscribe(); } catch(e) {}
                 window._dmUnsubscribe = null;
             }
-            // Restore cached DMs immediately for 0ms display
             if (!window._allDmMessages || window._allDmMessages.length === 0) {
                 window.mergeDmSnapshotsWithLocal([]);
             }
@@ -17978,7 +18483,6 @@ CRITICAL RULES:
                         window.renderActiveDmConversation();
                         window.updateDmUnreadBadge();
                     }, (err) => {
-                        console.warn('DM listener fallback notice:', err?.code || err?.message);
                         if (useOrderBy) {
                             attachDmListener(false);
                         } else {
@@ -18008,6 +18512,7 @@ CRITICAL RULES:
                 window.hydratePlayersDirectoryFromChatsAndTeams();
                 if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
                 window.startDmRealtimeListener();
+                window.refreshDmVipSecurityBarUI();
                 if (gBtn) gBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer cyber-card flex items-center justify-center gap-1.5';
                 if (dBtn) dBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer btn-theme flex items-center justify-center gap-1.5 relative';
                 if (gBox) gBox.classList.add('hidden');
@@ -18051,11 +18556,30 @@ CRITICAL RULES:
             window.openPrivateDmConversationWith(tgt);
         };
 
+        window.markPartnerDmMessagesAsRead = function(partnerEmail) {
+            const myEm = (window.loggedEmail || '').toLowerCase();
+            const partner = String(partnerEmail || '').toLowerCase();
+            if (!myEm || myEm === 'guest' || !partner) return;
+            const now = Date.now();
+            try { localStorage.setItem('sp_dm_last_read_' + myEm + '_' + partner, String(now)); } catch(e) {}
+            (window._allDmMessages || []).forEach(m => {
+                if (String(m.senderEmail || '').toLowerCase() === partner &&
+                    String(m.receiverEmail || '').toLowerCase() === myEm &&
+                    m.status !== 'read') {
+                    m.status = 'read';
+                    m.readAt = now;
+                    const docId = m.id || m.clientMsgId;
+                    if (docId && !String(docId).startsWith('local_')) {
+                        setDoc(doc(db, 'dm_messages', docId), { status: 'read', readAt: now }, { merge: true }).catch(() => {});
+                    }
+                }
+            });
+        };
+
         window.openPrivateDmConversationWith = function(partnerEmailRaw) {
             let partner = String(partnerEmailRaw || '').trim().toLowerCase();
             if (!partner) return;
             window.hydratePlayersDirectoryFromChatsAndTeams();
-            // Support opening DM by SP-XXXX Player ID or IGN if passed
             if (!partner.includes('@')) {
                 const foundEntry = Object.entries(userCache || {}).find(([em, u]) => {
                     const pid = String(u?.playerId || window.getStablePlayerId(em)).toLowerCase();
@@ -18068,18 +18592,31 @@ CRITICAL RULES:
             window._activeDmPartnerEmail = partner;
             document.getElementById('dm-inbox-view')?.classList.add('hidden');
             document.getElementById('dm-conversation-view')?.classList.remove('hidden');
+            window.refreshDmVipSecurityBarUI();
 
             const u = userCache[partner] || {};
             const name = u.username || u.ign || partner.split('@')[0] || 'Player';
             const pid = u.playerId || window.getStablePlayerId(partner);
             const dp = window.resolveUserDpUrl(partner, u, null, name);
+            const isOnline = window.isPlayerCurrentlyOnline(partner);
+            const lastSeenTxt = window.getFormattedPartnerLastSeen(partner);
 
             const dpEl = document.getElementById('dm-active-partner-dp');
+            const dotEl = document.getElementById('dm-active-partner-online-dot');
             const nmEl = document.getElementById('dm-active-partner-name');
             const sbEl = document.getElementById('dm-active-partner-sub');
             if (dpEl) dpEl.src = dp;
-            if (nmEl) nmEl.textContent = name;
-            if (sbEl) sbEl.textContent = `${pid} • Tap to view profile`;
+            if (dotEl) {
+                if (isOnline) dotEl.classList.remove('hidden');
+                else dotEl.classList.add('hidden');
+            }
+            if (nmEl) nmEl.textContent = `${name} (${pid})`;
+            if (sbEl) {
+                sbEl.textContent = lastSeenTxt;
+                sbEl.className = isOnline
+                    ? 'text-[9.5px] font-mono text-emerald-400 font-bold truncate'
+                    : 'text-[9.5px] font-mono text-slate-400 truncate';
+            }
 
             const pins = window.getMyPinnedDmPartners();
             const pinBtn = document.getElementById('dm-pin-toggle-btn');
@@ -18088,7 +18625,7 @@ CRITICAL RULES:
             const blkBtn = document.getElementById('dm-block-toggle-btn');
             if (blkBtn) blkBtn.textContent = window.isUserBlockedByMe(partner) ? '✅ Unblock' : '🚫 Block';
 
-            try { localStorage.setItem('sp_dm_last_read_' + (window.loggedEmail || '').toLowerCase() + '_' + partner, String(Date.now())); } catch(e) {}
+            window.markPartnerDmMessagesAsRead(partner);
             window.renderActiveDmConversation();
             window.updateDmUnreadBadge();
             setTimeout(() => {
@@ -18121,17 +18658,18 @@ CRITICAL RULES:
                     <div class="cyber-card p-5 text-center space-y-2.5 border border-emerald-500/30">
                         <div class="text-2xl">🔐</div>
                         <div class="text-xs font-extrabold text-white">Sign In Required for Private DM</div>
-                        <p class="text-[10.5px] text-slate-400">Sign in with your account to send and receive 1-to-1 private messages with Arena players.</p>
+                        <p class="text-[10.5px] text-slate-400">Sign in with your account to send and receive 1-to-1 private messages with Online Arena players.</p>
                         <button type="button" onclick="window.closeFullScreenChat(); window.openLoginScreenModal(true);" class="btn-theme px-4 py-2 text-xs font-extrabold cursor-pointer">🔐 Sign In Now</button>
                     </div>
                 `;
                 return;
             }
             window.hydratePlayersDirectoryFromChatsAndTeams();
+            window.refreshDmVipSecurityBarUI();
             const q = String(searchRaw ?? (document.getElementById('dm-user-search-input')?.value || '')).trim().toLowerCase();
             const pins = window.getMyPinnedDmPartners();
 
-            // Gather all DM partners from _allDmMessages + matching searched users from userCache
+            // Gather existing DM threads + Online Players ONLY
             const partnerMap = new Map();
             (window._allDmMessages || []).forEach(m => {
                 const s = String(m.senderEmail || '').toLowerCase();
@@ -18149,6 +18687,8 @@ CRITICAL RULES:
                 Object.entries(userCache || {}).forEach(([em, u]) => {
                     const lowEm = em.toLowerCase();
                     if (lowEm === myEm || !lowEm.includes('@')) return;
+                    // Only include Online players in search results as requested
+                    if (!window.isPlayerCurrentlyOnline(lowEm) && !partnerMap.has(lowEm)) return;
                     const pid = String(u.playerId || window.getStablePlayerId(lowEm)).toLowerCase();
                     const nm = String(u.username || '').toLowerCase();
                     const ign = String(u.ign || '').toLowerCase();
@@ -18168,37 +18708,56 @@ CRITICAL RULES:
                 return Number(mB?.timestamp || 0) - Number(mA?.timestamp || 0);
             });
 
-            // Also build a Quick-Start Arena Players list so users can immediately message any active player
-            const suggestedPlayers = Object.entries(userCache || {})
+            // Filter directory strictly to ONLINE players ONLY!
+            const onlineArenaPlayers = Object.entries(userCache || {})
                 .map(([em, u]) => ({ em: em.toLowerCase(), u: u || {} }))
-                .filter(x => x.em !== myEm && x.em.includes('@') && !partnerMap.has(x.em) && !window.isUserBlockedEitherWay(x.em))
-                .slice(0, 15);
+                .filter(x => x.em !== myEm && x.em.includes('@') && !partnerMap.has(x.em) && !window.isUserBlockedEitherWay(x.em) && window.isPlayerCurrentlyOnline(x.em))
+                .slice(0, 20);
 
-            const renderPartnerCard = (em, lastMsg, isSuggested = false) => {
+            const renderPartnerCard = (em, lastMsg, isOnlineSuggested = false) => {
                 const u = userCache[em] || {};
                 const name = u.username || u.ign || em.split('@')[0] || 'Player';
                 const pid = u.playerId || window.getStablePlayerId(em);
                 const dp = window.resolveUserDpUrl(em, u, null, name);
                 const isPinned = pins.includes(em);
+                const isOnline = window.isPlayerCurrentlyOnline(em);
+                const statusSub = window.getFormattedPartnerLastSeen(em);
                 const lastRead = Number(localStorage.getItem('sp_dm_last_read_' + myEm + '_' + em) || 0);
                 const isUnread = lastMsg && String(lastMsg.senderEmail).toLowerCase() === em && Number(lastMsg.timestamp || 0) > lastRead;
-                const timeStr = lastMsg?.timestamp ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isSuggested ? '💬 Message' : 'Start Chat');
+                const timeStr = lastMsg?.timestamp ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isOnline ? '🟢 Online' : 'Chat');
+                const previewText = lastMsg
+                    ? (window.aiMaskBadWords ? window.aiMaskBadWords(lastMsg.message) : lastMsg.message)
+                    : statusSub;
+
+                let myTickHtml = '';
+                if (lastMsg && String(lastMsg.senderEmail || '').toLowerCase() === myEm) {
+                    if (lastMsg.status === 'read' || Number(lastMsg.readAt || 0) > 0) {
+                        myTickHtml = '<span style="color:#38bdf8;font-weight:900;" class="mr-1">✓✓</span>';
+                    } else if (lastMsg.status === 'delivered' || Number(lastMsg.deliveredAt || 0) > 0 || isOnline) {
+                        myTickHtml = '<span class="text-slate-300 font-bold mr-1">✓✓</span>';
+                    } else {
+                        myTickHtml = '<span class="text-slate-400 font-bold mr-1">✓</span>';
+                    }
+                }
 
                 return `
                     <div onclick="window.openPrivateDmConversationWith('${window.escapeJsStr(em)}')" class="cyber-card p-2.5 flex items-center justify-between gap-2.5 cursor-pointer hover:border-emerald-400 transition-all ${isPinned ? 'border-amber-400/60 bg-amber-500/5' : ''}">
                         <div class="flex items-center gap-2.5 min-w-0">
-                            <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-10 h-10 rounded-full object-cover border border-emerald-400/60 shrink-0" alt="DP">
+                            <div class="relative shrink-0">
+                                <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-10 h-10 rounded-full object-cover border border-emerald-400/60" alt="DP">
+                                <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ${isOnline ? 'bg-emerald-400' : 'bg-slate-500'} ring-2 ring-zinc-900"></span>
+                            </div>
                             <div class="min-w-0">
                                 <div class="flex items-center gap-1.5">
                                     ${isPinned ? '<span class="text-[10px]" title="Pinned">📌</span>' : ''}
                                     <span class="font-extrabold text-white text-xs truncate">${window.escapeHTML(name)}</span>
                                     <span class="text-[9.5px] font-mono text-emerald-400">(${window.escapeHTML(pid)})</span>
                                 </div>
-                                <div class="text-[10.5px] text-slate-400 truncate mt-0.5">${lastMsg ? window.escapeHTML(lastMsg.message) : 'Tap to send a 1-to-1 private message...'}</div>
+                                <div class="text-[10.5px] text-slate-400 truncate mt-0.5">${myTickHtml}${window.escapeHTML(previewText)}</div>
                             </div>
                         </div>
                         <div class="flex flex-col items-end gap-1 shrink-0">
-                            <span class="text-[9px] font-mono ${isSuggested ? 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-400'}">${timeStr}</span>
+                            <span class="text-[9px] font-mono ${isOnlineSuggested ? 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-400'}">${timeStr}</span>
                             ${isUnread ? '<span class="px-1.5 py-0.2 rounded-full bg-emerald-500 text-black text-[8.5px] font-black">NEW</span>' : ''}
                         </div>
                     </div>
@@ -18208,19 +18767,19 @@ CRITICAL RULES:
             let htmlOut = '';
             if (partners.length > 0) {
                 htmlOut += partners.map(em => renderPartnerCard(em, partnerMap.get(em), false)).join('');
-            } else {
-                htmlOut += `
-                    <div class="cyber-card p-4 text-center space-y-1.5 border border-white/10">
-                        <div class="text-xl">💬</div>
-                        <div class="text-xs font-extrabold text-emerald-400">Private 1-to-1 Messenger</div>
-                        <p class="text-[10.5px] text-slate-400">Search a player by Name, IGN, or SP-ID above, or tap any player below or in Global Chat to start messaging!</p>
-                    </div>
-                `;
             }
 
-            if (suggestedPlayers.length > 0 && !q) {
-                htmlOut += `<div class="pt-2 pb-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 px-1">⚡ Active Arena Players — Tap to Chat</div>`;
-                htmlOut += suggestedPlayers.map(x => renderPartnerCard(x.em, null, true)).join('');
+            if (onlineArenaPlayers.length > 0) {
+                htmlOut += `<div class="pt-2 pb-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 px-1 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Online Arena Players (${onlineArenaPlayers.length}) — Tap to Chat</span></div>`;
+                htmlOut += onlineArenaPlayers.map(x => renderPartnerCard(x.em, null, true)).join('');
+            } else if (partners.length === 0) {
+                htmlOut += `
+                    <div class="cyber-card p-5 text-center space-y-2 border border-white/10">
+                        <div class="text-2xl">🟢</div>
+                        <div class="text-xs font-extrabold text-emerald-400">Online Players Only</div>
+                        <p class="text-[10.5px] text-slate-400">No other players are currently online right now, or tap any player in Global Chat to start a 1-to-1 Private DM!</p>
+                    </div>
+                `;
             }
 
             box.innerHTML = htmlOut;
@@ -18231,6 +18790,21 @@ CRITICAL RULES:
             const partner = (window._activeDmPartnerEmail || '').toLowerCase();
             const myEm = (window.loggedEmail || '').toLowerCase();
             if (!box || !partner || !myEm) return;
+
+            // Keep header Online / Last Seen status live
+            const isOnline = window.isPlayerCurrentlyOnline(partner);
+            const sbEl = document.getElementById('dm-active-partner-sub');
+            const dotEl = document.getElementById('dm-active-partner-online-dot');
+            if (sbEl) {
+                sbEl.textContent = window.getFormattedPartnerLastSeen(partner);
+                sbEl.className = isOnline
+                    ? 'text-[9.5px] font-mono text-emerald-400 font-bold truncate'
+                    : 'text-[9.5px] font-mono text-slate-400 truncate';
+            }
+            if (dotEl) {
+                if (isOnline) dotEl.classList.remove('hidden');
+                else dotEl.classList.add('hidden');
+            }
 
             if (window.isUserBlockedEitherWay(partner)) {
                 box.innerHTML = '<div class="cyber-card p-4 text-center text-rose-300 text-xs my-auto">🚫 This conversation is blocked. Unblock to send or view messages.</div>';
@@ -18244,7 +18818,7 @@ CRITICAL RULES:
             });
 
             if (threadMsgs.length === 0) {
-                box.innerHTML = '<div class="text-center text-xs text-slate-400 my-auto py-8">🔒 End-to-End Private Arena Chat. Say Vanakkam!</div>';
+                box.innerHTML = '<div class="text-center text-xs text-slate-400 my-auto py-8">🔒 End-to-End Encrypted Private Arena Chat. Say Vanakkam!</div>';
                 return;
             }
 
@@ -18255,12 +18829,31 @@ CRITICAL RULES:
                 const name = u.username || u.ign || m.senderName || sEm.split('@')[0];
                 const dp = window.resolveUserDpUrl(sEm, u, m, name);
                 const tStr = new Date(m.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const censoredMsg = window.aiMaskBadWords ? window.aiMaskBadWords(m.message || '') : (m.message || '');
+
+                // WhatsApp Tick Marks for Sender:
+                // ✓ (Single Grey) = Recipient Offline
+                // ✓✓ (Double Grey) = Recipient Online / Delivered, Not Read Yet
+                // ✓✓ (Double Blue #38bdf8) = Recipient Read Message
+                let tickHtml = '';
+                if (isMe) {
+                    const isRead = (m.status === 'read' || Number(m.readAt || 0) > 0);
+                    const isDelivered = isRead || m.status === 'delivered' || Number(m.deliveredAt || 0) > 0 || isOnline;
+                    if (isRead) {
+                        tickHtml = `<span style="color:#38bdf8;font-weight:900;text-shadow:0 0 6px rgba(56,189,248,0.5);" class="ml-1 tracking-tighter" title="Read (Blue Double Tick)">✓✓</span>`;
+                    } else if (isDelivered) {
+                        tickHtml = `<span class="text-slate-200 font-extrabold ml-1 tracking-tighter" title="Delivered (Online)">✓✓</span>`;
+                    } else {
+                        tickHtml = `<span class="text-slate-300 font-bold ml-1" title="Sent (Recipient Offline)">✓</span>`;
+                    }
+                }
+
                 return `
                     <div class="flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'}">
                         <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-7 h-7 rounded-full object-cover border border-white/20 shrink-0" alt="DP">
-                        <div class="max-w-[78%] px-3 py-2 rounded-2xl text-xs ${isMe ? 'bg-emerald-600 text-white rounded-br-sm' : 'cyber-card text-slate-100 rounded-bl-sm'}">
-                            <div class="break-words leading-relaxed">${window.escapeHTML(m.message || '')}</div>
-                            <div class="text-[8.5px] opacity-75 text-right mt-0.5 font-mono">${tStr}</div>
+                        <div class="max-w-[78%] px-3 py-2 rounded-2xl text-xs ${isMe ? 'bg-emerald-700/95 text-white rounded-br-sm border border-emerald-400/30' : 'cyber-card text-slate-100 rounded-bl-sm'}">
+                            <div class="break-words leading-relaxed">${window.escapeHTML(censoredMsg)}</div>
+                            <div class="text-[8.5px] opacity-90 text-right mt-0.5 font-mono flex items-center justify-end gap-0.5"><span>${tStr}</span>${tickHtml}</div>
                         </div>
                     </div>
                 `;
@@ -18269,6 +18862,7 @@ CRITICAL RULES:
         };
 
         window.sendPrivateDmMessage = async function() {
+            if (!window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) return;
             if (!window.loggedEmail && typeof window.checkLoginState === 'function') window.checkLoginState();
             if (!window.loggedEmail || window.loggedEmail === 'guest') {
                 window.showToast('🔐 Sign in first to send Private DMs!');
@@ -18278,7 +18872,7 @@ CRITICAL RULES:
             const myEm = window.loggedEmail.toLowerCase();
             const partner = (window._activeDmPartnerEmail || '').toLowerCase();
             if (!partner) {
-                window.showToast('⚠️ Select a player first to send a Private DM!');
+                window.showToast('⚠️ Select an online player first to send a Private DM!');
                 return;
             }
             if (window.isUserBlockedEitherWay(partner)) {
@@ -18286,14 +18880,18 @@ CRITICAL RULES:
                 return;
             }
             const inp = document.getElementById('dm-message-input');
-            const text = window.sanitizeSafeTextInput(inp?.value || '', 250);
-            if (!text) return;
+            const rawText = window.sanitizeSafeTextInput(inp?.value || '', 250);
+            if (!rawText) return;
+            const text = window.aiMaskBadWords ? window.aiMaskBadWords(rawText) : rawText;
             inp.value = '';
 
             const myU = userCache[myEm] || currentUserProfile || {};
             const now = Date.now();
             const clientMsgId = 'dm_' + now + '_' + Math.random().toString(36).slice(2, 8);
             const threadId = [myEm, partner].sort().join('__');
+            const partnerOnline = window.isPlayerCurrentlyOnline(partner);
+            const initialStatus = partnerOnline ? 'delivered' : 'sent';
+
             const payload = {
                 clientMsgId,
                 threadId,
@@ -18302,8 +18900,10 @@ CRITICAL RULES:
                 receiverEmail: partner,
                 senderUid: (auth.currentUser && auth.currentUser.uid) || window.loggedUid || '',
                 senderName: myU.username || myU.ign || myEm.split('@')[0],
-                dpBase64: myU.dpBase64 || myU.dp || '',
                 message: text,
+                status: initialStatus,
+                deliveredAt: partnerOnline ? now : 0,
+                readAt: 0,
                 timestamp: now
             };
 
@@ -18312,7 +18912,6 @@ CRITICAL RULES:
             window.renderDmInboxList();
 
             try {
-                // Ensure Firebase Auth session is active before writing to Firestore
                 if (!auth.currentUser && typeof window.ensureSilentFirebaseAuthSession === 'function') {
                     await window.ensureSilentFirebaseAuthSession(myEm);
                 }
@@ -18382,7 +18981,7 @@ CRITICAL RULES:
 
             // Never auto-ban Super Admin or Staff
             if (isSuperAdminEmail(targetEm) || isAdminEmail(targetEm) || isHostEmail(targetEm)) {
-                window.showToast('🛡️ Report logged for Super Admin review.');
+                window.showToast('🛡️ Report logged for System Security review.');
                 document.getElementById('dm-ai-report-modal')?.classList.add('hidden');
                 return;
             }
@@ -19184,14 +19783,31 @@ CRITICAL RULES:
         };
 
         window.triggerSystemMatchNotification = function(title, body) {
+            const cleanTitle = String(title || 'Satta Pai Esports').trim();
+            const cleanBody = String(body || '').trim();
+            // 1. Trigger Native Android Mobile Notification Bar via Flutter MethodChannel Bridge!
+            try {
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('notify:' + JSON.stringify({
+                        title: cleanTitle,
+                        body: cleanBody,
+                        id: Math.floor(Date.now() % 100000)
+                    }));
+                }
+            } catch(e) {}
+            // 2. Also trigger Web Notification API if supported
             if ("Notification" in window && Notification.permission === "granted") {
                 try {
-                    new Notification(title, {
-                        body: body,
+                    new Notification(cleanTitle, {
+                        body: cleanBody,
                         icon: window.currentBrandLogoDataURL || window.DEFAULT_SATTA_PAI_LOGO_DATA_URL,
                         requireInteraction: true
                     });
                 } catch(e) {}
+            }
+            // 3. Show non-intrusive toast alert
+            if (typeof window.showToast === 'function') {
+                window.showToast(`${cleanTitle} — ${cleanBody.slice(0, 70)}`);
             }
         };
 
@@ -19594,20 +20210,20 @@ CRITICAL RULES:
             }
 
             if (fnName === 'sendChatMessage') {
-                const msg = String(payload.message || '').trim();
-                if (!msg) throw new Error("Empty message.");
+                const rawMsg = String(payload.message || '').trim();
+                if (!rawMsg) throw new Error("Empty message.");
+                const msg = window.aiMaskBadWords ? window.aiMaskBadWords(rawMsg) : rawMsg;
                 if (myChatBannedUntil > now) throw new Error("You are banned from chat.");
-                const displayName = uData.username || window.getFriendlyFallbackName(emailLow, '');
-                const senderDp = uData.dpBase64 || uData.dp || uData.avatar || '';
-                const ref = await addDoc(collection(db, 'chats'), {
+                const displayName = uData.username || uData.ign || window.getFriendlyFallbackName(emailLow, '');
+                const chatDoc = {
                     message: msg,
                     userEmail: emailLow,
-                    displayName,
-                    dpBase64: senderDp,
+                    displayName: displayName,
                     isEdited: false,
                     timestamp: now
-                });
-                return { chatId: ref.id, timestamp: now };
+                };
+                const ref = await addDoc(collection(db, 'chats'), chatDoc);
+                return { chatId: ref.id, timestamp: now, message: msg };
             }
 
             if (fnName === 'castPredictionVote') {
@@ -20263,7 +20879,12 @@ CRITICAL RULES:
          * (!('lastChatAt' in get(/databases/$(database)/documents/users/$(userEmail())).data) || request.time.toMillis() - get(/databases/$(database)/documents/users/$(userEmail())).data.lastChatAt >= 10000)
          */
         window.sendChatMessage = async function() {
-            if (!window.loggedEmail || window.loggedEmail === 'guest') { window.showToast("🔐 Google Sign-In required to chat!"); return; }
+            if (!window.loggedEmail && typeof window.checkLoginState === 'function') window.checkLoginState();
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                window.showToast("🔐 Sign-In required to chat!");
+                window.openLoginScreenModal(true);
+                return;
+            }
             if (myChatBannedUntil > Date.now()) { window.showToast("🚫 You are banned from chatting!"); return; }
             if (currentChatMode === 'off') { window.showToast("🔇 Global Chat is currently disabled."); return; }
             const emailLow = window.loggedEmail.toLowerCase();
@@ -20272,17 +20893,15 @@ CRITICAL RULES:
             const isHost = isSuper || isHostEmail(emailLow);
             if (currentChatMode === 'admin' && !isAdmin && !isHost) { window.showToast("🛡️ Chat is currently in Staff-Only mode."); return; }
             const input = document.getElementById('chat-input');
-            const msg = (input?.value || '').trim();
-            if (!msg) return;
+            const rawMsg = (input?.value || '').trim();
+            if (!rawMsg) return;
+            const msg = window.aiMaskBadWords ? window.aiMaskBadWords(rawMsg) : rawMsg;
             const now = Date.now();
             const isProPlus = window.isCurrentUserProPlus ? window.isCurrentUserProPlus() : false;
-            const isPremOrStaff = isProPlus || window.isCurrentUserVip() || isAdmin || isHost;
             const cooldownMs = (isSuper || isProPlus || isAdmin || isHost) ? 0 : (window.isCurrentUserVip() ? 5000 : 15000);
             try {
                 if (cooldownMs > 0) {
-                    const userSnap = await getDoc(doc(db, 'users', emailLow));
-                    const serverLastChatAt = userSnap.exists() ? Number(userSnap.data().lastChatAt || 0) : 0;
-                    const lastTime = Math.max(window.lastUserMsgTime || 0, serverLastChatAt);
+                    const lastTime = Number(window.lastUserMsgTime || 0);
                     if (now - lastTime < cooldownMs) {
                         const remaining = Math.ceil((cooldownMs - (now - lastTime)) / 1000);
                         window.showToast(`⏳ Chat Cooldown (${window.isCurrentUserVip() ? '5s ⭐ PRO' : '15s Free'}): Wait ${remaining}s! (👑 PRO+ has 0s No Cooldown)`);
@@ -20290,9 +20909,31 @@ CRITICAL RULES:
                     }
                 }
                 input.value = '';
-                await setDoc(doc(db, 'users', emailLow), { lastChatAt: now, updatedAt: now }, { merge: true });
-                const res = await callCloudFn('sendChatMessage', { message: msg });
                 window.lastUserMsgTime = now;
+
+                // Optimistically append message to Global Chat UI at 0ms
+                const uData = userCache[emailLow] || currentUserProfile || {};
+                const displayName = uData.username || uData.ign || window.getFriendlyFallbackName(emailLow, '');
+                const tempId = 'local_chat_' + now;
+                allChatMessages.push({
+                    id: tempId,
+                    message: msg,
+                    userEmail: emailLow,
+                    displayName: displayName,
+                    isEdited: false,
+                    timestamp: now
+                });
+                window.renderChatMessages();
+
+                if (!auth.currentUser && typeof window.ensureSilentFirebaseAuthSession === 'function') {
+                    await window.ensureSilentFirebaseAuthSession(emailLow);
+                }
+
+                // IMPORTANT: Write to 'chats' FIRST so Firestore server-side lastChatAt rule NEVER self-locks!
+                await callCloudFn('sendChatMessage', { message: msg });
+
+                // Update user's lastChatAt & online status AFTER chat document is created (non-blocking)
+                setDoc(doc(db, 'users', emailLow), { lastChatAt: now, lastSeenAt: now, isOnline: true, updatedAt: now }, { merge: true }).catch(() => {});
                 if (userCache[emailLow]) userCache[emailLow].lastChatAt = now;
             } catch (e) {
                 console.warn("Chat send warning:", e);
@@ -21255,5 +21896,102 @@ CRITICAL RULES:
             <div id="sa-dm-audit-threads-box" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
         </div>
     </div>
+
+    <!-- ⚙️ NEW COMPACT SETTINGS MODAL (Music Volume Slider, Mute/Unmute, Language & Privacy) -->
+    <div id="app-quick-settings-modal" style="z-index: 99992 !important;" class="fixed inset-0 z-[99992] hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-5 max-w-sm w-full space-y-4 text-xs border-2 border-emerald-500/60 bg-zinc-950 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2.5" style="border-color: var(--border-color);">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">⚙️</span>
+                    <div>
+                        <h3 class="text-sm font-black text-emerald-400 uppercase tracking-wide">Arena Settings</h3>
+                        <p class="text-[10px] text-slate-400">Audio Volume, Mute & Language Preferences</p>
+                    </div>
+                </div>
+                <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+
+            <!-- 🎵 1. Song Volume & Persistent Mute Control -->
+            <div class="cyber-card p-3.5 space-y-3 bg-zinc-900/90 border border-amber-400/30">
+                <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-amber-300 uppercase text-[11px] flex items-center gap-1.5"><span>🎵</span><span>Theme Song & Volume</span></span>
+                    <span id="settings-music-vol-pct" class="px-2 py-0.5 rounded bg-black/60 font-mono text-[10px] font-bold text-emerald-400">75%</span>
+                </div>
+                <button type="button" id="settings-music-mute-btn" onclick="window.toggleMusic()" class="w-full py-2.5 px-3 rounded-xl bg-emerald-600/25 border border-emerald-500/50 text-emerald-300 font-extrabold text-xs cursor-pointer flex items-center justify-center gap-2">
+                    🔊 Music: ON (Auto-Play Active)
+                </button>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="window.stepAppMusicVolume(-10)" class="w-8 h-8 rounded-lg cyber-card font-black text-sm flex items-center justify-center cursor-pointer hover:border-amber-400" title="Decrease Volume">🔉-</button>
+                    <input type="range" id="settings-music-vol-slider" min="0" max="100" step="5" value="75" oninput="window.setAppMusicVolume(this.value)" class="flex-1 accent-emerald-400 cursor-pointer">
+                    <button type="button" onclick="window.stepAppMusicVolume(10)" class="w-8 h-8 rounded-lg cyber-card font-black text-sm flex items-center justify-center cursor-pointer hover:border-amber-400" title="Increase Volume">🔊+</button>
+                </div>
+                <p class="text-[9.5px] text-slate-400 leading-tight">💡 Turning music OFF keeps it muted even after closing and reopening the app until you unmute it here.</p>
+            </div>
+
+            <!-- 🇮🇳 2. App Language Selector (Moved from 3-Dots Menu) -->
+            <div class="cyber-card p-3.5 space-y-2.5 bg-zinc-900/90 border border-cyan-400/30">
+                <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-cyan-300 uppercase text-[11px] flex items-center gap-1.5"><span>🇮🇳</span><span>App Language</span></span>
+                    <span id="current-lang-badge" class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-bold">Tanglish</span>
+                </div>
+                <div id="settings-lang-select" class="grid grid-cols-2 gap-1.5">
+                    <button type="button" data-lang-btn="ta" onclick="setAppLanguage('ta')" class="lang-option-btn cyber-card py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 தமிழ்</button>
+                    <button type="button" data-lang-btn="tanglish" onclick="setAppLanguage('tanglish')" class="lang-option-btn btn-theme py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 Tanglish</button>
+                    <button type="button" data-lang-btn="en" onclick="setAppLanguage('en')" class="lang-option-btn cyber-card py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 English</button>
+                    <button type="button" data-lang-btn="hi" onclick="setAppLanguage('hi')" class="lang-option-btn cyber-card py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 हिन्दी</button>
+                    <button type="button" data-lang-btn="te" onclick="setAppLanguage('te')" class="lang-option-btn cyber-card py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 తెలుగు</button>
+                    <button type="button" data-lang-btn="ml" onclick="setAppLanguage('ml')" class="lang-option-btn cyber-card py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all">🇮🇳 മലയാളം</button>
+                    <button type="button" data-lang-btn="kn" onclick="setAppLanguage('kn')" class="lang-option-btn cyber-card py-2 px-2 text-[11px] font-bold text-center cursor-pointer transition-all col-span-2">🇮🇳 ಕನ್ನಡ (Kannada)</button>
+                </div>
+            </div>
+
+            <!-- 👁️ 3. App-Only Private Chat Last Seen Privacy -->
+            <div class="app-only-feature hidden cyber-card p-3 bg-zinc-900/90 border border-white/10 items-center justify-between gap-2">
+                <div class="text-[10.5px] font-bold text-slate-200">Private Chat Last Seen</div>
+                <button type="button" id="settings-last-seen-toggle-btn" onclick="window.toggleMyLastSeenPrivacy()" class="px-2.5 py-1 rounded-lg bg-zinc-800 border border-emerald-400/40 text-emerald-300 font-extrabold text-[10px] cursor-pointer">👁️ Last Seen: ON</button>
+            </div>
+
+            <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden')" class="btn-theme w-full py-2.5 font-extrabold text-xs uppercase cursor-pointer">Done</button>
+        </div>
+    </div>
+
+    <!-- 📡 OFFLINE / NO INTERNET CONNECTION GUARD MODAL -->
+    <div id="no-internet-guard-modal" style="z-index: 999999 !important;" class="fixed inset-0 z-[999999] hidden flex items-center justify-center p-4 bg-black/95 backdrop-blur-md">
+        <div class="cyber-card p-6 max-w-sm w-full space-y-4 text-center border-2 border-rose-500/70 bg-zinc-950 shadow-2xl">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-rose-600/20 border-2 border-rose-500 flex items-center justify-center text-3xl animate-pulse">📡</div>
+            <div class="space-y-1.5">
+                <span class="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono text-[9.5px] font-bold uppercase border border-rose-500/40">Connection Required</span>
+                <h2 class="text-base font-black text-white uppercase tracking-wide">Internet Connection Off!</h2>
+                <p class="text-xs text-slate-300 leading-relaxed">Please turn on your <b>Mobile Data</b> or <b>Wi-Fi</b> to enter Satta Pai Esports Arena and sync live tournament rooms.</p>
+            </div>
+            <button type="button" onclick="window.checkInternetConnectionGuard(true)" class="btn-theme w-full py-3 text-xs font-black uppercase cursor-pointer shadow-lg">
+                🔄 Turn On Internet & Retry
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            window.checkInternetConnectionGuard = function(manualTap = false) {
+                const modal = document.getElementById('no-internet-guard-modal');
+                if (!modal) return;
+                const isOnline = navigator.onLine !== false;
+                if (!isOnline) {
+                    modal.classList.remove('hidden');
+                    if (manualTap && typeof window.showToast === 'function') {
+                        window.showToast('📡 Still offline! Please turn on Mobile Data or Wi-Fi.');
+                    }
+                } else {
+                    modal.classList.add('hidden');
+                    if (manualTap && typeof window.showToast === 'function') {
+                        window.showToast('✅ Internet Connected!');
+                    }
+                }
+            };
+            window.addEventListener('offline', () => window.checkInternetConnectionGuard(false));
+            window.addEventListener('online', () => window.checkInternetConnectionGuard(true));
+            setTimeout(() => window.checkInternetConnectionGuard(false), 300);
+        })();
+    </script>
 </body>
 </html>
