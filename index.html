@@ -2,6 +2,8 @@
 <html lang="en" class="dark">
 <head>
     <script>window.IS_SATTA_PAI_APP_BUILD = false;</script>
+    <script>window.IS_SATTA_PAI_APP_BUILD = false;</script>
+    <script>window.IS_SATTA_PAI_APP_BUILD = false;</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Satta Pai - Free Fire Tournament Arena (App & Web)</title>
@@ -4479,13 +4481,28 @@ html.theme-ghost-live {
         let musicPlayingState = false;
         window.loggedEmail = '';
         try {
-            const _savedAuth = (localStorage.getItem('satta_pai_auth_email') || sessionStorage.getItem('satta_pai_auth_email') || '').toLowerCase();
-            const _savedGuest = sessionStorage.getItem('satta_pai_guest_session');
+            const _savedAuth = (
+                localStorage.getItem('satta_pai_auth_email') ||
+                localStorage.getItem('satta_pai_native_google_email') ||
+                sessionStorage.getItem('satta_pai_auth_email') ||
+                ''
+            ).toLowerCase().trim();
+            const _savedGuest = sessionStorage.getItem('satta_pai_guest_session') || localStorage.getItem('satta_pai_guest_session');
+
             if (_savedAuth && _savedAuth !== 'guest' && _savedAuth.includes('@')) {
                 window.loggedEmail = _savedAuth;
                 window._hasVerifiedAuthSession = true;
+                // Immediately suppress login overlay DOM style on parse so it NEVER flashes or prompts!
+                const ovStyle = document.createElement('style');
+                ovStyle.id = 'sp-suppress-login-boot';
+                ovStyle.textContent = '#google-login-overlay { display: none !important; pointer-events: none !important; }';
+                document.head.appendChild(ovStyle);
             } else if (_savedGuest === '1') {
                 window.loggedEmail = 'guest';
+                const ovStyle = document.createElement('style');
+                ovStyle.id = 'sp-suppress-login-boot';
+                ovStyle.textContent = '#google-login-overlay { display: none !important; pointer-events: none !important; }';
+                document.head.appendChild(ovStyle);
             } else {
                 window.loggedEmail = '';
             }
@@ -12223,7 +12240,8 @@ CRITICAL RULES:
             const m = (window.allMatches || []).find(x => x.id === matchId);
             if (!m) return;
             const feeTxt = m.type === 'free' ? 'FREE ENTRY 🆓' : `₹${m.fee}`;
-            const msg = `🔥 *SATTA PAI ESPORTS TOURNAMENT INVITE* 🔥\n\n🎮 *Match:* ${m.title}\n🗺️ *Map:* ${m.map || 'Bermuda'}\n⏰ *Time:* ${m.time || 'Today'}\n💰 *Prize Pool:* ₹${m.prize || '0'}\n🎟️ *Entry:* ${feeTxt}\n\n⚡ Squad Ready-ஆ வைங்க மச்சி! உடனே நம்ம Slot-ஐ Book பண்ணலாம்!`;
+            const exactTime = (m.time || '').trim() || 'Upcoming';
+            const msg = `🔥 *SATTA PAI ESPORTS TOURNAMENT INVITE* 🔥\n\n🎮 *Match:* ${m.title}\n🗺️ *Map:* ${m.map || 'Bermuda'}\n⏰ *Match Schedule:* ${exactTime}\n💰 *Prize Pool:* ₹${m.prize || '0'}\n🎟️ *Entry:* ${feeTxt}\n\n⚡ Squad Ready-ஆ வைங்க மச்சி! உடனே நம்ம Slot-ஐ Book பண்ணலாம்!\n🔑 *Room ID:* Shared in Satta Pai App before match start.`;
             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
@@ -14069,10 +14087,11 @@ CRITICAL RULES:
         };
 
         // 📲 Group-Wise 1-Click Share Room ID & Password to WhatsApp (TEAM A / TEAM B separately)
-        window.shareRoomToWhatsApp = function(matchTitle, roomId, roomPass, groupName) {
+        window.shareRoomToWhatsApp = function(matchTitle, roomId, roomPass, groupName, matchTime = '') {
             if (!roomId) { window.showToast("⚠️ Enter Room ID for this Group first!"); return; }
             const grpTag = groupName ? `\n🛡️ *Lobby Group:* ${groupName} ONLY` : '';
-            const msg = `🔥 *SATTA PAI ESPORTS TOURNAMENT* 🔥\n\n🎮 *Match:* ${matchTitle || 'Free Fire Custom Room'}${grpTag}\n🔑 *Room ID:* ${roomId}\n🔒 *Password:* ${roomPass || 'None'}\n\n⚠️ *Note:* Only squads registered in *${groupName || 'this group'}* are allowed to enter this room! Join within 5 minutes.`;
+            const timeTag = matchTime ? `\n⏰ *Match Time:* ${matchTime}` : '';
+            const msg = `🔥 *SATTA PAI ESPORTS TOURNAMENT* 🔥\n\n🎮 *Match:* ${matchTitle || 'Free Fire Custom Room'}${timeTag}${grpTag}\n🔑 *Room ID:* ${roomId}\n🔒 *Password:* ${roomPass || 'None'}\n\n⚠️ *Note:* Only squads registered in *${groupName || 'this group'}* are allowed to enter this room! Join within 5 minutes.`;
             const waUrl = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(waUrl, '_blank');
         };
@@ -14085,7 +14104,7 @@ CRITICAL RULES:
             const grpName = idEl?.getAttribute('data-group') || `TEAM ${idx === 0 ? 'A' : 'B'}`;
             const roomId = (idEl?.value || '').trim();
             const roomPass = (passEl?.value || '').trim();
-            window.shareRoomToWhatsApp(m ? m.title : 'Satta Pai Custom Room', roomId, roomPass, grpName);
+            window.shareRoomToWhatsApp(m ? m.title : 'Satta Pai Custom Room', roomId, roomPass, grpName, m ? (m.time || '') : '');
         };
 
         // 🎮 NEW UPDATE 3: 1-Click Free Fire Pro Gaming Avatar Generator & Picker
@@ -17049,18 +17068,44 @@ CRITICAL RULES:
             const cleanTitle = String(titleName || '').trim();
             if (!cleanTitle) return;
             const now = Date.now();
-            if (userCache[emailLow]) userCache[emailLow].armoryTitle = cleanTitle;
-            if (typeof window.saveUserEconomyVault === 'function') window.saveUserEconomyVault(emailLow, { armoryTitle: cleanTitle });
+            const u = userCache[emailLow] || {};
+            const vlt = window.loadUserEconomyVault ? window.loadUserEconomyVault(emailLow) : {};
+
+            const unlockedSet = new Set([
+                ...(Array.isArray(u.unlockedTitles) ? u.unlockedTitles : []),
+                ...(Array.isArray(vlt.unlockedTitles) ? vlt.unlockedTitles : [])
+            ].filter(Boolean));
+            unlockedSet.add(cleanTitle);
+            const unlockedArr = Array.from(unlockedSet);
+
+            if (userCache[emailLow]) {
+                userCache[emailLow].armoryTitle = cleanTitle;
+                userCache[emailLow].unlockedTitles = unlockedArr;
+            }
+            if (typeof window.saveUserEconomyVault === 'function') {
+                window.saveUserEconomyVault(emailLow, { armoryTitle: cleanTitle, unlockedTitles: unlockedArr });
+            }
+
             const armEl = document.getElementById('profile-armory-tag');
             if (armEl) armEl.textContent = cleanTitle;
             const eqLbl = document.getElementById('equipped-armory-lbl');
             if (eqLbl) eqLbl.textContent = 'Equipped: ' + cleanTitle;
+
             window.renderProfileInventoryUI();
             window.renderChatMessages();
+
             try {
-                await setDoc(doc(db, 'users', emailLow), { email: emailLow, armoryTitle: cleanTitle, updatedAt: now }, { merge: true });
+                await setDoc(doc(db, 'users', emailLow), {
+                    email: emailLow,
+                    armoryTitle: cleanTitle,
+                    unlockedTitles: unlockedArr,
+                    updatedAt: now
+                }, { merge: true });
             } catch(e) {}
-            if (window.SattaPaiSecureVault) window.SattaPaiSecureVault.saveCurrentSession();
+
+            if (window.SattaPaiSecureVault && window.SattaPaiSecureVault.saveCurrentSession) {
+                window.SattaPaiSecureVault.saveCurrentSession();
+            }
             window.showToast(`🎖️ Equipped Title: ${cleanTitle}!`);
         };
 
@@ -17068,19 +17113,47 @@ CRITICAL RULES:
             if (!window.loggedEmail || window.loggedEmail === 'guest') return;
             const emailLow = window.loggedEmail.toLowerCase();
             const now = Date.now();
-            if (userCache[emailLow]) userCache[emailLow].armoryTitle = '';
-            if (typeof window.saveUserEconomyVault === 'function') window.saveUserEconomyVault(emailLow, { armoryTitle: '' });
+            const u = userCache[emailLow] || {};
+            const vlt = window.loadUserEconomyVault ? window.loadUserEconomyVault(emailLow) : {};
+            const prevTitle = String(u.armoryTitle || vlt.armoryTitle || '').trim();
+
+            // Permanent Bag Retention: Ensure the unequipped title is permanently stored in unlockedTitles array!
+            const unlockedSet = new Set([
+                ...(Array.isArray(u.unlockedTitles) ? u.unlockedTitles : []),
+                ...(Array.isArray(vlt.unlockedTitles) ? vlt.unlockedTitles : [])
+            ].filter(Boolean));
+            if (prevTitle) unlockedSet.add(prevTitle);
+            const unlockedArr = Array.from(unlockedSet);
+
+            if (userCache[emailLow]) {
+                userCache[emailLow].armoryTitle = '';
+                userCache[emailLow].unlockedTitles = unlockedArr;
+            }
+            if (typeof window.saveUserEconomyVault === 'function') {
+                window.saveUserEconomyVault(emailLow, { armoryTitle: '', unlockedTitles: unlockedArr });
+            }
+
             const armEl = document.getElementById('profile-armory-tag');
             if (armEl) armEl.textContent = (window.isCurrentUserVip && window.isCurrentUserVip()) ? '⭐ PRO CONTENDER' : '🎖️ Arena Contender';
             const eqLbl = document.getElementById('equipped-armory-lbl');
             if (eqLbl) eqLbl.textContent = 'Equipped: None';
+
             window.renderProfileInventoryUI();
             window.renderChatMessages();
+
             try {
-                await setDoc(doc(db, 'users', emailLow), { email: emailLow, armoryTitle: '', updatedAt: now }, { merge: true });
+                await setDoc(doc(db, 'users', emailLow), {
+                    email: emailLow,
+                    armoryTitle: '',
+                    unlockedTitles: unlockedArr,
+                    updatedAt: now
+                }, { merge: true });
             } catch(e) {}
-            if (window.SattaPaiSecureVault) window.SattaPaiSecureVault.saveCurrentSession();
-            window.showToast('✖ Armory Title unequipped & removed from display!');
+
+            if (window.SattaPaiSecureVault && window.SattaPaiSecureVault.saveCurrentSession) {
+                window.SattaPaiSecureVault.saveCurrentSession();
+            }
+            window.showToast('✖ Title unequipped! It remains safely saved in your Bag below — tap "✅ Equip" anytime to wear it again.');
         };
 
         // =====================================================================
@@ -18467,9 +18540,12 @@ CRITICAL RULES:
                     const nextM = active[0];
                     const hasAnyRoom = Boolean(nextM.roomId) || Object.values(nextM.groupRooms || {}).some(gr => gr && gr.roomId);
                     if (badgeEl) badgeEl.textContent = hasAnyRoom ? '🔑 ROOM READY!' : `🔥 ${nextM.time || 'UPCOMING'}`;
-                    if (txtEl) txtEl.textContent = hasAnyRoom
-                        ? `🚨 Room ID Published for ${nextM.title}! Open My Room Keys to launch Free Fire!`
-                        : `Next Match: ${nextM.title} (${nextM.map} • ${nextM.time}) — Prize: ₹${nextM.prize || '0'}`;
+                    if (txtEl) {
+                        const customMatchTime = (nextM.time || '').trim() || 'Upcoming';
+                        txtEl.textContent = hasAnyRoom
+                            ? `🚨 Room ID Published for ${nextM.title}! Open My Room Keys to launch Free Fire!`
+                            : `Next Match: ${nextM.title} (${nextM.map || 'Bermuda'} • ⏰ ${customMatchTime}) — Prize: ₹${nextM.prize || '0'}`;
+                    }
                 }
                 if (!window._sirenAlertEnabled) return;
 
