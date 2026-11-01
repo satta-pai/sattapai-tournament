@@ -1,9 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <script>window.IS_SATTA_PAI_APP_BUILD = false;</script>
-    <script>window.IS_SATTA_PAI_APP_BUILD = false;</script>
-    <script>window.IS_SATTA_PAI_APP_BUILD = false;</script>
+    <script>
+        window.IS_SATTA_PAI_APP_BUILD = false;
+        window.CURRENT_APP_APK_VERSION = 'v13.0';
+        (function() {
+            try {
+                var getCk = function(n) {
+                    try {
+                        var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)'));
+                        return m ? decodeURIComponent(m[1]) : '';
+                    } catch(e) { return ''; }
+                };
+                var nativeObj = window.__SP_NATIVE_STORAGE__ || null;
+                var curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
+                var savedVer = (
+                    (nativeObj && nativeObj.appVersion) ||
+                    localStorage.getItem('satta_pai_logged_app_version') ||
+                    getCk('satta_pai_logged_app_version') ||
+                    ''
+                ).trim();
+                var savedEmail = (
+                    (nativeObj && nativeObj.email) ||
+                    localStorage.getItem('satta_pai_auth_email') ||
+                    localStorage.getItem('satta_pai_native_google_email') ||
+                    sessionStorage.getItem('satta_pai_auth_email') ||
+                    getCk('satta_pai_auth_email') ||
+                    ''
+                ).toLowerCase().trim();
+                var savedGuest = (
+                    (nativeObj && nativeObj.guest) ||
+                    localStorage.getItem('satta_pai_guest_session') ||
+                    sessionStorage.getItem('satta_pai_guest_session') ||
+                    getCk('satta_pai_guest_session') ||
+                    ''
+                ).trim();
+
+                // Enforce 1-Time Login Per Version:
+                // Only clear session if a previous version was recorded and differs from the newly updated app version!
+                if (savedVer && savedVer !== curVer) {
+                    try {
+                        localStorage.removeItem('satta_pai_auth_email');
+                        localStorage.removeItem('satta_pai_native_google_email');
+                        localStorage.removeItem('satta_pai_guest_session');
+                        localStorage.removeItem('satta_pai_secure_vault_v3');
+                        localStorage.setItem('satta_pai_logged_app_version', curVer);
+                        sessionStorage.removeItem('satta_pai_auth_email');
+                        sessionStorage.removeItem('satta_pai_guest_session');
+                        document.cookie = 'satta_pai_auth_email=; path=/; max-age=0';
+                        document.cookie = 'satta_pai_guest_session=; path=/; max-age=0';
+                        document.cookie = 'satta_pai_logged_app_version=' + encodeURIComponent(curVer) + '; path=/; max-age=31536000; SameSite=Lax';
+                    } catch(e) {}
+                    savedEmail = '';
+                    savedGuest = '';
+                } else if (!savedVer && ((savedEmail && savedEmail.indexOf('@') !== -1) || savedGuest === '1')) {
+                    try {
+                        localStorage.setItem('satta_pai_logged_app_version', curVer);
+                        document.cookie = 'satta_pai_logged_app_version=' + encodeURIComponent(curVer) + '; path=/; max-age=31536000; SameSite=Lax';
+                    } catch(e) {}
+                }
+
+                if ((savedEmail && savedEmail !== 'guest' && savedEmail.indexOf('@') !== -1) || savedGuest === '1') {
+                    window.loggedEmail = (savedEmail && savedEmail !== 'guest' && savedEmail.indexOf('@') !== -1) ? savedEmail : 'guest';
+                    if (window.loggedEmail !== 'guest') window._hasVerifiedAuthSession = true;
+                    // Also skip cinematic intro on subsequent app opens once logged in so app opens instantaneously!
+                    try { sessionStorage.setItem('sp_intro_shown_session', '1'); } catch(e) {}
+                    var st = document.createElement('style');
+                    st.id = 'sp-suppress-login-boot';
+                    st.textContent = 'html body #google-login-overlay:not(.sp-ban-locked) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; z-index: -99999 !important; }';
+                    document.head.appendChild(st);
+                }
+            } catch(e) {}
+        })();
+    </script>
+
+    
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Satta Pai - Free Fire Tournament Arena (App & Web)</title>
@@ -2216,7 +2288,7 @@ html.theme-ghost-live {
             <div class="p-2.5 bg-zinc-800 rounded-lg text-xs italic break-words text-left border border-zinc-700">"<span id="cp-msg"></span>"</div>
             <div id="cp-player-dm-actions" class="pt-1.5 border-t border-zinc-700/80 space-y-1.5">
                 <div class="grid grid-cols-2 gap-1.5">
-                    <button type="button" id="cp-start-dm-btn" onclick="window.startPrivateDmFromProfileModal()" class="app-only-feature hidden col-span-2 py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-xs cursor-pointer flex items-center justify-center gap-1.5">
+                    <button type="button" id="cp-start-dm-btn" onclick="window.startPrivateDmFromProfileModal()" class="app-only-feature hidden col-span-2 py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-xs cursor-pointer flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-600/30">
                         <span>💬</span><span>Send Private DM Message</span>
                     </button>
                     <button type="button" id="cp-block-user-btn" onclick="window.toggleBlockUserFromProfileModal()" class="py-1.5 px-2.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-rose-500/40 text-rose-300 font-extrabold text-[10.5px] cursor-pointer">
@@ -4500,30 +4572,69 @@ html.theme-ghost-live {
 
     <script>
         let musicPlayingState = false;
-        window.loggedEmail = '';
+        window.loggedEmail = window.loggedEmail || '';
+        window.CURRENT_APP_APK_VERSION = window.CURRENT_APP_APK_VERSION || 'v13.0';
+        window.getSpCookieVal = function(name) {
+            try {
+                const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+                return m ? decodeURIComponent(m[1]) : '';
+            } catch(e) { return ''; }
+        };
+        window.enableZeroFlashLoginSuppression = function() {
+            try {
+                let ovStyle = document.getElementById('sp-suppress-login-boot');
+                if (!ovStyle) {
+                    ovStyle = document.createElement('style');
+                    ovStyle.id = 'sp-suppress-login-boot';
+                    document.head.appendChild(ovStyle);
+                }
+                ovStyle.textContent = 'html body #google-login-overlay:not(.sp-ban-locked) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; z-index: -99999 !important; }';
+            } catch(e) {}
+        };
+        window.disableZeroFlashLoginSuppression = function() {
+            try {
+                const ovStyle = document.getElementById('sp-suppress-login-boot');
+                if (ovStyle) ovStyle.remove();
+            } catch(e) {}
+        };
         try {
-            const _savedAuth = (
+            const _nativeObj = window.__SP_NATIVE_STORAGE__ || null;
+            const _curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
+            const _savedVer = (
+                (_nativeObj && _nativeObj.appVersion) ||
+                localStorage.getItem('satta_pai_logged_app_version') ||
+                window.getSpCookieVal('satta_pai_logged_app_version') ||
+                ''
+            ).trim();
+            let _savedAuth = (
+                (_nativeObj && _nativeObj.email) ||
                 localStorage.getItem('satta_pai_auth_email') ||
                 localStorage.getItem('satta_pai_native_google_email') ||
                 sessionStorage.getItem('satta_pai_auth_email') ||
+                window.getSpCookieVal('satta_pai_auth_email') ||
                 ''
             ).toLowerCase().trim();
-            const _savedGuest = sessionStorage.getItem('satta_pai_guest_session') || localStorage.getItem('satta_pai_guest_session');
+            let _savedGuest = (
+                (_nativeObj && _nativeObj.guest) ||
+                sessionStorage.getItem('satta_pai_guest_session') ||
+                localStorage.getItem('satta_pai_guest_session') ||
+                window.getSpCookieVal('satta_pai_guest_session') ||
+                ''
+            ).trim();
 
-            if (_savedAuth && _savedAuth !== 'guest' && _savedAuth.includes('@')) {
+            if (_savedVer && _savedVer !== _curVer) {
+                _savedAuth = '';
+                _savedGuest = '';
+                window.loggedEmail = '';
+                window._hasVerifiedAuthSession = false;
+                window.disableZeroFlashLoginSuppression();
+            } else if (_savedAuth && _savedAuth !== 'guest' && _savedAuth.includes('@')) {
                 window.loggedEmail = _savedAuth;
                 window._hasVerifiedAuthSession = true;
-                // Immediately suppress login overlay DOM style on parse so it NEVER flashes or prompts!
-                const ovStyle = document.createElement('style');
-                ovStyle.id = 'sp-suppress-login-boot';
-                ovStyle.textContent = '#google-login-overlay { display: none !important; pointer-events: none !important; }';
-                document.head.appendChild(ovStyle);
+                window.enableZeroFlashLoginSuppression();
             } else if (_savedGuest === '1') {
                 window.loggedEmail = 'guest';
-                const ovStyle = document.createElement('style');
-                ovStyle.id = 'sp-suppress-login-boot';
-                ovStyle.textContent = '#google-login-overlay { display: none !important; pointer-events: none !important; }';
-                document.head.appendChild(ovStyle);
+                window.enableZeroFlashLoginSuppression();
             } else {
                 window.loggedEmail = '';
             }
@@ -5357,34 +5468,43 @@ html.theme-ghost-live {
                 .slice(0, maxLen);
         };
 
-        // 🔐 Universal Auth Email Resolver & Quota-Safe Session Saver (Fixes Mobile Login Loop)
+        // 🔐 Universal Auth Email Resolver & Quota-Safe Session Saver (Fixes Mobile Login Loop & Version Persistence)
         window.resolveAuthUserEmail = function(u, credResult = null) {
             if (!u && !credResult) return '';
             let nativePickedEmail = '';
-            try { nativePickedEmail = localStorage.getItem('satta_pai_native_google_email') || ''; } catch(e) {}
+            let savedStorageEmail = '';
+            try {
+                nativePickedEmail = (window.__SP_NATIVE_STORAGE__ && window.__SP_NATIVE_STORAGE__.email) || localStorage.getItem('satta_pai_native_google_email') || '';
+                savedStorageEmail = localStorage.getItem('satta_pai_auth_email') || sessionStorage.getItem('satta_pai_auth_email') || (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_auth_email') : '') || '';
+            } catch(e) {}
             const candidates = [
                 u?.email,
                 credResult?.user?.email,
                 credResult?._tokenResponse?.email,
-                u?.reloadUserInfo?.email,
-                nativePickedEmail
+                u?.reloadUserInfo?.email
             ];
             if (Array.isArray(u?.providerData)) {
                 for (const p of u.providerData) {
                     if (p && p.email) candidates.push(p.email);
                 }
             }
+            candidates.push(nativePickedEmail, savedStorageEmail);
+            if (window.loggedEmail && window.loggedEmail !== 'guest' && !window.loggedEmail.endsWith('@sattapai.app')) {
+                candidates.push(window.loggedEmail);
+            }
             for (const c of candidates) {
-                if (c && String(c).includes('@')) {
+                if (c && String(c).includes('@') && !String(c).endsWith('@sattapai.app')) {
                     return String(c).trim().toLowerCase();
                 }
             }
+            // Never synthesize a fake email for anonymous bridge sessions!
+            if (u?.isAnonymous) return '';
             const uid = String(u?.uid || credResult?.user?.uid || '').trim().toLowerCase();
             const provId = String(u?.providerData?.[0]?.providerId || credResult?.providerId || '').toLowerCase();
-            if (uid) {
+            if (uid && provId) {
                 if (provId.includes('facebook')) return `fb_${uid}@facebook.com`;
                 if (provId.includes('github')) return `gh_${uid}@github.com`;
-                return `google_${uid}@sattapai.app`;
+                if (provId.includes('google')) return `google_${uid}@sattapai.app`;
             }
             return '';
         };
@@ -5392,26 +5512,56 @@ html.theme-ghost-live {
         window.saveVerifiedAuthEmail = function(email) {
             if (!email || email === 'guest') return;
             const clean = String(email).trim().toLowerCase();
+            const curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
             window.loggedEmail = clean;
             window._hasVerifiedAuthSession = true;
-            try { sessionStorage.setItem('satta_pai_auth_email', clean); } catch(e) {}
-            try { sessionStorage.removeItem('satta_pai_guest_session'); try{localStorage.removeItem('satta_pai_guest_session');}catch(e){} } catch(e) {}
+            try {
+                sessionStorage.setItem('satta_pai_auth_email', clean);
+                sessionStorage.removeItem('satta_pai_guest_session');
+            } catch(e) {}
+            try {
+                localStorage.removeItem('satta_pai_guest_session');
+                document.cookie = 'satta_pai_guest_session=; path=/; max-age=0';
+                document.cookie = 'satta_pai_auth_email=' + encodeURIComponent(clean) + '; path=/; max-age=31536000; SameSite=Lax';
+                document.cookie = 'satta_pai_logged_app_version=' + encodeURIComponent(curVer) + '; path=/; max-age=31536000; SameSite=Lax';
+            } catch(e) {}
             try {
                 localStorage.setItem('satta_pai_auth_email', clean);
+                localStorage.setItem('satta_pai_native_google_email', clean);
+                localStorage.setItem('satta_pai_logged_app_version', curVer);
             } catch (quotaErr) {
-                // If mobile localStorage 5MB quota is full due to cached base64 logo/config, free space and save auth!
                 try {
                     localStorage.removeItem('satta_pai_cached_config');
                     localStorage.removeItem('satta_pai_custom_logo');
                     localStorage.setItem('satta_pai_auth_email', clean);
+                    localStorage.setItem('satta_pai_native_google_email', clean);
+                    localStorage.setItem('satta_pai_logged_app_version', curVer);
                 } catch (e2) {}
             }
+            try {
+                if (window.SattaPaiSecureVault && typeof window.SattaPaiSecureVault.saveSessionSnapshot === 'function') {
+                    window.SattaPaiSecureVault.saveSessionSnapshot(clean);
+                }
+            } catch(e) {}
+            try {
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('save_auth:' + JSON.stringify({
+                        email: clean,
+                        uid: window.loggedUid || localStorage.getItem('satta_pai_auth_uid') || '',
+                        guest: '0',
+                        appVersion: curVer
+                    }));
+                }
+            } catch(e) {}
+            window.enableZeroFlashLoginSuppression();
         };
 
         window.closeLoginOverlayPermanently = function() {
             if (window._isCurrentUserBannedLock) return; // Banned user stays locked on Login Page!
+            window.enableZeroFlashLoginSuppression();
             const ov = document.getElementById('google-login-overlay');
             if (ov) {
+                ov.classList.remove('sp-ban-locked');
                 ov.classList.add('hidden');
                 ov.setAttribute('hidden', '');
                 ov.setAttribute('aria-hidden', 'true');
@@ -6893,7 +7043,7 @@ Tap a quick button below or type your question!`
             try {
                 localStorage.removeItem('satta_pai_auth_email'); localStorage.removeItem('satta_pai_native_google_email');
                 sessionStorage.removeItem('satta_pai_auth_email');
-                sessionStorage.removeItem('satta_pai_guest_session'); try{localStorage.removeItem('satta_pai_guest_session');}catch(e){}
+                sessionStorage.removeItem('satta_pai_guest_session'); try{localStorage.removeItem('satta_pai_guest_session'); document.cookie='satta_pai_auth_email=; path=/; max-age=0'; document.cookie='satta_pai_guest_session=; path=/; max-age=0';}catch(e){}
             } catch(e) {}
             signOut(auth).finally(() => {
                 window.loggedEmail = '';
@@ -6997,7 +7147,9 @@ Tap a quick button below or type your question!`
                 if (banModal) banModal.classList.add('hidden'); // Use the Login Page Lock directly as requested!
 
                 // Force open #google-login-overlay and lock website scrolling/interaction
+                window.disableZeroFlashLoginSuppression();
                 if (loginOv) {
+                    loginOv.classList.add('sp-ban-locked');
                     loginOv.classList.remove('hidden');
                     loginOv.removeAttribute('hidden');
                     loginOv.removeAttribute('aria-hidden');
@@ -7399,7 +7551,7 @@ Tap a quick button below or type your question!`
             try {
                 localStorage.removeItem('satta_pai_auth_email'); localStorage.removeItem('satta_pai_native_google_email');
                 sessionStorage.removeItem('satta_pai_auth_email');
-                sessionStorage.removeItem('satta_pai_guest_session'); try{localStorage.removeItem('satta_pai_guest_session');}catch(e){}
+                sessionStorage.removeItem('satta_pai_guest_session'); try{localStorage.removeItem('satta_pai_guest_session'); document.cookie='satta_pai_auth_email=; path=/; max-age=0'; document.cookie='satta_pai_guest_session=; path=/; max-age=0';}catch(e){}
             } catch (e) {}
             window.loggedEmail = '';
             const ms = document.getElementById('maintenance-screen');
@@ -8910,8 +9062,13 @@ CRITICAL RULES:
             window._loginVideoRaf = requestAnimationFrame(renderLoginBg);
         };
 
-        window.openLoginScreenModal = function() {
+        window.openLoginScreenModal = function(forceOpen = true) {
             if (window._oauthCallbackInProgress) return;
+            if (!forceOpen && window.loggedEmail && window.loggedEmail !== 'guest' && window.loggedEmail.includes('@') && !window._isCurrentUserBannedLock) {
+                window.closeLoginOverlayPermanently();
+                return;
+            }
+            window.disableZeroFlashLoginSuppression();
             const ov = document.getElementById('google-login-overlay');
             if (!ov) return;
             ov.classList.remove('hidden');
@@ -10664,12 +10821,11 @@ CRITICAL RULES:
                     console.warn("Non-fatal config fetch error:", cfgErr);
                 }
 
-                // 5. Users listener: Normal users ONLY listen to their own doc (prevents user data scraping); Staff listen to collection
+                // 5. Users listener: Syncs player directory into userCache so Global Chat, Leaderboards & Private DM Search work 100%
                 window.startUsersSnapshotListener = function() {
                     if (!window.isGoogleAuthenticatedUser()) return;
                     const emailLow = window.loggedEmail.toLowerCase();
-                    const isStaff = window.isSuperAdminGlobal || isAdminEmail(emailLow) || isHostEmail(emailLow);
-                    const targetMode = isStaff ? 'staff_all' : ('self_' + emailLow);
+                    const targetMode = 'arena_all_' + emailLow;
                     if (window._usersUnsubscribe && window._usersListenerMode === targetMode) return;
                     if (window._usersUnsubscribe) {
                         try { window._usersUnsubscribe(); } catch(e) {}
@@ -10677,29 +10833,35 @@ CRITICAL RULES:
                     }
                     window._usersListenerMode = targetMode;
                     try {
-                        if (isStaff) {
-                            window._usersUnsubscribe = onSnapshot(collection(db, 'users'), snap => {
-                                let changed = false;
-                                snap.docs.forEach(docSnap => {
-                                    const data = docSnap.data();
-                                    const rawId = docSnap.id;
-                                    const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
-                                    const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
-                                    if (emailKey) userCache[emailKey] = norm;
-                                    userCache[rawId.toLowerCase()] = norm;
-                                    if (emailKey && emailKey === emailLow) {
-                                        window.currentUserVipUntil = norm.premiumUntil || 0;
-                                        window.currentUserIsPremiumFlag = !!norm.isPremium;
-                                        window.currentUserSpCoins = norm.spCoins || 0;
+                        window._usersUnsubscribe = onSnapshot(collection(db, 'users'), snap => {
+                            let changed = false;
+                            snap.docs.forEach(docSnap => {
+                                const data = docSnap.data();
+                                const rawId = docSnap.id;
+                                const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
+                                const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
+                                if (emailKey) userCache[emailKey] = norm;
+                                userCache[rawId.toLowerCase()] = norm;
+                                if (emailKey && emailKey === emailLow) {
+                                    window.currentUserVipUntil = norm.premiumUntil || 0;
+                                    window.currentUserIsPremiumFlag = !!norm.isPremium;
+                                    window.currentUserSpCoins = norm.spCoins || 0;
+                                    if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus(data);
+                                    if (window.SattaPaiSecureVault && typeof window.SattaPaiSecureVault.saveSessionSnapshot === 'function') {
+                                        window.SattaPaiSecureVault.saveSessionSnapshot(emailLow);
                                     }
-                                    changed = true;
-                                });
-                                if (changed) {
-                                    if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
-                                    if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
                                 }
-                            }, () => { window._usersUnsubscribe = null; });
-                        } else {
+                                changed = true;
+                            });
+                            if (changed) {
+                                if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
+                                if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
+                                if (window._currentChatTabMode === 'dm' && typeof window.renderDmInboxList === 'function') {
+                                    window.renderDmInboxList();
+                                }
+                            }
+                        }, () => {
+                            // Fallback to own doc listener if collection read is ever restricted
                             window._usersUnsubscribe = onSnapshot(doc(db, 'users', emailLow), docSnap => {
                                 const data = docSnap.exists() ? docSnap.data() : {};
                                 const norm = normalizeUserRecord(data, emailLow);
@@ -10711,7 +10873,7 @@ CRITICAL RULES:
                                 if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
                                 if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
                             }, () => { window._usersUnsubscribe = null; });
-                        }
+                        });
                     } catch(snapErr) {
                         console.warn("User listener init:", snapErr);
                     }
@@ -11066,13 +11228,48 @@ CRITICAL RULES:
             }
         };
 
-        window.openFullScreenChat = function() { if (!window.loggedEmail) { window.loggedEmail = "guest"; } if (typeof window.pushAppHistoryState === 'function') window.pushAppHistoryState({ type: 'modal', modalId: 'chat-fullscreen' }); document.getElementById('chat-fullscreen').classList.add('active'); setTimeout(() => { const box = document.getElementById('chat-messages'); if(box) box.scrollTop = box.scrollHeight; }, 100); checkChatBanStatus(); if (typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay(); };
+        window.openFullScreenChat = function() {
+            if (typeof window.checkLoginState === 'function') window.checkLoginState();
+            if (!window.loggedEmail) { window.loggedEmail = "guest"; }
+            if (typeof window.startDmRealtimeListener === 'function') window.startDmRealtimeListener();
+            if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
+            if (typeof window.pushAppHistoryState === 'function') window.pushAppHistoryState({ type: 'modal', modalId: 'chat-fullscreen' });
+            document.getElementById('chat-fullscreen').classList.add('active');
+            setTimeout(() => {
+                if (window._currentChatTabMode === 'dm') {
+                    window.renderDmInboxList();
+                    window.renderActiveDmConversation();
+                } else {
+                    const box = document.getElementById('chat-messages');
+                    if (box) box.scrollTop = box.scrollHeight;
+                }
+            }, 80);
+            checkChatBanStatus();
+            if (typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay();
+        };
         window.closeFullScreenChat = function() { document.getElementById('chat-fullscreen').classList.remove('active'); };
 
         function checkChatBanStatus() {
-            const banWarning = document.getElementById('chat-banned-warning'); const inputArea = document.getElementById('chat-input-area');
-            if(myChatBannedUntil > Date.now()) { banWarning.classList.remove('hidden'); inputArea.classList.add('hidden'); }
-            else { banWarning.classList.add('hidden'); inputArea.classList.remove('hidden'); const input = document.getElementById('chat-input'); const isStaff = window.isSuperAdminGlobal || isAdminEmail(window.loggedEmail) || isHostEmail(window.loggedEmail); if(currentChatMode === 'off') { input.disabled = true; input.placeholder = "Chat disabled."; } else if(currentChatMode === 'admin' && !isStaff) { input.disabled = true; input.placeholder = "Admins & Hosts only."; } else { input.disabled = false; input.placeholder = "Type a message..."; } }
+            const banWarning = document.getElementById('chat-banned-warning');
+            const inputArea = document.getElementById('chat-input-area');
+            const isDmMode = (window._currentChatTabMode === 'dm');
+            if (myChatBannedUntil > Date.now()) {
+                if (banWarning) banWarning.classList.remove('hidden');
+                if (inputArea) inputArea.classList.add('hidden');
+            } else {
+                if (banWarning) banWarning.classList.add('hidden');
+                if (inputArea) {
+                    if (isDmMode) inputArea.classList.add('hidden');
+                    else inputArea.classList.remove('hidden');
+                }
+                const input = document.getElementById('chat-input');
+                if (input) {
+                    const isStaff = window.isSuperAdminGlobal || isAdminEmail(window.loggedEmail) || isHostEmail(window.loggedEmail);
+                    if (currentChatMode === 'off') { input.disabled = true; input.placeholder = "Chat disabled."; }
+                    else if (currentChatMode === 'admin' && !isStaff) { input.disabled = true; input.placeholder = "Admins & Hosts only."; }
+                    else { input.disabled = false; input.placeholder = "Type a message..."; }
+                }
+            }
         }
 
         window.initializeChat = function() {
@@ -13328,21 +13525,42 @@ CRITICAL RULES:
                 }
             }
             if(window._oauthCallbackInProgress) { if(ov) { ov.classList.add('hidden'); ov.setAttribute('hidden', ''); } return; }
-            // 🛡️ Auto-restore stored session from localStorage so user is NEVER bounced back to login screen on app reopen!
+            // 🛡️ Auto-restore stored session from Native Storage / localStorage / Cookie / Vault so user is NEVER bounced back to login screen on app reopen!
             if (!window.loggedEmail) {
                 try {
-                    const savedAuth = (localStorage.getItem('satta_pai_auth_email') || localStorage.getItem('satta_pai_native_google_email') || '').toLowerCase().trim();
-                    const savedGuest = localStorage.getItem('satta_pai_guest_session') || sessionStorage.getItem('satta_pai_guest_session');
-                    if (savedAuth && savedAuth.includes('@')) {
-                        window.loggedEmail = savedAuth;
-                        window._hasVerifiedAuthSession = true;
-                    } else if (savedGuest === '1') {
-                        window.loggedEmail = 'guest';
+                    const nativeObj = window.__SP_NATIVE_STORAGE__ || null;
+                    const curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
+                    const savedVer = ((nativeObj && nativeObj.appVersion) || localStorage.getItem('satta_pai_logged_app_version') || (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_logged_app_version') : '') || '').trim();
+                    if (!savedVer || savedVer === curVer) {
+                        const savedAuth = (
+                            (nativeObj && nativeObj.email) ||
+                            localStorage.getItem('satta_pai_auth_email') ||
+                            localStorage.getItem('satta_pai_native_google_email') ||
+                            sessionStorage.getItem('satta_pai_auth_email') ||
+                            (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_auth_email') : '') ||
+                            ''
+                        ).toLowerCase().trim();
+                        const savedGuest = (
+                            (nativeObj && nativeObj.guest) ||
+                            localStorage.getItem('satta_pai_guest_session') ||
+                            sessionStorage.getItem('satta_pai_guest_session') ||
+                            (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_guest_session') : '') ||
+                            ''
+                        ).trim();
+                        if (savedAuth && savedAuth !== 'guest' && savedAuth.includes('@')) {
+                            window.loggedEmail = savedAuth;
+                            window._hasVerifiedAuthSession = true;
+                        } else if (savedGuest === '1') {
+                            window.loggedEmail = 'guest';
+                        } else if (window.SattaPaiSecureVault && typeof window.SattaPaiSecureVault.restoreSessionOnBoot === 'function') {
+                            window.SattaPaiSecureVault.restoreSessionOnBoot();
+                        }
                     }
                 } catch(e) {}
             }
             if(!window.loggedEmail){
-                if(ov) { ov.classList.remove('hidden'); ov.removeAttribute('hidden'); ov.removeAttribute('aria-hidden'); ov.removeAttribute('inert'); }
+                window.disableZeroFlashLoginSuppression();
+                if(ov) { ov.classList.remove('hidden'); ov.removeAttribute('hidden'); ov.removeAttribute('aria-hidden'); ov.removeAttribute('inert'); ov.style.removeProperty('display'); ov.style.removeProperty('pointer-events'); }
                 if(hdrLoginBtn) { hdrLoginBtn.classList.remove('hidden'); hdrLoginBtn.classList.add('flex'); }
                 if(typeof window.startLoginVideoCanvas === 'function') window.startLoginVideoCanvas();
                 if(pb) pb.classList.add('hidden');
@@ -13351,7 +13569,7 @@ CRITICAL RULES:
                 if(typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay();
                 return;
             }
-            if(ov) { ov.classList.add('hidden'); ov.setAttribute('hidden', ''); ov.setAttribute('aria-hidden', 'true'); ov.setAttribute('inert', ''); }
+            window.closeLoginOverlayPermanently();
             if(hdrLoginBtn) {
                 if(window.loggedEmail === 'guest') { hdrLoginBtn.classList.remove('hidden'); hdrLoginBtn.classList.add('flex'); }
                 else { hdrLoginBtn.classList.add('hidden'); hdrLoginBtn.classList.remove('flex'); }
@@ -13604,32 +13822,15 @@ CRITICAL RULES:
         })();
 
 
-        // 📱 NATIVE ANDROID "CHOOSE AN ACCOUNT" DIALOG CALLBACK (FOR GOOGLE, FACEBOOK & GITHUB!)
-        window.onNativeAccountPicked = async function(emailRaw, providerLabel = 'Google') {
-            try {
-                const email = String(emailRaw || '').trim().toLowerCase();
-                if (!email || !email.includes('@')) {
-                    window.showToast("⚠️ Account selection cancelled.");
-                    return;
-                }
-                const displayName = email.split('@')[0];
+        // 🔄 Silent Background Firebase Auth Session Restorer (Ensures request.auth != null on App Reopen!)
+        window._silentAuthPromise = null;
+        window.ensureSilentFirebaseAuthSession = async function(targetEmailRaw) {
+            const email = String(targetEmailRaw || window.loggedEmail || '').trim().toLowerCase();
+            if (!email || email === 'guest' || !email.includes('@')) return auth.currentUser;
+            if (auth.currentUser) return auth.currentUser;
+            if (window._silentAuthPromise) return window._silentAuthPromise;
 
-                // 1. Save verified session & immediately unlock Home Screen (Zero bounce-back!)
-                window._hasVerifiedAuthSession = true;
-                window.loggedEmail = email;
-                try {
-                    localStorage.setItem('satta_pai_native_google_email', email);
-                    localStorage.setItem('satta_pai_auth_email', email);
-                    sessionStorage.setItem('satta_pai_auth_email', email);
-                } catch(e) {}
-
-                window.closeLoginOverlayPermanently();
-                document.body.style.overflow = '';
-                if (typeof window.checkLoginState === 'function') window.checkLoginState();
-                if (typeof window.switchTab === 'function') window.switchTab('home');
-                window.showToast("✅ Signed in with " + providerLabel + ": " + email);
-
-                // 2. Authenticate with Firebase Auth in the background so Firestore Rules (request.auth != null) work 100%
+            window._silentAuthPromise = (async () => {
                 let fbUser = auth.currentUser;
                 const derivedPass = "SP_Native_Auth_2026_" + btoa(email).slice(0, 12);
                 if (!fbUser) {
@@ -13648,6 +13849,33 @@ CRITICAL RULES:
                         }
                     }
                 }
+                return fbUser;
+            })().finally(() => {
+                window._silentAuthPromise = null;
+            });
+            return window._silentAuthPromise;
+        };
+
+        // 📱 NATIVE ANDROID "CHOOSE AN ACCOUNT" DIALOG CALLBACK (FOR GOOGLE, FACEBOOK & GITHUB!)
+        window.onNativeAccountPicked = async function(emailRaw, providerLabel = 'Google') {
+            try {
+                const email = String(emailRaw || '').trim().toLowerCase();
+                if (!email || !email.includes('@')) {
+                    window.showToast("⚠️ Account selection cancelled.");
+                    return;
+                }
+                const displayName = email.split('@')[0];
+
+                // 1. Save verified session & immediately unlock Home Screen (Zero bounce-back!)
+                window.saveVerifiedAuthEmail(email);
+                window.closeLoginOverlayPermanently();
+                document.body.style.overflow = '';
+                if (typeof window.checkLoginState === 'function') window.checkLoginState();
+                if (typeof window.switchTab === 'function') window.switchTab('home');
+                window.showToast("✅ Signed in with " + providerLabel + ": " + email);
+
+                // 2. Authenticate with Firebase Auth in the background so Firestore Rules work 100%
+                const fbUser = await window.ensureSilentFirebaseAuthSession(email);
 
                 // Check if users/{email} already has a stored Google OAuth UID in Firestore
                 let storedUid = (fbUser && fbUser.uid) ? fbUser.uid : '';
@@ -13658,6 +13886,11 @@ CRITICAL RULES:
                     }
                 } catch(e) {}
 
+                if (storedUid) {
+                    window.loggedUid = storedUid;
+                    try { localStorage.setItem('satta_pai_auth_uid', storedUid); } catch(e) {}
+                }
+
                 const userObj = {
                     uid: storedUid || (fbUser && fbUser.uid) || '',
                     email: email,
@@ -13666,6 +13899,7 @@ CRITICAL RULES:
                 };
 
                 await window.completeUserSignInSuccess(userObj, null, providerLabel);
+                window.saveVerifiedAuthEmail(email);
                 window.closeLoginOverlayPermanently();
                 document.body.style.overflow = '';
             } catch (err) {
@@ -13711,13 +13945,26 @@ CRITICAL RULES:
             }
             const t = document.getElementById('terms-accept-checkbox');
             if (t && !t.checked) t.checked = true;
+            const curVer = window.CURRENT_APP_APK_VERSION || 'v13.0';
             window.loggedEmail = 'guest';
             window._hasVerifiedAuthSession = false;
             try {
                 localStorage.removeItem('satta_pai_auth_email'); localStorage.removeItem('satta_pai_native_google_email');
                 sessionStorage.removeItem('satta_pai_auth_email');
                 sessionStorage.setItem('satta_pai_guest_session', '1');
-                localStorage.setItem('satta_pai_guest_session', '1'); // Persist in localStorage across app restarts!
+                localStorage.setItem('satta_pai_guest_session', '1');
+                localStorage.setItem('satta_pai_logged_app_version', curVer);
+                document.cookie = 'satta_pai_guest_session=1; path=/; max-age=31536000; SameSite=Lax';
+                document.cookie = 'satta_pai_logged_app_version=' + encodeURIComponent(curVer) + '; path=/; max-age=31536000; SameSite=Lax';
+                document.cookie = 'satta_pai_auth_email=; path=/; max-age=0';
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('save_auth:' + JSON.stringify({
+                        email: '',
+                        uid: '',
+                        guest: '1',
+                        appVersion: curVer
+                    }));
+                }
             } catch(e) {}
             window.closeLoginOverlayPermanently();
             document.body.style.overflow = '';
@@ -13740,25 +13987,47 @@ CRITICAL RULES:
             }
         };
 
+        window.clearAllSavedAuthState = function() {
+            window._hasVerifiedAuthSession = false;
+            if (window.__SP_NATIVE_STORAGE__) {
+                window.__SP_NATIVE_STORAGE__.email = '';
+                window.__SP_NATIVE_STORAGE__.uid = '';
+                window.__SP_NATIVE_STORAGE__.guest = '0';
+            }
+            if (window.SattaPaiSecureVault && window.SattaPaiSecureVault.clearSession) {
+                window.SattaPaiSecureVault.clearSession();
+            }
+            try {
+                localStorage.removeItem('satta_pai_auth_email');
+                localStorage.removeItem('satta_pai_native_google_email');
+                localStorage.removeItem('satta_pai_guest_session');
+                sessionStorage.removeItem('satta_pai_auth_email');
+                sessionStorage.removeItem('satta_pai_guest_session');
+                document.cookie = 'satta_pai_auth_email=; path=/; max-age=0';
+                document.cookie = 'satta_pai_guest_session=; path=/; max-age=0';
+            } catch(e) {}
+            try {
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('clear_auth');
+                }
+            } catch(e) {}
+            window.disableZeroFlashLoginSuppression();
+        };
+
         window.signOutFirebaseUser = function() {
-            if (window.SattaPaiSecureVault && window.SattaPaiSecureVault.clearSession) window.SattaPaiSecureVault.clearSession();
+            window.clearAllSavedAuthState();
             try { signOut(auth).catch(() => {}); } catch(e) {}
             window.loggedEmail = '';
             window.isSuperAdminGlobal = false;
             window.checkLoginState();
-            window.openLoginScreenModal();
+            window.openLoginScreenModal(true);
             window.applyMaintenanceVisibility();
         };
 
         window.confirmSecureLogout = function() {
             window.askConfirm("Confirm Logout", "Are you sure you want to log out of your account?", () => {
-                window._hasVerifiedAuthSession = false;
-                signOut(auth).then(() => {
-                    try {
-                        localStorage.removeItem('satta_pai_auth_email'); localStorage.removeItem('satta_pai_native_google_email');
-                        sessionStorage.removeItem('satta_pai_auth_email');
-                        sessionStorage.removeItem('satta_pai_guest_session'); try{localStorage.removeItem('satta_pai_guest_session');}catch(e){}
-                    } catch(e) {}
+                window.clearAllSavedAuthState();
+                signOut(auth).finally(() => {
                     if (window._usersUnsubscribe) {
                         try { window._usersUnsubscribe(); } catch(e) {}
                         window._usersUnsubscribe = null;
@@ -13770,7 +14039,7 @@ CRITICAL RULES:
                     window.userDataLoaded = false;
                     window.checkLoginState();
                     window.setupPrivateDataListeners();
-                    window.openLoginScreenModal();
+                    window.openLoginScreenModal(true);
                     window.showToast("Logged out successfully");
                 });
             }, "Yes, Logout");
@@ -13794,29 +14063,66 @@ CRITICAL RULES:
                 window.closeLoginOverlayPermanently();
                 if (typeof window.checkLoginState === 'function') window.checkLoginState();
                 if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
-                await ensureUserProfileOnLogin(u); 
-                await checkSuperAdminStatus(u); 
+                if (typeof window.startDmRealtimeListener === 'function') window.startDmRealtimeListener();
+                await ensureUserProfileOnLogin({
+                    uid: u.uid || window.loggedUid || '',
+                    email: resolvedEmail,
+                    displayName: u.displayName || resolvedEmail.split('@')[0],
+                    photoURL: u.photoURL || ''
+                }); 
+                await checkSuperAdminStatus({
+                    uid: window.loggedUid || u.uid || '',
+                    email: resolvedEmail
+                }); 
                 if (typeof window.checkPlayerBanStatus === 'function') await window.checkPlayerBanStatus();
                 if (typeof window.applyMaintenanceVisibility === 'function') window.applyMaintenanceVisibility();
                 if (typeof window.loadProfileUI === 'function') window.loadProfileUI(); 
                 setTimeout(() => { if (typeof window.validateAndApplySavedTheme === 'function') window.validateAndApplySavedTheme(); }, 500); 
             } else { 
                 try { 
-                    const cached = (localStorage.getItem('satta_pai_auth_email') || sessionStorage.getItem('satta_pai_auth_email') || '').toLowerCase();
-                    const isGuestSession = sessionStorage.getItem('satta_pai_guest_session') === '1';
+                    const nativeObj = window.__SP_NATIVE_STORAGE__ || null;
+                    const cached = (
+                        (nativeObj && nativeObj.email) ||
+                        localStorage.getItem('satta_pai_auth_email') ||
+                        localStorage.getItem('satta_pai_native_google_email') ||
+                        sessionStorage.getItem('satta_pai_auth_email') ||
+                        (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_auth_email') : '') ||
+                        ''
+                    ).toLowerCase().trim();
+                    const isGuestSession = (
+                        (nativeObj && nativeObj.guest === '1') ||
+                        sessionStorage.getItem('satta_pai_guest_session') === '1' ||
+                        localStorage.getItem('satta_pai_guest_session') === '1' ||
+                        (window.getSpCookieVal && window.getSpCookieVal('satta_pai_guest_session') === '1')
+                    );
                     if (cached && cached !== 'guest' && cached.includes('@')) {
-                        window.loggedEmail = cached;
-                        const savedUid = localStorage.getItem('satta_pai_auth_uid') || '';
+                        window.saveVerifiedAuthEmail(cached);
+                        const savedUid = (nativeObj && nativeObj.uid) || localStorage.getItem('satta_pai_auth_uid') || '';
                         const savedSuperUid = localStorage.getItem('satta_pai_verified_super_uid') || '';
+                        if (savedUid) window.loggedUid = savedUid;
                         if (savedUid && savedSuperUid && savedUid === savedSuperUid) {
-                            window.loggedUid = savedUid;
                             window.superAdminUid = savedSuperUid;
                             window.isSuperAdminGlobal = true;
                             window.superAdminEmail = cached;
                         }
                         window.closeLoginOverlayPermanently();
+                        // Silently restore Firebase Auth session & listeners in background without showing login overlay!
+                        window.ensureSilentFirebaseAuthSession(cached).then(async (fbU) => {
+                            if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
+                            if (typeof window.startDmRealtimeListener === 'function') window.startDmRealtimeListener();
+                            await ensureUserProfileOnLogin({
+                                uid: savedUid || (fbU && fbU.uid) || '',
+                                email: cached,
+                                displayName: cached.split('@')[0]
+                            });
+                            await checkSuperAdminStatus({
+                                uid: savedUid || (fbU && fbU.uid) || '',
+                                email: cached
+                            });
+                            if (typeof window.checkPlayerBanStatus === 'function') await window.checkPlayerBanStatus();
+                            if (typeof window.loadProfileUI === 'function') window.loadProfileUI();
+                        }).catch(() => {});
                     } else if (window._hasVerifiedAuthSession && window.loggedEmail && window.loggedEmail !== 'guest' && window.loggedEmail.includes('@')) {
-                        // Preserve active in-memory login even if mobile localStorage/IndexedDB is restricted!
                         window.closeLoginOverlayPermanently();
                     } else if (window.loggedEmail === 'guest' || isGuestSession) {
                         window.loggedEmail = 'guest';
@@ -17417,7 +17723,18 @@ CRITICAL RULES:
                         const laterBtn = document.getElementById('apk-update-later-btn');
                         if (titleEl) titleEl.textContent = '📲 Satta Pai App Update (' + d.version + ')';
                         if (notesEl) notesEl.textContent = d.notes || 'Download the latest APK for new features and performance improvements!';
-                        if (dlBtn) dlBtn.href = d.apkUrl;
+                        if (dlBtn) {
+                            dlBtn.href = d.apkUrl;
+                            dlBtn.onclick = function() {
+                                // Clear current version stamp when downloading update so the new APK prompts a fresh 1-time login!
+                                try {
+                                    localStorage.setItem('satta_pai_logged_app_version', 'pending_update_' + d.version);
+                                    if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                                        window.SattaPaiNativeAuth.postMessage('clear_auth');
+                                    }
+                                } catch(e) {}
+                            };
+                        }
                         if (laterBtn) {
                             if (d.forceUpdate && !window.isSuperAdminGlobal) laterBtn.classList.add('hidden');
                             else laterBtn.classList.remove('hidden');
@@ -17565,21 +17882,120 @@ CRITICAL RULES:
             window.showToast(pins.includes(partner) ? '📌 Conversation pinned to top of DM Inbox!' : '📌 Conversation unpinned.');
         };
 
-        window.startDmRealtimeListener = function() {
-            if (window._dmListenerStarted) return;
-            window._dmListenerStarted = true;
+        window._dmUnsubscribe = null;
+        window.loadLocalCachedDms = function() {
             try {
-                const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000);
-                onSnapshot(query(collection(db, 'dm_messages'), orderBy('timestamp', 'desc'), limit(200)), snap => {
-                    window._allDmMessages = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(m => (m.timestamp || 0) > cutoff).reverse();
-                    window.renderDmInboxList();
-                    window.renderActiveDmConversation();
-                    window.updateDmUnreadBadge();
-                }, () => {});
+                const raw = localStorage.getItem('satta_pai_dm_local_cache_v1');
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch(e) { return []; }
+        };
+        window.saveLocalCachedDms = function(list) {
+            try {
+                const trimmed = (Array.isArray(list) ? list : []).slice(-250);
+                localStorage.setItem('satta_pai_dm_local_cache_v1', JSON.stringify(trimmed));
+            } catch(e) {}
+        };
+        window.mergeDmSnapshotsWithLocal = function(remoteDocs) {
+            const cutoff = Date.now() - (14 * 24 * 60 * 60 * 1000);
+            const mergedMap = new Map();
+            const localCached = window.loadLocalCachedDms();
+            const currentMem = Array.isArray(window._allDmMessages) ? window._allDmMessages : [];
+
+            [...localCached, ...currentMem].forEach(m => {
+                if (!m || !m.message || Number(m.timestamp || 0) <= cutoff) return;
+                const key = m.clientMsgId || m.id || `${m.senderEmail}_${m.receiverEmail}_${m.timestamp}`;
+                mergedMap.set(key, m);
+            });
+
+            (remoteDocs || []).forEach(m => {
+                if (!m || !m.message || Number(m.timestamp || 0) <= cutoff) return;
+                const key = m.clientMsgId || m.id || `${m.senderEmail}_${m.receiverEmail}_${m.timestamp}`;
+                mergedMap.set(key, m);
+                if (m.id && m.clientMsgId && m.id !== m.clientMsgId) {
+                    mergedMap.delete(m.id);
+                }
+            });
+
+            const sorted = Array.from(mergedMap.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
+            window._allDmMessages = sorted;
+            window.saveLocalCachedDms(sorted);
+        };
+
+        window.hydratePlayersDirectoryFromChatsAndTeams = function() {
+            try {
+                (window.allChatMessages || []).forEach(m => {
+                    const em = String(m.userEmail || m.email || m.senderEmail || '').trim().toLowerCase();
+                    if (!em || !em.includes('@')) return;
+                    if (!userCache[em]) {
+                        userCache[em] = {
+                            email: em,
+                            username: m.displayName || m.username || m.senderName || em.split('@')[0],
+                            ign: m.ign || m.displayName || em.split('@')[0],
+                            playerId: window.getStablePlayerId(em),
+                            dpBase64: m.dpBase64 || ''
+                        };
+                    }
+                });
+                (window.allTeams || []).forEach(t => {
+                    const em = String(t.userEmail || t.leaderEmail || '').trim().toLowerCase();
+                    if (!em || !em.includes('@')) return;
+                    if (!userCache[em]) {
+                        userCache[em] = {
+                            email: em,
+                            username: t.leaderName || t.teamName || em.split('@')[0],
+                            ign: t.leaderName || t.teamName || em.split('@')[0],
+                            gameUid: t.gameUid || '',
+                            playerId: t.ownerPlayerId || window.getStablePlayerId(em)
+                        };
+                    }
+                });
             } catch(e) {}
         };
 
+        window.startDmRealtimeListener = function(forceRestart = false) {
+            if (!window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) return;
+            if (window._dmListenerStarted && !forceRestart) return;
+            window._dmListenerStarted = true;
+            if (window._dmUnsubscribe) {
+                try { window._dmUnsubscribe(); } catch(e) {}
+                window._dmUnsubscribe = null;
+            }
+            // Restore cached DMs immediately for 0ms display
+            if (!window._allDmMessages || window._allDmMessages.length === 0) {
+                window.mergeDmSnapshotsWithLocal([]);
+            }
+            const attachDmListener = (useOrderBy = true) => {
+                try {
+                    const qRef = useOrderBy
+                        ? query(collection(db, 'dm_messages'), orderBy('timestamp', 'desc'), limit(250))
+                        : collection(db, 'dm_messages');
+                    window._dmUnsubscribe = onSnapshot(qRef, snap => {
+                        const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                        window.mergeDmSnapshotsWithLocal(docs);
+                        window.renderDmInboxList();
+                        window.renderActiveDmConversation();
+                        window.updateDmUnreadBadge();
+                    }, (err) => {
+                        console.warn('DM listener fallback notice:', err?.code || err?.message);
+                        if (useOrderBy) {
+                            attachDmListener(false);
+                        } else {
+                            window._dmListenerStarted = false;
+                        }
+                    });
+                } catch(e) {
+                    window._dmListenerStarted = false;
+                }
+            };
+            attachDmListener(true);
+        };
+
         window.switchChatTabMode = function(mode) {
+            if (mode === 'dm' && !window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) {
+                mode = 'global';
+            }
             window._currentChatTabMode = mode;
             const gBtn = document.getElementById('chat-tab-btn-global');
             const dBtn = document.getElementById('chat-tab-btn-dm');
@@ -17589,6 +18005,8 @@ CRITICAL RULES:
             const dmContainer = document.getElementById('dm-chat-container');
 
             if (mode === 'dm') {
+                window.hydratePlayersDirectoryFromChatsAndTeams();
+                if (typeof window.startUsersSnapshotListener === 'function') window.startUsersSnapshotListener();
                 window.startDmRealtimeListener();
                 if (gBtn) gBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer cyber-card flex items-center justify-center gap-1.5';
                 if (dBtn) dBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer btn-theme flex items-center justify-center gap-1.5 relative';
@@ -17596,21 +18014,33 @@ CRITICAL RULES:
                 if (sfxBar) sfxBar.classList.add('hidden');
                 if (gInp) gInp.classList.add('hidden');
                 if (dmContainer) dmContainer.classList.remove('hidden');
-                window.renderDmInboxList();
+                if (window._activeDmPartnerEmail) {
+                    window.openPrivateDmConversationWith(window._activeDmPartnerEmail);
+                } else {
+                    window.renderDmInboxList();
+                }
             } else {
                 if (gBtn) gBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer btn-theme flex items-center justify-center gap-1.5';
                 if (dBtn) dBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer cyber-card flex items-center justify-center gap-1.5 relative';
                 if (gBox) gBox.classList.remove('hidden');
                 if (sfxBar) sfxBar.classList.remove('hidden');
-                if (gInp) gInp.classList.remove('hidden');
+                if (gInp && !(myChatBannedUntil > Date.now())) gInp.classList.remove('hidden');
                 if (dmContainer) dmContainer.classList.add('hidden');
                 window.renderChatMessages();
             }
         };
 
         window.startPrivateDmFromProfileModal = function() {
+            if (!window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) return;
+            if (typeof window.checkLoginState === 'function') window.checkLoginState();
             const tgt = (window._activeChatProfileTargetEmail || '').toLowerCase();
             if (!tgt || tgt === 'guest') return;
+            if (!window.loggedEmail || window.loggedEmail === 'guest') {
+                document.getElementById('chat-profile-modal')?.classList.add('hidden');
+                window.showToast('🔐 Sign in first to send Private DMs!');
+                window.openLoginScreenModal(true);
+                return;
+            }
             if (tgt === (window.loggedEmail || '').toLowerCase()) {
                 window.showToast('ℹ️ You cannot send a private DM to yourself!');
                 return;
@@ -17622,8 +18052,19 @@ CRITICAL RULES:
         };
 
         window.openPrivateDmConversationWith = function(partnerEmailRaw) {
-            const partner = String(partnerEmailRaw || '').trim().toLowerCase();
+            let partner = String(partnerEmailRaw || '').trim().toLowerCase();
             if (!partner) return;
+            window.hydratePlayersDirectoryFromChatsAndTeams();
+            // Support opening DM by SP-XXXX Player ID or IGN if passed
+            if (!partner.includes('@')) {
+                const foundEntry = Object.entries(userCache || {}).find(([em, u]) => {
+                    const pid = String(u?.playerId || window.getStablePlayerId(em)).toLowerCase();
+                    const nm = String(u?.username || '').toLowerCase();
+                    const ign = String(u?.ign || '').toLowerCase();
+                    return pid === partner || nm === partner || ign === partner;
+                });
+                if (foundEntry) partner = foundEntry[0].toLowerCase();
+            }
             window._activeDmPartnerEmail = partner;
             document.getElementById('dm-inbox-view')?.classList.add('hidden');
             document.getElementById('dm-conversation-view')?.classList.remove('hidden');
@@ -17650,6 +18091,10 @@ CRITICAL RULES:
             try { localStorage.setItem('sp_dm_last_read_' + (window.loggedEmail || '').toLowerCase() + '_' + partner, String(Date.now())); } catch(e) {}
             window.renderActiveDmConversation();
             window.updateDmUnreadBadge();
+            setTimeout(() => {
+                const inp = document.getElementById('dm-message-input');
+                if (inp) inp.focus();
+            }, 60);
         };
 
         window.backToDmInboxList = function() {
@@ -17669,11 +18114,20 @@ CRITICAL RULES:
         window.renderDmInboxList = function(searchRaw) {
             const box = document.getElementById('dm-inbox-threads-list');
             if (!box) return;
+            if (!window.loggedEmail && typeof window.checkLoginState === 'function') window.checkLoginState();
             const myEm = (window.loggedEmail || '').toLowerCase();
             if (!myEm || myEm === 'guest') {
-                box.innerHTML = '<div class="cyber-card p-5 text-center text-slate-400">🔐 Sign in to use Private DM Messaging!</div>';
+                box.innerHTML = `
+                    <div class="cyber-card p-5 text-center space-y-2.5 border border-emerald-500/30">
+                        <div class="text-2xl">🔐</div>
+                        <div class="text-xs font-extrabold text-white">Sign In Required for Private DM</div>
+                        <p class="text-[10.5px] text-slate-400">Sign in with your account to send and receive 1-to-1 private messages with Arena players.</p>
+                        <button type="button" onclick="window.closeFullScreenChat(); window.openLoginScreenModal(true);" class="btn-theme px-4 py-2 text-xs font-extrabold cursor-pointer">🔐 Sign In Now</button>
+                    </div>
+                `;
                 return;
             }
+            window.hydratePlayersDirectoryFromChatsAndTeams();
             const q = String(searchRaw ?? (document.getElementById('dm-user-search-input')?.value || '')).trim().toLowerCase();
             const pins = window.getMyPinnedDmPartners();
 
@@ -17683,16 +18137,18 @@ CRITICAL RULES:
                 const s = String(m.senderEmail || '').toLowerCase();
                 const r = String(m.receiverEmail || '').toLowerCase();
                 if (s === myEm && r) {
-                    partnerMap.set(r, m);
+                    const prev = partnerMap.get(r);
+                    if (!prev || Number(m.timestamp || 0) >= Number(prev.timestamp || 0)) partnerMap.set(r, m);
                 } else if (r === myEm && s) {
-                    partnerMap.set(s, m);
+                    const prev = partnerMap.get(s);
+                    if (!prev || Number(m.timestamp || 0) >= Number(prev.timestamp || 0)) partnerMap.set(s, m);
                 }
             });
 
             if (q) {
                 Object.entries(userCache || {}).forEach(([em, u]) => {
                     const lowEm = em.toLowerCase();
-                    if (lowEm === myEm) return;
+                    if (lowEm === myEm || !lowEm.includes('@')) return;
                     const pid = String(u.playerId || window.getStablePlayerId(lowEm)).toLowerCase();
                     const nm = String(u.username || '').toLowerCase();
                     const ign = String(u.ign || '').toLowerCase();
@@ -17712,27 +18168,21 @@ CRITICAL RULES:
                 return Number(mB?.timestamp || 0) - Number(mA?.timestamp || 0);
             });
 
-            if (partners.length === 0) {
-                box.innerHTML = `
-                    <div class="cyber-card p-6 text-center space-y-2 border border-white/10">
-                        <div class="text-2xl">💬</div>
-                        <div class="text-xs font-extrabold text-emerald-400">Private 1-to-1 Messenger</div>
-                        <p class="text-[10.5px] text-slate-400">Search a player by Name, IGN, or SP-ID above, or tap any player's avatar in Global Chat and select <b>💬 Send Private DM</b>!</p>
-                    </div>
-                `;
-                return;
-            }
+            // Also build a Quick-Start Arena Players list so users can immediately message any active player
+            const suggestedPlayers = Object.entries(userCache || {})
+                .map(([em, u]) => ({ em: em.toLowerCase(), u: u || {} }))
+                .filter(x => x.em !== myEm && x.em.includes('@') && !partnerMap.has(x.em) && !window.isUserBlockedEitherWay(x.em))
+                .slice(0, 15);
 
-            box.innerHTML = partners.map(em => {
+            const renderPartnerCard = (em, lastMsg, isSuggested = false) => {
                 const u = userCache[em] || {};
                 const name = u.username || u.ign || em.split('@')[0] || 'Player';
                 const pid = u.playerId || window.getStablePlayerId(em);
                 const dp = window.resolveUserDpUrl(em, u, null, name);
-                const lastMsg = partnerMap.get(em);
                 const isPinned = pins.includes(em);
                 const lastRead = Number(localStorage.getItem('sp_dm_last_read_' + myEm + '_' + em) || 0);
                 const isUnread = lastMsg && String(lastMsg.senderEmail).toLowerCase() === em && Number(lastMsg.timestamp || 0) > lastRead;
-                const timeStr = lastMsg?.timestamp ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Start Chat';
+                const timeStr = lastMsg?.timestamp ? new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : (isSuggested ? '💬 Message' : 'Start Chat');
 
                 return `
                     <div onclick="window.openPrivateDmConversationWith('${window.escapeJsStr(em)}')" class="cyber-card p-2.5 flex items-center justify-between gap-2.5 cursor-pointer hover:border-emerald-400 transition-all ${isPinned ? 'border-amber-400/60 bg-amber-500/5' : ''}">
@@ -17744,16 +18194,36 @@ CRITICAL RULES:
                                     <span class="font-extrabold text-white text-xs truncate">${window.escapeHTML(name)}</span>
                                     <span class="text-[9.5px] font-mono text-emerald-400">(${window.escapeHTML(pid)})</span>
                                 </div>
-                                <div class="text-[10.5px] text-slate-400 truncate mt-0.5">${lastMsg ? window.escapeHTML(lastMsg.message) : 'Tap to send a private message...'}</div>
+                                <div class="text-[10.5px] text-slate-400 truncate mt-0.5">${lastMsg ? window.escapeHTML(lastMsg.message) : 'Tap to send a 1-to-1 private message...'}</div>
                             </div>
                         </div>
                         <div class="flex flex-col items-end gap-1 shrink-0">
-                            <span class="text-[9px] font-mono text-slate-400">${timeStr}</span>
+                            <span class="text-[9px] font-mono ${isSuggested ? 'px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold' : 'text-slate-400'}">${timeStr}</span>
                             ${isUnread ? '<span class="px-1.5 py-0.2 rounded-full bg-emerald-500 text-black text-[8.5px] font-black">NEW</span>' : ''}
                         </div>
                     </div>
                 `;
-            }).join('');
+            };
+
+            let htmlOut = '';
+            if (partners.length > 0) {
+                htmlOut += partners.map(em => renderPartnerCard(em, partnerMap.get(em), false)).join('');
+            } else {
+                htmlOut += `
+                    <div class="cyber-card p-4 text-center space-y-1.5 border border-white/10">
+                        <div class="text-xl">💬</div>
+                        <div class="text-xs font-extrabold text-emerald-400">Private 1-to-1 Messenger</div>
+                        <p class="text-[10.5px] text-slate-400">Search a player by Name, IGN, or SP-ID above, or tap any player below or in Global Chat to start messaging!</p>
+                    </div>
+                `;
+            }
+
+            if (suggestedPlayers.length > 0 && !q) {
+                htmlOut += `<div class="pt-2 pb-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 px-1">⚡ Active Arena Players — Tap to Chat</div>`;
+                htmlOut += suggestedPlayers.map(x => renderPartnerCard(x.em, null, true)).join('');
+            }
+
+            box.innerHTML = htmlOut;
         };
 
         window.renderActiveDmConversation = function() {
@@ -17799,13 +18269,18 @@ CRITICAL RULES:
         };
 
         window.sendPrivateDmMessage = async function() {
+            if (!window.loggedEmail && typeof window.checkLoginState === 'function') window.checkLoginState();
             if (!window.loggedEmail || window.loggedEmail === 'guest') {
                 window.showToast('🔐 Sign in first to send Private DMs!');
+                window.openLoginScreenModal(true);
                 return;
             }
             const myEm = window.loggedEmail.toLowerCase();
             const partner = (window._activeDmPartnerEmail || '').toLowerCase();
-            if (!partner) return;
+            if (!partner) {
+                window.showToast('⚠️ Select a player first to send a Private DM!');
+                return;
+            }
             if (window.isUserBlockedEitherWay(partner)) {
                 window.showToast('🚫 Cannot send message — user is blocked!');
                 return;
@@ -17815,24 +18290,44 @@ CRITICAL RULES:
             if (!text) return;
             inp.value = '';
 
-            const myU = userCache[myEm] || {};
+            const myU = userCache[myEm] || currentUserProfile || {};
             const now = Date.now();
+            const clientMsgId = 'dm_' + now + '_' + Math.random().toString(36).slice(2, 8);
             const threadId = [myEm, partner].sort().join('__');
             const payload = {
+                clientMsgId,
                 threadId,
+                participants: [myEm, partner],
                 senderEmail: myEm,
                 receiverEmail: partner,
+                senderUid: (auth.currentUser && auth.currentUser.uid) || window.loggedUid || '',
                 senderName: myU.username || myU.ign || myEm.split('@')[0],
                 dpBase64: myU.dpBase64 || myU.dp || '',
                 message: text,
                 timestamp: now
             };
-            window._allDmMessages.push({ id: 'local_' + now, ...payload });
+
+            window.mergeDmSnapshotsWithLocal([{ id: clientMsgId, ...payload }]);
             window.renderActiveDmConversation();
+            window.renderDmInboxList();
+
             try {
-                await addDoc(collection(db, 'dm_messages'), payload);
-            } catch(e) {
-                window.showToast('❌ Failed to send DM: ' + (e.message || e));
+                // Ensure Firebase Auth session is active before writing to Firestore
+                if (!auth.currentUser && typeof window.ensureSilentFirebaseAuthSession === 'function') {
+                    await window.ensureSilentFirebaseAuthSession(myEm);
+                }
+                if (auth.currentUser && !payload.senderUid) {
+                    payload.senderUid = auth.currentUser.uid;
+                }
+                await setDoc(doc(db, 'dm_messages', clientMsgId), payload);
+                if (!window._dmListenerStarted) window.startDmRealtimeListener(true);
+            } catch(e1) {
+                try {
+                    await addDoc(collection(db, 'dm_messages'), payload);
+                } catch(e2) {
+                    console.error('Private DM send error:', e2);
+                    window.showToast('❌ Failed to send DM: ' + (e2.message || e2));
+                }
             }
         };
 
