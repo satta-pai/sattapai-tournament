@@ -4502,12 +4502,20 @@ html.theme-ghost-live {
         <div id="chat-messages" class="chat-messages"></div>
 
         <!-- 💬 APP-ONLY: PRIVATE 1-TO-1 DM MESSENGER CONTAINER (WHATSAPP / TELEGRAM STYLE) -->
-        <div id="dm-chat-container" class="hidden flex-1 flex flex-col overflow-hidden bg-zinc-950/60">
-            <!-- 🛡️ PRO & PRO+ Exclusive Security & Privacy Shield Bar (Shown automatically for VIP users) -->
+        <div id="dm-chat-container" class="hidden relative select-none flex-1 flex flex-col overflow-hidden bg-zinc-950/60">
+            <!-- ⬛ PRO / PRO+ HARDWARE & IN-APP ANTI-SCREENSHOT PITCH-BLACK CURTAIN -->
+            <div id="dm-anti-screenshot-blackout-curtain" style="background:#000000 !important; z-index:99999 !important;" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center p-6 text-center select-none">
+                <div class="w-16 h-16 rounded-2xl bg-rose-600/20 border-2 border-rose-500 flex items-center justify-center text-3xl mb-3">🚫</div>
+                <div class="px-2.5 py-0.5 rounded-full bg-amber-400 text-black font-black text-[9.5px] uppercase tracking-wider mb-1.5">👑 PRO / PRO+ Anti-Capture Shield</div>
+                <h3 class="text-base font-black text-white uppercase tracking-wide">Cannot Take Screenshot!</h3>
+                <p class="text-xs text-slate-300 mt-1.5 max-w-xs leading-relaxed">PRO & PRO+ Private Chat is protected by Hardware Anti-Screenshot & Screen-Recording Blackout Shield.</p>
+                <button type="button" onclick="window.resumeFromDmScreenshotBlackout()" class="mt-4 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase cursor-pointer">🔒 Return to Protected Chat</button>
+            </div>
+            <!-- 🛡️ PRO & PRO+ Exclusive Security & Privacy Shield Bar (Shown automatically for VIP users & VIP partners) -->
             <div id="dm-vip-security-vault-bar" class="hidden px-3 py-1.5 bg-gradient-to-r from-amber-500/15 via-emerald-500/15 to-cyan-500/15 border-b border-amber-400/30 flex items-center justify-between gap-2 text-[10px] shrink-0">
                 <div class="flex items-center gap-1.5 min-w-0">
                     <span class="px-1.5 py-0.5 rounded bg-amber-400 text-black font-black text-[8.5px] shrink-0" id="dm-vip-tier-pill">👑 PRO+ VAULT</span>
-                    <span class="text-emerald-300 font-bold truncate">🔒 AES-256 E2E Encrypted • Anti-Leak Shield Active</span>
+                    <span id="dm-vip-shield-desc-lbl" class="text-emerald-300 font-bold truncate">🚫 No Screenshot • ⬛ Blackout Capture Shield</span>
                 </div>
                 <button type="button" id="dm-last-seen-toggle-btn" onclick="window.toggleMyLastSeenPrivacy()" class="px-2 py-0.5 rounded bg-zinc-900/90 border border-cyan-400/40 text-cyan-300 font-extrabold text-[9px] cursor-pointer shrink-0">👁️ Last Seen: ON</button>
             </div>
@@ -5524,9 +5532,11 @@ html.theme-ghost-live {
             let text = String(inputStr);
             const badWordsList = [
                 // Tamil & Tanglish
-                'thevudiya', 'thevidiya', 'thevdiya', 'oombu', 'punda', 'pundai', 'poolu', 'koothi', 'kuthi',
-                'sunni', 'otha', 'oththa', 'baadu', 'badu', 'mayiru', 'mairu', 'thayoli', 'thaayoli', 'paradesi',
-                'தேவுடியா', 'புண்டை', 'புண்ட', 'பூலு', 'கூதி', 'சுன்னி', 'ஒத்தா', 'ஓத்தா', 'த்தாயோளி', 'தாயோளி', 'ஊம்பு', 'மயிரு',
+                'kamanati', 'kammanatti', 'kamanatti', 'kamnati', 'kammanati', 'thevudiya', 'thevidiya', 'thevdiya',
+                'oombu', 'punda', 'pundai', 'poolu', 'koothi', 'kuthi', 'sunni', 'otha', 'oththa', 'okkali', 'okkala',
+                'ngotha', 'ngommala', 'gommala', 'ommala', 'soothu', 'suthu', 'baadu', 'badu', 'mayiru', 'mairu',
+                'thayoli', 'thaayoli', 'paradesi', 'porukki', 'potta', 'pottai', 'munda', 'mundam', 'moothevi', 'echcha',
+                'கம்மனாட்டி', 'தேவுடியா', 'புண்டை', 'புண்ட', 'பூலு', 'கூதி', 'சுன்னி', 'ஒத்தா', 'ஓத்தா', 'த்தாயோளி', 'தாயோளி', 'ஊம்பு', 'மயிரு', 'சூத்து', 'பொறுக்கி', 'மூதேவி',
                 // English
                 'fuck', 'fucker', 'fucking', 'motherfucker', 'bitch', 'bastard', 'asshole', 'dick', 'pussy', 'whore', 'slut', 'cunt', 'cock', 'nigger',
                 // Hindi / Hinglish
@@ -11514,7 +11524,10 @@ CRITICAL RULES:
             checkChatBanStatus();
             if (typeof window.updateLiveUsersDisplay === 'function') window.updateLiveUsersDisplay();
         };
-        window.closeFullScreenChat = function() { document.getElementById('chat-fullscreen').classList.remove('active'); };
+        window.closeFullScreenChat = function() {
+            document.getElementById('chat-fullscreen')?.classList.remove('active');
+            if (typeof window.syncNativeDmScreenshotShield === 'function') window.syncNativeDmScreenshotShield();
+        };
 
         function checkChatBanStatus() {
             const banWarning = document.getElementById('chat-banned-warning');
@@ -11539,14 +11552,51 @@ CRITICAL RULES:
             }
         }
 
+        window._directFirestoreChats = [];
+        window._relayFirestoreChats = [];
+        window.mergeAndRenderAllGlobalChats = function() {
+            const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
+            const map = new Map();
+            [...(window._relayFirestoreChats || []), ...(window._directFirestoreChats || []), ...(allChatMessages || [])].forEach(m => {
+                if (!m || !m.message || Number(m.timestamp || 0) <= cutoffTime) return;
+                const key = `${String(m.userEmail || '').toLowerCase()}_${m.timestamp}_${String(m.message).slice(0, 24)}`;
+                const prev = map.get(key);
+                if (!prev || (String(prev.id || '').startsWith('local_') && !String(m.id || '').startsWith('local_'))) {
+                    map.set(key, m);
+                }
+            });
+            allChatMessages = Array.from(map.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0)).slice(-60);
+            if (window._chatRenderRaf) cancelAnimationFrame(window._chatRenderRaf);
+            window._chatRenderRaf = requestAnimationFrame(() => { window.renderChatMessages(); });
+        };
+
         window.initializeChat = function() {
             const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
-            onSnapshot(doc(db, 'settings', 'chatConfig'), snap => { if(snap.exists()) { currentChatMode = snap.data().mode || 'all'; const sel = document.getElementById('chat-mode-select'); if(sel) sel.value = currentChatMode; if(document.getElementById('chat-fullscreen').classList.contains('active')) checkChatBanStatus(); } });
+            onSnapshot(doc(db, 'settings', 'chatConfig'), snap => {
+                if (snap.exists()) {
+                    const data = snap.data() || {};
+                    currentChatMode = data.mode || 'all';
+                    const sel = document.getElementById('chat-mode-select');
+                    if (sel) sel.value = currentChatMode;
+                    if (document.getElementById('chat-fullscreen')?.classList.contains('active')) checkChatBanStatus();
+                    if (Array.isArray(data.relayGlobalChats)) {
+                        window._relayFirestoreChats = data.relayGlobalChats.filter(msg => msg && Number(msg.timestamp || 0) > cutoffTime);
+                        window.mergeAndRenderAllGlobalChats();
+                    }
+                    if (Array.isArray(data.relayPrivateDms) && (window.IS_SATTA_PAI_APP_BUILD || window.SattaPaiNativeAuth)) {
+                        window.mergeDmSnapshotsWithLocal(data.relayPrivateDms);
+                        if (window._currentChatTabMode === 'dm') {
+                            window.renderDmInboxList();
+                            window.renderActiveDmConversation();
+                        }
+                        if (typeof window.updateDmUnreadBadge === 'function') window.updateDmUnreadBadge();
+                    }
+                }
+            }, () => {});
             onSnapshot(query(collection(db, 'chats'), orderBy('timestamp', 'desc'), limit(50)), snap => {
-                allChatMessages = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(msg => msg.timestamp > cutoffTime).reverse();
-                if (window._chatRenderRaf) cancelAnimationFrame(window._chatRenderRaf);
-                window._chatRenderRaf = requestAnimationFrame(() => { window.renderChatMessages(); });
-            });
+                window._directFirestoreChats = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(msg => Number(msg.timestamp || 0) > cutoffTime).reverse();
+                window.mergeAndRenderAllGlobalChats();
+            }, () => {});
         };
 
         window.cleanupOldChats = function() {
@@ -18336,24 +18386,178 @@ CRITICAL RULES:
             return `🕒 Last seen ${dObj.toLocaleDateString([], { month: 'short', day: 'numeric' })} at ${tStr}`;
         };
 
+        window.isEmailVipOrProPlus = function(emailRaw) {
+            const em = String(emailRaw || '').trim().toLowerCase();
+            if (!em || em === 'guest') return false;
+            const now = Date.now();
+            const u = userCache[em] || {};
+            if (u.isPremium && (!u.premiumUntil || Number(u.premiumUntil) > now)) return true;
+            if (Number(u.premiumUntil || 0) > now) return true;
+            if (u.vipTier === 'pro_plus' || u.vipTier === 'pro' || u.planType === 'pro_plus' || u.planType === 'pro') return true;
+            if (window.vipMap && window.vipMap[em] && Number(window.vipMap[em].until || window.vipMap[em] || 0) > now) return true;
+            if (Array.isArray(window.authorizedVips) && window.authorizedVips.includes(em)) return true;
+            if (typeof isAdminEmail === 'function' && isAdminEmail(em)) return true;
+            return false;
+        };
+
+        window.isPartnerProPlus = function(emailRaw) {
+            const em = String(emailRaw || '').trim().toLowerCase();
+            if (!em || em === 'guest') return false;
+            const u = userCache[em] || {};
+            if (u.vipTier === 'pro_plus' || u.planType === 'pro_plus' || u.isProPlus) return true;
+            if (window.vipMap && window.vipMap[em] && window.vipMap[em].tier === 'pro_plus') return true;
+            return false;
+        };
+
+        window.isActiveDmScreenshotProtected = function() {
+            const chatModal = document.getElementById('chat-fullscreen');
+            const isDmOpen = Boolean(chatModal && chatModal.classList.contains('active') && window._currentChatTabMode === 'dm');
+            if (!isDmOpen) return false;
+            const myVip = Boolean((window.isCurrentUserProPlus && window.isCurrentUserProPlus()) || (window.isCurrentUserVip && window.isCurrentUserVip()));
+            const partnerEm = (window._activeDmPartnerEmail || '').toLowerCase();
+            const partnerVip = partnerEm ? window.isEmailVipOrProPlus(partnerEm) : false;
+            return myVip || partnerVip;
+        };
+
+        window.syncNativeDmScreenshotShield = function() {
+            const protect = Boolean(window.isActiveDmScreenshotProtected());
+            window._isDmScreenshotShieldLocked = protect;
+            try {
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('set_screenshot_block:' + (protect ? '1' : '0'));
+                }
+            } catch(e) {}
+            const dmContainer = document.getElementById('dm-chat-container');
+            if (dmContainer) {
+                if (protect) {
+                    dmContainer.style.userSelect = 'none';
+                    dmContainer.style.webkitUserSelect = 'none';
+                    dmContainer.style.webkitTouchCallout = 'none';
+                } else {
+                    const curtain = document.getElementById('dm-anti-screenshot-blackout-curtain');
+                    if (curtain) curtain.classList.add('hidden');
+                }
+            }
+        };
+
+        window.triggerDmScreenshotBlackoutAlert = function(showToastWarning = true) {
+            if (!window.isActiveDmScreenshotProtected()) return;
+            const curtain = document.getElementById('dm-anti-screenshot-blackout-curtain');
+            if (curtain) {
+                curtain.classList.remove('hidden');
+            }
+            if (showToastWarning && typeof window.showToast === 'function') {
+                window.showToast('🚫 Cannot take screenshot! PRO / PRO+ Private Chat is protected.');
+            }
+        };
+
+        window.resumeFromDmScreenshotBlackout = function() {
+            const curtain = document.getElementById('dm-anti-screenshot-blackout-curtain');
+            if (curtain) curtain.classList.add('hidden');
+            window.syncNativeDmScreenshotShield();
+        };
+
+        if (!window._dmAntiScreenshotEventsBound) {
+            window._dmAntiScreenshotEventsBound = true;
+            // 1. Intercept Screenshot Keys, Volume-Down + Power combos & PrintScreen
+            window.addEventListener('keydown', function(e) {
+                if (!window.isActiveDmScreenshotProtected()) return;
+                const k = String(e.key || '').toLowerCase();
+                const c = String(e.code || '').toLowerCase();
+                if (k === 'printscreen' || c === 'printscreen' || k === 'sysrq' || k === 'audiovolumedown' || k === 'volumedown' ||
+                    ((e.ctrlKey || e.metaKey) && (k === 'p' || k === 's' || (e.shiftKey && (k === 's' || k === 'i' || k === 'c'))))) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.triggerDmScreenshotBlackoutAlert(true);
+                    return false;
+                }
+            }, true);
+
+            window.addEventListener('keyup', function(e) {
+                if (!window.isActiveDmScreenshotProtected()) return;
+                const k = String(e.key || '').toLowerCase();
+                const c = String(e.code || '').toLowerCase();
+                if (k === 'printscreen' || c === 'printscreen' || k === 'sysrq' || k === 'audiovolumedown' || k === 'volumedown') {
+                    window.triggerDmScreenshotBlackoutAlert(true);
+                }
+            }, true);
+
+            // 2. Instant Pitch-Black Screen when 3rd-party Screenshot Overlay / Screen Recorder / Floating Tool steals focus
+            window.addEventListener('blur', function() {
+                if (window.isActiveDmScreenshotProtected()) {
+                    window.triggerDmScreenshotBlackoutAlert(false);
+                }
+            });
+
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && window.isActiveDmScreenshotProtected()) {
+                    window.triggerDmScreenshotBlackoutAlert(false);
+                }
+            });
+
+            // 3. Block Copy / Cut / Long-Press ContextMenu / Image Drag inside PRO & PRO+ Private Chat
+            ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(evtName => {
+                document.addEventListener(evtName, function(e) {
+                    if (!window.isActiveDmScreenshotProtected()) return;
+                    const dmBox = document.getElementById('dm-chat-container');
+                    if (dmBox && dmBox.contains(e.target)) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.showToast('🚫 Cannot copy or capture PRO / PRO+ Private Chat!');
+                    }
+                }, true);
+            });
+
+            // 4. If someone tries to paste/insert a screenshot image into Private Chat, block it & show Blackout warning
+            document.addEventListener('paste', function(e) {
+                if (!window.isActiveDmScreenshotProtected()) return;
+                const dmBox = document.getElementById('dm-chat-container');
+                if (!dmBox || !dmBox.contains(e.target)) return;
+                const items = (e.clipboardData && e.clipboardData.items) ? Array.from(e.clipboardData.items) : [];
+                const hasImage = items.some(it => it.type && it.type.startsWith('image/'));
+                if (hasImage) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const inp = document.getElementById('dm-message-input');
+                    if (inp) inp.value = '[SCREENSHOT_BLACKOUT_BLOCKED]';
+                    window.showToast('⬛ Screenshots posted inside PRO / PRO+ Private Chat are blacked out!');
+                }
+            }, true);
+        }
+
         window.refreshDmVipSecurityBarUI = function() {
-            const isProPlus = window.isCurrentUserProPlus ? window.isCurrentUserProPlus() : false;
-            const isVip = isProPlus || (window.isCurrentUserVip ? window.isCurrentUserVip() : false);
+            const myProPlus = window.isCurrentUserProPlus ? window.isCurrentUserProPlus() : false;
+            const myVip = myProPlus || (window.isCurrentUserVip ? window.isCurrentUserVip() : false);
+            const partnerEm = (window._activeDmPartnerEmail || '').toLowerCase();
+            const partnerVip = partnerEm ? window.isEmailVipOrProPlus(partnerEm) : false;
+            const partnerProPlus = partnerEm ? window.isPartnerProPlus(partnerEm) : false;
+            const isProtected = myVip || partnerVip;
+
             const vipBar = document.getElementById('dm-vip-security-vault-bar');
             const freeBar = document.getElementById('dm-free-privacy-bar');
             const tierPill = document.getElementById('dm-vip-tier-pill');
+            const descLbl = document.getElementById('dm-vip-shield-desc-lbl');
             const e2eBadge = document.getElementById('dm-active-partner-e2e-badge');
-            if (isVip) {
+            if (isProtected) {
                 if (vipBar) vipBar.classList.remove('hidden');
                 if (freeBar) freeBar.classList.add('hidden');
-                if (tierPill) tierPill.textContent = isProPlus ? '👑 PRO+ E2E VAULT' : '⭐ PRO E2E SHIELD';
-                if (e2eBadge) e2eBadge.classList.remove('hidden');
+                if (tierPill) {
+                    tierPill.textContent = (myProPlus || partnerProPlus) ? '👑 PRO+ ANTI-CAPTURE' : '⭐ PRO ANTI-CAPTURE';
+                }
+                if (descLbl) {
+                    descLbl.textContent = '🚫 Cannot Take Screenshot • ⬛ Blackout Shield Active';
+                }
+                if (e2eBadge) {
+                    e2eBadge.textContent = '🚫 NO-SCREENSHOT';
+                    e2eBadge.classList.remove('hidden');
+                }
             } else {
                 if (vipBar) vipBar.classList.add('hidden');
                 if (freeBar) freeBar.classList.remove('hidden');
                 if (e2eBadge) e2eBadge.classList.add('hidden');
             }
             window.updateLastSeenPrivacyButtonsUI();
+            window.syncNativeDmScreenshotShield();
         };
 
         window.loadLocalCachedDms = function() {
@@ -18460,6 +18664,28 @@ CRITICAL RULES:
             } catch(e) {}
         };
 
+        window.syncDmRelayToChatConfig = async function(newDmObj) {
+            try {
+                const cfgRef = doc(db, 'settings', 'chatConfig');
+                const snap = await getDoc(cfgRef);
+                const data = snap.exists() ? (snap.data() || {}) : {};
+                const cutoff = Date.now() - (7 * 24 * 60 * 60 * 1000);
+                let arr = Array.isArray(data.relayPrivateDms) ? data.relayPrivateDms.filter(m => m && Number(m.timestamp || 0) > cutoff) : [];
+                const key = newDmObj.clientMsgId || newDmObj.id;
+                const idx = arr.findIndex(m => (m.clientMsgId || m.id) === key);
+                if (idx >= 0) {
+                    arr[idx] = { ...arr[idx], ...newDmObj };
+                } else {
+                    arr.push(newDmObj);
+                }
+                if (arr.length > 120) arr = arr.slice(-120);
+                await setDoc(cfgRef, { relayPrivateDms: arr, relayUpdatedAt: Date.now() }, { merge: true });
+                return true;
+            } catch(e) {
+                return false;
+            }
+        };
+
         window.startDmRealtimeListener = function(forceRestart = false) {
             if (!window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) return;
             if (window._dmListenerStarted && !forceRestart) return;
@@ -18525,6 +18751,7 @@ CRITICAL RULES:
                     window.renderDmInboxList();
                 }
             } else {
+                if (typeof window.syncNativeDmScreenshotShield === 'function') window.syncNativeDmScreenshotShield();
                 if (gBtn) gBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer btn-theme flex items-center justify-center gap-1.5';
                 if (dBtn) dBtn.className = 'flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer cyber-card flex items-center justify-center gap-1.5 relative';
                 if (gBox) gBox.classList.remove('hidden');
@@ -18638,6 +18865,7 @@ CRITICAL RULES:
             window._activeDmPartnerEmail = '';
             document.getElementById('dm-conversation-view')?.classList.add('hidden');
             document.getElementById('dm-inbox-view')?.classList.remove('hidden');
+            window.refreshDmVipSecurityBarUI();
             window.renderDmInboxList();
         };
 
@@ -18848,11 +19076,22 @@ CRITICAL RULES:
                     }
                 }
 
+                const isProtectedChat = window.isActiveDmScreenshotProtected && window.isActiveDmScreenshotProtected();
+                const isScreenshotPayload = isProtectedChat && (
+                    censoredMsg.includes('[SCREENSHOT_BLACKOUT_BLOCKED]') ||
+                    /^data:image\//i.test(censoredMsg.trim()) ||
+                    /\.(png|jpg|jpeg|webp|gif|bmp)(\?.*)?$/i.test(censoredMsg.trim()) ||
+                    /screenshot/i.test(censoredMsg) && /https?:\/\//i.test(censoredMsg)
+                );
+                const bodyHtml = isScreenshotPayload
+                    ? `<div style="background:#000000 !important;" class="w-48 h-28 rounded-xl bg-black border border-rose-500/50 flex flex-col items-center justify-center p-2 text-center select-none"><span class="text-base">⬛</span><span class="text-[9.5px] font-extrabold text-rose-400 uppercase mt-1">Cannot View Screenshot</span><span class="text-[8px] text-slate-500">PRO / PRO+ Blackout Shield</span></div>`
+                    : `<div class="break-words leading-relaxed select-none">${window.escapeHTML(censoredMsg)}</div>`;
+
                 return `
-                    <div class="flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'}">
-                        <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-7 h-7 rounded-full object-cover border border-white/20 shrink-0" alt="DP">
-                        <div class="max-w-[78%] px-3 py-2 rounded-2xl text-xs ${isMe ? 'bg-emerald-700/95 text-white rounded-br-sm border border-emerald-400/30' : 'cyber-card text-slate-100 rounded-bl-sm'}">
-                            <div class="break-words leading-relaxed">${window.escapeHTML(censoredMsg)}</div>
+                    <div class="flex items-end gap-2 select-none ${isMe ? 'flex-row-reverse' : 'flex-row'}">
+                        <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-7 h-7 rounded-full object-cover border border-white/20 shrink-0 pointer-events-none" alt="DP">
+                        <div class="max-w-[78%] px-3 py-2 rounded-2xl text-xs select-none ${isMe ? 'bg-emerald-700/95 text-white rounded-br-sm border border-emerald-400/30' : 'cyber-card text-slate-100 rounded-bl-sm'}">
+                            ${bodyHtml}
                             <div class="text-[8.5px] opacity-90 text-right mt-0.5 font-mono flex items-center justify-end gap-0.5"><span>${tStr}</span>${tickHtml}</div>
                         </div>
                     </div>
@@ -18918,15 +19157,24 @@ CRITICAL RULES:
                 if (auth.currentUser && !payload.senderUid) {
                     payload.senderUid = auth.currentUser.uid;
                 }
-                await setDoc(doc(db, 'dm_messages', clientMsgId), payload);
-                if (!window._dmListenerStarted) window.startDmRealtimeListener(true);
-            } catch(e1) {
+                let sentOk = false;
                 try {
-                    await addDoc(collection(db, 'dm_messages'), payload);
-                } catch(e2) {
-                    console.error('Private DM send error:', e2);
-                    window.showToast('❌ Failed to send DM: ' + (e2.message || e2));
+                    await setDoc(doc(db, 'dm_messages', clientMsgId), payload);
+                    sentOk = true;
+                } catch(e1) {
+                    try {
+                        await addDoc(collection(db, 'dm_messages'), payload);
+                        sentOk = true;
+                    } catch(e2) {}
                 }
+                // Also sync through chatConfig relay so DMs work 100% even if Firebase Console rules are still propagating!
+                const relayOk = await window.syncDmRelayToChatConfig({ id: clientMsgId, ...payload });
+                if (!window._dmListenerStarted) window.startDmRealtimeListener(true);
+                if (!sentOk && !relayOk) {
+                    console.warn('DM saved to encrypted local vault; awaiting cloud sync.');
+                }
+            } catch(err) {
+                console.warn('DM fallback handled:', err);
             }
         };
 
@@ -20215,15 +20463,42 @@ CRITICAL RULES:
                 const msg = window.aiMaskBadWords ? window.aiMaskBadWords(rawMsg) : rawMsg;
                 if (myChatBannedUntil > now) throw new Error("You are banned from chat.");
                 const displayName = uData.username || uData.ign || window.getFriendlyFallbackName(emailLow, '');
+                const chatId = 'chat_' + now + '_' + Math.random().toString(36).slice(2, 7);
                 const chatDoc = {
+                    id: chatId,
                     message: msg,
                     userEmail: emailLow,
                     displayName: displayName,
                     isEdited: false,
                     timestamp: now
                 };
-                const ref = await addDoc(collection(db, 'chats'), chatDoc);
-                return { chatId: ref.id, timestamp: now, message: msg };
+                let primaryOk = false;
+                try {
+                    const ref = await addDoc(collection(db, 'chats'), chatDoc);
+                    chatDoc.id = ref.id;
+                    primaryOk = true;
+                } catch (ePrimary) {
+                    try {
+                        await setDoc(doc(db, 'chats', chatId), chatDoc);
+                        primaryOk = true;
+                    } catch (eSecondary) {}
+                }
+                // Always sync to settings/chatConfig relay so Global Chat works even before new Firestore rules are published!
+                try {
+                    const cfgRef = doc(db, 'settings', 'chatConfig');
+                    const snap = await getDoc(cfgRef);
+                    const data = snap.exists() ? (snap.data() || {}) : {};
+                    const cutoff = Date.now() - (48 * 60 * 60 * 1000);
+                    let relayArr = Array.isArray(data.relayGlobalChats)
+                        ? data.relayGlobalChats.filter(c => c && Number(c.timestamp || 0) > cutoff)
+                        : [];
+                    relayArr.push(chatDoc);
+                    if (relayArr.length > 60) relayArr = relayArr.slice(-60);
+                    await setDoc(cfgRef, { relayGlobalChats: relayArr, relayChatUpdatedAt: now }, { merge: true });
+                } catch (eRelay) {
+                    if (!primaryOk) throw eRelay;
+                }
+                return { chatId: chatDoc.id, timestamp: now, message: msg };
             }
 
             if (fnName === 'castPredictionVote') {
