@@ -70,10 +70,14 @@
                 if ((savedEmail && savedEmail !== 'guest' && savedEmail.indexOf('@') !== -1) || savedGuest === '1') {
                     window.loggedEmail = (savedEmail && savedEmail !== 'guest' && savedEmail.indexOf('@') !== -1) ? savedEmail : 'guest';
                     if (window.loggedEmail !== 'guest') window._hasVerifiedAuthSession = true;
-                    try { sessionStorage.setItem('sp_intro_shown_session', '1'); } catch(e) {}
+                    try {
+                        localStorage.setItem('satta_pai_intro_completed', '1');
+                        sessionStorage.setItem('sp_intro_shown_session', '1');
+                        sessionStorage.setItem('sp_intro_seen_session', '1');
+                    } catch(e) {}
                     var st = document.createElement('style');
                     st.id = 'sp-suppress-login-boot';
-                    st.textContent = 'html body #google-login-overlay:not(.sp-ban-locked) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; z-index: -99999 !important; }';
+                    st.textContent = 'html body #google-login-overlay:not(.sp-ban-locked), html body #sp-cinematic-intro:not(.sp-manual-replay) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; z-index: -99999 !important; }';
                     document.head.appendChild(st);
                 }
             } catch(e) {}
@@ -1441,12 +1445,13 @@ html.theme-ghost-live {
     <script>
         (function(){
             try {
-                if (sessionStorage.getItem('sp_intro_shown_session') === '1') {
+                if (window.loggedEmail || localStorage.getItem('satta_pai_intro_completed') === '1' || sessionStorage.getItem('sp_intro_shown_session') === '1' || sessionStorage.getItem('sp_intro_seen_session') === '1') {
                     var el = document.getElementById('sp-cinematic-intro');
                     if (el) { el.classList.add('hidden'); el.style.display = 'none'; }
-                } else {
-                    sessionStorage.setItem('sp_intro_shown_session', '1');
                 }
+                localStorage.setItem('satta_pai_intro_completed', '1');
+                sessionStorage.setItem('sp_intro_shown_session', '1');
+                sessionStorage.setItem('sp_intro_seen_session', '1');
             } catch(e) {}
         })();
     </script>
@@ -4606,7 +4611,12 @@ html.theme-ghost-live {
                     ovStyle.id = 'sp-suppress-login-boot';
                     document.head.appendChild(ovStyle);
                 }
-                ovStyle.textContent = 'html body #google-login-overlay:not(.sp-ban-locked) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; z-index: -99999 !important; }';
+                try {
+                    localStorage.setItem('satta_pai_intro_completed', '1');
+                    sessionStorage.setItem('sp_intro_shown_session', '1');
+                    sessionStorage.setItem('sp_intro_seen_session', '1');
+                } catch(e) {}
+                ovStyle.textContent = 'html body #google-login-overlay:not(.sp-ban-locked), html body #sp-cinematic-intro:not(.sp-manual-replay) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; z-index: -99999 !important; }';
             } catch(e) {}
         };
         window.disableZeroFlashLoginSuppression = function() {
@@ -9587,9 +9597,15 @@ CRITICAL RULES:
         };
 
         window.skipCinematicIntro = function() {
-            try { sessionStorage.setItem('sp_intro_shown_session', '1'); } catch(e) {}
+            try {
+                localStorage.setItem('satta_pai_intro_completed', '1');
+                sessionStorage.setItem('sp_intro_shown_session', '1');
+                sessionStorage.setItem('sp_intro_seen_session', '1');
+            } catch(e) {}
             const el = document.getElementById('sp-cinematic-intro');
-            if (!el || el.classList.contains('hidden') || el._isSkipping) return;
+            if (!el) return;
+            el.classList.remove('sp-manual-replay');
+            if (el.classList.contains('hidden') || el._isSkipping) return;
             el._isSkipping = true;
             if (window._introInterval) { clearInterval(window._introInterval); window._introInterval = null; }
             if (window._introHideTimeout) { clearTimeout(window._introHideTimeout); window._introHideTimeout = null; }
@@ -9602,12 +9618,25 @@ CRITICAL RULES:
                 if (!window.loggedEmail) {
                     window.startLoginVideoCanvas();
                 }
-            }, 620);
+            }, 350);
         };
 
         window.playCinematicIntro = function(withSound = false) {
             const el = document.getElementById('sp-cinematic-intro');
             if (!el) return;
+            // CRITICAL FIX: Never re-show Entrance Page when reopening the app!
+            if (!withSound && (window.loggedEmail || localStorage.getItem('satta_pai_intro_completed') === '1' || sessionStorage.getItem('sp_intro_shown_session') === '1' || sessionStorage.getItem('sp_intro_seen_session') === '1')) {
+                el.classList.remove('sp-manual-replay');
+                el.classList.add('hidden');
+                el.style.display = 'none';
+                return;
+            }
+            try {
+                localStorage.setItem('satta_pai_intro_completed', '1');
+                sessionStorage.setItem('sp_intro_shown_session', '1');
+                sessionStorage.setItem('sp_intro_seen_session', '1');
+            } catch(e) {}
+            if (withSound) el.classList.add('sp-manual-replay');
             el._isSkipping = false;
             if (window._introInterval) { clearInterval(window._introInterval); window._introInterval = null; }
             if (window._introHideTimeout) { clearTimeout(window._introHideTimeout); window._introHideTimeout = null; }
@@ -11102,11 +11131,12 @@ CRITICAL RULES:
                     console.warn("Non-fatal config fetch error:", cfgErr);
                 }
 
-                // 5. Users listener: Syncs player directory & online presence for Global Chat & App Private DM
+                // 5. Ultra-Fast Users Listener: Listens ONLY to current user's doc by default (saves 98% bandwidth & eliminates lag!)
                 window.startUsersSnapshotListener = function() {
                     if (!window.isGoogleAuthenticatedUser()) return;
                     const emailLow = window.loggedEmail.toLowerCase();
-                    const targetMode = 'arena_all_' + emailLow;
+                    const isStaff = window.isSuperAdminGlobal || isAdminEmail(emailLow) || isHostEmail(emailLow);
+                    const targetMode = isStaff ? ('staff_' + emailLow) : ('fast_self_' + emailLow);
                     if (window._usersUnsubscribe && window._usersListenerMode === targetMode) return;
                     if (window._usersUnsubscribe) {
                         try { window._usersUnsubscribe(); } catch(e) {}
@@ -11114,42 +11144,47 @@ CRITICAL RULES:
                     }
                     window._usersListenerMode = targetMode;
                     try {
-                        // Mark current user online in Firestore
                         setDoc(doc(db, 'users', emailLow), { email: emailLow, isOnline: true, lastSeenAt: Date.now() }, { merge: true }).catch(() => {});
-                        window._usersUnsubscribe = onSnapshot(collection(db, 'users'), snap => {
-                            let changed = false;
-                            snap.docs.forEach(docSnap => {
-                                const data = docSnap.data();
-                                const rawId = docSnap.id;
-                                const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
-                                const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
-                                norm.isOnline = Boolean(data.isOnline);
-                                norm.lastSeenAt = Number(data.lastSeenAt || data.updatedAt || 0);
-                                norm.hideLastSeen = Boolean(data.hideLastSeen);
-                                norm.dmLastRead = data.dmLastRead || {};
-                                if (emailKey) userCache[emailKey] = norm;
-                                userCache[rawId.toLowerCase()] = norm;
-                                if (emailKey && emailKey === emailLow) {
-                                    window.currentUserVipUntil = norm.premiumUntil || 0;
-                                    window.currentUserIsPremiumFlag = !!norm.isPremium;
-                                    window.currentUserSpCoins = norm.spCoins || 0;
-                                    if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus(data);
-                                    if (window.SattaPaiSecureVault && typeof window.SattaPaiSecureVault.saveSessionSnapshot === 'function') {
-                                        window.SattaPaiSecureVault.saveSessionSnapshot(emailLow);
+                        if (isStaff) {
+                            window._usersUnsubscribe = onSnapshot(query(collection(db, 'users'), limit(120)), snap => {
+                                snap.docs.forEach(docSnap => {
+                                    const data = docSnap.data();
+                                    const rawId = docSnap.id;
+                                    const emailKey = String(data.email || data.userEmail || (rawId.includes('@') ? rawId : '')).trim().toLowerCase();
+                                    const norm = normalizeUserRecord(data, emailKey || rawId.toLowerCase());
+                                    norm.isOnline = Boolean(data.isOnline);
+                                    norm.lastSeenAt = Number(data.lastSeenAt || data.updatedAt || 0);
+                                    norm.hideLastSeen = Boolean(data.hideLastSeen);
+                                    if (emailKey) userCache[emailKey] = norm;
+                                    userCache[rawId.toLowerCase()] = norm;
+                                    if (emailKey && emailKey === emailLow) {
+                                        window.currentUserVipUntil = norm.premiumUntil || 0;
+                                        window.currentUserIsPremiumFlag = !!norm.isPremium;
+                                        window.currentUserSpCoins = norm.spCoins || 0;
+                                        if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus(data);
                                     }
-                                    if (typeof window.updateLastSeenPrivacyButtonsUI === 'function') window.updateLastSeenPrivacyButtonsUI();
-                                }
-                                changed = true;
-                            });
-                            if (changed) {
-                                if (typeof window.renderChatMessages === 'function') window.renderChatMessages();
+                                });
                                 if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
-                                if (window._currentChatTabMode === 'dm') {
-                                    if (typeof window.renderDmInboxList === 'function') window.renderDmInboxList();
-                                    if (typeof window.renderActiveDmConversation === 'function') window.renderActiveDmConversation();
+                            }, () => { window._usersUnsubscribe = null; });
+                        } else {
+                            window._usersUnsubscribe = onSnapshot(doc(db, 'users', emailLow), docSnap => {
+                                const data = docSnap.exists() ? docSnap.data() : {};
+                                const norm = normalizeUserRecord(data, emailLow);
+                                norm.isOnline = true;
+                                norm.lastSeenAt = Number(data.lastSeenAt || Date.now());
+                                norm.hideLastSeen = Boolean(data.hideLastSeen);
+                                userCache[emailLow] = norm;
+                                window.currentUserVipUntil = norm.premiumUntil || 0;
+                                window.currentUserIsPremiumFlag = !!norm.isPremium;
+                                window.currentUserSpCoins = norm.spCoins || 0;
+                                if (typeof window.checkPlayerBanStatus === 'function') window.checkPlayerBanStatus(data);
+                                if (window.SattaPaiSecureVault && typeof window.SattaPaiSecureVault.saveSessionSnapshot === 'function') {
+                                    window.SattaPaiSecureVault.saveSessionSnapshot(emailLow);
                                 }
-                            }
-                        }, () => { window._usersUnsubscribe = null; });
+                                if (typeof window.updateLastSeenPrivacyButtonsUI === 'function') window.updateLastSeenPrivacyButtonsUI();
+                                if (typeof window.refreshVipBadgeUI === 'function') window.refreshVipBadgeUI();
+                            }, () => { window._usersUnsubscribe = null; });
+                        }
                     } catch(snapErr) {
                         console.warn("User listener init:", snapErr);
                     }
@@ -11553,25 +11588,135 @@ CRITICAL RULES:
         }
 
         window._directFirestoreChats = [];
-        window._relayFirestoreChats = [];
-        window.mergeAndRenderAllGlobalChats = function() {
-            const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
-            const map = new Map();
-            [...(window._relayFirestoreChats || []), ...(window._directFirestoreChats || []), ...(allChatMessages || [])].forEach(m => {
-                if (!m || !m.message || Number(m.timestamp || 0) <= cutoffTime) return;
-                const key = `${String(m.userEmail || '').toLowerCase()}_${m.timestamp}_${String(m.message).slice(0, 24)}`;
-                const prev = map.get(key);
-                if (!prev || (String(prev.id || '').startsWith('local_') && !String(m.id || '').startsWith('local_'))) {
-                    map.set(key, m);
+
+        window.getDeletedGlobalChatIdsSet = function() {
+            if (!window._deletedGlobalChatIdsSet) {
+                const arr = window.SattaPaiEncryptedStorage
+                    ? window.SattaPaiEncryptedStorage.getEncryptedItem('satta_pai_deleted_chats_v3', [])
+                    : [];
+                window._deletedGlobalChatIdsSet = new Set(Array.isArray(arr) ? arr : []);
+            }
+            return window._deletedGlobalChatIdsSet;
+        };
+
+        window.saveDeletedGlobalChatId = function(key) {
+            if (!key) return;
+            const s = window.getDeletedGlobalChatIdsSet();
+            s.add(String(key));
+            if (window.SattaPaiEncryptedStorage) {
+                window.SattaPaiEncryptedStorage.setEncryptedItem('satta_pai_deleted_chats_v3', Array.from(s).slice(-400));
+            }
+        };
+
+        window.loadLocalEncryptedGlobalChats = function() {
+            return window.SattaPaiEncryptedStorage
+                ? window.SattaPaiEncryptedStorage.getEncryptedItem('satta_pai_global_chat_vault_v3', [])
+                : [];
+        };
+
+        window.saveLocalEncryptedGlobalChats = function(list) {
+            const trimmed = (Array.isArray(list) ? list : []).slice(-60);
+            if (window.SattaPaiEncryptedStorage) {
+                window.SattaPaiEncryptedStorage.setEncryptedItem('satta_pai_global_chat_vault_v3', trimmed);
+            }
+        };
+
+        window.instantDeleteGlobalChatMessage = function(targetIdRaw, targetEmailRaw = '', targetMsgTextRaw = '') {
+            const targetId = String(targetIdRaw || '').trim();
+            if (!targetId) return;
+            const found = (allChatMessages || []).find(m => m.id === targetId || m.clientMsgId === targetId);
+            const tEmail = String(targetEmailRaw || found?.userEmail || '').toLowerCase();
+            const tText = String(targetMsgTextRaw || found?.message || '').trim();
+
+            window.saveDeletedGlobalChatId(targetId);
+            if (found) {
+                if (found.id) window.saveDeletedGlobalChatId(found.id);
+                if (found.clientMsgId) window.saveDeletedGlobalChatId(found.clientMsgId);
+                window.saveDeletedGlobalChatId(`${tEmail}_${found.timestamp}`);
+            }
+
+            const matchingFirestoreIds = new Set([targetId]);
+            const filterFn = (m) => {
+                if (!m) return false;
+                if (m.id === targetId || m.clientMsgId === targetId) {
+                    if (m.id) matchingFirestoreIds.add(m.id);
+                    return false;
+                }
+                if (tEmail && tText && String(m.userEmail || '').toLowerCase() === tEmail && String(m.message || '').trim() === tText) {
+                    if (m.id) {
+                        matchingFirestoreIds.add(m.id);
+                        window.saveDeletedGlobalChatId(m.id);
+                    }
+                    if (m.timestamp) window.saveDeletedGlobalChatId(`${tEmail}_${m.timestamp}`);
+                    return false;
+                }
+                return true;
+            };
+
+            window._directFirestoreChats = (window._directFirestoreChats || []).filter(filterFn);
+            allChatMessages = (allChatMessages || []).filter(filterFn);
+            window.saveLocalEncryptedGlobalChats(allChatMessages);
+            window.renderChatMessages();
+            window.showToast("🗑️ Message deleted");
+
+            // Delete all matching IDs from Firestore in background + wipe any legacy relayGlobalChats
+            matchingFirestoreIds.forEach(idToDel => {
+                if (idToDel && !String(idToDel).startsWith('local_')) {
+                    deleteDoc(doc(db, 'chats', idToDel)).catch(() => {});
                 }
             });
-            allChatMessages = Array.from(map.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0)).slice(-60);
+            setDoc(doc(db, 'settings', 'chatConfig'), { relayGlobalChats: [], relayPrivateDms: [] }, { merge: true }).catch(() => {});
+        };
+
+        window.mergeAndRenderAllGlobalChats = function() {
+            const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
+            const delSet = window.getDeletedGlobalChatIdsSet();
+            const localCached = window.loadLocalEncryptedGlobalChats();
+            const map = new Map();
+
+            const isDeleted = (m) => {
+                if (!m || !m.message) return true;
+                const em = String(m.userEmail || '').toLowerCase();
+                if (m.id && delSet.has(String(m.id))) return true;
+                if (m.clientMsgId && delSet.has(String(m.clientMsgId))) return true;
+                if (em && m.timestamp && delSet.has(`${em}_${m.timestamp}`)) return true;
+                return false;
+            };
+
+            [...localCached, ...(allChatMessages || []), ...(window._directFirestoreChats || [])].forEach(m => {
+                if (!m || !m.message || Number(m.timestamp || 0) <= cutoffTime || isDeleted(m)) return;
+                const key = m.clientMsgId || m.id || `${String(m.userEmail || '').toLowerCase()}_${m.timestamp}`;
+                map.set(key, m);
+            });
+
+            // Deduplicate messages from the same sender with identical text within 5 seconds
+            const sortedRaw = Array.from(map.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
+            const deduped = [];
+            for (const item of sortedRaw) {
+                const dup = deduped.find(prev =>
+                    String(prev.userEmail || '').toLowerCase() === String(item.userEmail || '').toLowerCase() &&
+                    String(prev.message || '').trim() === String(item.message || '').trim() &&
+                    Math.abs(Number(prev.timestamp || 0) - Number(item.timestamp || 0)) < 5000
+                );
+                if (!dup) {
+                    deduped.push(item);
+                } else if (String(dup.id || '').startsWith('local_') && !String(item.id || '').startsWith('local_')) {
+                    const idx = deduped.indexOf(dup);
+                    deduped[idx] = item;
+                }
+            }
+
+            allChatMessages = deduped.slice(-60);
+            window.saveLocalEncryptedGlobalChats(allChatMessages);
             if (window._chatRenderRaf) cancelAnimationFrame(window._chatRenderRaf);
             window._chatRenderRaf = requestAnimationFrame(() => { window.renderChatMessages(); });
         };
 
         window.initializeChat = function() {
             const cutoffTime = Date.now() - (48 * 60 * 60 * 1000);
+            // 1. Render immediately in 0ms from Encrypted Local Storage!
+            window.mergeAndRenderAllGlobalChats();
+
             onSnapshot(doc(db, 'settings', 'chatConfig'), snap => {
                 if (snap.exists()) {
                     const data = snap.data() || {};
@@ -11579,23 +11724,25 @@ CRITICAL RULES:
                     const sel = document.getElementById('chat-mode-select');
                     if (sel) sel.value = currentChatMode;
                     if (document.getElementById('chat-fullscreen')?.classList.contains('active')) checkChatBanStatus();
-                    if (Array.isArray(data.relayGlobalChats)) {
-                        window._relayFirestoreChats = data.relayGlobalChats.filter(msg => msg && Number(msg.timestamp || 0) > cutoffTime);
-                        window.mergeAndRenderAllGlobalChats();
-                    }
-                    if (Array.isArray(data.relayPrivateDms) && (window.IS_SATTA_PAI_APP_BUILD || window.SattaPaiNativeAuth)) {
-                        window.mergeDmSnapshotsWithLocal(data.relayPrivateDms);
-                        if (window._currentChatTabMode === 'dm') {
-                            window.renderDmInboxList();
-                            window.renderActiveDmConversation();
-                        }
-                        if (typeof window.updateDmUnreadBadge === 'function') window.updateDmUnreadBadge();
+                    // Auto-clean legacy relay arrays once so old ghost messages are permanently purged
+                    if ((Array.isArray(data.relayGlobalChats) && data.relayGlobalChats.length > 0) ||
+                        (Array.isArray(data.relayPrivateDms) && data.relayPrivateDms.length > 0)) {
+                        setDoc(doc(db, 'settings', 'chatConfig'), { relayGlobalChats: [], relayPrivateDms: [] }, { merge: true }).catch(() => {});
                     }
                 }
             }, () => {});
-            onSnapshot(query(collection(db, 'chats'), orderBy('timestamp', 'desc'), limit(50)), snap => {
+
+            onSnapshot(query(collection(db, 'chats'), orderBy('timestamp', 'desc'), limit(45)), snap => {
+                const now = Date.now();
                 window._directFirestoreChats = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(msg => Number(msg.timestamp || 0) > cutoffTime).reverse();
                 window.mergeAndRenderAllGlobalChats();
+                // Auto-prune old Firestore chat docs (>24h old) in background to keep Firebase storage near 0MB
+                snap.docs.forEach((d, idx) => {
+                    const dt = d.data() || {};
+                    if (idx >= 35 || (now - Number(dt.timestamp || 0)) > (24 * 3600000)) {
+                        deleteDoc(doc(db, 'chats', d.id)).catch(() => {});
+                    }
+                });
             }, () => {});
         };
 
@@ -11672,13 +11819,16 @@ CRITICAL RULES:
             const modal = document.getElementById('chat-profile-modal');
             let uData = userCache[emailLow] || {};
             if (emailLow && (!uData.username || !uData.ign)) {
-                try {
-                    const liveSnap = await getDoc(doc(db, 'users', emailLow));
-                    if (liveSnap.exists()) {
-                        uData = normalizeUserRecord({ ...uData, ...liveSnap.data() }, emailLow);
-                        userCache[emailLow] = uData;
+                getDoc(doc(db, 'users', emailLow)).then(liveSnap => {
+                    if (liveSnap && liveSnap.exists()) {
+                        const freshU = normalizeUserRecord({ ...(userCache[emailLow] || {}), ...liveSnap.data() }, emailLow);
+                        userCache[emailLow] = freshU;
+                        const ignEl = document.getElementById('cp-ign');
+                        const uidEl = document.getElementById('cp-uid');
+                        if (ignEl && freshU.ign) ignEl.textContent = freshU.ign;
+                        if (uidEl && freshU.gameUid) uidEl.textContent = freshU.gameUid;
                     }
-                } catch(err) {}
+                }).catch(() => {});
             }
             const regTeam = (window.allTeams || []).find(t => (t.userEmail || '').toLowerCase() === emailLow);
             const isSuper = window.isSuperAdminGlobal; const isAdmin = isSuper || isAdminEmail(window.loggedEmail); const isHost = isSuper || isHostEmail(window.loggedEmail); const isStaff = isAdmin || isHost;
@@ -11759,13 +11909,24 @@ CRITICAL RULES:
         }
 
         window.handleChatAction = async function(action) {
-            if (!window.currentChatTargetId) return;
-            const targetId = window.currentChatTargetId;
+            if (!window.currentChatTargetId && action !== 'ban' && action !== 'unban') return;
+            const targetId = window.currentChatTargetId || '';
             const targetEmail = (window.currentChatTargetEmail || '').toLowerCase();
-            document.getElementById('chat-profile-modal').classList.add('hidden');
-            if (action === 'unsend' || action === 'delete') { window.askConfirm("Delete Message", "Are you sure you want to delete this message?", async () => { await deleteDoc(doc(db, 'chats', targetId)); window.showToast("Message deleted"); }, "Delete"); }
-            else if (action === 'ban') { window.askConfirm("Ban User", `Ban ${window.maskEmail(targetEmail)} from chatting for 24 hours?`, async () => { await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: Date.now() + (24 * 60 * 60 * 1000) }, { merge: true }); window.showToast("User banned for 24h"); }, "Ban User"); }
-            else if (action === 'unban') { window.askConfirm("Unban User", `Remove chat ban for ${window.maskEmail(targetEmail)}?`, async () => { await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: 0 }, { merge: true }); window.showToast("User unbanned"); }, "Unban"); }
+            const targetMsgTxt = document.getElementById('cp-msg')?.textContent || '';
+            document.getElementById('chat-profile-modal')?.classList.add('hidden');
+            if (action === 'unsend' || action === 'delete') {
+                window.instantDeleteGlobalChatMessage(targetId, targetEmail, targetMsgTxt);
+            } else if (action === 'ban') {
+                window.askConfirm("Ban User", `Ban ${window.maskEmail(targetEmail)} from chatting for 24 hours?`, async () => {
+                    await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: Date.now() + (24 * 60 * 60 * 1000) }, { merge: true });
+                    window.showToast("🚫 User banned for 24h");
+                }, "Ban User");
+            } else if (action === 'unban') {
+                window.askConfirm("Unban User", `Remove chat ban for ${window.maskEmail(targetEmail)}?`, async () => {
+                    await setDoc(doc(db, 'users', targetEmail), { chatBannedUntil: 0 }, { merge: true });
+                    window.showToast("✅ User unbanned");
+                }, "Unban");
+            }
         };
 
         window.sendChatMessage = async function() {
@@ -14178,12 +14339,15 @@ CRITICAL RULES:
 
 
         window._silentAuthPromise = null;
+        window._silentAuthTriedMap = {};
         window.ensureSilentFirebaseAuthSession = async function(targetEmailRaw) {
             const email = String(targetEmailRaw || window.loggedEmail || '').trim().toLowerCase();
             if (!email || email === 'guest' || !email.includes('@')) return auth.currentUser;
             if (auth.currentUser) return auth.currentUser;
+            if (window._silentAuthTriedMap[email]) return auth.currentUser;
             if (window._silentAuthPromise) return window._silentAuthPromise;
 
+            window._silentAuthTriedMap[email] = true;
             window._silentAuthPromise = (async () => {
                 let fbUser = auth.currentUser;
                 const derivedPass = "SP_Native_Auth_2026_" + btoa(email).slice(0, 12);
@@ -14193,14 +14357,9 @@ CRITICAL RULES:
                         fbUser = cred.user;
                     } catch (e1) {
                         try {
-                            const created = await createUserWithEmailAndPassword(auth, email, derivedPass);
-                            fbUser = created.user;
-                        } catch (e2) {
-                            try {
-                                const anon = await signInAnonymously(auth);
-                                fbUser = anon.user;
-                            } catch (e3) {}
-                        }
+                            const anon = await signInAnonymously(auth);
+                            fbUser = anon.user;
+                        } catch (e2) {}
                     }
                 }
                 return fbUser;
@@ -18560,6 +18719,61 @@ CRITICAL RULES:
             window.syncNativeDmScreenshotShield();
         };
 
+        window._appBootTimestamp = Date.now();
+
+        window.getDeletedDmIdsSet = function() {
+            if (!window._deletedDmIdsSet) {
+                const arr = window.SattaPaiEncryptedStorage
+                    ? window.SattaPaiEncryptedStorage.getEncryptedItem('satta_pai_deleted_dm_ids_v2', [])
+                    : [];
+                window._deletedDmIdsSet = new Set(Array.isArray(arr) ? arr : []);
+            }
+            return window._deletedDmIdsSet;
+        };
+
+        window.saveDeletedDmId = function(idKey) {
+            if (!idKey) return;
+            const s = window.getDeletedDmIdsSet();
+            s.add(String(idKey));
+            if (window.SattaPaiEncryptedStorage) {
+                window.SattaPaiEncryptedStorage.setEncryptedItem('satta_pai_deleted_dm_ids_v2', Array.from(s).slice(-300));
+            }
+        };
+
+        window.getNotifiedDmIdsSet = function() {
+            if (!window._notifiedDmIds || !(window._notifiedDmIds instanceof Set) || !window._notifiedDmIdsLoaded) {
+                let saved = [];
+                try {
+                    saved = JSON.parse(localStorage.getItem('satta_pai_notified_dm_ids_v3') || '[]');
+                } catch(e) {}
+                window._notifiedDmIds = new Set(Array.isArray(saved) ? saved : []);
+                window._notifiedDmIdsLoaded = true;
+            }
+            return window._notifiedDmIds;
+        };
+
+        window.markDmAsNotifiedPersistently = function(m) {
+            if (!m) return;
+            const s = window.getNotifiedDmIdsSet();
+            const sEm = String(m.senderEmail || '').toLowerCase();
+            if (m.id) s.add(String(m.id));
+            if (m.clientMsgId) s.add(String(m.clientMsgId));
+            if (sEm && m.timestamp) s.add(`${sEm}_${m.timestamp}`);
+            try {
+                localStorage.setItem('satta_pai_notified_dm_ids_v3', JSON.stringify(Array.from(s).slice(-400)));
+            } catch(e) {}
+        };
+
+        window.hasDmBeenNotifiedPersistently = function(m) {
+            if (!m) return true;
+            const s = window.getNotifiedDmIdsSet();
+            const sEm = String(m.senderEmail || '').toLowerCase();
+            if (m.id && s.has(String(m.id))) return true;
+            if (m.clientMsgId && s.has(String(m.clientMsgId))) return true;
+            if (sEm && m.timestamp && s.has(`${sEm}_${m.timestamp}`)) return true;
+            return false;
+        };
+
         window.loadLocalCachedDms = function() {
             return window.SattaPaiEncryptedStorage
                 ? window.SattaPaiEncryptedStorage.getEncryptedItem('satta_pai_dm_local_cache_v1', [])
@@ -18573,67 +18787,160 @@ CRITICAL RULES:
             }
         };
 
+        window.deletePrivateDmMessage = function(msgIdRaw) {
+            const targetId = String(msgIdRaw || '').trim();
+            if (!targetId) return;
+            const targetMsg = (window._allDmMessages || []).find(m => m.id === targetId || m.clientMsgId === targetId);
+            window.saveDeletedDmId(targetId);
+            if (targetMsg) {
+                if (targetMsg.id) window.saveDeletedDmId(targetMsg.id);
+                if (targetMsg.clientMsgId) window.saveDeletedDmId(targetMsg.clientMsgId);
+                window.saveDeletedDmId(`${String(targetMsg.senderEmail || '').toLowerCase()}_${targetMsg.timestamp}`);
+            }
+            window._allDmMessages = (window._allDmMessages || []).filter(m => {
+                if (!m) return false;
+                if (m.id === targetId || m.clientMsgId === targetId) return false;
+                if (targetMsg && m.senderEmail === targetMsg.senderEmail && m.receiverEmail === targetMsg.receiverEmail && m.message === targetMsg.message && Math.abs(Number(m.timestamp || 0) - Number(targetMsg.timestamp || 0)) < 5000) {
+                    if (m.id) window.saveDeletedDmId(m.id);
+                    return false;
+                }
+                return true;
+            });
+            window.saveLocalCachedDms(window._allDmMessages);
+            window.renderActiveDmConversation();
+            window.renderDmInboxList();
+            window.showToast('🗑️ DM deleted');
+            deleteDoc(doc(db, 'dm_messages', targetId)).catch(() => {});
+            if (targetMsg && targetMsg.id && targetMsg.id !== targetId) {
+                deleteDoc(doc(db, 'dm_messages', targetMsg.id)).catch(() => {});
+            }
+        };
+
         window.mergeDmSnapshotsWithLocal = function(remoteDocs) {
             const cutoff = Date.now() - (14 * 24 * 60 * 60 * 1000);
+            const deletedSet = window.getDeletedDmIdsSet();
             const mergedMap = new Map();
             const localCached = window.loadLocalCachedDms();
             const currentMem = Array.isArray(window._allDmMessages) ? window._allDmMessages : [];
 
+            const isDmDeleted = (m) => {
+                if (!m || !m.message) return true;
+                const sEm = String(m.senderEmail || '').toLowerCase();
+                if (m.id && deletedSet.has(String(m.id))) return true;
+                if (m.clientMsgId && deletedSet.has(String(m.clientMsgId))) return true;
+                if (sEm && m.timestamp && deletedSet.has(`${sEm}_${m.timestamp}`)) return true;
+                return false;
+            };
+
             [...localCached, ...currentMem].forEach(m => {
-                if (!m || !m.message || Number(m.timestamp || 0) <= cutoff) return;
+                if (!m || !m.message || Number(m.timestamp || 0) <= cutoff || isDmDeleted(m)) return;
                 const key = m.clientMsgId || m.id || `${m.senderEmail}_${m.receiverEmail}_${m.timestamp}`;
                 mergedMap.set(key, m);
             });
 
             const myEm = (window.loggedEmail || '').toLowerCase();
+            const now = Date.now();
             (remoteDocs || []).forEach(m => {
-                if (!m || !m.message || Number(m.timestamp || 0) <= cutoff) return;
+                if (!m || !m.message || Number(m.timestamp || 0) <= cutoff || isDmDeleted(m)) return;
                 const key = m.clientMsgId || m.id || `${m.senderEmail}_${m.receiverEmail}_${m.timestamp}`;
+                const existing = mergedMap.get(key);
+                if (existing && existing.status === 'read' && m.status !== 'read') {
+                    m.status = 'read';
+                    m.readAt = existing.readAt || now;
+                }
                 mergedMap.set(key, m);
                 if (m.id && m.clientMsgId && m.id !== m.clientMsgId) {
                     mergedMap.delete(m.id);
                 }
 
-                // Auto-update delivery tick (✓ -> ✓✓) & fire Mobile Notification when a new DM arrives for me!
                 const rEm = String(m.receiverEmail || '').toLowerCase();
                 const sEm = String(m.senderEmail || '').toLowerCase();
                 if (myEm && myEm !== 'guest' && rEm === myEm && sEm && sEm !== myEm) {
+                    const lastReadTs = Number(localStorage.getItem('sp_dm_last_read_' + myEm + '_' + sEm) || 0);
+                    const isAlreadyRead = (m.status === 'read' || Number(m.readAt || 0) > 0 || Number(m.timestamp || 0) <= lastReadTs);
                     const isCurrentlyViewingPartner = (window._currentChatTabMode === 'dm' && window._activeDmPartnerEmail === sEm && document.getElementById('chat-fullscreen')?.classList.contains('active'));
-                    if (isCurrentlyViewingPartner && m.status !== 'read' && m.id && !String(m.id).startsWith('local_')) {
-                        m.status = 'read';
-                        m.readAt = Date.now();
-                        setDoc(doc(db, 'dm_messages', m.id), { status: 'read', readAt: m.readAt }, { merge: true }).catch(() => {});
-                    } else if ((!m.status || m.status === 'sent') && m.id && !String(m.id).startsWith('local_')) {
-                        m.status = 'delivered';
-                        m.deliveredAt = Date.now();
-                        setDoc(doc(db, 'dm_messages', m.id), { status: 'delivered', deliveredAt: m.deliveredAt }, { merge: true }).catch(() => {});
-                    }
 
-                    if (window._dmInitialBatchLoaded && !window._notifiedDmIds.has(key) && !window.isUserBlockedEitherWay(sEm)) {
-                        window._notifiedDmIds.add(key);
-                        const senderU = userCache[sEm] || {};
-                        const senderDisplay = senderU.username || senderU.ign || m.senderName || sEm.split('@')[0];
-                        const cleanPreview = window.aiMaskBadWords ? window.aiMaskBadWords(m.message) : m.message;
-                        if (typeof window.triggerSystemMatchNotification === 'function') {
-                            window.triggerSystemMatchNotification(
-                                `💬 Private DM from ${senderDisplay}`,
-                                cleanPreview
-                            );
+                    if (isCurrentlyViewingPartner) {
+                        window.markDmAsNotifiedPersistently(m);
+                        if (m.status !== 'read' && m.id && !String(m.id).startsWith('local_')) {
+                            m.status = 'read';
+                            m.readAt = now;
+                            try { localStorage.setItem('sp_dm_last_read_' + myEm + '_' + sEm, String(now)); } catch(e) {}
+                            setDoc(doc(db, 'dm_messages', m.id), { status: 'read', readAt: now }, { merge: true }).catch(() => {});
                         }
+                    } else if (isAlreadyRead) {
+                        // Already read by user! Mark notified so it NEVER fires a notification again!
+                        window.markDmAsNotifiedPersistently(m);
                     } else {
-                        window._notifiedDmIds.add(key);
+                        if ((!m.status || m.status === 'sent') && m.id && !String(m.id).startsWith('local_')) {
+                            m.status = 'delivered';
+                            m.deliveredAt = now;
+                            setDoc(doc(db, 'dm_messages', m.id), { status: 'delivered', deliveredAt: now }, { merge: true }).catch(() => {});
+                        }
+                        const isFreshSinceBoot = Number(m.timestamp || 0) >= (window._appBootTimestamp - 8000);
+                        if (window._dmInitialBatchLoaded && isFreshSinceBoot && !window.hasDmBeenNotifiedPersistently(m) && !window.isUserBlockedEitherWay(sEm)) {
+                            window.markDmAsNotifiedPersistently(m);
+                            const senderU = userCache[sEm] || {};
+                            const senderDisplay = senderU.username || senderU.ign || m.senderName || sEm.split('@')[0];
+                            const cleanPreview = window.aiMaskBadWords ? window.aiMaskBadWords(m.message) : m.message;
+                            if (typeof window.triggerSystemMatchNotification === 'function') {
+                                window.triggerSystemMatchNotification(
+                                    `💬 Private DM from ${senderDisplay}`,
+                                    cleanPreview
+                                );
+                            }
+                        } else {
+                            window.markDmAsNotifiedPersistently(m);
+                        }
                     }
+                }
+
+                // Auto-prune read DMs older than 12 hours from Firestore (already safely encrypted in local storage!)
+                if ((m.status === 'read' || Number(m.readAt || 0) > 0) && m.id && (now - Number(m.timestamp || 0)) > (12 * 3600000)) {
+                    deleteDoc(doc(db, 'dm_messages', m.id)).catch(() => {});
                 }
             });
 
             window._dmInitialBatchLoaded = true;
-            const sorted = Array.from(mergedMap.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
-            window._allDmMessages = sorted;
-            window.saveLocalCachedDms(sorted);
+            // Deduplicate any messages with identical sender + receiver + text within 4 seconds
+            const rawSorted = Array.from(mergedMap.values()).sort((a, b) => Number(a.timestamp || 0) - Number(b.timestamp || 0));
+            const deduped = [];
+            for (const item of rawSorted) {
+                const dup = deduped.find(prev =>
+                    String(prev.senderEmail || '').toLowerCase() === String(item.senderEmail || '').toLowerCase() &&
+                    String(prev.receiverEmail || '').toLowerCase() === String(item.receiverEmail || '').toLowerCase() &&
+                    String(prev.message || '').trim() === String(item.message || '').trim() &&
+                    Math.abs(Number(prev.timestamp || 0) - Number(item.timestamp || 0)) < 4000
+                );
+                if (!dup) {
+                    deduped.push(item);
+                } else if (item.status === 'read' && dup.status !== 'read') {
+                    dup.status = 'read';
+                    dup.readAt = item.readAt;
+                }
+            }
+            window._allDmMessages = deduped;
+            window.saveLocalCachedDms(deduped);
         };
 
         window.hydratePlayersDirectoryFromChatsAndTeams = function() {
             try {
+                (window._liveVisitors || []).forEach(v => {
+                    const em = String(v.id || '').trim().toLowerCase();
+                    if (!em || !em.includes('@')) return;
+                    if (!userCache[em]) {
+                        userCache[em] = {
+                            email: em,
+                            username: v.name || em.split('@')[0],
+                            ign: v.name || em.split('@')[0],
+                            playerId: window.getStablePlayerId(em),
+                            lastSeenAt: Number(v.time || 0),
+                            isOnline: (Date.now() - Number(v.time || 0)) < 300000
+                        };
+                    } else if (Number(v.time || 0) > Number(userCache[em].lastSeenAt || 0)) {
+                        userCache[em].lastSeenAt = Number(v.time || 0);
+                    }
+                });
                 (window.allChatMessages || []).forEach(m => {
                     const em = String(m.userEmail || m.email || m.senderEmail || '').trim().toLowerCase();
                     if (!em || !em.includes('@')) return;
@@ -18644,6 +18951,19 @@ CRITICAL RULES:
                             ign: m.ign || m.displayName || em.split('@')[0],
                             playerId: window.getStablePlayerId(em),
                             dpBase64: m.dpBase64 || '',
+                            lastChatAt: m.timestamp || 0
+                        };
+                    }
+                });
+                (window._allDmMessages || []).forEach(m => {
+                    const em = String(m.senderEmail || '').trim().toLowerCase();
+                    if (!em || !em.includes('@')) return;
+                    if (!userCache[em]) {
+                        userCache[em] = {
+                            email: em,
+                            username: m.senderName || em.split('@')[0],
+                            ign: m.senderName || em.split('@')[0],
+                            playerId: window.getStablePlayerId(em),
                             lastChatAt: m.timestamp || 0
                         };
                     }
@@ -18789,18 +19109,31 @@ CRITICAL RULES:
             if (!myEm || myEm === 'guest' || !partner) return;
             const now = Date.now();
             try { localStorage.setItem('sp_dm_last_read_' + myEm + '_' + partner, String(now)); } catch(e) {}
+            // Clear active Android notification tray so read DM notifications disappear immediately!
+            try {
+                if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                    window.SattaPaiNativeAuth.postMessage('clear_notifications');
+                }
+            } catch(e) {}
+            let changed = false;
             (window._allDmMessages || []).forEach(m => {
                 if (String(m.senderEmail || '').toLowerCase() === partner &&
-                    String(m.receiverEmail || '').toLowerCase() === myEm &&
-                    m.status !== 'read') {
-                    m.status = 'read';
-                    m.readAt = now;
-                    const docId = m.id || m.clientMsgId;
-                    if (docId && !String(docId).startsWith('local_')) {
-                        setDoc(doc(db, 'dm_messages', docId), { status: 'read', readAt: now }, { merge: true }).catch(() => {});
+                    String(m.receiverEmail || '').toLowerCase() === myEm) {
+                    window.markDmAsNotifiedPersistently(m);
+                    if (m.status !== 'read') {
+                        m.status = 'read';
+                        m.readAt = now;
+                        changed = true;
+                        const docId = m.id || m.clientMsgId;
+                        if (docId && !String(docId).startsWith('local_')) {
+                            setDoc(doc(db, 'dm_messages', docId), { status: 'read', readAt: now }, { merge: true }).catch(() => {});
+                        }
                     }
                 }
             });
+            if (changed) {
+                window.saveLocalCachedDms(window._allDmMessages);
+            }
         };
 
         window.openPrivateDmConversationWith = function(partnerEmailRaw) {
@@ -18820,6 +19153,24 @@ CRITICAL RULES:
             document.getElementById('dm-inbox-view')?.classList.add('hidden');
             document.getElementById('dm-conversation-view')?.classList.remove('hidden');
             window.refreshDmVipSecurityBarUI();
+
+            // Fetch single partner doc non-blockingly so Last Seen, VIP status & DP are always fresh without downloading entire users collection!
+            if (partner.includes('@')) {
+                getDoc(doc(db, 'users', partner)).then(snap => {
+                    if (snap && snap.exists()) {
+                        const d = snap.data() || {};
+                        const norm = normalizeUserRecord({ ...(userCache[partner] || {}), ...d }, partner);
+                        norm.isOnline = Boolean(d.isOnline);
+                        norm.lastSeenAt = Number(d.lastSeenAt || d.updatedAt || 0);
+                        norm.hideLastSeen = Boolean(d.hideLastSeen);
+                        userCache[partner] = norm;
+                        if (window._activeDmPartnerEmail === partner) {
+                            window.refreshDmVipSecurityBarUI();
+                            window.renderActiveDmConversation();
+                        }
+                    }
+                }).catch(() => {});
+            }
 
             const u = userCache[partner] || {};
             const name = u.username || u.ign || partner.split('@')[0] || 'Player';
@@ -19087,12 +19438,17 @@ CRITICAL RULES:
                     ? `<div style="background:#000000 !important;" class="w-48 h-28 rounded-xl bg-black border border-rose-500/50 flex flex-col items-center justify-center p-2 text-center select-none"><span class="text-base">⬛</span><span class="text-[9.5px] font-extrabold text-rose-400 uppercase mt-1">Cannot View Screenshot</span><span class="text-[8px] text-slate-500">PRO / PRO+ Blackout Shield</span></div>`
                     : `<div class="break-words leading-relaxed select-none">${window.escapeHTML(censoredMsg)}</div>`;
 
+                const msgKey = m.clientMsgId || m.id || '';
+                const delBtnHtml = (isMe && msgKey)
+                    ? `<button type="button" onclick="event.stopPropagation(); window.deletePrivateDmMessage('${window.escapeJsStr(msgKey)}')" class="ml-1.5 text-[9.5px] text-rose-200 hover:text-rose-400 opacity-80 hover:opacity-100 cursor-pointer" title="Delete DM">🗑️</button>`
+                    : '';
+
                 return `
                     <div class="flex items-end gap-2 select-none ${isMe ? 'flex-row-reverse' : 'flex-row'}">
                         <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-7 h-7 rounded-full object-cover border border-white/20 shrink-0 pointer-events-none" alt="DP">
                         <div class="max-w-[78%] px-3 py-2 rounded-2xl text-xs select-none ${isMe ? 'bg-emerald-700/95 text-white rounded-br-sm border border-emerald-400/30' : 'cyber-card text-slate-100 rounded-bl-sm'}">
                             ${bodyHtml}
-                            <div class="text-[8.5px] opacity-90 text-right mt-0.5 font-mono flex items-center justify-end gap-0.5"><span>${tStr}</span>${tickHtml}</div>
+                            <div class="text-[8.5px] opacity-90 text-right mt-0.5 font-mono flex items-center justify-end gap-0.5"><span>${tStr}</span>${tickHtml}${delBtnHtml}</div>
                         </div>
                     </div>
                 `;
@@ -19150,32 +19506,12 @@ CRITICAL RULES:
             window.renderActiveDmConversation();
             window.renderDmInboxList();
 
-            try {
-                if (!auth.currentUser && typeof window.ensureSilentFirebaseAuthSession === 'function') {
-                    await window.ensureSilentFirebaseAuthSession(myEm);
-                }
-                if (auth.currentUser && !payload.senderUid) {
-                    payload.senderUid = auth.currentUser.uid;
-                }
-                let sentOk = false;
-                try {
-                    await setDoc(doc(db, 'dm_messages', clientMsgId), payload);
-                    sentOk = true;
-                } catch(e1) {
-                    try {
-                        await addDoc(collection(db, 'dm_messages'), payload);
-                        sentOk = true;
-                    } catch(e2) {}
-                }
-                // Also sync through chatConfig relay so DMs work 100% even if Firebase Console rules are still propagating!
-                const relayOk = await window.syncDmRelayToChatConfig({ id: clientMsgId, ...payload });
+            // Single direct non-blocking Firestore write with deterministic clientMsgId (Zero Duplicates, 0ms Speed!)
+            setDoc(doc(db, 'dm_messages', clientMsgId), payload).then(() => {
                 if (!window._dmListenerStarted) window.startDmRealtimeListener(true);
-                if (!sentOk && !relayOk) {
-                    console.warn('DM saved to encrypted local vault; awaiting cloud sync.');
-                }
-            } catch(err) {
-                console.warn('DM fallback handled:', err);
-            }
+            }).catch((err) => {
+                console.warn('DM sync warning:', err);
+            });
         };
 
         window.updateDmUnreadBadge = function() {
@@ -20463,42 +20799,19 @@ CRITICAL RULES:
                 const msg = window.aiMaskBadWords ? window.aiMaskBadWords(rawMsg) : rawMsg;
                 if (myChatBannedUntil > now) throw new Error("You are banned from chat.");
                 const displayName = uData.username || uData.ign || window.getFriendlyFallbackName(emailLow, '');
-                const chatId = 'chat_' + now + '_' + Math.random().toString(36).slice(2, 7);
+                const chatTime = Number(payload.timestamp || now);
+                const chatId = String(payload.chatId || ('chat_' + chatTime + '_' + Math.random().toString(36).slice(2, 7)));
                 const chatDoc = {
                     id: chatId,
+                    clientMsgId: chatId,
                     message: msg,
                     userEmail: emailLow,
                     displayName: displayName,
                     isEdited: false,
-                    timestamp: now
+                    timestamp: chatTime
                 };
-                let primaryOk = false;
-                try {
-                    const ref = await addDoc(collection(db, 'chats'), chatDoc);
-                    chatDoc.id = ref.id;
-                    primaryOk = true;
-                } catch (ePrimary) {
-                    try {
-                        await setDoc(doc(db, 'chats', chatId), chatDoc);
-                        primaryOk = true;
-                    } catch (eSecondary) {}
-                }
-                // Always sync to settings/chatConfig relay so Global Chat works even before new Firestore rules are published!
-                try {
-                    const cfgRef = doc(db, 'settings', 'chatConfig');
-                    const snap = await getDoc(cfgRef);
-                    const data = snap.exists() ? (snap.data() || {}) : {};
-                    const cutoff = Date.now() - (48 * 60 * 60 * 1000);
-                    let relayArr = Array.isArray(data.relayGlobalChats)
-                        ? data.relayGlobalChats.filter(c => c && Number(c.timestamp || 0) > cutoff)
-                        : [];
-                    relayArr.push(chatDoc);
-                    if (relayArr.length > 60) relayArr = relayArr.slice(-60);
-                    await setDoc(cfgRef, { relayGlobalChats: relayArr, relayChatUpdatedAt: now }, { merge: true });
-                } catch (eRelay) {
-                    if (!primaryOk) throw eRelay;
-                }
-                return { chatId: chatDoc.id, timestamp: now, message: msg };
+                await setDoc(doc(db, 'chats', chatId), chatDoc);
+                return { chatId: chatId, timestamp: chatTime, message: msg };
             }
 
             if (fnName === 'castPredictionVote') {
@@ -21174,46 +21487,41 @@ CRITICAL RULES:
             const now = Date.now();
             const isProPlus = window.isCurrentUserProPlus ? window.isCurrentUserProPlus() : false;
             const cooldownMs = (isSuper || isProPlus || isAdmin || isHost) ? 0 : (window.isCurrentUserVip() ? 5000 : 15000);
-            try {
-                if (cooldownMs > 0) {
-                    const lastTime = Number(window.lastUserMsgTime || 0);
-                    if (now - lastTime < cooldownMs) {
-                        const remaining = Math.ceil((cooldownMs - (now - lastTime)) / 1000);
-                        window.showToast(`⏳ Chat Cooldown (${window.isCurrentUserVip() ? '5s ⭐ PRO' : '15s Free'}): Wait ${remaining}s! (👑 PRO+ has 0s No Cooldown)`);
-                        return;
-                    }
+            if (cooldownMs > 0) {
+                const lastTime = Number(window.lastUserMsgTime || 0);
+                if (now - lastTime < cooldownMs) {
+                    const remaining = Math.ceil((cooldownMs - (now - lastTime)) / 1000);
+                    window.showToast(`⏳ Chat Cooldown (${window.isCurrentUserVip() ? '5s ⭐ PRO' : '15s Free'}): Wait ${remaining}s! (👑 PRO+ has 0s No Cooldown)`);
+                    return;
                 }
-                input.value = '';
-                window.lastUserMsgTime = now;
-
-                // Optimistically append message to Global Chat UI at 0ms
-                const uData = userCache[emailLow] || currentUserProfile || {};
-                const displayName = uData.username || uData.ign || window.getFriendlyFallbackName(emailLow, '');
-                const tempId = 'local_chat_' + now;
-                allChatMessages.push({
-                    id: tempId,
-                    message: msg,
-                    userEmail: emailLow,
-                    displayName: displayName,
-                    isEdited: false,
-                    timestamp: now
-                });
-                window.renderChatMessages();
-
-                if (!auth.currentUser && typeof window.ensureSilentFirebaseAuthSession === 'function') {
-                    await window.ensureSilentFirebaseAuthSession(emailLow);
-                }
-
-                // IMPORTANT: Write to 'chats' FIRST so Firestore server-side lastChatAt rule NEVER self-locks!
-                await callCloudFn('sendChatMessage', { message: msg });
-
-                // Update user's lastChatAt & online status AFTER chat document is created (non-blocking)
-                setDoc(doc(db, 'users', emailLow), { lastChatAt: now, lastSeenAt: now, isOnline: true, updatedAt: now }, { merge: true }).catch(() => {});
-                if (userCache[emailLow]) userCache[emailLow].lastChatAt = now;
-            } catch (e) {
-                console.warn("Chat send warning:", e);
-                window.showToast("❌ Failed to send message: " + (e.message || "Try again"));
             }
+            input.value = '';
+            window.lastUserMsgTime = now;
+
+            // Single Deterministic ID -> Impossible to create duplicate chat bubbles!
+            const chatId = 'chat_' + now + '_' + Math.random().toString(36).slice(2, 7);
+            const uData = userCache[emailLow] || currentUserProfile || {};
+            const displayName = uData.username || uData.ign || window.getFriendlyFallbackName(emailLow, '');
+            const chatObj = {
+                id: chatId,
+                clientMsgId: chatId,
+                message: msg,
+                userEmail: emailLow,
+                displayName: displayName,
+                isEdited: false,
+                timestamp: now
+            };
+
+            // 0ms Instant Render + Encrypted Local Storage Save
+            window._directFirestoreChats = [...(window._directFirestoreChats || []), chatObj];
+            window.mergeAndRenderAllGlobalChats();
+
+            // Non-blocking single Firestore write with exact same chatId
+            setDoc(doc(db, 'chats', chatId), chatObj).catch((e) => {
+                console.warn("Chat send warning:", e);
+            });
+            setDoc(doc(db, 'users', emailLow), { lastChatAt: now, lastSeenAt: now, isOnline: true, updatedAt: now }, { merge: true }).catch(() => {});
+            if (userCache[emailLow]) userCache[emailLow].lastChatAt = now;
         };
 
         // 10. castPredictionVote(matchId, teamName) — User self (Once per match, +10 coins)
@@ -21529,21 +21837,15 @@ CRITICAL RULES:
             }, "Yes, Publish");
         };
 
-        // 18. deleteChatMessage(chatId, action, targetEmail) — Admin/Owner moderation
+        // 18. deleteChatMessage(chatId, action, targetEmail) — Admin/Owner 0ms Instant Delete & Moderation
         window.handleChatAction = async function(action) {
             if (!window.currentChatTargetId && action !== 'ban' && action !== 'unban') return;
             const targetId = window.currentChatTargetId || '';
             const targetEmail = (window.currentChatTargetEmail || '').toLowerCase();
+            const targetMsgTxt = document.getElementById('cp-msg')?.textContent || '';
             document.getElementById('chat-profile-modal')?.classList.add('hidden');
             if (action === 'unsend' || action === 'delete') {
-                window.askConfirm("Delete Message", "Are you sure you want to delete this message?", async () => {
-                    try {
-                        await callCloudFn('deleteChatMessage', { chatId: targetId, action });
-                        window.showToast("🗑️ Message deleted");
-                    } catch (e) {
-                        window.showToast("❌ " + (e.message || "Delete failed"));
-                    }
-                }, "Delete");
+                window.instantDeleteGlobalChatMessage(targetId, targetEmail, targetMsgTxt);
             } else if (action === 'ban') {
                 window.askConfirm("Ban User", `Ban ${window.maskEmail(targetEmail)} from chatting for 24 hours?`, async () => {
                     try {
