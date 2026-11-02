@@ -1517,6 +1517,23 @@ html.theme-ghost-live {
         }
 
     </style>
+
+    <style id="satta-pai-web-toast-contrast-fix">
+        #toast {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(52, 211, 153, 0.6) !important;
+            border-radius: 14px !important;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5) !important;
+        }
+        #toast #toast-text { color: #ffffff !important; font-weight: 800 !important; }
+        html:not(.dark) .chat-messages,
+        html:not(.dark) #chat-messages,
+        html:not(.dark) #dm-messages-scroll-box {
+            background-color: #eef2f6 !important;
+        }
+    </style>
+
 </head>
 <body id="body-root" role="application" aria-label="Satta Pai Esports Arena">
 
@@ -2021,7 +2038,7 @@ html.theme-ghost-live {
                         <div class="text-center font-bold text-yellow-300 uppercase text-[9px]">👑 Pro+</div>
                     </div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 border-b border-white/5 items-center text-[9.5px]"><div class="truncate">Paid Match Discount</div><div class="text-center text-rose-400">0%</div><div class="text-center text-emerald-400 font-bold"><span id="vip-perk-discount-lbl">10</span>% OFF</div><div class="text-center text-yellow-300 font-extrabold"><span id="vip-perk-plus-discount-lbl">25</span>% OFF</div></div>
-                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Global Chat Cooldown</div><div class="text-center text-amber-400">15s</div><div class="text-center text-emerald-400 font-bold">5s</div><div class="text-center text-yellow-300 font-extrabold">0s No Wait ⚡</div></div>
+                    <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Global Chat Cooldown</div><div class="text-center text-amber-400">10s</div><div class="text-center text-emerald-400 font-bold">5s</div><div class="text-center text-yellow-300 font-extrabold">0s Unlimited ⚡</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Private DM Security (App)</div><div class="text-center text-slate-300">Normal</div><div class="text-center text-emerald-400 font-bold">🔒 Stealth</div><div class="text-center text-yellow-300 font-extrabold">🛡️ E2E Vault</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>Hide Last Seen & Blue ✓✓</div><div class="text-center text-slate-300">Basic</div><div class="text-center text-emerald-400 font-bold">✓ Ghost</div><div class="text-center text-yellow-300 font-extrabold">👻 Pro Cloak</div></div>
                     <div class="grid grid-cols-[1fr_46px_58px_68px] gap-1 py-1 text-[9.5px] border-b border-white/5 items-center"><div>DP Photo Change</div><div class="text-center text-amber-400">6 Days</div><div class="text-center text-emerald-400 font-bold">2 Days</div><div class="text-center text-yellow-300 font-extrabold">Unlimited ⚡</div></div>
@@ -4618,6 +4635,7 @@ html.theme-ghost-live {
                     <span id="dm-vip-shield-desc-lbl" class="text-emerald-300 font-bold truncate text-[9.5px]">Screen-Share Blackout Active</span>
                 </div>
                 <div class="flex items-center gap-1 shrink-0">
+                    <button type="button" id="dm-call-lock-toggle-btn" onclick="window.toggleMyIncomingCallsLock()" class="px-1.5 py-0.5 rounded bg-zinc-900/90 border border-emerald-400/40 text-emerald-300 font-extrabold text-[8.5px] cursor-pointer" title="PRO/PRO+ Incoming Audio Call Privacy">Calls: ON</button>
                     <button type="button" id="dm-forward-lock-toggle-btn" onclick="window.toggleMyForwardLock()" class="px-1.5 py-0.5 rounded bg-zinc-900/90 border border-amber-400/40 text-amber-300 font-extrabold text-[8.5px] cursor-pointer">Fwd: ON</button>
                     <button type="button" id="dm-last-seen-toggle-btn" onclick="window.toggleMyLastSeenPrivacy()" class="px-1.5 py-0.5 rounded bg-zinc-900/90 border border-cyan-400/40 text-cyan-300 font-extrabold text-[8.5px] cursor-pointer">Last Seen: ON</button>
                 </div>
@@ -4657,10 +4675,16 @@ html.theme-ghost-live {
                             <div id="dm-active-partner-sub" class="text-[10px] font-mono text-emerald-400 truncate mt-0.5">Online</div>
                         </div>
                     </div>
-                    <button type="button" onclick="window.openDmPartnerProfileModal()" class="px-2.5 py-1.5 rounded-lg cyber-card border border-cyan-400/40 text-cyan-300 text-[10px] font-extrabold cursor-pointer shrink-0 flex items-center gap-1" title="View Profile, Pin, Block or Report">
-                        <span>Profile</span>
-                        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 fill-current"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    </button>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" id="dm-audio-call-btn" onclick="window.startPrivateDmAudioCall()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600/25 hover:bg-emerald-600/40 border border-emerald-400/50 text-emerald-300 text-[10px] font-extrabold cursor-pointer flex items-center gap-1 shadow" title="Start 1-to-1 Voice Call">
+                            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 fill-current"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                            <span>Call</span>
+                        </button>
+                        <button type="button" onclick="window.openDmPartnerProfileModal()" class="px-2 py-1.5 rounded-lg cyber-card border border-cyan-400/40 text-cyan-300 text-[10px] font-extrabold cursor-pointer flex items-center gap-0.5" title="View Profile, Pin, Block or Report">
+                            <span>Profile</span>
+                            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 fill-current"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 1-to-1 Messages Scroll Box -->
@@ -18455,18 +18479,33 @@ CRITICAL RULES:
             return false;
         };
 
-        window.openExternalApkUpdateDownload = function(e, url, ver) {
+        window.openExternalApkUpdateDownload = function(e, url, ver, updatedAtTs) {
             if (e && e.preventDefault) e.preventDefault();
             const targetUrl = String(url || window._latestPublishedApkUrl || '').trim();
             if (!targetUrl || targetUrl === '#') return false;
+            const cleanVer = String(ver || window._latestPublishedApkVersion || '').trim();
+            const cleanTs = String(updatedAtTs || window._latestPublishedApkUpdatedAt || Date.now());
             try {
-                if (ver) {
-                    localStorage.setItem('satta_pai_installed_apk_ver', String(ver).trim());
-                    localStorage.setItem('satta_pai_logged_app_version', 'pending_update_' + String(ver).trim());
+                if (cleanVer) {
+                    window.CURRENT_APP_APK_VERSION = cleanVer;
+                    localStorage.setItem('satta_pai_installed_apk_ver', cleanVer);
+                    localStorage.setItem('satta_pai_installed_apk_ts', cleanTs);
+                    localStorage.setItem('satta_pai_logged_app_version', cleanVer);
+                    sessionStorage.setItem('sp_dismissed_apk_ver_' + cleanVer, '1');
+                    document.cookie = 'satta_pai_installed_apk_ver=' + encodeURIComponent(cleanVer) + '; path=/; max-age=31536000; SameSite=Lax';
+                    document.cookie = 'satta_pai_logged_app_version=' + encodeURIComponent(cleanVer) + '; path=/; max-age=31536000; SameSite=Lax';
+                    if (window.__SP_NATIVE_STORAGE__) {
+                        window.__SP_NATIVE_STORAGE__.installedApkVer = cleanVer;
+                        window.__SP_NATIVE_STORAGE__.installedApkTs = cleanTs;
+                        window.__SP_NATIVE_STORAGE__.appVersion = cleanVer;
+                    }
+                    if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                        window.SattaPaiNativeAuth.postMessage('save_installed_ver:' + cleanVer + '|' + cleanTs);
+                    }
                 }
             } catch(e2) {}
             document.getElementById('app-apk-update-modal')?.classList.add('hidden');
-            window.showToast('🌐 Opening APK Download in Browser...');
+            window.showToast('🌐 Downloading Update (' + (cleanVer || 'Latest') + ') in Browser...');
             window.openExternalBrowserUrl(targetUrl);
             return false;
         };
@@ -18541,15 +18580,22 @@ CRITICAL RULES:
                     const modal = document.getElementById('app-apk-update-modal');
                     if (!isAppEnv || !modal) return;
 
-                    const curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
+                    window._latestPublishedApkUpdatedAt = Number(d.updatedAt || 0);
+                    const nativeObj = window.__SP_NATIVE_STORAGE__ || null;
+                    const ackedVer = (nativeObj && nativeObj.installedApkVer) || localStorage.getItem('satta_pai_installed_apk_ver') || (window.getSpCookieVal ? window.getSpCookieVal('satta_pai_installed_apk_ver') : '') || '';
+                    const ackedTs = Number((nativeObj && nativeObj.installedApkTs) || localStorage.getItem('satta_pai_installed_apk_ts') || 0);
                     const remoteVer = String(d.version || '').trim();
-                    const alreadyInstalledVer = localStorage.getItem('satta_pai_installed_apk_ver') || '';
-                    const isDismissedThisSession = sessionStorage.getItem('sp_dismissed_apk_ver_' + remoteVer) === '1';
-                    const isNewerVersion = remoteVer && window.compareAppVersions(remoteVer, curVer) > 0 && alreadyInstalledVer !== remoteVer;
+                    const remoteTs = Number(d.updatedAt || 0);
 
-                    // If current version >= remoteVer, mark as installed so update modal NEVER shows!
-                    if (remoteVer && window.compareAppVersions(curVer, remoteVer) >= 0) {
-                        try { localStorage.setItem('satta_pai_installed_apk_ver', remoteVer); } catch(e) {}
+                    if (ackedVer && (!remoteVer || window.compareAppVersions(ackedVer, window.CURRENT_APP_APK_VERSION || '1.0.0') >= 0)) {
+                        window.CURRENT_APP_APK_VERSION = ackedVer;
+                    }
+                    const curVer = window.CURRENT_APP_APK_VERSION || '1.0.0';
+                    const isSameUpdateAlreadyInstalled = (ackedVer === remoteVer) && (!remoteTs || !ackedTs || ackedTs >= (remoteTs - 10000));
+                    const isDismissedThisSession = sessionStorage.getItem('sp_dismissed_apk_ver_' + remoteVer) === '1';
+                    const isNewerVersion = remoteVer && !isSameUpdateAlreadyInstalled && (window.compareAppVersions(remoteVer, curVer) > 0 || (ackedVer === remoteVer && remoteTs > ackedTs + 10000));
+
+                    if (remoteVer && (isSameUpdateAlreadyInstalled || window.compareAppVersions(curVer, remoteVer) >= 0)) {
                         modal.classList.add('hidden');
                         return;
                     }
@@ -18564,7 +18610,7 @@ CRITICAL RULES:
                         if (dlBtn) {
                             dlBtn.href = d.apkUrl;
                             dlBtn.onclick = function(ev) {
-                                return window.openExternalApkUpdateDownload(ev, d.apkUrl, remoteVer);
+                                return window.openExternalApkUpdateDownload(ev, d.apkUrl, remoteVer, remoteTs);
                             };
                         }
                         if (laterBtn) {
@@ -18845,16 +18891,27 @@ CRITICAL RULES:
             return false;
         };
 
-        // Free users chatting with a PRO/PRO+ member are strictly blocked from taking screenshots!
-        // PRO & PRO+ members CAN take normal screenshots, but Screen Sharing / Mirroring turns the screen BLACK!
+        // Screenshot Rule:
+        // - If the opposite person (partnerEm) is a PRO or PRO+ member (partnerVip === true), NOBODY (neither Free nor PRO/PRO+) can take a screenshot of their chat!
+        // - If the opposite person is a Free user (!partnerVip) and I am PRO/PRO+, I CAN take screenshots (while Screen Share still turns black)!
+        window.isPartnerVipInCurrentDm = function(partnerEmRaw) {
+            const partnerEm = String(partnerEmRaw || window._activeDmPartnerEmail || '').trim().toLowerCase();
+            if (!partnerEm) return false;
+            if (window.isEmailVipOrProPlus && window.isEmailVipOrProPlus(partnerEm)) return true;
+            // Also check if any message from this partner has isVip or isProPlus flag
+            if ((window._allDmMessages || []).some(m => String(m.senderEmail || '').toLowerCase() === partnerEm && (m.isVip || m.isProPlus || m.vipTier === 'pro' || m.vipTier === 'pro_plus'))) {
+                return true;
+            }
+            return false;
+        };
+
         window.isFreeUserBlockedFromScreenshottingVip = function() {
             const chatModal = document.getElementById('chat-fullscreen');
             const isDmOpen = Boolean(chatModal && chatModal.classList.contains('active') && window._currentChatTabMode === 'dm');
             if (!isDmOpen) return false;
-            const myVip = Boolean((window.isCurrentUserProPlus && window.isCurrentUserProPlus()) || (window.isCurrentUserVip && window.isCurrentUserVip()));
             const partnerEm = (window._activeDmPartnerEmail || '').toLowerCase();
-            const partnerVip = partnerEm ? window.isEmailVipOrProPlus(partnerEm) : false;
-            return (!myVip && partnerVip);
+            if (!partnerEm) return false;
+            return window.isPartnerVipInCurrentDm(partnerEm);
         };
 
         window.isActiveDmScreenshotProtected = function() {
@@ -19178,7 +19235,8 @@ CRITICAL RULES:
                             if (typeof window.triggerSystemMatchNotification === 'function') {
                                 window.triggerSystemMatchNotification(
                                     `💬 Private DM from ${senderDisplay}`,
-                                    cleanPreview
+                                    cleanPreview,
+                                    sEm
                                 );
                             }
                         } else {
@@ -19686,7 +19744,7 @@ CRITICAL RULES:
                 const s = String(m.senderEmail || '').toLowerCase();
                 const r = String(m.receiverEmail || '').toLowerCase();
                 return (s === myEm && r === partner) || (s === partner && r === myEm);
-            });
+            }).slice(-60);
 
             if (threadMsgs.length === 0) {
                 box.innerHTML = '<div class="text-center text-xs text-slate-400 my-auto py-8">🔒 End-to-End Encrypted Private Arena Chat. Say Vanakkam!</div>';
@@ -19746,7 +19804,7 @@ CRITICAL RULES:
                                <span class="w-1 h-2 bg-emerald-300 rounded"></span><span class="w-1 h-3 bg-emerald-300 rounded"></span><span class="w-1 h-1.5 bg-emerald-300 rounded"></span><span class="w-1 h-3 bg-emerald-300 rounded"></span><span class="w-1 h-2 bg-emerald-300 rounded"></span><span class="w-1 h-2.5 bg-emerald-300 rounded"></span><span class="w-1 h-1.5 bg-emerald-300 rounded"></span>
                            </div>
                            <span class="text-[9px] font-mono font-bold text-amber-200">${Number(m.audioDuration || 1)}s</span>
-                           <span onclick="event.stopPropagation(); window.cycleVoicePlaybackRate(this)" class="px-1.5 py-0.2 rounded bg-black/50 border border-white/20 text-[8.5px] font-mono font-extrabold text-cyan-300 cursor-pointer" title="Playback Speed">1x</span>
+                           <button type="button" onclick="event.stopPropagation(); window.cycleVoicePlaybackRate(this, '${window.escapeJsStr(msgKey)}')" class="dm-voice-speed-pill px-1.5 py-0.5 rounded bg-black/60 border border-cyan-400/50 text-[9px] font-mono font-black text-cyan-300 cursor-pointer shrink-0" title="Tap to change speed (1x / 1.5x / 2x)">${(window._currentVoicePlaybackRate || 1)}x</button>
                        </div>`
                     : bodyHtml;
 
@@ -20690,32 +20748,66 @@ CRITICAL RULES:
             }
         };
 
-        window.triggerSystemMatchNotification = function(title, body) {
+        window.openDirectDmFromNotification = function(partnerEmailRaw) {
+            const partner = String(partnerEmailRaw || '').trim().toLowerCase();
+            if (!partner || !partner.includes('@')) return;
+            try {
+                document.querySelectorAll('[id$="-modal"]').forEach(m => m.classList.add('hidden'));
+                if (typeof window.openFullScreenChat === 'function') window.openFullScreenChat();
+                if (typeof window.switchChatTabMode === 'function') window.switchChatTabMode('dm');
+                setTimeout(() => {
+                    if (typeof window.openPrivateDmConversationWith === 'function') {
+                        window.openPrivateDmConversationWith(partner);
+                    }
+                }, 80);
+            } catch(e) {}
+        };
+
+        window.triggerSystemMatchNotification = function(title, body, dmPartnerEmail = '') {
             const cleanTitle = String(title || 'Satta Pai Esports').trim();
             const cleanBody = String(body || '').trim();
-            // 1. Trigger Native Android Mobile Notification Bar via Flutter MethodChannel Bridge!
+            const cleanDmEmail = String(dmPartnerEmail || '').trim().toLowerCase();
+            // 1. Trigger Native Android Mobile Notification Bar with deep-link dmEmail!
             try {
                 if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
                     window.SattaPaiNativeAuth.postMessage('notify:' + JSON.stringify({
                         title: cleanTitle,
                         body: cleanBody,
-                        id: Math.floor(Date.now() % 100000)
+                        id: Math.floor(Date.now() % 100000),
+                        dmEmail: cleanDmEmail
                     }));
                 }
             } catch(e) {}
-            // 2. Also trigger Web Notification API if supported
+            // 2. Also trigger Web Notification API with onclick deep-link to Private DM
             if ("Notification" in window && Notification.permission === "granted") {
                 try {
-                    new Notification(cleanTitle, {
+                    const n = new Notification(cleanTitle, {
                         body: cleanBody,
                         icon: window.currentBrandLogoDataURL || window.DEFAULT_SATTA_PAI_LOGO_DATA_URL,
                         requireInteraction: true
                     });
+                    if (cleanDmEmail) {
+                        n.onclick = function() {
+                            window.focus();
+                            window.openDirectDmFromNotification(cleanDmEmail);
+                            n.close();
+                        };
+                    }
                 } catch(e) {}
             }
-            // 3. Show non-intrusive toast alert
+            // 3. Show clickable toast alert (tapping toast also jumps directly to that DM!)
             if (typeof window.showToast === 'function') {
                 window.showToast(`${cleanTitle} — ${cleanBody.slice(0, 70)}`);
+                if (cleanDmEmail) {
+                    const toastEl = document.getElementById('toast-box');
+                    if (toastEl) {
+                        toastEl.style.cursor = 'pointer';
+                        toastEl.onclick = function() {
+                            toastEl.onclick = null;
+                            window.openDirectDmFromNotification(cleanDmEmail);
+                        };
+                    }
+                }
             }
         };
 
@@ -21823,12 +21915,12 @@ CRITICAL RULES:
             const msg = window.aiMaskBadWords ? window.aiMaskBadWords(rawMsg) : rawMsg;
             const now = Date.now();
             const isProPlus = window.isCurrentUserProPlus ? window.isCurrentUserProPlus() : false;
-            const cooldownMs = (isSuper || isProPlus || isAdmin || isHost) ? 0 : (window.isCurrentUserVip() ? 5000 : 15000);
+            const cooldownMs = (isSuper || isProPlus || isAdmin || isHost) ? 0 : (window.isCurrentUserVip() ? 5000 : 10000);
             if (cooldownMs > 0) {
                 const lastTime = Number(window.lastUserMsgTime || 0);
                 if (now - lastTime < cooldownMs) {
                     const remaining = Math.ceil((cooldownMs - (now - lastTime)) / 1000);
-                    window.showToast(`⏳ Chat Cooldown (${window.isCurrentUserVip() ? '5s ⭐ PRO' : '15s Free'}): Wait ${remaining}s! (👑 PRO+ has 0s No Cooldown)`);
+                    window.showToast(`⏳ Chat Cooldown (${window.isCurrentUserVip() ? '5s PRO' : '10s Free'}): Wait ${remaining}s! (PRO+ has Unlimited 0s)`);
                     return;
                 }
             }
@@ -22975,6 +23067,34 @@ CRITICAL RULES:
         </div>
     </div>
 
+    <!-- 📞 1-TO-1 PRIVATE DM WEBRTC AUDIO CALL OVERLAY MODAL (V11.0 PRO AUDIO CALL) -->
+    <div id="dm-audio-call-modal" style="z-index: 999995 !important;" class="fixed inset-0 z-[999995] hidden flex items-center justify-center p-4 bg-black/95">
+        <div class="cyber-card p-6 max-w-xs w-full text-center space-y-5 border-2 border-emerald-400/60 shadow-2xl">
+            <div class="text-[10px] font-mono font-extrabold uppercase tracking-widest text-emerald-400" id="dm-call-header-pill">🔒 Encrypted Arena Voice Call</div>
+            <div class="relative w-24 h-24 mx-auto">
+                <div class="absolute inset-0 rounded-full bg-emerald-500/25 animate-ping"></div>
+                <img id="dm-call-partner-dp" src="" class="relative w-24 h-24 rounded-full object-cover border-2 border-emerald-400 shadow-xl" alt="Caller DP">
+            </div>
+            <div>
+                <h3 id="dm-call-partner-name" class="text-base font-black text-white truncate">Player</h3>
+                <p id="dm-call-status-lbl" class="text-xs font-mono text-amber-300 mt-1">Calling...</p>
+            </div>
+            <audio id="dm-webrtc-remote-audio" autoplay playsinline class="hidden"></audio>
+
+            <!-- Incoming Call Answer / Decline Row -->
+            <div id="dm-call-incoming-actions" class="hidden grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="window.answerIncomingDmAudioCall()" class="py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs uppercase cursor-pointer shadow-lg">📞 Answer</button>
+                <button type="button" onclick="window.endActiveDmAudioCall('declined')" class="py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs uppercase cursor-pointer shadow-lg">✖ Decline</button>
+            </div>
+
+            <!-- Active / Outgoing Call Controls Row -->
+            <div id="dm-call-active-actions" class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" id="dm-call-mute-btn" onclick="window.toggleDmCallMicMute()" class="py-2.5 rounded-2xl cyber-card border border-white/20 text-slate-200 font-extrabold text-xs cursor-pointer">🎙️ Mic: ON</button>
+                <button type="button" onclick="window.endActiveDmAudioCall('ended')" class="py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs uppercase cursor-pointer shadow-lg">☎️ End Call</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ✨ PRO FREE FIRE IGN & GUILD NAME UNICODE STYLER MODAL (V10.0 LEGEND) -->
     <div id="ign-name-styler-modal" style="z-index: 99998 !important;" class="fixed inset-0 z-[99998] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="cyber-card p-4 max-w-sm w-full max-h-[88vh] overflow-y-auto space-y-3 text-xs border-2 border-rose-400/60 shadow-2xl" onclick="event.stopPropagation()">
@@ -23575,20 +23695,98 @@ GHOST SQUAD, 0, 11, 39</textarea>
             };
 
             window._activeDmVoiceAudio = null;
-            window.togglePlayDmVoiceNote = function(containerEl, msgKey) {
+            window._activeDmVoiceBtn = null;
+            window._activeDmVoiceSourceNode = null;
+            window._currentVoicePlaybackRate = 1.0;
+
+            window.stopActiveDmVoiceNote = function() {
+                if (window._activeDmVoiceSourceNode) {
+                    try { window._activeDmVoiceSourceNode.stop(); } catch(e) {}
+                    window._activeDmVoiceSourceNode = null;
+                }
+                if (window._activeDmVoiceAudio) {
+                    try { window._activeDmVoiceAudio.pause(); } catch(e) {}
+                    window._activeDmVoiceAudio = null;
+                }
+                if (window._activeDmVoiceBtn) {
+                    window._activeDmVoiceBtn.textContent = '▶';
+                    window._activeDmVoiceBtn = null;
+                }
+            };
+
+            window.togglePlayDmVoiceNote = async function(containerEl, msgKey, forceRestartWithNewSpeed = false) {
                 const msg = (window._allDmMessages || []).find(m => m && (m.id === msgKey || m.clientMsgId === msgKey));
                 if (!msg || !msg.audioData) return;
                 const btn = containerEl ? containerEl.querySelector('button') : null;
-                if (window._activeDmVoiceAudio && !window._activeDmVoiceAudio.paused) {
-                    window._activeDmVoiceAudio.pause();
-                    if (btn) btn.textContent = '▶';
+                const rate = Number(window._currentVoicePlaybackRate) || 1.0;
+
+                if (!forceRestartWithNewSpeed && (window._activeDmVoiceAudio || window._activeDmVoiceSourceNode) && window._activeDmVoiceKey === msgKey) {
+                    window.stopActiveDmVoiceNote();
                     return;
                 }
-                const audio = new Audio(msg.audioData);
-                window._activeDmVoiceAudio = audio;
+
+                window.stopActiveDmVoiceNote();
+                window._activeDmVoiceKey = msgKey;
+                window._activeDmVoiceBtn = btn;
                 if (btn) btn.textContent = '⏸';
-                audio.onended = () => { if (btn) btn.textContent = '▶'; };
-                audio.play().catch(() => { if (btn) btn.textContent = '▶'; });
+
+                // Primary: Use Web Audio API AudioBufferSourceNode for 100% hardware-accurate 1x / 1.5x / 2x speed on all Android WebViews!
+                try {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) {
+                        if (!window._dmVoiceAudioCtx) window._dmVoiceAudioCtx = new AudioCtx();
+                        const ctx = window._dmVoiceAudioCtx;
+                        if (ctx.state === 'suspended') await ctx.resume();
+                        const b64Part = String(msg.audioData).split(',')[1] || '';
+                        const binStr = atob(b64Part);
+                        const len = binStr.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+                        const audioBuffer = await ctx.decodeAudioData(bytes.buffer.slice(0));
+                        const source = ctx.createBufferSource();
+                        source.buffer = audioBuffer;
+                        source.playbackRate.value = rate;
+                        source.connect(ctx.destination);
+                        window._activeDmVoiceSourceNode = source;
+                        source.onended = () => {
+                            if (window._activeDmVoiceSourceNode === source) {
+                                window._activeDmVoiceSourceNode = null;
+                                if (btn) btn.textContent = '▶';
+                            }
+                        };
+                        source.start(0);
+                        return;
+                    }
+                } catch (webAudioErr) {
+                    // Fallback to HTML5 Audio element with enforced playbackRate on metadata & play
+                }
+
+                try {
+                    const audio = new Audio(msg.audioData);
+                    audio.preservesPitch = true;
+                    audio.mozPreservesPitch = true;
+                    audio.webkitPreservesPitch = true;
+                    audio.defaultPlaybackRate = rate;
+                    audio.playbackRate = rate;
+                    audio.onloadedmetadata = () => {
+                        audio.defaultPlaybackRate = Number(window._currentVoicePlaybackRate) || 1.0;
+                        audio.playbackRate = Number(window._currentVoicePlaybackRate) || 1.0;
+                    };
+                    audio.onplaying = () => {
+                        audio.playbackRate = Number(window._currentVoicePlaybackRate) || 1.0;
+                    };
+                    window._activeDmVoiceAudio = audio;
+                    audio.onended = () => {
+                        if (window._activeDmVoiceAudio === audio) {
+                            window._activeDmVoiceAudio = null;
+                            if (btn) btn.textContent = '▶';
+                        }
+                    };
+                    await audio.play();
+                    audio.playbackRate = Number(window._currentVoicePlaybackRate) || 1.0;
+                } catch (err) {
+                    if (btn) btn.textContent = '▶';
+                }
             };
 
             // =========================================================================
@@ -24177,6 +24375,360 @@ GHOST SQUAD, 0, 11, 39</textarea>
                     window.showToast('Error saving audio URL: ' + e.message);
                 }
             };
+
+            // =========================================================================
+            // 4.9 V11.0 PRIVATE DM 1-TO-1 WEBRTC AUDIO CALL ENGINE & PRO CALL LOCK
+            // =========================================================================
+            window.isMyIncomingCallsLocked = function() {
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                if (myEm && window.userCache && window.userCache[myEm] && typeof window.userCache[myEm].disableIncomingCalls === 'boolean') {
+                    return window.userCache[myEm].disableIncomingCalls;
+                }
+                return localStorage.getItem('satta_pai_disable_calls_' + myEm) === '1';
+            };
+
+            window.updateCallLockButtonsUI = function() {
+                const locked = window.isMyIncomingCallsLocked();
+                const btn = document.getElementById('dm-call-lock-toggle-btn');
+                if (btn) {
+                    btn.textContent = locked ? '📵 Calls: OFF' : '📞 Calls: ON';
+                    btn.className = locked
+                        ? 'px-1.5 py-0.5 rounded bg-rose-500/25 border border-rose-400/50 text-rose-200 font-extrabold text-[8.5px] cursor-pointer'
+                        : 'px-1.5 py-0.5 rounded bg-zinc-900/90 border border-emerald-400/40 text-emerald-300 font-extrabold text-[8.5px] cursor-pointer';
+                }
+            };
+
+            window.toggleMyIncomingCallsLock = async function() {
+                const isVip = Boolean((window.isCurrentUserProPlus && window.isCurrentUserProPlus()) || (window.isCurrentUserVip && window.isCurrentUserVip()));
+                if (!isVip) {
+                    window.showToast('⭐ PRO / PRO+ Pass required to disable incoming audio calls!');
+                    return;
+                }
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                const next = !window.isMyIncomingCallsLocked();
+                try { localStorage.setItem('satta_pai_disable_calls_' + myEm, next ? '1' : '0'); } catch(e) {}
+                if (window.userCache && window.userCache[myEm]) {
+                    window.userCache[myEm].disableIncomingCalls = next;
+                }
+                window.updateCallLockButtonsUI();
+                try {
+                    if (window.setDoc && window.doc && window.db) {
+                        await window.setDoc(window.doc(window.db, 'users', myEm), { email: myEm, disableIncomingCalls: next, updatedAt: Date.now() }, { merge: true });
+                    }
+                } catch(e) {}
+                window.showToast(next
+                    ? '📵 Incoming Audio Calls Disabled! Nobody can call you in Private DM.'
+                    : '📞 Incoming Audio Calls Enabled!');
+            };
+
+            window._dmPeerConn = null;
+            window._dmLocalAudioStream = null;
+            window._dmCallUnsub = null;
+            window._dmCallListenerUnsub = null;
+            window._dmCallDurationTimer = null;
+            window._dmCallSeconds = 0;
+            window._activeCallDocId = '';
+            window._incomingCallSnapData = null;
+
+            const RTC_ICE_CONFIG = {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+            };
+
+            window.cleanupDmWebRtcResources = function() {
+                clearInterval(window._dmCallDurationTimer);
+                window._dmCallDurationTimer = null;
+                if (window._dmCallUnsub) {
+                    try { window._dmCallUnsub(); } catch(e) {}
+                    window._dmCallUnsub = null;
+                }
+                if (window._dmLocalAudioStream) {
+                    try { window._dmLocalAudioStream.getTracks().forEach(t => t.stop()); } catch(e) {}
+                    window._dmLocalAudioStream = null;
+                }
+                if (window._dmPeerConn) {
+                    try { window._dmPeerConn.close(); } catch(e) {}
+                    window._dmPeerConn = null;
+                }
+                document.getElementById('dm-audio-call-modal')?.classList.add('hidden');
+            };
+
+            window.startDmCallDurationCounter = function() {
+                clearInterval(window._dmCallDurationTimer);
+                window._dmCallSeconds = 0;
+                const statusEl = document.getElementById('dm-call-status-lbl');
+                window._dmCallDurationTimer = setInterval(() => {
+                    window._dmCallSeconds += 1;
+                    const m = String(Math.floor(window._dmCallSeconds / 60)).padStart(2, '0');
+                    const s = String(window._dmCallSeconds % 60).padStart(2, '0');
+                    if (statusEl) statusEl.textContent = `🟢 Connected • ${m}:${s}`;
+                }, 1000);
+            };
+
+            window.startPrivateDmAudioCall = async function() {
+                if (!window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) return;
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                const partner = (window._activeDmPartnerEmail || '').toLowerCase();
+                if (!myEm || myEm === 'guest' || !partner) {
+                    window.showToast('🔐 Sign in & select an online player first!');
+                    return;
+                }
+                if (window.isUserBlockedEitherWay && window.isUserBlockedEitherWay(partner)) {
+                    window.showToast('🚫 Cannot call — user is blocked!');
+                    return;
+                }
+
+                // Check if partner is a PRO/PRO+ member who has disabled incoming calls!
+                try {
+                    const pSnap = await window.getDoc(window.doc(window.db, 'users', partner));
+                    if (pSnap && pSnap.exists()) {
+                        const pData = pSnap.data() || {};
+                        if (window.userCache[partner]) window.userCache[partner].disableIncomingCalls = Boolean(pData.disableIncomingCalls);
+                        const partnerIsVip = window.isPartnerVipInCurrentDm(partner);
+                        if (partnerIsVip && pData.disableIncomingCalls === true) {
+                            window.showToast('📵 This PRO / PRO+ player has disabled incoming audio calls!');
+                            return;
+                        }
+                    }
+                } catch(e) {}
+
+                try {
+                    if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                        window.SattaPaiNativeAuth.postMessage('request_mic_perm');
+                    }
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    window.cleanupDmWebRtcResources();
+                    window._dmLocalAudioStream = stream;
+
+                    const u = (window.userCache && window.userCache[partner]) || {};
+                    const pName = window.getPublicPlayerDisplayName(partner, u, '');
+                    const pDp = window.resolveUserDpUrl ? window.resolveUserDpUrl(partner, u, null, pName) : '';
+                    const dpEl = document.getElementById('dm-call-partner-dp');
+                    const nmEl = document.getElementById('dm-call-partner-name');
+                    const stEl = document.getElementById('dm-call-status-lbl');
+                    if (dpEl) dpEl.src = pDp;
+                    if (nmEl) nmEl.textContent = pName;
+                    if (stEl) stEl.textContent = '🔔 Ringing...';
+                    document.getElementById('dm-call-incoming-actions')?.classList.add('hidden');
+                    document.getElementById('dm-call-active-actions')?.classList.remove('hidden');
+                    document.getElementById('dm-audio-call-modal')?.classList.remove('hidden');
+
+                    const pc = new RTCPeerConnection(RTC_ICE_CONFIG);
+                    window._dmPeerConn = pc;
+                    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+                    pc.ontrack = (event) => {
+                        const remAudio = document.getElementById('dm-webrtc-remote-audio');
+                        if (remAudio && event.streams && event.streams[0]) {
+                            remAudio.srcObject = event.streams[0];
+                            remAudio.play().catch(() => {});
+                        }
+                    };
+
+                    const callerCandidates = [];
+                    pc.onicecandidate = (event) => {
+                        if (event.candidate) {
+                            callerCandidates.push(event.candidate.toJSON());
+                            window.setDoc(window.doc(window.db, 'dm_calls', partner), { callerCandidates: callerCandidates.slice(-15) }, { merge: true }).catch(() => {});
+                        }
+                    };
+
+                    const offer = await pc.createOffer();
+                    await pc.setLocalDescription(offer);
+
+                    const myU = (window.userCache && window.userCache[myEm]) || {};
+                    const myName = window.getPublicPlayerDisplayName(myEm, myU, '');
+                    window._activeCallDocId = partner;
+
+                    await window.setDoc(window.doc(window.db, 'dm_calls', partner), {
+                        callerEmail: myEm,
+                        callerName: myName,
+                        calleeEmail: partner,
+                        status: 'ringing',
+                        offer: { type: offer.type, sdp: offer.sdp },
+                        answer: null,
+                        callerCandidates: [],
+                        calleeCandidates: [],
+                        timestamp: Date.now()
+                    });
+
+                    const addedCalleeIce = new Set();
+                    window._dmCallUnsub = window.onSnapshot(window.doc(window.db, 'dm_calls', partner), async (snap) => {
+                        if (!snap.exists()) return;
+                        const data = snap.data() || {};
+                        if (data.status === 'declined' || data.status === 'ended') {
+                            window.showToast(data.status === 'declined' ? '📵 Call declined' : '☎️ Call ended');
+                            window.cleanupDmWebRtcResources();
+                            return;
+                        }
+                        if (data.answer && pc.signalingState !== 'stable') {
+                            try {
+                                await pc.setRemoteDescription(new RTCSessionDescription(data.answer));
+                                window.startDmCallDurationCounter();
+                            } catch(e) {}
+                        }
+                        if (Array.isArray(data.calleeCandidates)) {
+                            for (const c of data.calleeCandidates) {
+                                const key = JSON.stringify(c);
+                                if (!addedCalleeIce.has(key)) {
+                                    addedCalleeIce.add(key);
+                                    try { await pc.addIceCandidate(new RTCIceCandidate(c)); } catch(e) {}
+                                }
+                            }
+                        }
+                    });
+                } catch (err) {
+                    window.showToast('🎤 Allow Microphone permission to make voice calls!');
+                    window.cleanupDmWebRtcResources();
+                }
+            };
+
+            window.answerIncomingDmAudioCall = async function() {
+                const callData = window._incomingCallSnapData;
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                if (!callData || !callData.offer || !myEm) return;
+                try {
+                    if (window.SattaPaiNativeAuth && typeof window.SattaPaiNativeAuth.postMessage === 'function') {
+                        window.SattaPaiNativeAuth.postMessage('request_mic_perm');
+                    }
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    window._dmLocalAudioStream = stream;
+
+                    document.getElementById('dm-call-incoming-actions')?.classList.add('hidden');
+                    document.getElementById('dm-call-active-actions')?.classList.remove('hidden');
+
+                    const pc = new RTCPeerConnection(RTC_ICE_CONFIG);
+                    window._dmPeerConn = pc;
+                    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+                    pc.ontrack = (event) => {
+                        const remAudio = document.getElementById('dm-webrtc-remote-audio');
+                        if (remAudio && event.streams && event.streams[0]) {
+                            remAudio.srcObject = event.streams[0];
+                            remAudio.play().catch(() => {});
+                        }
+                    };
+
+                    const calleeCandidates = [];
+                    pc.onicecandidate = (event) => {
+                        if (event.candidate) {
+                            calleeCandidates.push(event.candidate.toJSON());
+                            window.setDoc(window.doc(window.db, 'dm_calls', myEm), { calleeCandidates: calleeCandidates.slice(-15) }, { merge: true }).catch(() => {});
+                        }
+                    };
+
+                    await pc.setRemoteDescription(new RTCSessionDescription(callData.offer));
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+
+                    window._activeCallDocId = myEm;
+                    await window.setDoc(window.doc(window.db, 'dm_calls', myEm), {
+                        status: 'connected',
+                        answer: { type: answer.type, sdp: answer.sdp }
+                    }, { merge: true });
+
+                    window.startDmCallDurationCounter();
+
+                    const addedCallerIce = new Set();
+                    window._dmCallUnsub = window.onSnapshot(window.doc(window.db, 'dm_calls', myEm), async (snap) => {
+                        if (!snap.exists()) return;
+                        const d = snap.data() || {};
+                        if (d.status === 'ended' || d.status === 'declined') {
+                            window.showToast('☎️ Call ended');
+                            window.cleanupDmWebRtcResources();
+                            return;
+                        }
+                        if (Array.isArray(d.callerCandidates)) {
+                            for (const c of d.callerCandidates) {
+                                const key = JSON.stringify(c);
+                                if (!addedCallerIce.has(key)) {
+                                    addedCallerIce.add(key);
+                                    try { await pc.addIceCandidate(new RTCIceCandidate(c)); } catch(e) {}
+                                }
+                            }
+                        }
+                    });
+                } catch (err) {
+                    window.showToast('🎤 Microphone permission required to answer call!');
+                    window.endActiveDmAudioCall('declined');
+                }
+            };
+
+            window.endActiveDmAudioCall = async function(reason = 'ended') {
+                const docId = window._activeCallDocId || (window.loggedEmail || '').toLowerCase();
+                window.cleanupDmWebRtcResources();
+                if (docId && window.setDoc && window.doc && window.db) {
+                    try {
+                        await window.setDoc(window.doc(window.db, 'dm_calls', docId), { status: reason, updatedAt: Date.now() }, { merge: true });
+                    } catch(e) {}
+                }
+            };
+
+            window.toggleDmCallMicMute = function() {
+                if (!window._dmLocalAudioStream) return;
+                const track = window._dmLocalAudioStream.getAudioTracks()[0];
+                if (!track) return;
+                track.enabled = !track.enabled;
+                const btn = document.getElementById('dm-call-mute-btn');
+                if (btn) {
+                    btn.textContent = track.enabled ? '🎙️ Mic: ON' : '🔇 Mic: MUTED';
+                    btn.className = track.enabled
+                        ? 'py-2.5 rounded-2xl cyber-card border border-white/20 text-slate-200 font-extrabold text-xs cursor-pointer'
+                        : 'py-2.5 rounded-2xl bg-amber-500/25 border border-amber-400 text-amber-300 font-extrabold text-xs cursor-pointer';
+                }
+            };
+
+            window.startIncomingDmCallListener = function() {
+                if (!window.IS_SATTA_PAI_APP_BUILD && !window.SattaPaiNativeAuth) return;
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                if (!myEm || myEm === 'guest' || !window.onSnapshot || !window.doc || !window.db) return;
+                if (window._dmCallListenerEmail === myEm && window._dmCallListenerUnsub) return;
+                if (window._dmCallListenerUnsub) {
+                    try { window._dmCallListenerUnsub(); } catch(e) {}
+                }
+                window._dmCallListenerEmail = myEm;
+                window._dmCallListenerUnsub = window.onSnapshot(window.doc(window.db, 'dm_calls', myEm), (snap) => {
+                    if (!snap.exists()) return;
+                    const d = snap.data() || {};
+                    const ageMs = Date.now() - Number(d.timestamp || 0);
+                    if (d.status === 'ringing' && ageMs < 45000 && d.callerEmail && d.callerEmail !== myEm) {
+                        const isVip = Boolean((window.isCurrentUserProPlus && window.isCurrentUserProPlus()) || (window.isCurrentUserVip && window.isCurrentUserVip()));
+                        if (isVip && window.isMyIncomingCallsLocked()) {
+                            window.setDoc(window.doc(window.db, 'dm_calls', myEm), { status: 'declined' }, { merge: true }).catch(() => {});
+                            return;
+                        }
+                        if (window.isUserBlockedEitherWay && window.isUserBlockedEitherWay(d.callerEmail)) return;
+                        window._incomingCallSnapData = d;
+                        window._activeCallDocId = myEm;
+                        const cEm = String(d.callerEmail).toLowerCase();
+                        const u = (window.userCache && window.userCache[cEm]) || {};
+                        const cName = d.callerName || window.getPublicPlayerDisplayName(cEm, u, '');
+                        const cDp = window.resolveUserDpUrl ? window.resolveUserDpUrl(cEm, u, null, cName) : '';
+                        const dpEl = document.getElementById('dm-call-partner-dp');
+                        const nmEl = document.getElementById('dm-call-partner-name');
+                        const stEl = document.getElementById('dm-call-status-lbl');
+                        if (dpEl) dpEl.src = cDp;
+                        if (nmEl) nmEl.textContent = cName;
+                        if (stEl) stEl.textContent = '📞 Incoming Private Voice Call...';
+                        document.getElementById('dm-call-incoming-actions')?.classList.remove('hidden');
+                        document.getElementById('dm-call-active-actions')?.classList.add('hidden');
+                        document.getElementById('dm-audio-call-modal')?.classList.remove('hidden');
+                        if (window.playAppLogoSoundEffect) window.playAppLogoSoundEffect();
+                        if (window.triggerSystemMatchNotification) {
+                            window.triggerSystemMatchNotification('📞 Incoming Voice Call', cName + ' is calling you in Private Chat!', cEm);
+                        }
+                    }
+                }, () => {});
+            };
+            setTimeout(() => window.startIncomingDmCallListener(), 1500);
+            setInterval(() => {
+                if (window.loggedEmail && window.loggedEmail !== 'guest' && !window._dmCallListenerUnsub) {
+                    window.startIncomingDmCallListener();
+                }
+                window.updateCallLockButtonsUI();
+            }, 6000);
 
             // =========================================================================
             // 5.0 V10.0 LEGEND SUITE: PRO IGN UNICODE STYLER & 4v4 ROOM RULES BUILDER
@@ -24914,16 +25466,34 @@ GHOST SQUAD, 0, 11, 39</textarea>
                 window.clearChatReplyQuote('dm');
             };
 
-            window._currentVoicePlaybackRate = 1.0;
-            window.cycleVoicePlaybackRate = function(badgeEl) {
-                const rates = [1.0, 1.5, 2.0];
-                const nextIdx = (rates.indexOf(window._currentVoicePlaybackRate) + 1) % rates.length;
-                window._currentVoicePlaybackRate = rates[nextIdx];
-                if (badgeEl) badgeEl.textContent = window._currentVoicePlaybackRate + 'x';
-                if (window._activeDmVoiceAudio) {
-                    window._activeDmVoiceAudio.playbackRate = window._currentVoicePlaybackRate;
+            window.cycleVoicePlaybackRate = function(badgeEl, msgKey) {
+                const rates = [1, 1.5, 2];
+                const cur = Number(window._currentVoicePlaybackRate) || 1;
+                const nextIdx = (rates.indexOf(cur) + 1) % rates.length;
+                const nextRate = rates[nextIdx];
+                window._currentVoicePlaybackRate = nextRate;
+
+                // Update all speed pills in the DOM so they stay in sync
+                document.querySelectorAll('.dm-voice-speed-pill').forEach(el => {
+                    el.textContent = nextRate + 'x';
+                });
+
+                // Immediately apply to active WebAudio source node OR HTML5 Audio element!
+                if (window._activeDmVoiceSourceNode && window._activeDmVoiceSourceNode.playbackRate) {
+                    try { window._activeDmVoiceSourceNode.playbackRate.value = nextRate; } catch(e) {}
                 }
-                window.showToast('🎙️ Voice Speed: ' + window._currentVoicePlaybackRate + 'x');
+                if (window._activeDmVoiceAudio) {
+                    try {
+                        window._activeDmVoiceAudio.defaultPlaybackRate = nextRate;
+                        window._activeDmVoiceAudio.playbackRate = nextRate;
+                    } catch(e) {}
+                } else if (msgKey && badgeEl) {
+                    const parentPlayer = badgeEl.closest('div');
+                    if (parentPlayer) {
+                        window.togglePlayDmVoiceNote(parentPlayer, msgKey, true);
+                    }
+                }
+                window.showToast('🎙️ Voice Speed: ' + nextRate + 'x');
             };
 
             window.runArena120FpsRamBooster = function() {
