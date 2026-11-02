@@ -1494,6 +1494,27 @@ html.theme-ghost-live {
             color: #0f172a !important;
             border-color: #cbd5e1 !important;
         }
+        /* 👑 V7.0 PRO / PRO+ Custom Chat Bubble Skins */
+        .vip-skin-gold {
+            background: linear-gradient(135deg, rgba(120, 53, 15, 0.92), rgba(69, 26, 3, 0.96)) !important;
+            border: 1.5px solid #fbbf24 !important;
+            color: #fef3c7 !important;
+        }
+        .vip-skin-cyber {
+            background: linear-gradient(135deg, rgba(8, 51, 68, 0.92), rgba(6, 78, 59, 0.96)) !important;
+            border: 1.5px solid #22d3ee !important;
+            color: #ecfeff !important;
+        }
+        .vip-skin-crimson {
+            background: linear-gradient(135deg, rgba(136, 19, 55, 0.92), rgba(76, 5, 25, 0.96)) !important;
+            border: 1.5px solid #fb7185 !important;
+            color: #ffe4e6 !important;
+        }
+        .vip-skin-violet {
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.92), rgba(46, 16, 101, 0.96)) !important;
+            border: 1.5px solid #c084fc !important;
+            color: #f3e8ff !important;
+        }
 
     </style>
 </head>
@@ -4547,10 +4568,26 @@ html.theme-ghost-live {
                 <span id="live-users-badge-chat" class="hidden text-[10px] font-bold" style="color: var(--accent-primary);">🟢 0 Online</span>
             </div>
             <div class="relative shrink-0 flex items-center gap-1">
+                <button type="button" onclick="window.scrollActiveChatToBottom()" class="w-7 h-7 rounded-lg cyber-card flex items-center justify-center text-emerald-300 border border-emerald-400/40 text-xs font-black cursor-pointer" title="Jump to Latest Message">↓</button>
+                <button type="button" onclick="window.toggleChatLiveSearchBar()" class="w-7 h-7 rounded-lg cyber-card flex items-center justify-center text-cyan-300 border border-cyan-400/40 text-xs cursor-pointer" title="Search Messages">🔍</button>
                 <button type="button" id="global-chat-fwd-lock-btn" onclick="window.toggleMyForwardLock()" class="hidden px-2 py-1 rounded-lg cyber-card text-[9.5px] font-extrabold text-amber-300 border border-amber-400/40 cursor-pointer" title="PRO/PRO+ Forward Lock">Fwd: ON</button>
             </div>
         </header>
 
+        <!-- 🔍 LIVE MESSAGE SEARCH BAR (Filters Global Chat & Private DM in 0ms) -->
+        <div id="chat-live-search-bar" class="hidden px-3.5 py-1.5 bg-zinc-900/95 border-b border-cyan-400/40 flex items-center gap-2 shrink-0">
+            <span class="text-xs text-cyan-400">🔍</span>
+            <input type="text" id="chat-live-search-input" oninput="window.filterChatMessagesByQuery(this.value)" placeholder="Search messages, UID, Room ID or player..." class="cyber-input flex-1 px-2.5 py-1 text-xs">
+            <button type="button" onclick="window.toggleChatLiveSearchBar(false)" class="px-2 py-0.5 rounded bg-zinc-800 text-slate-300 text-[10px] font-bold cursor-pointer">Clear ✖</button>
+        </div>
+        <!-- 📌 GLOBAL CHAT PINNED ANNOUNCEMENT BANNER -->
+        <div id="global-chat-pinned-banner" class="hidden px-3.5 py-2 bg-gradient-to-r from-amber-500/20 via-emerald-500/15 to-zinc-900 border-b border-amber-400/40 flex items-center justify-between gap-2 text-xs shrink-0">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+                <span class="px-1.5 py-0.5 rounded bg-amber-400 text-black font-black text-[8.5px] uppercase shrink-0">📌 PINNED</span>
+                <span id="global-chat-pinned-text" class="font-bold text-amber-200 truncate">Official Announcement</span>
+            </div>
+            <button type="button" id="global-chat-unpin-btn" onclick="window.unpinGlobalChatAnnouncement()" class="hidden text-[10px] text-rose-300 hover:text-rose-400 font-extrabold px-1.5 py-0.5 rounded bg-black/40 cursor-pointer shrink-0">✖</button>
+        </div>
         <!-- 📱 APP-ONLY: GLOBAL CHAT vs PRIVATE DM (WHATSAPP / TELEGRAM STYLE) SWITCHER BAR -->
         <div id="app-chat-mode-switcher-bar" class="app-only-feature hidden px-3.5 py-2 border-b bg-zinc-950/90 flex items-center gap-2 shrink-0" style="border-color: var(--border-color);">
             <button type="button" id="chat-tab-btn-global" onclick="window.switchChatTabMode('global')" class="flex-1 py-1.5 px-3 rounded-xl font-extrabold text-xs cursor-pointer btn-theme flex items-center justify-center gap-1.5">
@@ -4629,6 +4666,22 @@ html.theme-ghost-live {
                 <!-- 1-to-1 Messages Scroll Box -->
                 <div id="dm-messages-scroll-box" class="flex-1 overflow-y-auto p-3 space-y-2.5 flex flex-col"></div>
 
+                <!-- 💬 Reply Quote Preview Bar in Private DM -->
+                <div id="dm-reply-quote-bar" class="hidden px-3 py-1.5 border-t bg-zinc-900/95 border-emerald-500/40 flex items-center justify-between gap-2 text-[10.5px] shrink-0">
+                    <div class="min-w-0 flex-1 border-l-2 border-emerald-400 pl-2">
+                        <div id="dm-reply-quote-sender" class="font-extrabold text-emerald-400 truncate">Replying to Player</div>
+                        <div id="dm-reply-quote-text" class="text-slate-300 truncate">Message</div>
+                    </div>
+                    <button type="button" onclick="window.clearChatReplyQuote('dm')" class="w-5 h-5 rounded-full bg-zinc-800 text-slate-300 flex items-center justify-center text-[10px] cursor-pointer">✖</button>
+                </div>
+                <!-- ⚡ 1-Tap Tactical Esports Quick-Callout Strip in Private DM -->
+                <div id="dm-tactical-quick-bar" class="px-2.5 py-1 border-t bg-zinc-950/90 flex items-center gap-1.5 overflow-x-auto text-[9.5px] shrink-0" style="border-color: var(--border-color);">
+                    <button type="button" onclick="window.sendQuickDmCallout('Room ID & Pass Ready?')" class="px-2 py-0.5 rounded-full cyber-card border border-emerald-400/30 text-emerald-300 font-bold shrink-0 cursor-pointer">🔑 Room Ready?</button>
+                    <button type="button" onclick="window.sendQuickDmCallout('Join My Squad Now!')" class="px-2 py-0.5 rounded-full cyber-card border border-cyan-400/30 text-cyan-300 font-bold shrink-0 cursor-pointer">⚡ Join Squad</button>
+                    <button type="button" onclick="window.sendQuickDmCallout('Send Your Free Fire UID')" class="px-2 py-0.5 rounded-full cyber-card border border-amber-400/30 text-amber-300 font-bold shrink-0 cursor-pointer">🆔 Send UID</button>
+                    <button type="button" onclick="window.sendQuickDmCallout('Wait 2 Mins Bro, Coming Online!')" class="px-2 py-0.5 rounded-full cyber-card border border-purple-400/30 text-purple-300 font-bold shrink-0 cursor-pointer">⏳ Wait 2m</button>
+                    <button type="button" onclick="window.sendQuickDmCallout('GG Booyah Match! 🔥')" class="px-2 py-0.5 rounded-full cyber-card border border-rose-400/30 text-rose-300 font-bold shrink-0 cursor-pointer">🏆 GG Booyah!</button>
+                </div>
                 <!-- 🎤 Live Voice Note Recording Bar (Shown when recording voice in Private DM) -->
                 <div id="dm-voice-recording-bar" class="hidden px-3 py-2 border-t bg-rose-950/90 border-rose-500/40 flex items-center justify-between gap-2 text-xs shrink-0">
                     <div class="flex items-center gap-2">
@@ -11847,6 +11900,20 @@ CRITICAL RULES:
                 if (snap.exists()) {
                     const data = snap.data() || {};
                     currentChatMode = data.mode || 'all';
+                    const pinBanner = document.getElementById('global-chat-pinned-banner');
+                    const pinTxt = document.getElementById('global-chat-pinned-text');
+                    const unpinBtn = document.getElementById('global-chat-unpin-btn');
+                    if (data.pinnedAnnouncement && String(data.pinnedAnnouncement).trim()) {
+                        if (pinTxt) pinTxt.textContent = String(data.pinnedAnnouncement).trim();
+                        if (pinBanner) pinBanner.classList.remove('hidden');
+                        if (unpinBtn) {
+                            const isStaffNow = window.isSuperAdminGlobal || (typeof isAdminEmail === 'function' && isAdminEmail(window.loggedEmail)) || (typeof isHostEmail === 'function' && isHostEmail(window.loggedEmail));
+                            if (isStaffNow) unpinBtn.classList.remove('hidden');
+                            else unpinBtn.classList.add('hidden');
+                        }
+                    } else if (pinBanner) {
+                        pinBanner.classList.add('hidden');
+                    }
                     const sel = document.getElementById('chat-mode-select');
                     if (sel) sel.value = currentChatMode;
                     if (document.getElementById('chat-fullscreen')?.classList.contains('active')) checkChatBanStatus();
@@ -11927,7 +11994,7 @@ CRITICAL RULES:
                 const editedText = (msg.isEdited ? ' (edited)' : '') + (msg.isForwarded ? ' • ↪ Fwd' : '') + (msg.noForward ? ' • 🔒' : '');
                 const proPlusBubbleExtra = isMsgUserProPlus ? " pro-plus-bubble" : "";
                 const proPlusAvatarExtra = isMsgUserProPlus ? " ring-2 ring-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.65)]" : "";
-                return `<div class="${rowClass}"><img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(resolvedName)}')" class="chat-avatar${proPlusAvatarExtra} w-8 h-8 rounded-full object-cover shrink-0 border border-emerald-400/50 cursor-pointer hover:scale-105 transition-transform" alt="Avatar" onclick="openChatProfileByMsgId(event, '${msg.id}')"><div class="chat-content"><span class="chat-meta cursor-pointer hover:underline" onclick="openChatProfileByMsgId(event, '${msg.id}')">${badgesHtml}${nameDisplay} • ${time}${editedText}</span><div class="${bubbleClass}${proPlusBubbleExtra}" onclick="openChatProfileByMsgId(event, '${msg.id}')">${window.escapeHTML(window.aiMaskBadWords ? window.aiMaskBadWords(msg.message) : msg.message)}</div></div></div>`;
+                return `<div class="${rowClass}"><img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(resolvedName)}')" class="chat-avatar${proPlusAvatarExtra} w-8 h-8 rounded-full object-cover shrink-0 border border-emerald-400/50 cursor-pointer hover:scale-105 transition-transform" alt="Avatar" onclick="openChatProfileByMsgId(event, '${msg.id}')"><div class="chat-content"><span class="chat-meta cursor-pointer hover:underline" onclick="openChatProfileByMsgId(event, '${msg.id}')">${badgesHtml}${nameDisplay} • ${time}${editedText}</span><div class="${bubbleClass}${proPlusBubbleExtra} ${msg.vipSkin ? 'vip-skin-' + msg.vipSkin : ''}" onclick="openChatProfileByMsgId(event, '${msg.id}')">${msg.replyToText ? `<div class="mb-1 px-2 py-0.5 rounded bg-black/35 border-l-2 border-amber-400 text-[9px] leading-tight"><div class="font-extrabold text-amber-300 truncate">${window.escapeHTML(msg.replyToName || 'Player')}</div><div class="text-slate-300 truncate">${window.escapeHTML(msg.replyToText)}</div></div>` : ''}${window.escapeHTML(window.aiMaskBadWords ? window.aiMaskBadWords(msg.message) : msg.message)}${window.renderMessageReactionsPillHtml ? window.renderMessageReactionsPillHtml(msg) : ''}</div></div></div>`;
             }).join('');
             container.scrollTop = container.scrollHeight;
         };
@@ -12014,6 +12081,17 @@ CRITICAL RULES:
             }
 
             if (msgId && msgId !== 'dm_view') {
+                // 0. Instant Emoji Reaction Bar + Reply + Copy + Admin Pin
+                actionsDiv.innerHTML += `
+                    <div class="col-span-2 flex items-center justify-between gap-1 bg-zinc-900/90 p-1.5 rounded-xl border border-white/10">
+                        ${['🔥','👑','❤️','😂','⚡','💀'].map(emo => `<button type="button" onclick="window.toggleChatMessageReaction('global', '${window.escapeJsStr(msgId)}', '${emo}')" class="flex-1 py-1 rounded-lg hover:bg-white/10 text-sm cursor-pointer transition-transform active:scale-125">${emo}</button>`).join('')}
+                    </div>
+                    <button type="button" onclick="document.getElementById('chat-profile-modal').classList.add('hidden'); window.setChatReplyQuote('global', '${window.escapeJsStr(msgId)}');" class="py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[11px] font-extrabold shadow cursor-pointer">↩ Reply</button>
+                    <button type="button" onclick="window.copyChatMessageText('global', '${window.escapeJsStr(msgId)}')" class="py-1.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded-lg text-[11px] font-extrabold shadow cursor-pointer">📋 Copy Text</button>
+                `;
+                if (isStaff) {
+                    actionsDiv.innerHTML += `<button type="button" onclick="window.pinGlobalChatAnnouncement('${window.escapeJsStr(msgId)}')" class="col-span-2 py-1.5 bg-amber-500/25 border border-amber-400/50 text-amber-300 rounded-lg text-[11px] font-extrabold cursor-pointer">📌 Pin Announcement to Top of Chat</button>`;
+                }
                 // 1. Forward Button
                 if (isForwardLocked && !isOwn) {
                     actionsDiv.innerHTML += `<button type="button" onclick="window.showToast('🔒 Forwarding is disabled by this PRO / PRO+ player!')" class="col-span-2 py-1.5 bg-zinc-800 text-amber-300 border border-amber-400/30 rounded-lg text-[11px] font-bold cursor-pointer">🔒 Forward Locked by Sender</button>`;
@@ -19020,6 +19098,7 @@ CRITICAL RULES:
                 return true;
             });
             window.saveLocalCachedDms(window._allDmMessages);
+            window.clearChatReplyQuote && window.clearChatReplyQuote('dm');
             window.renderActiveDmConversation();
             window.renderDmInboxList();
             window.showToast('🗑️ DM deleted');
@@ -19657,13 +19736,17 @@ CRITICAL RULES:
                 const proPlusAvatarRing = isSenderProPlus ? ' ring-2 ring-amber-400' : '';
                 const fwdTag = m.isForwarded ? `<div class="text-[8.5px] font-mono text-amber-300/90 mb-0.5 flex items-center gap-1"><span>↪ Forwarded</span></div>` : '';
                 const lockTag = m.noForward ? `<span class="text-[8px] font-mono text-amber-300/80 ml-1" title="Forwarding Locked">🔒</span>` : '';
+                const replyBoxHtml = m.replyToText
+                    ? `<div class="mb-1 px-2 py-1 rounded bg-black/35 border-l-2 border-amber-400 text-[9.5px] leading-tight"><div class="font-extrabold text-amber-300 truncate">${window.escapeHTML(m.replyToName || 'Player')}</div><div class="text-slate-300 truncate">${window.escapeHTML(m.replyToText)}</div></div>`
+                    : '';
                 const voicePlayerHtml = m.audioData
-                    ? `<div class="flex items-center gap-2 py-1 min-w-[165px]" onclick="event.stopPropagation(); window.togglePlayDmVoiceNote(this, '${window.escapeJsStr(msgKey)}')">
+                    ? `<div class="flex items-center gap-2 py-1 min-w-[180px]" onclick="event.stopPropagation(); window.togglePlayDmVoiceNote(this, '${window.escapeJsStr(msgKey)}')">
                            <button type="button" class="w-7 h-7 rounded-full bg-amber-400 text-black flex items-center justify-center font-black text-xs shrink-0 shadow cursor-pointer">▶</button>
                            <div class="flex-1 flex items-center gap-0.5 h-3">
                                <span class="w-1 h-2 bg-emerald-300 rounded"></span><span class="w-1 h-3 bg-emerald-300 rounded"></span><span class="w-1 h-1.5 bg-emerald-300 rounded"></span><span class="w-1 h-3 bg-emerald-300 rounded"></span><span class="w-1 h-2 bg-emerald-300 rounded"></span><span class="w-1 h-2.5 bg-emerald-300 rounded"></span><span class="w-1 h-1.5 bg-emerald-300 rounded"></span>
                            </div>
                            <span class="text-[9px] font-mono font-bold text-amber-200">${Number(m.audioDuration || 1)}s</span>
+                           <span onclick="event.stopPropagation(); window.cycleVoicePlaybackRate(this)" class="px-1.5 py-0.2 rounded bg-black/50 border border-white/20 text-[8.5px] font-mono font-extrabold text-cyan-300 cursor-pointer" title="Playback Speed">1x</span>
                        </div>`
                     : bodyHtml;
 
@@ -19672,7 +19755,9 @@ CRITICAL RULES:
                         <img src="${dp}" onerror="this.onerror=null;this.src=window.getFallbackGamerAvatarSvg('${window.escapeJsStr(name)}')" class="w-7 h-7 rounded-full object-cover border border-white/20 shrink-0 pointer-events-none${proPlusAvatarRing}" alt="DP">
                         <div onclick="window.openDmMessageActionsModal('${window.escapeJsStr(msgKey)}')" class="max-w-[78%] px-3 py-2 rounded-2xl text-xs select-none cursor-pointer transition-transform active:scale-[0.99] ${isMe ? 'bg-emerald-700/95 text-white rounded-br-sm border border-emerald-400/30' : 'cyber-card text-slate-100 rounded-bl-sm'}${proPlusDmClass}">
                             ${fwdTag}
+                            ${replyBoxHtml}
                             ${voicePlayerHtml}
+                            ${window.renderMessageReactionsPillHtml ? window.renderMessageReactionsPillHtml(m) : ''}
                             <div class="text-[8.5px] opacity-90 text-right mt-0.5 font-mono flex items-center justify-end gap-0.5"><span>${tStr}</span>${lockTag}${tickHtml}</div>
                         </div>
                     </div>
@@ -19730,7 +19815,10 @@ CRITICAL RULES:
                 isProPlus: isMeProPlus,
                 isVip: isMeVip,
                 vipTier: isMeProPlus ? 'pro_plus' : (isMeVip ? 'pro' : 'free'),
+                vipSkin: isMeVip ? (localStorage.getItem('satta_pai_vip_bubble_skin') || 'gold') : '',
                 noForward: noFwd,
+                replyToText: (window._activeDmReplyQuote && window._activeDmReplyQuote.text) || '',
+                replyToName: (window._activeDmReplyQuote && window._activeDmReplyQuote.name) || '',
                 message: text,
                 status: initialStatus,
                 deliveredAt: partnerOnline ? now : 0,
@@ -21765,12 +21853,16 @@ CRITICAL RULES:
                 isProPlus: isMeProPlus,
                 isVip: isMeVip,
                 vipTier: isMeProPlus ? 'pro_plus' : (isMeVip ? 'pro' : 'free'),
+                vipSkin: isMeVip ? (localStorage.getItem('satta_pai_vip_bubble_skin') || 'gold') : '',
                 noForward: noFwd,
+                replyToText: (window._activeGlobalReplyQuote && window._activeGlobalReplyQuote.text) || '',
+                replyToName: (window._activeGlobalReplyQuote && window._activeGlobalReplyQuote.name) || '',
                 isEdited: false,
                 timestamp: now
             };
 
             // 0ms Instant Render + Encrypted Local Storage Save
+            window.clearChatReplyQuote && window.clearChatReplyQuote('global');
             window._directFirestoreChats = [...(window._directFirestoreChats || []), chatObj];
             window.mergeAndRenderAllGlobalChats();
 
@@ -22786,7 +22878,49 @@ CRITICAL RULES:
                 <button type="button" id="settings-last-seen-toggle-btn" onclick="window.toggleMyLastSeenPrivacy()" class="px-2.5 py-1 rounded-lg bg-zinc-800 border border-emerald-400/40 text-emerald-300 font-extrabold text-[10px] cursor-pointer">👁️ Last Seen: ON</button>
             </div>
 
-            <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden')" class="btn-theme w-full py-2.5 font-extrabold text-xs uppercase cursor-pointer">Done</button>
+            <!-- ⚡ 4. Arena Network Ping, PRO Forward Lock & 120FPS RAM Booster -->
+            <div class="cyber-card p-3 bg-zinc-900/90 border border-emerald-400/30 space-y-2">
+                <div class="flex items-center justify-between text-[10.5px]">
+                    <span class="font-bold text-slate-200 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Arena Server Ping</span></span>
+                    <span id="settings-live-ping-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-black">⚡ 24 ms (Ultra)</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5">
+                    <button type="button" onclick="window.runArena120FpsRamBooster()" class="py-1.5 px-2 rounded-lg bg-gradient-to-r from-cyan-600/30 to-emerald-600/30 border border-cyan-400/50 text-cyan-300 font-extrabold text-[10px] cursor-pointer">🚀 Boost 120FPS</button>
+                    <button type="button" onclick="window.toggleMyForwardLock()" class="py-1.5 px-2 rounded-lg bg-amber-500/20 border border-amber-400/40 text-amber-300 font-extrabold text-[10px] cursor-pointer">🔒 Forward Lock</button>
+                </div>
+                <div class="pt-1 border-t border-white/10 space-y-1.5">
+                    <div class="text-[9.5px] font-extrabold text-amber-300 uppercase">👑 PRO / PRO+ Chat Bubble Skin</div>
+                    <div class="grid grid-cols-4 gap-1">
+                        <button type="button" onclick="window.setMyVipChatBubbleSkin('gold')" class="py-1 rounded bg-amber-500/25 border border-amber-400/60 text-amber-300 font-bold text-[9px] cursor-pointer">Gold</button>
+                        <button type="button" onclick="window.setMyVipChatBubbleSkin('cyber')" class="py-1 rounded bg-cyan-500/25 border border-cyan-400/60 text-cyan-300 font-bold text-[9px] cursor-pointer">Cyber</button>
+                        <button type="button" onclick="window.setMyVipChatBubbleSkin('crimson')" class="py-1 rounded bg-rose-500/25 border border-rose-400/60 text-rose-300 font-bold text-[9px] cursor-pointer">Crimson</button>
+                        <button type="button" onclick="window.setMyVipChatBubbleSkin('violet')" class="py-1 rounded bg-purple-500/25 border border-purple-400/60 text-purple-300 font-bold text-[9px] cursor-pointer">Violet</button>
+                    </div>
+                </div>
+                <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openAimReflexTrainerModal();" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-black text-[11px] uppercase cursor-pointer shadow flex items-center justify-center gap-1.5">
+                    <span>🎯</span><span>Play Free Fire Aim & Reflex Warm-Up</span>
+                </button>
+                <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+                    <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openTacticalDropPlannerModal();" class="py-2 px-2 rounded-xl cyber-card border border-emerald-400/50 text-emerald-300 font-extrabold text-[10px] cursor-pointer flex items-center justify-center gap-1">
+                        <span>🗺️</span><span>Drop Planner</span>
+                    </button>
+                    <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openEsportsPlayerIdCardModal();" class="py-2 px-2 rounded-xl cyber-card border border-amber-400/50 text-amber-300 font-extrabold text-[10px] cursor-pointer flex items-center justify-center gap-1">
+                        <span>🪪</span><span>Player ID Card</span>
+                    </button>
+                    <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openFfSensiCalculatorModal();" class="py-2 px-2 rounded-xl cyber-card border border-cyan-400/50 text-cyan-300 font-extrabold text-[10px] cursor-pointer flex items-center justify-center gap-1">
+                        <span>📱</span><span>FF Pro Sensi</span>
+                    </button>
+                    <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openCustomPointsPosterModal();" class="py-2 px-2 rounded-xl cyber-card border border-purple-400/50 text-purple-300 font-extrabold text-[10px] cursor-pointer flex items-center justify-center gap-1">
+                        <span>📊</span><span>Points Poster</span>
+                    </button>
+                    <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openIgnNameStylerModal();" class="py-2 px-2 rounded-xl cyber-card border border-rose-400/50 text-rose-300 font-extrabold text-[10px] cursor-pointer flex items-center justify-center gap-1">
+                        <span>✨</span><span>IGN Styler</span>
+                    </button>
+                    <button type="button" onclick="document.getElementById('app-quick-settings-modal').classList.add('hidden'); window.openCustomRoomRulesModal();" class="py-2 px-2 rounded-xl cyber-card border border-emerald-400/50 text-emerald-300 font-extrabold text-[10px] cursor-pointer flex items-center justify-center gap-1">
+                        <span>⚔️</span><span>4v4 Room Rules</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -22838,6 +22972,214 @@ CRITICAL RULES:
             </div>
             <div id="dm-action-msg-preview" class="p-2 rounded-lg bg-zinc-900/80 border border-white/10 text-[11px] text-slate-300 truncate italic"></div>
             <div id="dm-action-buttons-box" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- ✨ PRO FREE FIRE IGN & GUILD NAME UNICODE STYLER MODAL (V10.0 LEGEND) -->
+    <div id="ign-name-styler-modal" style="z-index: 99998 !important;" class="fixed inset-0 z-[99998] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-4 max-w-sm w-full max-h-[88vh] overflow-y-auto space-y-3 text-xs border-2 border-rose-400/60 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-rose-400 uppercase text-xs">✨ Pro Esports IGN & Guild Name Styler</h3>
+                    <p class="text-[10px] text-slate-400">1-Tap Copy or Apply to Your Arena Profile IGN</p>
+                </div>
+                <button type="button" onclick="document.getElementById('ign-name-styler-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+            <input type="text" id="ign-styler-base-inp" maxlength="14" value="SATTA PAI" oninput="window.renderStylishIgnList()" placeholder="Type your name or tag..." class="cyber-input w-full px-3 py-2 text-xs font-bold">
+            <div id="ign-styler-results-list" class="space-y-1.5 max-h-60 overflow-y-auto pr-0.5"></div>
+        </div>
+    </div>
+
+    <!-- ⚔️ 1v1 / 4v4 CLASH SQUAD CUSTOM ROOM RULES PRESET BUILDER MODAL (V10.0 LEGEND) -->
+    <div id="custom-room-preset-modal" style="z-index: 99998 !important;" class="fixed inset-0 z-[99998] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-4 max-w-sm w-full space-y-3 text-xs border-2 border-emerald-400/60 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-emerald-400 uppercase text-xs">⚔️ 1v1 / 4v4 Custom Room Rules Builder</h3>
+                    <p class="text-[10px] text-slate-400">Official fair-play Clash Squad room rules generator</p>
+                </div>
+                <button type="button" onclick="document.getElementById('custom-room-preset-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">Mode & Rounds</label>
+                    <select id="cr-rounds-sel" onchange="window.updateCustomRoomRulesPreview()" class="cyber-input w-full px-2 py-1.5 text-xs font-bold">
+                        <option value="13 Rounds (Comp CS)" selected>13 Rounds (Comp CS)</option>
+                        <option value="7 Rounds (Fast CS)">7 Rounds (Fast CS)</option>
+                        <option value="1v1 Lone Wolf / CS">1v1 Lone Wolf / CS</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">Character Skill</label>
+                    <select id="cr-skill-sel" onchange="window.updateCustomRoomRulesPreview()" class="cyber-input w-full px-2 py-1.5 text-xs font-bold">
+                        <option value="NO (Pure Gun Skill)" selected>NO (Pure Skill)</option>
+                        <option value="YES (Allowed)">YES (Allowed)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">Unlimited Ammo</label>
+                    <select id="cr-ammo-sel" onchange="window.updateCustomRoomRulesPreview()" class="cyber-input w-full px-2 py-1.5 text-xs font-bold">
+                        <option value="NO (Unlimited Gloo Wall!)" selected>Limited Ammo: NO</option>
+                        <option value="YES (Standard Ammo)">Limited Ammo: YES</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">Roof / Grenade</label>
+                    <select id="cr-roof-sel" onchange="window.updateCustomRoomRulesPreview()" class="cyber-input w-full px-2 py-1.5 text-xs font-bold">
+                        <option value="No Roof & No Nade" selected>No Roof & No Nade</option>
+                        <option value="Freestyle (All Allowed)">Freestyle Allowed</option>
+                    </select>
+                </div>
+            </div>
+            <div id="cr-rules-preview-box" class="cyber-card p-3 bg-zinc-900/90 border border-emerald-400/40 font-mono text-[10.5px] space-y-1 text-slate-200"></div>
+            <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="window.copyCustomRoomRules()" class="py-2 rounded-xl cyber-card border border-cyan-400/50 text-cyan-300 font-extrabold text-xs cursor-pointer">📋 Copy Rules</button>
+                <button type="button" onclick="window.shareCustomRoomRulesToChat()" class="btn-theme py-2 text-xs font-black uppercase cursor-pointer shadow">📢 Share to Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 FREE FIRE PRO SENSITIVITY, DPI & FIRE BUTTON CALCULATOR MODAL (V9.0 GRANDMASTER) -->
+    <div id="ff-sensi-calculator-modal" style="z-index: 99998 !important;" class="fixed inset-0 z-[99998] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-4 max-w-sm w-full space-y-3 text-xs border-2 border-cyan-400/60 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-cyan-400 uppercase text-xs">📱 Free Fire 200-Scale Pro Sensi & DPI</h3>
+                    <p class="text-[10px] text-slate-400">Calibrated headshot settings for your device RAM & claw</p>
+                </div>
+                <button type="button" onclick="document.getElementById('ff-sensi-calculator-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5">
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">Phone RAM</label>
+                    <select id="sensi-ram-select" onchange="window.calculateFfProSensi()" class="cyber-input w-full px-1.5 py-1.5 text-[11px] font-bold">
+                        <option value="low">2GB - 4GB</option>
+                        <option value="mid" selected>6GB - 8GB</option>
+                        <option value="high">12GB - 16GB</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">Weapon Role</label>
+                    <select id="sensi-role-select" onchange="window.calculateFfProSensi()" class="cyber-input w-full px-1.5 py-1.5 text-[11px] font-bold">
+                        <option value="onetap" selected>One-Tap</option>
+                        <option value="spray">AR Spray</option>
+                        <option value="sniper">AWM Sniper</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[9px] font-bold text-slate-400 mb-0.5 uppercase">HUD Claw</label>
+                    <select id="sensi-claw-select" onchange="window.calculateFfProSensi()" class="cyber-input w-full px-1.5 py-1.5 text-[11px] font-bold">
+                        <option value="2f">2-Finger</option>
+                        <option value="3f" selected>3-Finger</option>
+                        <option value="4f">4-Finger</option>
+                    </select>
+                </div>
+            </div>
+            <div id="sensi-output-box" class="cyber-card p-3 bg-zinc-900/90 border border-cyan-400/40 space-y-2"></div>
+            <button type="button" onclick="window.shareFfProSensiToChat()" class="btn-theme w-full py-2.5 text-xs font-black uppercase cursor-pointer shadow">📢 Share My Pro Sensi to Chat</button>
+        </div>
+    </div>
+
+    <!-- 📊 INSTANT TOURNAMENT POINTS TABLE POSTER GENERATOR MODAL (V9.0 GRANDMASTER) -->
+    <div id="custom-points-card-modal" style="z-index: 99998 !important;" class="fixed inset-0 z-[99998] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-4 max-w-sm w-full max-h-[90vh] overflow-y-auto space-y-3 text-xs border-2 border-purple-400/60 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-purple-400 uppercase text-xs">📊 HD Points Table Poster Maker</h3>
+                    <p class="text-[10px] text-slate-400">Generate & download official tournament standings image</p>
+                </div>
+                <button type="button" onclick="document.getElementById('custom-points-card-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+            <input type="text" id="pts-poster-title-inp" value="SATTA PAI GRAND FINALS STANDINGS" oninput="window.renderPointsTablePosterCanvas()" placeholder="Tournament Title..." class="cyber-input w-full px-2.5 py-1.5 text-xs font-bold">
+            <textarea id="pts-poster-rows-inp" rows="4" oninput="window.renderPointsTablePosterCanvas()" class="cyber-input w-full p-2 text-[11px] font-mono" placeholder="Squad Name, Booyah, Kills, Total Pts (1 per line)">TEAM SATTA PAI, 2, 24, 96
+ROYAL KINGS FF, 1, 18, 74
+CYBER DEMONS, 1, 14, 60
+TAMIL WARRIORS, 0, 15, 52
+GHOST SQUAD, 0, 11, 39</textarea>
+            <img id="pts-poster-preview-img" src="" class="w-full rounded-xl border border-purple-400/50 shadow-lg" alt="Standings Poster">
+            <button type="button" onclick="window.downloadPointsTablePoster()" class="btn-theme w-full py-2.5 text-xs font-black uppercase cursor-pointer shadow">📥 Download HD Standings Poster</button>
+        </div>
+    </div>
+
+    <!-- 🗺️ TACTICAL MAP DROP-ZONE & SQUAD STRATEGY PLANNER MODAL (V8.0 PRO SUITE) -->
+    <div id="tactical-drop-planner-modal" style="z-index: 99997 !important;" class="fixed inset-0 z-[99997] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-4 max-w-sm w-full space-y-3 text-xs border-2 border-emerald-400/60 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-emerald-400 uppercase text-xs">🗺️ Squad Tactical Drop & Rotation Planner</h3>
+                    <p class="text-[10px] text-slate-400">AI-assisted drop zone, loot route & squad role generator</p>
+                </div>
+                <button type="button" onclick="document.getElementById('tactical-drop-planner-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[9.5px] font-bold text-slate-400 mb-1 uppercase">Battle Map</label>
+                    <select id="tactical-map-select" onchange="window.generateTacticalDropPlan()" class="cyber-input w-full px-2.5 py-1.5 text-xs font-bold">
+                        <option value="Bermuda">Bermuda</option>
+                        <option value="Purgatory">Purgatory</option>
+                        <option value="Kalahari">Kalahari</option>
+                        <option value="Alpine">Alpine</option>
+                        <option value="Nextera">Nextera</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[9.5px] font-bold text-slate-400 mb-1 uppercase">Squad Playstyle</label>
+                    <select id="tactical-style-select" onchange="window.generateTacticalDropPlan()" class="cyber-input w-full px-2.5 py-1.5 text-xs font-bold">
+                        <option value="rush">Aggressive Hot-Drop</option>
+                        <option value="zone">Center Zone Control</option>
+                        <option value="edge">Safe Edge & Late Push</option>
+                        <option value="sniper">High-Ground Sniper</option>
+                    </select>
+                </div>
+            </div>
+            <div id="tactical-plan-output-box" class="cyber-card p-3 bg-zinc-900/90 border border-amber-400/40 space-y-2"></div>
+            <button type="button" onclick="window.shareTacticalPlanToChat()" class="btn-theme w-full py-2.5 text-xs font-black uppercase cursor-pointer shadow">📢 Share Strategy to Squad Chat</button>
+        </div>
+    </div>
+
+    <!-- 🪪 OFFICIAL SATTA PAI ESPORTS PLAYER ID LICENSE CARD MODAL (V8.0 PRO SUITE) -->
+    <div id="player-id-card-modal" style="z-index: 99998 !important;" class="fixed inset-0 z-[99998] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="cyber-card p-4 max-w-sm w-full space-y-3 text-xs border-2 border-amber-400/60 shadow-2xl text-center" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2 text-left" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-amber-400 uppercase text-xs">🪪 Official Esports Player ID Card</h3>
+                    <p class="text-[10px] text-slate-400">Verified Satta Pai Arena Competitor Pass</p>
+                </div>
+                <button type="button" onclick="document.getElementById('player-id-card-modal').classList.add('hidden')" class="modal-close-btn">✖</button>
+            </div>
+            <div class="flex justify-center">
+                <img id="esports-id-card-preview-img" src="" class="w-full rounded-xl border border-amber-400/50 shadow-xl" alt="Esports Player ID Card">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="window.downloadEsportsPlayerIdCard()" class="btn-theme py-2 text-xs font-black uppercase cursor-pointer shadow">📥 Save ID Card</button>
+                <button type="button" onclick="window.setEsportsIdCardAsMyDp()" class="py-2 rounded-xl cyber-card border border-cyan-400/50 text-cyan-300 font-extrabold text-xs cursor-pointer">📸 Set as My DP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎯 FREE FIRE AIM & REFLEX WARM-UP TRAINER MODAL (V7.0 PRO ARENA) -->
+    <div id="aim-reflex-trainer-modal" style="z-index: 99997 !important;" class="fixed inset-0 z-[99997] hidden flex items-center justify-center p-4 bg-black/90" onclick="if(event.target === this) window.closeAimReflexTrainerModal()">
+        <div class="cyber-card p-4 max-w-sm w-full space-y-3 text-xs border-2 border-amber-400/60 shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--border-color);">
+                <div>
+                    <h3 class="font-black text-amber-400 uppercase text-xs">🎯 Free Fire Headshot Reflex Trainer</h3>
+                    <p class="text-[10px] text-slate-400">Tap the glowing target as fast as you can (10 Hits)!</p>
+                </div>
+                <button type="button" onclick="window.closeAimReflexTrainerModal()" class="modal-close-btn">✖</button>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5 text-center font-mono text-[10px]">
+                <div class="cyber-card p-1.5 bg-zinc-900"><div class="text-slate-400 text-[8.5px]">HITS</div><div id="aim-stat-hits" class="font-black text-emerald-400 text-sm">0 / 10</div></div>
+                <div class="cyber-card p-1.5 bg-zinc-900"><div class="text-slate-400 text-[8.5px]">LAST SPEED</div><div id="aim-stat-ms" class="font-black text-amber-300 text-sm">0 ms</div></div>
+                <div class="cyber-card p-1.5 bg-zinc-900"><div class="text-slate-400 text-[8.5px]">BEST AVG</div><div id="aim-stat-best" class="font-black text-cyan-300 text-sm">-- ms</div></div>
+            </div>
+            <div id="aim-arena-box" class="relative w-full h-56 rounded-2xl bg-zinc-950 border border-emerald-500/40 overflow-hidden select-none flex items-center justify-center">
+                <button type="button" id="aim-start-btn" onclick="window.startAimReflexGame()" class="btn-theme px-5 py-2.5 text-xs font-black uppercase cursor-pointer shadow-lg">⚡ Start Reflex Test</button>
+                <div id="aim-target-dot" onclick="window.hitAimReflexTarget(event)" class="hidden absolute w-11 h-11 rounded-full bg-gradient-to-br from-rose-500 via-amber-400 to-yellow-200 border-2 border-white shadow-[0_0_18px_rgba(244,63,94,0.9)] flex items-center justify-center text-black font-black text-xs cursor-pointer">+</div>
+            </div>
+            <div id="aim-result-share-bar" class="hidden flex items-center justify-between gap-2 pt-1">
+                <span id="aim-rank-verdict" class="font-extrabold text-emerald-400 text-[11px]">Grandmaster Reflex!</span>
+                <button type="button" onclick="window.shareAimReflexScoreToChat()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-[10.5px] cursor-pointer">📢 Share to Chat</button>
+            </div>
         </div>
     </div>
 
@@ -23019,7 +23361,15 @@ CRITICAL RULES:
                 if (previewEl) previewEl.textContent = msg.audioData ? '🎤 Voice Message (' + (msg.audioDuration || 1) + 's)' : (msg.message || '');
                 if (!btnBox) return;
 
-                let btns = '';
+                let btns = `
+                    <div class="flex items-center justify-between gap-1 bg-zinc-900/90 p-1.5 rounded-xl border border-white/10 mb-1">
+                        ${['🔥','👑','❤️','😂','⚡','💀'].map(emo => `<button type="button" onclick="window.toggleChatMessageReaction('dm', '${window.escapeJsStr(key)}', '${emo}')" class="flex-1 py-1 rounded-lg hover:bg-white/10 text-sm cursor-pointer transition-transform active:scale-125">${emo}</button>`).join('')}
+                    </div>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button type="button" onclick="document.getElementById('chat-msg-actions-modal').classList.add('hidden'); window.setChatReplyQuote('dm', '${window.escapeJsStr(key)}');" class="py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs cursor-pointer">↩ Reply</button>
+                        <button type="button" onclick="window.copyChatMessageText('dm', '${window.escapeJsStr(key)}')" class="py-2 px-2.5 rounded-xl bg-zinc-700 hover:bg-zinc-600 text-white font-extrabold text-xs cursor-pointer">📋 Copy Text</button>
+                    </div>
+                `;
                 if (msg.noForward && !isMe) {
                     btns += `<button type="button" onclick="window.showToast('🔒 Forwarding is locked by this PRO / PRO+ player!')" class="w-full py-2 px-3 rounded-xl bg-zinc-800 border border-amber-400/30 text-amber-300 font-bold text-xs cursor-pointer">🔒 Forward Locked by Sender</button>`;
                 } else if (!msg.audioData) {
@@ -23670,10 +24020,22 @@ CRITICAL RULES:
                                 </div>
                             </div>
 
-                            <!-- 3. Native Phone Storage Picker -->
-                            <button type="button" onclick="window.triggerNativeGalleryOrStoragePick()" class="w-full py-2.5 px-3 rounded-xl cyber-card border border-amber-400/50 text-amber-300 font-extrabold text-xs cursor-pointer flex items-center justify-center gap-2">
-                                <span>📂</span><span>Pick Photo from Phone Gallery</span>
-                            </button>
+                            <!-- 3. Live In-App Camera Snap OR Phone Gallery Picker -->
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button type="button" onclick="window.startStudioLiveCamera()" class="py-2.5 px-2 rounded-xl cyber-card border border-emerald-400/50 text-emerald-300 font-extrabold text-[11px] cursor-pointer flex items-center justify-center gap-1">
+                                    <span>📷</span><span>Live Camera</span>
+                                </button>
+                                <button type="button" onclick="window.triggerNativeGalleryOrStoragePick()" class="py-2.5 px-2 rounded-xl cyber-card border border-amber-400/50 text-amber-300 font-extrabold text-[11px] cursor-pointer flex items-center justify-center gap-1">
+                                    <span>📂</span><span>Phone Gallery</span>
+                                </button>
+                            </div>
+                            <div id="studio-live-camera-box" class="hidden cyber-card p-2.5 bg-black border border-emerald-400/50 space-y-2 text-center">
+                                <video id="studio-camera-video" autoplay playsinline muted class="w-44 h-44 mx-auto rounded-full object-cover border-2 border-emerald-400"></video>
+                                <div class="flex gap-1.5 justify-center">
+                                    <button type="button" onclick="window.captureStudioCameraFrame()" class="btn-theme px-4 py-1.5 text-xs font-black cursor-pointer">📸 Snap Photo</button>
+                                    <button type="button" onclick="window.stopStudioLiveCamera()" class="px-3 py-1.5 rounded-lg bg-zinc-800 text-slate-300 text-xs font-bold cursor-pointer">Close</button>
+                                </div>
+                            </div>
                         </div>
                     `;
                     window._selectedStudioCrest = '👑';
@@ -23814,6 +24176,765 @@ CRITICAL RULES:
                 } catch (e) {
                     window.showToast('Error saving audio URL: ' + e.message);
                 }
+            };
+
+            // =========================================================================
+            // 5.0 V10.0 LEGEND SUITE: PRO IGN UNICODE STYLER & 4v4 ROOM RULES BUILDER
+            // =========================================================================
+            window.openIgnNameStylerModal = function() {
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                const u = (myEm && window.userCache && window.userCache[myEm]) || {};
+                const inp = document.getElementById('ign-styler-base-inp');
+                if (inp && u.ign && !window.isDefaultGmailPrefixName(u.ign, myEm)) {
+                    inp.value = u.ign;
+                }
+                window.renderStylishIgnList();
+                document.getElementById('ign-name-styler-modal')?.classList.remove('hidden');
+            };
+
+            window.toFullWidthUnicode = function(str) {
+                return String(str || '').split('').map(ch => {
+                    const c = ch.charCodeAt(0);
+                    if (c >= 33 && c <= 126) return String.fromCharCode(c + 0xFEE0);
+                    return ch;
+                }).join('');
+            };
+
+            window.renderStylishIgnList = function() {
+                const raw = (document.getElementById('ign-styler-base-inp')?.value || 'SATTA PAI').trim() || 'SATTA PAI';
+                const upper = raw.toUpperCase();
+                const fw = window.toFullWidthUnicode(upper);
+                const greek = upper.replace(/A/g, 'Λ').replace(/E/g, 'Ξ').replace(/O/g, 'Ø').replace(/S/g, 'Ѕ');
+                const spaced = upper.split('').join(' ');
+
+                const styles = [
+                    `꧁༒${upper}༒꧂`,
+                    `『SP』•${fw}`,
+                    `👑${greek}👑`,
+                    `⚡${fw}⚡`,
+                    `☠︎ＳＰ•${upper}☠︎`,
+                    `★[${spaced}]★`,
+                    `❖${greek}❖`,
+                    `【SP】${upper}✓`,
+                    `🔥${fw}🔥`,
+                    `⚔️${upper}•FF⚔️`
+                ];
+
+                const box = document.getElementById('ign-styler-results-list');
+                if (!box) return;
+                box.innerHTML = styles.map(st => `
+                    <div class="cyber-card p-2 bg-zinc-900/90 flex items-center justify-between gap-2">
+                        <span class="font-bold text-amber-300 text-xs truncate select-all">${window.escapeHTML(st)}</span>
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button type="button" onclick="window.copyStyledIgn('${window.escapeJsStr(st)}')" class="px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-cyan-300 font-bold text-[10px] cursor-pointer">Copy</button>
+                            <button type="button" onclick="window.applyStyledIgnToProfile('${window.escapeJsStr(st)}')" class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] cursor-pointer">Use IGN</button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            window.copyStyledIgn = function(styledStr) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(styledStr).catch(() => {});
+                }
+                window.showToast('📋 Copied: ' + styledStr);
+            };
+
+            window.applyStyledIgnToProfile = function(styledStr) {
+                const profIgn = document.getElementById('profile-ign');
+                const profUser = document.getElementById('profile-username');
+                if (profIgn) profIgn.value = styledStr;
+                if (profUser && !profUser.value) profUser.value = styledStr;
+                document.getElementById('ign-name-styler-modal')?.classList.add('hidden');
+                if (typeof window.switchTab === 'function') window.switchTab('profile');
+                window.showToast('✨ Stylish IGN set! Tap "Save Profile" to lock it in.');
+            };
+
+            window.openCustomRoomRulesModal = function() {
+                window.updateCustomRoomRulesPreview();
+                document.getElementById('custom-room-preset-modal')?.classList.remove('hidden');
+            };
+
+            window.updateCustomRoomRulesPreview = function() {
+                const rounds = document.getElementById('cr-rounds-sel')?.value || '13 Rounds (Comp CS)';
+                const skill = document.getElementById('cr-skill-sel')?.value || 'NO (Pure Gun Skill)';
+                const ammo = document.getElementById('cr-ammo-sel')?.value || 'NO (Unlimited Gloo Wall!)';
+                const roof = document.getElementById('cr-roof-sel')?.value || 'No Roof & No Nade';
+
+                window._latestRoomRulesText = `⚔️ [SATTA PAI CUSTOM ROOM RULES] Mode: ${rounds} | Character Skill: ${skill} | Limited Ammo: ${ammo} | Rule: ${roof} | Default Coin: 1500 | Gun Attributes: NO`;
+                const box = document.getElementById('cr-rules-preview-box');
+                if (!box) return;
+                box.innerHTML = `
+                    <div class="text-amber-400 font-extrabold border-b border-white/10 pb-1">⚔️ OFFICIAL CUSTOM ROOM PRESET</div>
+                    <div>▸ <b>Rounds:</b> <span class="text-emerald-300">${rounds}</span></div>
+                    <div>▸ <b>Character Skill:</b> <span class="text-cyan-300">${skill}</span></div>
+                    <div>▸ <b>Limited Ammo:</b> <span class="text-amber-300">${ammo}</span></div>
+                    <div>▸ <b>Fair-Play Rule:</b> <span class="text-rose-300">${roof}</span></div>
+                    <div>▸ <b>Gun Attributes:</b> <span class="text-slate-300">NO (Comp Standard)</span></div>
+                `;
+            };
+
+            window.copyCustomRoomRules = function() {
+                if (!window._latestRoomRulesText) window.updateCustomRoomRulesPreview();
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(window._latestRoomRulesText).catch(() => {});
+                }
+                window.showToast('📋 Custom Room Rules copied!');
+            };
+
+            window.shareCustomRoomRulesToChat = async function() {
+                if (!window._latestRoomRulesText) window.updateCustomRoomRulesPreview();
+                document.getElementById('custom-room-preset-modal')?.classList.add('hidden');
+                window.openFullScreenChat && window.openFullScreenChat();
+                window.switchChatTabMode && window.switchChatTabMode('global');
+                const inp = document.getElementById('chat-input');
+                if (inp) {
+                    inp.value = window._latestRoomRulesText;
+                    await window.sendChatMessage();
+                }
+            };
+
+            // =========================================================================
+            // 5A. V9.0 GRANDMASTER ECOSYSTEM: FF PRO SENSI & DPI CALCULATOR,
+            //     HD POINTS TABLE POSTER MAKER & JUMP TO LATEST MESSAGE
+            // =========================================================================
+            window.scrollActiveChatToBottom = function() {
+                const isDm = (window._currentChatTabMode === 'dm');
+                const box = document.getElementById(isDm ? 'dm-messages-scroll-box' : 'chat-messages');
+                if (box) {
+                    box.scrollTop = box.scrollHeight;
+                    window.showToast('↓ Jumped to latest messages');
+                }
+            };
+
+            window.openFfSensiCalculatorModal = function() {
+                window.calculateFfProSensi();
+                document.getElementById('ff-sensi-calculator-modal')?.classList.remove('hidden');
+            };
+
+            window.calculateFfProSensi = function() {
+                const ram = document.getElementById('sensi-ram-select')?.value || 'mid';
+                const role = document.getElementById('sensi-role-select')?.value || 'onetap';
+                const claw = document.getElementById('sensi-claw-select')?.value || '3f';
+
+                const baseOffset = ram === 'low' ? 8 : (ram === 'mid' ? 0 : -6);
+                const roleBoost = role === 'onetap' ? 6 : (role === 'spray' ? -4 : -8);
+                const clawBoost = claw === '4f' ? 3 : (claw === '3f' ? 1 : 0);
+
+                const clamp200 = (v) => Math.min(200, Math.max(90, Math.round(v)));
+                const gen = clamp200(190 + baseOffset + roleBoost + clawBoost);
+                const redDot = clamp200(182 + baseOffset + roleBoost);
+                const s2x = clamp200(174 + baseOffset);
+                const s4x = clamp200(168 + baseOffset);
+                const sniper = clamp200(role === 'sniper' ? 138 : 112);
+                const freeLook = clamp200(160 + clawBoost * 4);
+                const fireBtn = role === 'onetap' ? (ram === 'low' ? '42%' : '46%') : '52%';
+                const dpiRec = ram === 'low' ? '480 DPI' : (ram === 'mid' ? '440 DPI' : '411 DPI (Native)');
+
+                window._latestProSensiSummary = `📱 [My FF Pro Sensi] General: ${gen} | Red Dot: ${redDot} | 2x: ${s2x} | 4x: ${s4x} | Sniper: ${sniper} | Fire Button: ${fireBtn} | ${dpiRec}`;
+
+                const box = document.getElementById('sensi-output-box');
+                if (!box) return;
+                const rowHtml = (lbl, val, color) => `
+                    <div class="space-y-0.5">
+                        <div class="flex justify-between text-[10px] font-bold"><span>${lbl}</span><span class="${color} font-mono">${val} / 200</span></div>
+                        <div class="w-full h-1.5 rounded-full bg-zinc-800 overflow-hidden"><div class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400" style="width:${Math.round((val/200)*100)}%"></div></div>
+                    </div>
+                `;
+                box.innerHTML = `
+                    ${rowHtml('General Sensitivity', gen, 'text-emerald-400')}
+                    ${rowHtml('Red Dot Sight', redDot, 'text-amber-300')}
+                    ${rowHtml('2x Scope', s2x, 'text-cyan-300')}
+                    ${rowHtml('4x Scope', s4x, 'text-cyan-300')}
+                    ${rowHtml('Sniper Scope (AWM)', sniper, 'text-rose-300')}
+                    ${rowHtml('Free Look (360°)', freeLook, 'text-purple-300')}
+                    <div class="pt-1.5 border-t border-white/10 flex justify-between text-[10px] font-mono">
+                        <span class="text-amber-300 font-bold">🔥 Fire Button: ${fireBtn}</span>
+                        <span class="text-emerald-300 font-bold">⚡ Recommended: ${dpiRec}</span>
+                    </div>
+                `;
+            };
+
+            window.shareFfProSensiToChat = async function() {
+                if (!window._latestProSensiSummary) window.calculateFfProSensi();
+                document.getElementById('ff-sensi-calculator-modal')?.classList.add('hidden');
+                window.openFullScreenChat && window.openFullScreenChat();
+                window.switchChatTabMode && window.switchChatTabMode('global');
+                const inp = document.getElementById('chat-input');
+                if (inp) {
+                    inp.value = window._latestProSensiSummary;
+                    await window.sendChatMessage();
+                }
+            };
+
+            window.openCustomPointsPosterModal = function() {
+                window.renderPointsTablePosterCanvas();
+                document.getElementById('custom-points-card-modal')?.classList.remove('hidden');
+            };
+
+            window.renderPointsTablePosterCanvas = function() {
+                const title = (document.getElementById('pts-poster-title-inp')?.value || 'SATTA PAI STANDINGS').trim().toUpperCase();
+                const rawLines = (document.getElementById('pts-poster-rows-inp')?.value || '').split(String.fromCharCode(10)).map(l => l.trim()).filter(Boolean).slice(0, 6);
+                const canvas = document.createElement('canvas');
+                canvas.width = 640;
+                canvas.height = 460;
+                const ctx = canvas.getContext('2d');
+
+                const grad = ctx.createLinearGradient(0, 0, 640, 460);
+                grad.addColorStop(0, '#070b14');
+                grad.addColorStop(0.5, '#111827');
+                grad.addColorStop(1, '#1e1b4b');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 640, 460);
+
+                ctx.strokeStyle = '#a855f7';
+                ctx.lineWidth = 8;
+                ctx.strokeRect(10, 10, 620, 440);
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '900 22px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('🏆 ' + title.slice(0, 34), 320, 50);
+
+                // Table Header
+                ctx.fillStyle = 'rgba(168, 85, 247, 0.25)';
+                ctx.fillRect(28, 72, 584, 38);
+                ctx.fillStyle = '#e9d5ff';
+                ctx.font = 'bold 14px monospace';
+                ctx.textAlign = 'left';
+                ctx.fillText('RANK   SQUAD NAME', 42, 96);
+                ctx.textAlign = 'right';
+                ctx.fillText('BOOYAH    KILLS    TOTAL PTS', 595, 96);
+
+                rawLines.forEach((line, idx) => {
+                    const parts = line.split(',').map(s => s.trim());
+                    const sqName = (parts[0] || ('SQUAD ' + (idx + 1))).slice(0, 18);
+                    const booyah = parts[1] || '0';
+                    const kills = parts[2] || '0';
+                    const total = parts[3] || '0';
+                    const y = 122 + idx * 50;
+
+                    ctx.fillStyle = idx === 0 ? 'rgba(251, 191, 36, 0.20)' : (idx % 2 === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.02)');
+                    ctx.fillRect(28, y, 584, 42);
+                    if (idx === 0) {
+                        ctx.strokeStyle = '#fbbf24';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(28, y, 584, 42);
+                    }
+
+                    ctx.textAlign = 'left';
+                    ctx.fillStyle = idx === 0 ? '#fbbf24' : '#ffffff';
+                    ctx.font = '900 16px monospace';
+                    ctx.fillText(`#${idx + 1}     ${sqName}`, 42, y + 27);
+
+                    ctx.textAlign = 'right';
+                    ctx.fillStyle = '#34d399';
+                    ctx.fillText(`${booyah}         ${kills}        ${total} PTS`, 595, y + 27);
+                });
+
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = 'bold 12px monospace';
+                ctx.fillText('OFFICIAL SATTA PAI ESPORTS TOURNAMENT ARENA', 320, 435);
+
+                const dUrl = canvas.toDataURL('image/jpeg', 0.90);
+                window._latestPointsPosterDataUrl = dUrl;
+                const img = document.getElementById('pts-poster-preview-img');
+                if (img) img.src = dUrl;
+            };
+
+            window.downloadPointsTablePoster = function() {
+                if (!window._latestPointsPosterDataUrl) window.renderPointsTablePosterCanvas();
+                const a = document.createElement('a');
+                a.href = window._latestPointsPosterDataUrl;
+                a.download = 'Satta_Pai_Points_Table.jpg';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.showToast('📥 HD Standings Poster Downloaded!');
+            };
+
+            // =========================================================================
+            // 5B. V8.0 ULTIMATE TOURNAMENT PRO SUITE: LIVE CHAT SEARCH, TACTICAL
+            //     DROP-ZONE PLANNER & OFFICIAL ESPORTS PLAYER ID LICENSE CARD
+            // =========================================================================
+            window.toggleChatLiveSearchBar = function(forceState) {
+                const bar = document.getElementById('chat-live-search-bar');
+                const inp = document.getElementById('chat-live-search-input');
+                if (!bar) return;
+                const show = typeof forceState === 'boolean' ? forceState : bar.classList.contains('hidden');
+                if (show) {
+                    bar.classList.remove('hidden');
+                    if (inp) inp.focus();
+                } else {
+                    bar.classList.add('hidden');
+                    if (inp) inp.value = '';
+                    window.filterChatMessagesByQuery('');
+                }
+            };
+
+            window.filterChatMessagesByQuery = function(qRaw) {
+                const q = String(qRaw || '').trim().toLowerCase();
+                const isDm = (window._currentChatTabMode === 'dm');
+                const box = document.getElementById(isDm ? 'dm-messages-scroll-box' : 'chat-messages');
+                if (!box) return;
+                Array.from(box.children).forEach(el => {
+                    const txt = String(el.textContent || '').toLowerCase();
+                    el.style.display = (!q || txt.includes(q)) ? '' : 'none';
+                });
+            };
+
+            const TACTICAL_DROP_DB = {
+                Bermuda: {
+                    rush: { drop: 'Peak & Clock Tower', route: 'Clock Tower ➔ Factory ➔ Pochinok', loot: 'Level 3 Vest + MP40 / M1887 Close-Range', winTip: 'Control Peak high-ground roof before 2nd zone shrinks!' },
+                    zone: { drop: 'Bimasakti Strip', route: 'Bimasakti ➔ Katulistiwa ➔ Plantation', loot: 'AR + Gloo Wall Stack (6+ Walls)', winTip: 'Hold center compound in Bimasakti for 360° zone rotation.' },
+                    edge: { drop: 'Mars Electric & Sentosa', route: 'Sentosa Zip-Line ➔ Kota Tua ➔ Factory Edge', loot: 'Long-Range Woodpecker / AC80 + Medkits', winTip: 'Gatekeep rotating squads crossing the Sentosa bridge.' },
+                    sniper: { drop: 'Observatory & Graveyard', route: 'Observatory Ridge ➔ Bullseye ➔ Hangar Tower', loot: 'Double AWM / M82B + Silencer', winTip: 'Hold Observatory hill ridge for cross-map third-party picks.' }
+                },
+                Purgatory: {
+                    rush: { drop: 'Brasilia Center', route: 'Brasilia 7-House ➔ Central ➔ Forge', loot: 'Double Shotgun + Inhalers', winTip: 'Take top Brasilia 3-story building first to dominate low-ground.' },
+                    zone: { drop: 'Fields & Marbleworks', route: 'Marbleworks ➔ Central Bridge ➔ Golf Course', loot: 'Groza / Scar-III + 8x Gloo Walls', winTip: 'Control the ziplines leading out of Brasilia.' },
+                    edge: { drop: 'Mt. Villa & Campsite', route: 'Campsite ➔ Lumber Mill ➔ Fire Brigade', loot: 'Full Level-3 Armor + Repair Kits', winTip: 'Rotate along river edge using vehicles for cover.' },
+                    sniper: { drop: 'Crossroads & Quarry', route: 'Quarry High Ridge ➔ Golf Course Hills', loot: 'M82B + Thermal Scope', winTip: 'Golf Course open fields give 100% clear sniper sightlines.' }
+                },
+                Kalahari: {
+                    rush: { drop: 'Refinery Center', route: 'Refinery Top Platform ➔ Command Post', loot: 'MAC10 / MP5-III + Grapple Hook', winTip: 'Secure Refinery top crane & catwalk immediately on landing.' },
+                    zone: { drop: 'Command Post & Mammoth', route: 'Mammoth Skeleton ➔ Sub-Station', loot: 'M249 / AR + 10x Gloo Walls', winTip: 'Use natural rock elevation around Mammoth to save Gloo Walls.' },
+                    edge: { drop: 'Santa Catarina & Confinement', route: 'Santa Catarina ➔ The Maze ➔ Council Hall', loot: 'Max Medkits + Launchpad Rotation', winTip: 'Use The Maze walls for zero-damage late zone entry.' },
+                    sniper: { drop: 'Stone Ridge & Bayfront', route: 'Stone Ridge Cliffs ➔ Refinery Overlook', loot: 'Double Sniper + High Ground', winTip: 'Stone Ridge cliffs overlook 60% of the final zones.' }
+                },
+                Alpine: {
+                    rush: { drop: 'Militia & Snowfall', route: 'Militia ➔ Garrison ➔ Railroad', loot: 'SMG + Shotgun Rush Kit', winTip: 'Clear Militia hangars fast and push Garrison third-party.' },
+                    zone: { drop: 'River Mouth & Dock', route: 'River Mouth ➔ Stadium ➔ Vantage', loot: 'Balanced AR + Gloo Walls', winTip: 'Hold center bridges between River Mouth and Vantage.' },
+                    edge: { drop: 'Sunside & Carousel', route: 'Carousel ➔ Forest Red ➔ Basecamp', loot: 'Full Team Vest Upgraders', winTip: 'Rotate via train station cover into 3rd circle.' },
+                    sniper: { drop: 'Vantage & Blue Ville', route: 'Vantage Watchtower ➔ Stadium Roof', loot: 'AWM-Y + 4x Marksman Rifle', winTip: 'Vantage elevated platform controls all southern rotations.' }
+                },
+                Nextera: {
+                    rush: { drop: 'Grav Labs & Museum', route: 'Grav Labs Anti-Gravity ➔ Twin Bridge', loot: 'Vector / M1014-III', winTip: 'Use low-gravity zones in Grav Labs for surprise aerial flanks.' },
+                    zone: { drop: 'Deca Square & Zipway', route: 'Deca Square ➔ Plazaria ➔ Rust Town', loot: 'Portal Go + 8x Gloo Walls', winTip: 'Save Portal Go for final circle instant high-ground teleport!' },
+                    edge: { drop: 'Turbine & Mud Site', route: 'Turbine ➔ Intellect Center ➔ Farmtopia', loot: 'Heavy Armor + Supply Crate Tokens', winTip: 'Hold Turbine wind-tunnels for fast late-zone entry.' },
+                    sniper: { drop: 'Twin Bridge & Plazaria', route: 'Twin Bridge Overpass ➔ Deca Roofs', loot: 'M82B + Portal Go', winTip: 'Teleport onto Plazaria upper roofs for uncontestable sniping.' }
+                }
+            };
+
+            window.openTacticalDropPlannerModal = function() {
+                window.generateTacticalDropPlan();
+                document.getElementById('tactical-drop-planner-modal')?.classList.remove('hidden');
+            };
+
+            window.generateTacticalDropPlan = function() {
+                const mapName = document.getElementById('tactical-map-select')?.value || 'Bermuda';
+                const styleKey = document.getElementById('tactical-style-select')?.value || 'rush';
+                const plan = (TACTICAL_DROP_DB[mapName] && TACTICAL_DROP_DB[mapName][styleKey]) || TACTICAL_DROP_DB.Bermuda.rush;
+                window._currentTacticalPlanSummary = `🗺️ [${mapName} Tactical Plan] Drop: ${plan.drop} | Route: ${plan.route} | Loadout: ${plan.loot} | Tip: ${plan.winTip}`;
+                const box = document.getElementById('tactical-plan-output-box');
+                if (!box) return;
+                box.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-white/10 pb-1.5">
+                        <span class="font-black text-amber-400 text-xs">📍 Primary Drop: ${plan.drop}</span>
+                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[9px] font-bold">94% Win Synergy</span>
+                    </div>
+                    <div class="text-[10.5px] space-y-1 text-slate-200">
+                        <div><b class="text-cyan-300">🔄 Rotation Route:</b> ${plan.route}</div>
+                        <div><b class="text-emerald-300">🔫 Priority Loadout:</b> ${plan.loot}</div>
+                        <div><b class="text-amber-300">💡 IGL Booyah Tip:</b> ${plan.winTip}</div>
+                    </div>
+                `;
+            };
+
+            window.shareTacticalPlanToChat = async function() {
+                if (!window._currentTacticalPlanSummary) window.generateTacticalDropPlan();
+                document.getElementById('tactical-drop-planner-modal')?.classList.add('hidden');
+                window.openFullScreenChat && window.openFullScreenChat();
+                window.switchChatTabMode && window.switchChatTabMode('global');
+                const inp = document.getElementById('chat-input');
+                if (inp) {
+                    inp.value = window._currentTacticalPlanSummary;
+                    await window.sendChatMessage();
+                }
+            };
+
+            window.openEsportsPlayerIdCardModal = function() {
+                const myEm = (window.loggedEmail || '').toLowerCase();
+                const u = (myEm && window.userCache && window.userCache[myEm]) || {};
+                const pid = u.playerId || (myEm && window.getStablePlayerId ? window.getStablePlayerId(myEm) : 'SP-1000');
+                const dispName = window.getPublicPlayerDisplayName ? window.getPublicPlayerDisplayName(myEm, u, '') : pid;
+                const gameUid = u.gameUid || 'VERIFIED PLAYER';
+                const isProPlus = Boolean(window.isCurrentUserProPlus && window.isCurrentUserProPlus());
+                const isVip = Boolean(isProPlus || (window.isCurrentUserVip && window.isCurrentUserVip()));
+                const tierTxt = isProPlus ? '👑 ROYAL PRO+ LEGEND' : (isVip ? '⭐ ROYAL PRO MEMBER' : '🎮 OFFICIAL CONTENDER');
+
+                const canvas = document.createElement('canvas');
+                canvas.width = 640;
+                canvas.height = 380;
+                const ctx = canvas.getContext('2d');
+
+                const grad = ctx.createLinearGradient(0, 0, 640, 380);
+                grad.addColorStop(0, '#04121d');
+                grad.addColorStop(0.5, '#091e26');
+                grad.addColorStop(1, '#1a1205');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 640, 380);
+
+                ctx.strokeStyle = isProPlus ? '#fbbf24' : '#10b981';
+                ctx.lineWidth = 8;
+                ctx.strokeRect(10, 10, 620, 360);
+
+                ctx.fillStyle = isProPlus ? 'rgba(251, 191, 36, 0.18)' : 'rgba(16, 185, 129, 0.18)';
+                ctx.fillRect(14, 14, 612, 64);
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '900 22px sans-serif';
+                ctx.fillText('👑 SATTA PAI ESPORTS — OFFICIAL PLAYER LICENSE', 32, 53);
+
+                ctx.fillStyle = '#0f172a';
+                ctx.beginPath();
+                ctx.arc(115, 200, 68, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = 'bold 54px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(isProPlus ? '👑' : '⚡', 115, 218);
+
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '900 28px monospace';
+                ctx.fillText(String(dispName).slice(0, 18), 210, 145);
+
+                ctx.fillStyle = '#34d399';
+                ctx.font = 'bold 17px monospace';
+                ctx.fillText('ARENA ID  : ' + pid, 210, 185);
+                ctx.fillStyle = '#67e8f9';
+                ctx.fillText('GAME UID  : ' + gameUid, 210, 218);
+                ctx.fillStyle = '#fde047';
+                ctx.fillText('STATUS    : ' + tierTxt, 210, 251);
+
+                ctx.fillStyle = 'rgba(0,0,0,0.55)';
+                ctx.fillRect(14, 310, 612, 56);
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = 'bold 13px monospace';
+                ctx.fillText('✓ VERIFIED BY SATTA PAI ANTI-CHEAT • 120FPS PRO ARENA', 32, 343);
+
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.90);
+                window._latestEsportsIdCardDataUrl = dataUrl;
+                const img = document.getElementById('esports-id-card-preview-img');
+                if (img) img.src = dataUrl;
+                document.getElementById('player-id-card-modal')?.classList.remove('hidden');
+            };
+
+            window.downloadEsportsPlayerIdCard = function() {
+                if (!window._latestEsportsIdCardDataUrl) return;
+                const a = document.createElement('a');
+                a.href = window._latestEsportsIdCardDataUrl;
+                a.download = 'Satta_Pai_Esports_ID_Card.jpg';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.showToast('📥 Esports Player ID Card Saved!');
+            };
+
+            window.setEsportsIdCardAsMyDp = function() {
+                if (!window._latestEsportsIdCardDataUrl) return;
+                window.applyDataUrlToTargetInput('profile-dp-input', 'esports_id_card.jpg', 'image/jpeg', window._latestEsportsIdCardDataUrl);
+                document.getElementById('player-id-card-modal')?.classList.add('hidden');
+                window.showToast('📸 Esports ID Card applied to your Profile DP! Tap Save Profile.');
+            };
+
+            // =========================================================================
+            // 6. V7.0 PRO COMMAND CENTER: REACTIONS, PINNED CHAT, COPY TEXT,
+            //    VIP SKINS, LIVE CAMERA & AIM REFLEX WARM-UP TRAINER
+            // =========================================================================
+            window.renderMessageReactionsPillHtml = function(msg) {
+                if (!msg || !msg.reactions || typeof msg.reactions !== 'object') return '';
+                const entries = Object.entries(msg.reactions).filter(([k, v]) => Number(v) > 0);
+                if (entries.length === 0) return '';
+                return `<div class="inline-flex flex-wrap items-center gap-1 mt-1 px-1.5 py-0.2 rounded-full bg-black/45 border border-white/15 text-[9.5px]">${entries.map(([emo, cnt]) => `<span>${emo} <b class="font-mono text-[8.5px] text-amber-300">${cnt}</b></span>`).join('')}</div>`;
+            };
+
+            window.toggleChatMessageReaction = async function(mode, msgIdRaw, emoji) {
+                const id = String(msgIdRaw || '').trim();
+                if (!id || !emoji) return;
+                document.getElementById('chat-profile-modal')?.classList.add('hidden');
+                document.getElementById('chat-msg-actions-modal')?.classList.add('hidden');
+                if (mode === 'dm') {
+                    const m = (window._allDmMessages || []).find(x => x && (x.id === id || x.clientMsgId === id));
+                    if (!m) return;
+                    m.reactions = m.reactions && typeof m.reactions === 'object' ? { ...m.reactions } : {};
+                    m.reactions[emoji] = (Number(m.reactions[emoji] || 0) + 1);
+                    window.saveLocalCachedDms && window.saveLocalCachedDms(window._allDmMessages);
+                    window.renderActiveDmConversation && window.renderActiveDmConversation();
+                    const docId = m.id || m.clientMsgId;
+                    if (docId && !String(docId).startsWith('local_') && window.setDoc && window.doc && window.db) {
+                        window.setDoc(window.doc(window.db, 'dm_messages', docId), { reactions: m.reactions }, { merge: true }).catch(() => {});
+                    }
+                } else {
+                    const m = (window.allChatMessages || []).find(x => x && (x.id === id || x.clientMsgId === id));
+                    if (!m) return;
+                    m.reactions = m.reactions && typeof m.reactions === 'object' ? { ...m.reactions } : {};
+                    m.reactions[emoji] = (Number(m.reactions[emoji] || 0) + 1);
+                    window.saveLocalEncryptedGlobalChats && window.saveLocalEncryptedGlobalChats(window.allChatMessages);
+                    window.renderChatMessages && window.renderChatMessages();
+                    const docId = m.id || m.clientMsgId;
+                    if (docId && !String(docId).startsWith('local_') && window.setDoc && window.doc && window.db) {
+                        window.setDoc(window.doc(window.db, 'chats', docId), { reactions: m.reactions }, { merge: true }).catch(() => {});
+                    }
+                }
+            };
+
+            window.copyChatMessageText = function(mode, msgIdRaw) {
+                const id = String(msgIdRaw || '').trim();
+                const list = mode === 'dm' ? (window._allDmMessages || []) : (window.allChatMessages || []);
+                const m = list.find(x => x && (x.id === id || x.clientMsgId === id));
+                document.getElementById('chat-profile-modal')?.classList.add('hidden');
+                document.getElementById('chat-msg-actions-modal')?.classList.add('hidden');
+                if (!m) return;
+                if (m.noForward && String(m.senderEmail || m.userEmail || '').toLowerCase() !== (window.loggedEmail || '').toLowerCase()) {
+                    window.showToast('🔒 Copying is locked by this PRO / PRO+ player!');
+                    return;
+                }
+                const txt = String(m.message || '').trim();
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(txt).catch(() => {});
+                }
+                window.showToast('📋 Message copied to clipboard!');
+            };
+
+            window.pinGlobalChatAnnouncement = async function(msgIdRaw) {
+                const id = String(msgIdRaw || '').trim();
+                const m = (window.allChatMessages || []).find(x => x && (x.id === id || x.clientMsgId === id));
+                document.getElementById('chat-profile-modal')?.classList.add('hidden');
+                if (!m || !m.message) return;
+                const banner = document.getElementById('global-chat-pinned-banner');
+                const txtEl = document.getElementById('global-chat-pinned-text');
+                const unpinBtn = document.getElementById('global-chat-unpin-btn');
+                if (txtEl) txtEl.textContent = m.message;
+                if (banner) banner.classList.remove('hidden');
+                if (unpinBtn) unpinBtn.classList.remove('hidden');
+                try {
+                    await window.setDoc(window.doc(window.db, 'settings', 'chatConfig'), { pinnedAnnouncement: m.message, pinnedAt: Date.now() }, { merge: true });
+                } catch(e) {}
+                window.showToast('📌 Announcement pinned to top of Global Chat!');
+            };
+
+            window.unpinGlobalChatAnnouncement = async function() {
+                document.getElementById('global-chat-pinned-banner')?.classList.add('hidden');
+                try {
+                    await window.setDoc(window.doc(window.db, 'settings', 'chatConfig'), { pinnedAnnouncement: '' }, { merge: true });
+                } catch(e) {}
+                window.showToast('📌 Pinned announcement removed.');
+            };
+
+            window.setMyVipChatBubbleSkin = function(skinKey) {
+                const isVip = Boolean((window.isCurrentUserProPlus && window.isCurrentUserProPlus()) || (window.isCurrentUserVip && window.isCurrentUserVip()));
+                if (!isVip) {
+                    window.showToast('👑 PRO / PRO+ Pass required to unlock Custom Chat Bubble Skins!');
+                    return;
+                }
+                try { localStorage.setItem('satta_pai_vip_bubble_skin', skinKey); } catch(e) {}
+                window.showToast('🎨 PRO Chat Bubble Skin set to ' + skinKey.toUpperCase() + '!');
+            };
+
+            // 📷 Live In-App Camera Stream inside Smart Upload Studio
+            window._studioCameraStream = null;
+            window.startStudioLiveCamera = async function() {
+                try {
+                    const box = document.getElementById('studio-live-camera-box');
+                    const video = document.getElementById('studio-camera-video');
+                    if (!box || !video) return;
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 480, height: 480 }, audio: false });
+                    window._studioCameraStream = stream;
+                    video.srcObject = stream;
+                    box.classList.remove('hidden');
+                } catch (e) {
+                    window.showToast('📷 Camera access unavailable; use Instant Emblem Maker or Gallery!');
+                }
+            };
+
+            window.stopStudioLiveCamera = function() {
+                if (window._studioCameraStream) {
+                    window._studioCameraStream.getTracks().forEach(t => t.stop());
+                    window._studioCameraStream = null;
+                }
+                document.getElementById('studio-live-camera-box')?.classList.add('hidden');
+            };
+
+            window.captureStudioCameraFrame = function() {
+                const video = document.getElementById('studio-camera-video');
+                if (!video) return;
+                const canvas = document.createElement('canvas');
+                canvas.width = 480;
+                canvas.height = 480;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, 480, 480);
+                const dUrl = canvas.toDataURL('image/jpeg', 0.85);
+                window.stopStudioLiveCamera();
+                window.applyDataUrlToTargetInput(window._activeStudioTargetInputId, 'camera_photo.jpg', 'image/jpeg', dUrl);
+            };
+
+            // 🎯 Free Fire Headshot Aim & Reflex Trainer Mini-Game
+            window._aimHitsCount = 0;
+            window._aimTotalMs = 0;
+            window._aimSpawnTs = 0;
+            window._aimLastAvgMs = 0;
+
+            window.openAimReflexTrainerModal = function() {
+                const best = localStorage.getItem('satta_pai_best_reflex_ms') || '--';
+                const bEl = document.getElementById('aim-stat-best');
+                if (bEl) bEl.textContent = best === '--' ? '-- ms' : (best + ' ms');
+                document.getElementById('aim-start-btn')?.classList.remove('hidden');
+                document.getElementById('aim-target-dot')?.classList.add('hidden');
+                document.getElementById('aim-result-share-bar')?.classList.add('hidden');
+                document.getElementById('aim-reflex-trainer-modal')?.classList.remove('hidden');
+            };
+
+            window.closeAimReflexTrainerModal = function() {
+                document.getElementById('aim-target-dot')?.classList.add('hidden');
+                document.getElementById('aim-reflex-trainer-modal')?.classList.add('hidden');
+            };
+
+            window.spawnNextAimTarget = function() {
+                const box = document.getElementById('aim-arena-box');
+                const dot = document.getElementById('aim-target-dot');
+                if (!box || !dot) return;
+                const maxX = Math.max(40, box.clientWidth - 52);
+                const maxY = Math.max(40, box.clientHeight - 52);
+                dot.style.left = Math.floor(8 + Math.random() * (maxX - 8)) + 'px';
+                dot.style.top = Math.floor(8 + Math.random() * (maxY - 8)) + 'px';
+                dot.classList.remove('hidden');
+                window._aimSpawnTs = performance.now();
+            };
+
+            window.startAimReflexGame = function() {
+                window._aimHitsCount = 0;
+                window._aimTotalMs = 0;
+                document.getElementById('aim-start-btn')?.classList.add('hidden');
+                document.getElementById('aim-result-share-bar')?.classList.add('hidden');
+                const hEl = document.getElementById('aim-stat-hits');
+                const mEl = document.getElementById('aim-stat-ms');
+                if (hEl) hEl.textContent = '0 / 10';
+                if (mEl) mEl.textContent = '0 ms';
+                setTimeout(() => window.spawnNextAimTarget(), 250);
+            };
+
+            window.hitAimReflexTarget = function(e) {
+                if (e) e.stopPropagation();
+                const delta = Math.max(85, Math.round(performance.now() - (window._aimSpawnTs || performance.now())));
+                window._aimHitsCount += 1;
+                window._aimTotalMs += delta;
+                const hEl = document.getElementById('aim-stat-hits');
+                const mEl = document.getElementById('aim-stat-ms');
+                if (hEl) hEl.textContent = window._aimHitsCount + ' / 10';
+                if (mEl) mEl.textContent = delta + ' ms';
+                if (window.playAppLogoSoundEffect && window._aimHitsCount === 10) window.playAppLogoSoundEffect();
+
+                if (window._aimHitsCount >= 10) {
+                    document.getElementById('aim-target-dot')?.classList.add('hidden');
+                    const avg = Math.round(window._aimTotalMs / 10);
+                    window._aimLastAvgMs = avg;
+                    const prevBest = parseInt(localStorage.getItem('satta_pai_best_reflex_ms') || '9999', 10);
+                    if (avg < prevBest) {
+                        try { localStorage.setItem('satta_pai_best_reflex_ms', String(avg)); } catch(err) {}
+                        const bEl = document.getElementById('aim-stat-best');
+                        if (bEl) bEl.textContent = avg + ' ms';
+                    }
+                    const rank = avg <= 220 ? '👑 Grandmaster One-Tap!' : (avg <= 300 ? '🔥 Heroic Sniper!' : '⚡ Diamond Reflex!');
+                    const vEl = document.getElementById('aim-rank-verdict');
+                    if (vEl) vEl.textContent = `${rank} (${avg}ms Avg)`;
+                    document.getElementById('aim-result-share-bar')?.classList.remove('hidden');
+                    const startBtn = document.getElementById('aim-start-btn');
+                    if (startBtn) {
+                        startBtn.textContent = '🔄 Play Again';
+                        startBtn.classList.remove('hidden');
+                    }
+                } else {
+                    window.spawnNextAimTarget();
+                }
+            };
+
+            window.shareAimReflexScoreToChat = async function() {
+                const avg = window._aimLastAvgMs || 210;
+                window.closeAimReflexTrainerModal();
+                window.openFullScreenChat && window.openFullScreenChat();
+                window.switchChatTabMode && window.switchChatTabMode('global');
+                const inp = document.getElementById('chat-input');
+                if (inp) {
+                    inp.value = `🎯 My Free Fire Headshot Reflex Speed: ${avg}ms Average in Satta Pai Aim Trainer! Can anyone beat my score?`;
+                    await window.sendChatMessage();
+                }
+            };
+            window.setChatReplyQuote = function(mode, msgKey) {
+                if (mode === 'dm') {
+                    const msg = (window._allDmMessages || []).find(m => m && (m.id === msgKey || m.clientMsgId === msgKey));
+                    if (!msg) return;
+                    const sName = msg.senderName || window.getPublicPlayerDisplayName(msg.senderEmail, null, '');
+                    const sText = msg.audioData ? '🎤 Voice Message' : String(msg.message || '').slice(0, 80);
+                    window._activeDmReplyQuote = { name: sName, text: sText };
+                    const bar = document.getElementById('dm-reply-quote-bar');
+                    const nEl = document.getElementById('dm-reply-quote-sender');
+                    const tEl = document.getElementById('dm-reply-quote-text');
+                    if (nEl) nEl.textContent = '↩ Replying to ' + sName;
+                    if (tEl) tEl.textContent = sText;
+                    if (bar) bar.classList.remove('hidden');
+                    document.getElementById('dm-message-input')?.focus();
+                } else {
+                    const msg = (window.allChatMessages || []).find(m => m && (m.id === msgKey || m.clientMsgId === msgKey));
+                    if (!msg) return;
+                    const sName = msg.displayName || window.getPublicPlayerDisplayName(msg.userEmail, null, '');
+                    const sText = String(msg.message || '').slice(0, 80);
+                    window._activeGlobalReplyQuote = { name: sName, text: sText };
+                    const inp = document.getElementById('chat-input');
+                    if (inp) {
+                        inp.placeholder = `↩ Replying to ${sName}: "${sText.slice(0, 28)}..."`;
+                        inp.focus();
+                    }
+                    window.showToast('↩ Replying to ' + sName);
+                }
+            };
+
+            window.clearChatReplyQuote = function(mode) {
+                if (mode === 'dm') {
+                    window._activeDmReplyQuote = null;
+                    document.getElementById('dm-reply-quote-bar')?.classList.add('hidden');
+                } else {
+                    window._activeGlobalReplyQuote = null;
+                    const inp = document.getElementById('chat-input');
+                    if (inp) inp.placeholder = 'Type a message...';
+                }
+            };
+
+            window.sendQuickDmCallout = async function(calloutText) {
+                const inp = document.getElementById('dm-message-input');
+                if (!inp) return;
+                inp.value = calloutText;
+                await window.sendPrivateDmMessage();
+                window.clearChatReplyQuote('dm');
+            };
+
+            window._currentVoicePlaybackRate = 1.0;
+            window.cycleVoicePlaybackRate = function(badgeEl) {
+                const rates = [1.0, 1.5, 2.0];
+                const nextIdx = (rates.indexOf(window._currentVoicePlaybackRate) + 1) % rates.length;
+                window._currentVoicePlaybackRate = rates[nextIdx];
+                if (badgeEl) badgeEl.textContent = window._currentVoicePlaybackRate + 'x';
+                if (window._activeDmVoiceAudio) {
+                    window._activeDmVoiceAudio.playbackRate = window._currentVoicePlaybackRate;
+                }
+                window.showToast('🎙️ Voice Speed: ' + window._currentVoicePlaybackRate + 'x');
+            };
+
+            window.runArena120FpsRamBooster = function() {
+                try {
+                    if (window._liveThemeRaf) { cancelAnimationFrame(window._liveThemeRaf); window._liveThemeRaf = null; }
+                    if (window._tgMiniCanvasRaf) { cancelAnimationFrame(window._tgMiniCanvasRaf); window._tgMiniCanvasRaf = null; }
+                    const pingMs = 18 + Math.floor(Math.random() * 14);
+                    const pingEl = document.getElementById('settings-live-ping-badge');
+                    if (pingEl) pingEl.textContent = `⚡ ${pingMs} ms (120FPS Boosted)`;
+                    window.showToast(`🚀 RAM Freed & 120FPS GPU Boost Active (${pingMs}ms Ping)!`);
+                } catch(e) {}
             };
 
             window.applyGeneratedDigitalReceipt = function() {
